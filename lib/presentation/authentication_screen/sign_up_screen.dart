@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/authentication_screen/verification_screen.dart';
 import 'package:sgt/utils/const.dart';
@@ -16,10 +17,6 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
-
-  // void selectImages() async {
-  //   final List<XFile>? selectedImages = await ImagePicker.pickMultiImage();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +40,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const Text(
                         'Welcome\nuser',
                         style: TextStyle(
-                            fontSize: 40, fontWeight: FontWeight.bold),
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Stack(
                         children: [
                           Container(
-                            height: 100,
-                            width: 100,
+                            height: 100.r,
+                            width: 100.w,
                             decoration: BoxDecoration(
                                 color: Colors.grey,
                                 borderRadius: BorderRadius.circular(50)),
@@ -85,9 +84,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               'Use camera or select file from device gallery',
                                               textScaleFactor: 1.0,
                                               style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color.fromARGB(
-                                                      255, 109, 109, 109)),
+                                                fontSize: 12,
+                                                color: Color.fromARGB(
+                                                    255, 109, 109, 109),
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 20,
@@ -98,15 +98,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               children: [
                                                 InkWell(
                                                   onTap: () async {
-                                                    // Capture a photo
                                                     final XFile? photo =
                                                         await _picker.pickImage(
-                                                            source: ImageSource
-                                                                .camera);
-
-                                                    // Capture a video
-                                                    final XFile? video =
-                                                        await _picker.pickVideo(
                                                             source: ImageSource
                                                                 .camera);
                                                   },
@@ -144,17 +137,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                         await _picker.pickImage(
                                                             source: ImageSource
                                                                 .gallery);
-
-                                                    // Pick a video
-                                                    final XFile? video =
-                                                        await _picker.pickVideo(
-                                                            source: ImageSource
-                                                                .gallery);
-
-                                                    // Pick multiple images
-                                                    final List<XFile>? images =
-                                                        await _picker
-                                                            .pickMultiImage();
                                                   },
                                                   child: Column(
                                                     children: [
@@ -203,8 +185,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                               },
                               child: Container(
-                                height: 30,
-                                width: 30,
+                                height: 27.h,
+                                width: 30.w,
                                 decoration: BoxDecoration(
                                     color: primaryColor,
                                     borderRadius: BorderRadius.circular(50)),

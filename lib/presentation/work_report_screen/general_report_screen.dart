@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/const.dart';
+import 'dart:io';
+import 'package:path/path.dart' as path;
 
 class GeneralReportScreen extends StatefulWidget {
   const GeneralReportScreen({super.key});
@@ -16,6 +18,8 @@ class GeneralReportScreen extends StatefulWidget {
 class _GeneralReportScreenState extends State<GeneralReportScreen> {
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
+
+  List imageNames = [];
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -33,6 +37,14 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
               Navigator.pop(context);
             },
           ),
+          centerTitle: true,
+          title: Text(
+            'General Report',
+            textScaleFactor: 1.0,
+            style: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.w500)),
+          ),
         ),
         backgroundColor: white,
         body: SingleChildScrollView(
@@ -41,13 +53,8 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'General\nReport',
-                style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold),
-                textScaleFactor: 1.0,
-              ),
-              const SizedBox(
-                height: 26,
+              SizedBox(
+                height: 30,
               ),
               Text(
                 'Title',
@@ -71,7 +78,7 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                 textScaleFactor: 1.0,
               ),
               const SizedBox(
-                height: 18,
+                height: 20,
               ),
               TextFormField(
                 maxLines: 8,
@@ -94,6 +101,80 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
               const SizedBox(
                 height: 20,
               ),
+              imageFileList!.isNotEmpty
+                  ? SizedBox(
+                      height: 110 * imageFileList!.length.toDouble(),
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: imageFileList!.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 20),
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.all(5),
+                                        height: 60,
+                                        width: 60,
+                                        alignment: Alignment.center,
+                                        child: Image.file(
+                                            File(imageFileList![index].path))),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: 190,
+                                            child: Text(imageNames[index],
+                                                style: TextStyle())),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              height: 4,
+                                              width: 200,
+                                              decoration: BoxDecoration(
+                                                  color: primaryColor),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text('100 %',
+                                                style: TextStyle(fontSize: 12)),
+                                            SizedBox(width: 5),
+                                            InkWell(
+                                              onTap: () {
+                                                print('remove');
+
+                                                setState(() {
+                                                  imageFileList!
+                                                      .removeAt(index);
+                                                  // imageNames.removeAt(index);
+                                                });
+                                                print(index);
+                                                print(imageFileList);
+                                                // imageNames
+                                                //     .add(path.dirname(photo.path));
+                                              },
+                                              child: Container(
+                                                  height: 15,
+                                                  width: 15,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                      border: Border.all(
+                                                          color: primaryColor)),
+                                                  child: Icon(Icons.close,
+                                                      size: 12)),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ]),
+                            );
+                          }),
+                    )
+                  : Container(),
               InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -132,6 +213,14 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                                       final XFile? photo =
                                           await _picker.pickImage(
                                               source: ImageSource.camera);
+                                      if (photo != null) {
+                                        imageFileList?.add(photo);
+
+                                        imageNames
+                                            .add(path.dirname(photo.path));
+                                        setState(() {});
+                                      }
+                                      print('$imageFileList   $imageNames');
                                     },
                                     child: Column(
                                       children: [
@@ -163,6 +252,16 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                                       // Pick multiple images
                                       final List<XFile>? images =
                                           await _picker.pickMultiImage();
+                                      if (images != null) {
+                                        for (var i = 0;
+                                            i < images.length;
+                                            i++) {
+                                          imageFileList?.add(images[i]);
+                                        }
+                                        imageNames.add(images[0].name);
+                                        setState(() {});
+                                      }
+                                      print('$imageFileList   $imageNames');
                                     },
                                     child: Column(
                                       children: [
@@ -223,7 +322,7 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
           ),
         )),
         bottomNavigationBar: SizedBox(
-          height: 130,
+          height: 100.h,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

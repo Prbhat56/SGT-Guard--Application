@@ -79,11 +79,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     curve: Curves.easeInOut,
                   ),
                   effect: WormEffect(
-                      dotHeight: 12,
-                      dotWidth: 12,
-                      spacing: 16,
-                      dotColor: Colors.grey,
-                      activeDotColor: primaryColor),
+                    dotHeight: 10,
+                    dotWidth: 10,
+                    spacing: 16,
+                    dotColor: Colors.grey,
+                    activeDotColor: primaryColor,
+                  ),
                 ),
               ),
               SizedBox(
@@ -93,9 +94,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ? InkWell(
                       onTap: () {
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignInScreen()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignInScreen(),
+                          ),
+                        );
                       },
                       child: Center(
                           child: Text(

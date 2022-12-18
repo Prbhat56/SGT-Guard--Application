@@ -23,7 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
   late TextEditingController _passwordController;
   bool iseamilvalid = true;
   bool ispasswordvalid = true;
-  bool isButtonActive = false;
+  bool isFormValid = false;
   List<String> languages = [
     'English',
     'Deutsch',
@@ -59,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+              padding: EdgeInsets.symmetric(horizontal: 28.w),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -74,100 +74,95 @@ class _SignInScreenState extends State<SignInScreen> {
                           showModalBottomSheet(
                             isScrollControlled: true,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(25.0),
+                              ),
+                            ),
                             context: context,
-                            builder: (context) => SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 3.7 / 5,
-                              child: Container(
-                                color: white,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 24,
+                            builder: (context) => Container(
+                              height: 530.h,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(top: 24),
+                                    color: white,
+                                    child: Center(
+                                      child: Text(
+                                        'Change Language',
+                                        textScaleFactor: 1.0,
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            fontSize: 25.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    Container(
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
                                       color: white,
-                                      child: Center(
-                                        child: Text(
-                                          'Change Language',
-                                          textScaleFactor: 1.0,
-                                          style: GoogleFonts.montserrat(
-                                              textStyle: TextStyle(
-                                                  fontSize: 25.sp,
-                                                  fontWeight: FontWeight.w500)),
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          width: 4.0,
+                                          color: grey,
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: white,
-                                          border: Border(
-                                            bottom: BorderSide(
-                                                width: 4.0, color: grey),
-                                          )
-                                          // boxShadow: const [
-                                          //   BoxShadow(
-                                          //       color: Colors.black54,
-                                          //       blurRadius: .0,
-                                          //       spreadRadius: 2,
-                                          //       offset: Offset(
-                                          //         0.0,
-                                          //         15.0,
-                                          //       ))
-                                          // ],
-                                          ),
-                                      child: TextFormField(
-                                        readOnly: true,
-                                        decoration: InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: grey),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: grey),
-                                          ),
-                                          border: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: grey),
-                                          ),
-                                          prefixIcon: const Icon(Icons.search),
-                                          hintText: 'Spanish',
-                                          hintStyle: GoogleFonts.montserrat(
-                                              textStyle: TextStyle(
-                                                  color: grey, fontSize: 17)),
-                                          focusColor: primaryColor,
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: grey),
                                         ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: grey),
+                                        ),
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: grey),
+                                        ),
+                                        prefixIcon: const Icon(Icons.search),
+                                        hintText: 'Spanish',
+                                        hintStyle: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                                color: grey, fontSize: 17)),
+                                        focusColor: primaryColor,
                                       ),
                                     ),
-                                    Expanded(
-                                      child: ListView.builder(
-                                          itemCount: languages.length,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 20),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                        itemCount: languages.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            decoration: BoxDecoration(
+                                              border: Border(
                                                 bottom: BorderSide(
                                                     width: 2.0, color: grey),
-                                              )),
-                                              child: Center(
-                                                child: Text(languages[index],
-                                                    textScaleFactor: 1.0,
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                      textStyle: TextStyle(
-                                                          color: black,
-                                                          fontSize: 17),
-                                                    )),
                                               ),
-                                            );
-                                          }),
-                                    )
-                                  ],
-                                ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                languages[index],
+                                                textScaleFactor: 1.0,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                      color: black,
+                                                      fontSize: 17),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                ],
                               ),
                             ),
                           );
@@ -218,7 +213,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           'Sign in to continue',
                           style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
-                                color: Colors.grey, fontSize: 17),
+                              color: Colors.grey,
+                              fontSize: 17,
+                            ),
                           )),
                     ),
                     const SizedBox(
@@ -231,30 +228,21 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     TextFormField(
                       controller: _emailController,
-                      // validator: (input) => input!.isValidEmail()
-                      //     ? null
-                      //     : " \u26A0 Email ID is Incorrect",
                       decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          hintText: 'Enter Email',
-                          hintStyle: TextStyle(color: grey, fontSize: 15),
-                          focusColor: primaryColor),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: primaryColor, width: 2),
+                        ),
+                        hintText: 'Enter Email',
+                        hintStyle: TextStyle(color: grey, fontSize: 15),
+                        focusColor: primaryColor,
+                      ),
                       onChanged: (value) {
                         setState(() {
                           iseamilvalid = value.isValidEmail;
                         });
-                        // _formKey.currentState!.validate()
-                        //     ? setState(() {
-                        //         isButtonActive = !isButtonActive;
-                        //       })
-                        //     : null;
                       },
                     ),
                     const SizedBox(
@@ -267,11 +255,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     TextFormField(
                       controller: _passwordController,
-                      // validator: (input) => input!.isValidPassword()
-                      //     ? null
-                      //     : 'Password Is Incorrect',
-
-                      //    input == null ? 'Password is Empty' : null,
                       obscureText:
                           BlocProvider.of<ObscureCubit>(context, listen: true)
                               .state
@@ -308,13 +291,12 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                           )),
                       onChanged: (value) {
-                        print(value.isValidPassword);
                         setState(() {
                           ispasswordvalid = value.isValidPassword;
+                          iseamilvalid && ispasswordvalid
+                              ? isFormValid = true
+                              : "";
                         });
-                        // _formKey.currentState!.validate()
-                        //     ? setState(() {})
-                        //     : null;
                       },
                     ),
                     const SizedBox(
@@ -369,23 +351,30 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: iseamilvalid && ispasswordvalid
-                                  ? 200.w
-                                  : 72.w,
-                              right: 0),
+                            left:
+                                iseamilvalid && ispasswordvalid ? 200.w : 72.w,
+                            right: 0,
+                          ),
                           child: InkWell(
-                              onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const ForgotPasswordScreen();
-                                }));
-                              },
-                              child: Text('Forgot password',
-                                  textScaleFactor: 1.0,
-                                  style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: 12.sp)))),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const ForgotPasswordScreen();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Forgot password',
+                              textScaleFactor: 1.0,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                    color: Colors.blue, fontSize: 12.sp),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -394,49 +383,58 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     Center(
                       child: CupertinoButton(
-                          disabledColor: seconderyColor,
                           padding: EdgeInsets.symmetric(
-                              horizontal: 120.w, vertical: 15),
-                          color: iseamilvalid && ispasswordvalid
-                              ? primaryColor
-                              : seconderyColor,
+                            horizontal: 120.w,
+                            vertical: 15,
+                          ),
+                          color: isFormValid ? primaryColor : seconderyColor,
                           child: Text(
                             'Sign In',
                             textScaleFactor: 1.0,
                             style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(fontSize: 15.sp)),
+                              textStyle: TextStyle(fontSize: 15.sp),
+                            ),
                           ),
                           onPressed: () {
-                            iseamilvalid && ispasswordvalid
-                                ? Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                    return const Home();
-                                  }))
+                            isFormValid
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const Home();
+                                      },
+                                    ),
+                                  )
                                 : null;
                           }),
                     ),
                     const SizedBox(height: 160),
                     InkWell(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const SignUpScreen();
-                        }));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const SignUpScreen();
+                            },
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 40.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          // mainAxisSize: MainAxisSize.min,
                           children: [
                             Center(
                               child: Text(
                                 "Don't have an account?",
                                 textScaleFactor: 1.0,
                                 style: GoogleFonts.montserrat(
-                                    textStyle: const TextStyle(
-                                        color: Colors.grey, fontSize: 17)),
+                                  textStyle: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 17,
+                                  ),
+                                ),
                               ),
                             ),
                             Expanded(
@@ -444,8 +442,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                 "Sign Up",
                                 textScaleFactor: 1.0,
                                 style: GoogleFonts.montserrat(
-                                    textStyle: const TextStyle(
-                                        color: Colors.black, fontSize: 18)),
+                                  textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
                               ),
                             ),
                           ],

@@ -146,21 +146,27 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             _newpasswordController.text.toString() ==
                     _reenteredpasswordController.text.toString()
                 ? Container()
-                : SizedBox(
-                    width: 143.w,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          color: Colors.red,
-                          size: 17,
-                        ),
-                        Text(
-                          'Password not matched',
-                          style: TextStyle(color: Colors.red, fontSize: 13),
-                        ),
-                      ],
+                : Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: SizedBox(
+                      width: 143.w,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 17,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            'Password not matched',
+                            style: TextStyle(color: Colors.red, fontSize: 13),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
             SizedBox(
@@ -183,10 +189,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 onPressed: () {
                   _newpasswordController.text.toString() ==
                           _reenteredpasswordController.text.toString()
-                      ? Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                          return const PasswordChangeSuccessScreen();
-                        }))
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const PasswordChangeSuccessScreen();
+                            },
+                          ),
+                        )
                       : null;
                 },
               ),

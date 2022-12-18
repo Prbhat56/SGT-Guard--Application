@@ -7,7 +7,6 @@ import 'package:sgt/presentation/work_report_screen/emergency_report_screen.dart
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/maintenance_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/parking_report_screen.dart';
-
 import '../../utils/const.dart';
 
 class WorkReportScreen extends StatefulWidget {
@@ -45,12 +44,12 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
       backgroundColor: white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: 40.h,
               ),
               Text(
                 'Select report type below',
@@ -58,8 +57,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                     color: black, fontSize: 17.sp, fontWeight: FontWeight.bold),
                 textScaleFactor: 1.0,
               ),
-              const SizedBox(
-                height: 25,
+              SizedBox(
+                height: 25.h,
               ),
               InkWell(
                 onTap: () {
@@ -68,7 +67,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   }));
                 },
                 child: Container(
-                  height: 54,
+                  height: 45.h,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: primaryColor)),
@@ -94,7 +93,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   }));
                 },
                 child: Container(
-                  height: 54,
+                  height: 45.h,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey)),
@@ -120,7 +119,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   }));
                 },
                 child: Container(
-                  height: 54,
+                  height: 45.h,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey)),
@@ -146,7 +145,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   }));
                 },
                 child: Container(
-                  height: 54,
+                  height: 45.h,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey)),
@@ -167,7 +166,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        height: 130,
+        height: 100.h,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

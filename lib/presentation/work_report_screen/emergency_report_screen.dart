@@ -57,8 +57,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 26,
+                    SizedBox(
+                      height: 26.h,
                     ),
                     Text(
                       'Emergency Date & Time',
@@ -128,8 +128,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 25,
+                    SizedBox(
+                      height: 25.h,
                     ),
                     Row(
                       children: [
