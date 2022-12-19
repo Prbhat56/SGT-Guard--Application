@@ -63,6 +63,7 @@ dependencies:
   flutter_google_places_hoc081098: ^1.1.0
   google_api_headers: ^1.5.0
   geocoding: ^2.0.5
+  intl: ^0.18.0
   
 
 dev_dependencies:

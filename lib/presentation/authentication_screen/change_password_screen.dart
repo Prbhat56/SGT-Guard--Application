@@ -80,7 +80,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: primaryColor, width: 2),
                   ),
-                  hintText: '.......',
+                  hintText: '•••••••••',
                   focusColor: primaryColor),
               onChanged: (value) {
                 _newpasswordController.text.toString() ==
@@ -112,7 +112,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: primaryColor, width: 2),
                   ),
-                  hintText: '.......',
+                  hintText: '•••••••••',
                   focusColor: primaryColor,
                   suffixIcon: IconButton(
                     onPressed: () {
