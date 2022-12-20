@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sgt/presentation/account_screen/account_screen.dart';
 import 'package:sgt/presentation/connect_screen/connect_screen.dart';
+import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
 import 'package:sgt/presentation/notification_screen/notification_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/time_sheet_screen.dart';
 import 'package:sgt/utils/const.dart';
@@ -15,8 +17,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-
   List<Widget> currentWidget = [
     const HomeScreen(),
     const TimeSheetScreen(),
@@ -94,29 +94,25 @@ class _HomeState extends State<Home> {
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: Scaffold(
-            body: currentWidget[_selectedIndex],
+            body: currentWidget[
+                BlocProvider.of<NavigationCubit>(context, listen: true)
+                    .state
+                    .selectedIndex],
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                // borderRadius: BorderRadius.only(
-                //     topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                // boxShadow: <BoxShadow>[
-                //   BoxShadow(
-                //     color: Colors.black,
-                //     blurRadius: 10,
-                //   ),
-                //],
               ),
               child: BottomNavigationBar(
                 elevation: 20,
-                currentIndex: _selectedIndex,
+                currentIndex: BlocProvider.of<NavigationCubit>(context)
+                    .state
+                    .selectedIndex,
                 selectedItemColor: primaryColor,
                 selectedLabelStyle:
                     TextStyle(color: primaryColor, fontSize: 13),
                 type: BottomNavigationBarType.fixed,
-                onTap: (index) => setState(() {
-                  _selectedIndex = index;
-                }),
+                onTap: (index) => BlocProvider.of<NavigationCubit>(context)
+                    .changeIndex(index),
                 items: [
                   BottomNavigationBarItem(
                     activeIcon: Icon(
@@ -155,11 +151,6 @@ class _HomeState extends State<Home> {
                       size: 28,
                       color: Colors.grey,
                     ),
-                    // icon: const Icon(
-                    //   Icons.message_rounded,
-                    //   size: 28,
-                    //   color: Colors.grey,
-                    // ),
                     label: 'Connect',
                   ),
                   BottomNavigationBarItem(

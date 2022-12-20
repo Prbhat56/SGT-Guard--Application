@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pressed_cubit.dart';
+import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
 import 'package:sgt/presentation/settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
 import 'package:sgt/utils/const.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
@@ -24,14 +25,11 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (context) => ObscureCubit(),
-              ),
-              BlocProvider(
-                create: (context) => ToggleSwitchCubit(),
-              ),
+              BlocProvider(create: (context) => NavigationCubit()),
+              BlocProvider(create: (context) => ObscureCubit()),
+              BlocProvider(create: (context) => ToggleSwitchCubit()),
               BlocProvider(create: (context) => IslongpressCubit()),
-              BlocProvider(create: (context) => MessagePressedCubit())
+              BlocProvider(create: (context) => MessagePressedCubit()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
