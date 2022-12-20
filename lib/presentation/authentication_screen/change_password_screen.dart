@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/password_change_success_screen.dart';
 import '../../utils/const.dart';
 
@@ -15,7 +18,7 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController _newpasswordController;
   late TextEditingController _reenteredpasswordController;
-  bool isvisible = false;
+
   bool ispasswordmatched = true;
   @override
   void initState() {
@@ -85,12 +88,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               onChanged: (value) {
                 _newpasswordController.text.toString() ==
                         _reenteredpasswordController.text.toString()
-                    ? setState(() {
-                        ispasswordmatched == true;
-                      })
-                    : setState(() {
-                        ispasswordmatched == false;
-                      });
+                    ? BlocProvider.of<IspasswordmarchedCubit>(context)
+                        .passwordMatched()
+                    : BlocProvider.of<IspasswordmarchedCubit>(context)
+                        .passwordnotMatched();
               },
             ),
             SizedBox(
@@ -104,7 +105,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
             TextFormField(
               controller: _reenteredpasswordController,
-              obscureText: isvisible,
+              obscureText: BlocProvider.of<ObscureCubit>(context, listen: true)
+                  .state
+                  .isObscure,
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: grey, width: 2),
@@ -116,35 +119,34 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   focusColor: primaryColor,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      setState(() {
-                        isvisible = !isvisible;
-                      });
+                      BlocProvider.of<ObscureCubit>(context).changeVisibility();
                     },
-                    icon: isvisible
-                        ? Icon(
+                    icon: BlocProvider.of<ObscureCubit>(context, listen: true)
+                            .state
+                            .isObscure
+                        ? const Icon(
                             Icons.visibility_off_outlined,
                             color: Colors.black,
-                            size: 20.sp,
+                            size: 20,
                           )
-                        : Icon(
+                        : const Icon(
                             Icons.visibility_outlined,
                             color: Colors.black,
-                            size: 20.sp,
+                            size: 20,
                           ),
                   )),
               onChanged: (value) {
                 _newpasswordController.text.toString() ==
                         _reenteredpasswordController.text.toString()
-                    ? setState(() {
-                        ispasswordmatched == true;
-                      })
-                    : setState(() {
-                        ispasswordmatched == false;
-                      });
+                    ? BlocProvider.of<IspasswordmarchedCubit>(context)
+                        .passwordMatched()
+                    : BlocProvider.of<IspasswordmarchedCubit>(context)
+                        .passwordnotMatched();
               },
             ),
-            _newpasswordController.text.toString() ==
-                    _reenteredpasswordController.text.toString()
+            BlocProvider.of<IspasswordmarchedCubit>(context, listen: true)
+                    .state
+                    .ispasswordmatched
                 ? Container()
                 : Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -176,8 +178,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: CupertinoButton(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 130, vertical: 15),
-                color: _newpasswordController.text ==
-                        _reenteredpasswordController.text
+                color: BlocProvider.of<IspasswordmarchedCubit>(context,
+                            listen: true)
+                        .state
+                        .ispasswordmatched
                     ? primaryColor
                     : seconderyColor,
                 child: Text(
@@ -187,8 +191,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       textStyle: TextStyle(fontSize: 17.sp)),
                 ),
                 onPressed: () {
-                  _newpasswordController.text.toString() ==
-                          _reenteredpasswordController.text.toString()
+                  BlocProvider.of<IspasswordmarchedCubit>(context, listen: true)
+                          .state
+                          .ispasswordmatched
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(
