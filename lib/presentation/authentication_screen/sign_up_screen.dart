@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,16 +49,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Stack(
                         children: [
                           Container(
-                            height: 100.r,
-                            width: 100.w,
+                            height: 100,
+                            width: 100,
                             decoration: BoxDecoration(
                                 color: Colors.grey,
                                 borderRadius: BorderRadius.circular(50)),
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: white,
-                              size: 70,
-                            ),
+                            child: imageFileList!.isEmpty
+                                ? Icon(
+                                    Icons.camera_alt_outlined,
+                                    color: white,
+                                    size: 70,
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.file(
+                                      File(imageFileList![0].path),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                           ),
                           Positioned(
                             top: 70,
@@ -102,6 +112,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                         await _picker.pickImage(
                                                             source: ImageSource
                                                                 .camera);
+                                                    imageFileList!.clear();
+                                                    imageFileList!.add(photo!);
+                                                    setState(() {});
                                                   },
                                                   child: Column(
                                                     children: [
@@ -135,8 +148,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     // Pick an image
                                                     final XFile? image =
                                                         await _picker.pickImage(
-                                                            source: ImageSource
-                                                                .gallery);
+                                                      source:
+                                                          ImageSource.gallery,
+                                                    );
+                                                    imageFileList!.clear();
+                                                    imageFileList!.add(image!);
+                                                    setState(() {});
                                                   },
                                                   child: Column(
                                                     children: [
@@ -185,8 +202,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                               },
                               child: Container(
-                                height: 27.h,
-                                width: 30.w,
+                                height: 30,
+                                width: 30,
                                 decoration: BoxDecoration(
                                     color: primaryColor,
                                     borderRadius: BorderRadius.circular(50)),
@@ -292,8 +309,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   Center(
                     child: CupertinoButton(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 130, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 120.w, vertical: 15),
                       color: seconderyColor,
                       child: const Text(
                         'Sign Up',

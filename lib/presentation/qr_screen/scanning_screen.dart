@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import '../../utils/const.dart';
 
 class ScanningScreen extends StatefulWidget {
@@ -17,22 +18,22 @@ class _ScanningScreenState extends State<ScanningScreen> {
 
   @override
   void initState() {
-    qrController!.resumeCamera();
+    // qrController!.resumeCamera();
     super.initState();
   }
 
   @override
   void dispose() {
-    qrController?.dispose();
+    // qrController?.dispose();
     super.dispose();
   }
 
   @override
   void reassemble() async {
     super.reassemble();
-    // if (Platform.isAndroid) {
-    //   await qrController!.pauseCamera();
-    // }
+    if (Platform.isAndroid) {
+      await qrController!.pauseCamera();
+    }
     qrController!.resumeCamera();
   }
 

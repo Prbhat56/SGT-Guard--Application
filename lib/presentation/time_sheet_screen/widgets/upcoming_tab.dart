@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/time_sheet_screen/widgets/time_sheet_model.dart';
 import '../../../utils/const.dart';
+import '../../shift_details_screen/shift_details_sceen.dart';
 
 class UpcomingWidgetTab extends StatelessWidget {
   const UpcomingWidgetTab({super.key});
@@ -15,6 +16,12 @@ class UpcomingWidgetTab extends StatelessWidget {
             // mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ShiftDetailsScreen()));
+                },
                 contentPadding: const EdgeInsets.only(
                     left: 10, right: 10, top: 10, bottom: 0),
                 dense: false,

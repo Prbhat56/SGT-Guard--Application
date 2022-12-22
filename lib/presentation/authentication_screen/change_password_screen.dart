@@ -19,7 +19,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController _newpasswordController;
   late TextEditingController _reenteredpasswordController;
 
-  bool ispasswordmatched = true;
   @override
   void initState() {
     _reenteredpasswordController = TextEditingController();
@@ -75,6 +74,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   textStyle: TextStyle(color: Colors.grey, fontSize: 16.sp)),
             ),
             TextFormField(
+              obscureText: true,
               controller: _newpasswordController,
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -181,7 +181,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 color: BlocProvider.of<IspasswordmarchedCubit>(context,
                             listen: true)
                         .state
-                        .ispasswordmatched
+                        .isValid
                     ? primaryColor
                     : seconderyColor,
                 child: Text(
@@ -191,9 +191,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       textStyle: TextStyle(fontSize: 17.sp)),
                 ),
                 onPressed: () {
-                  BlocProvider.of<IspasswordmarchedCubit>(context, listen: true)
+                  BlocProvider.of<IspasswordmarchedCubit>(context,
+                              listen: false)
                           .state
-                          .ispasswordmatched
+                          .isValid
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(

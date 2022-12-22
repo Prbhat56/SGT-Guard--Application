@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/helper/validator.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/forgot_password_screen.dart';
-import 'package:sgt/presentation/authentication_screen/sign_up_screen.dart';
 import 'package:sgt/presentation/home.dart';
 import 'package:sgt/utils/const.dart';
 
@@ -408,51 +407,51 @@ class _SignInScreenState extends State<SignInScreen> {
                                 : null;
                           }),
                     ),
-                    const SizedBox(height: 160),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const SignUpScreen();
-                            },
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                "Don't have an account?",
-                                textScaleFactor: 1.0,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Sign Up",
-                                textScaleFactor: 1.0,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                    // const SizedBox(height: 160),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) {
+                    //           return const SignUpScreen();
+                    //         },
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.only(left: 40.0),
+                    //     child: Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: [
+                    //         Center(
+                    //           child: Text(
+                    //             "Don't have an account?",
+                    //             textScaleFactor: 1.0,
+                    //             style: GoogleFonts.montserrat(
+                    //               textStyle: const TextStyle(
+                    //                 color: Colors.grey,
+                    //                 fontSize: 17,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         Expanded(
+                    //           child: Text(
+                    //             "Sign Up",
+                    //             textScaleFactor: 1.0,
+                    //             style: GoogleFonts.montserrat(
+                    //               textStyle: const TextStyle(
+                    //                 color: Colors.black,
+                    //                 fontSize: 18,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

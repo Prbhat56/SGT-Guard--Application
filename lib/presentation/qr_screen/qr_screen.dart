@@ -56,11 +56,14 @@ class _QrScreenState extends State<QrScreen> {
               height: 100,
             ),
             Center(
-              child: Icon(
-                Icons.qr_code_scanner_outlined,
-                size: 200,
+              child: Stack(
+                children: [
+                  Image.asset('assets/rectangle_design.png'),
+                  Positioned(top: 120, child: Image.asset('assets/line.png')),
+                ],
               ),
             ),
+            SizedBox(height: 20.h),
             Text(
               'Scan',
               textScaleFactor: 1.0,
@@ -68,7 +71,7 @@ class _QrScreenState extends State<QrScreen> {
               style: TextStyle(fontSize: 20, color: Colors.grey),
             ),
             SizedBox(
-              height: 180,
+              height: 130.h,
             ),
             Center(
               child: CupertinoButton(

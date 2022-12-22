@@ -1,10 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../utils/const.dart';
 
 class CheckPointWidget extends StatelessWidget {
-  const CheckPointWidget({super.key, required this.iscompleted});
-  final bool iscompleted;
+  const CheckPointWidget({
+    Key? key,
+    required this.title,
+    required this.imageUrl,
+    required this.iscompleted,
+  }) : super(key: key);
+  final String title;
+  final String imageUrl;
+  final String iscompleted;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,31 +28,34 @@ class CheckPointWidget extends StatelessWidget {
           width: 90,
           child: Image.network(
             fit: BoxFit.contain,
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
+            imageUrl,
           ),
         ),
         const SizedBox(
           width: 10,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Building Hallway 1',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-            ),
-            Text(
-              iscompleted ? 'Completed' : 'Check-in by 11:00am',
-              style: const TextStyle(fontSize: 15, color: Colors.grey),
-            ),
-          ],
+        SizedBox(
+          width: 138.w,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+              ),
+              Text(
+                iscompleted,
+                style: const TextStyle(fontSize: 15, color: Colors.grey),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           width: 50,
         ),
         IconButton(
             onPressed: () {},
-            icon: iscompleted
+            icon: iscompleted == 'Complete'
                 ? Icon(
                     Icons.check_circle,
                     color: greenColor,

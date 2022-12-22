@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/shift_details_screen/check_in%20_error_screen.dart';
+import 'package:sgt/presentation/time_sheet_screen/check_point_screen.dart';
 import '../../utils/const.dart';
 
 class ClockInScreen extends StatefulWidget {
@@ -160,7 +161,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return const CheckInErrorScreen();
+                          return const CheckPointScreen();
                         }));
                       }),
                   const SizedBox(

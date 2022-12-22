@@ -15,7 +15,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool iseamilvalid = true;
-
+  bool isValid = false;
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -80,6 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               onChanged: (value) {
                 setState(() {
                   iseamilvalid = value.isValidEmail;
+                  isValid = iseamilvalid ? true : false;
                 });
               },
             ),
@@ -98,6 +99,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           color: Colors.red,
                           size: 17,
                         ),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Text(
                           'Email ID is Incorrect',
                           style: TextStyle(color: Colors.red, fontSize: 13),
@@ -112,7 +116,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: CupertinoButton(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 130, vertical: 15),
-                color: iseamilvalid ? primaryColor : seconderyColor,
+                color: isValid ? primaryColor : seconderyColor,
                 child: Text(
                   'Send',
                   textScaleFactor: 1.0,
@@ -120,9 +124,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       textStyle: TextStyle(fontSize: 17.sp)),
                 ),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const ChangePasswordScreen();
-                  }));
+                  isValid
+                      ? Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                          return const ChangePasswordScreen();
+                        }))
+                      : null;
                 },
               ),
             ),

@@ -92,7 +92,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                               children: [
                                 Text(
                                   dummyData[index].name,
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -100,7 +100,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                                 Text(
                                   dummyData[index].location,
                                   style: TextStyle(
-                                      fontSize: 17, color: Colors.grey),
+                                      fontSize: 14, color: Colors.grey),
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -109,7 +109,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                             ),
                             subtitle: Text(
                               dummyData[index].position,
-                              style: TextStyle(fontSize: 15, color: black),
+                              style: TextStyle(fontSize: 13, color: black),
                             ),
                           ),
                           Divider(

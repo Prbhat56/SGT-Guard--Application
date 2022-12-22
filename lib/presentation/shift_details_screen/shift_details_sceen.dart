@@ -14,6 +14,12 @@ class ShiftDetailsScreen extends StatelessWidget {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: white,
+          title: Text(
+            'Shift details',
+            style: TextStyle(color: black),
+            textScaleFactor: 1.0,
+          ),
+          centerTitle: true,
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -24,23 +30,21 @@ class ShiftDetailsScreen extends StatelessWidget {
               )),
           actions: [
             TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Cencel',
-                  style: TextStyle(color: black, fontSize: 17),
-                ))
+              onPressed: () {},
+              child: Text(
+                'Cencel',
+                style: TextStyle(color: Colors.grey, fontSize: 17),
+              ),
+            ),
           ],
         ),
+        backgroundColor: white,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 18.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Shift details',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-                ),
                 const SizedBox(
                   height: 20,
                 ),
