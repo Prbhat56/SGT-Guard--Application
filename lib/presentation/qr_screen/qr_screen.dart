@@ -83,7 +83,7 @@ class _QrScreenState extends State<QrScreen> {
                     style: TextStyle(fontSize: 15.sp),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return const ScanningScreen();
                     }));
