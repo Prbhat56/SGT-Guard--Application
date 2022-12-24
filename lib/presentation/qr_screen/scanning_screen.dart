@@ -173,10 +173,11 @@ class _ScanningScreenState extends State<ScanningScreen> {
         key: qrKey,
         onQRViewCreated: _onQRViewCreated,
         overlay: QrScannerOverlayShape(
-            overlayColor: white,
-            cutOutSize: MediaQuery.of(context).size.width * 0.8,
-            borderWidth: 5,
-            borderRadius: 7),
+          overlayColor: white,
+          cutOutSize: MediaQuery.of(context).size.width * 0.8,
+          borderWidth: 5,
+          borderRadius: 7,
+        ),
       );
 
   void _onQRViewCreated(QRViewController controller) {

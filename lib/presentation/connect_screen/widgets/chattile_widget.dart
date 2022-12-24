@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,44 +8,35 @@ import 'chat_model.dart';
 import 'chatting_screen.dart';
 
 class ChatTileWidget extends StatelessWidget {
-  const ChatTileWidget({super.key, required this.index});
+  const ChatTileWidget(
+      {Key? key, required this.index, required this.color, required this.cubit})
+      : super(key: key);
   final int index;
+  final Color color;
+  final IslongpressCubit cubit;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
-          tileColor: BlocProvider.of<IslongpressCubit>(
-            context,
-          ).state.selectedChatTile.contains(index)
-              // selectedChatTile.contains(index)
-              ? seconderyColor
-              : null,
+          selectedColor: color,
+          tileColor: color,
           onLongPress: () {
-            BlocProvider.of<IslongpressCubit>(
-              context,
-            ).addtoList(index);
-            // setState(() {
-            //   selectedChatTile.add(index);
-            // });
-            // print(selectedChatTile[index]);
+            // cubit.addtoList(index);
+            BlocProvider.of<IslongpressCubit>(context).addtoList(index);
           },
           onTap: () {
-            BlocProvider.of<IslongpressCubit>(context, listen: true)
-                    .state
-                    .selectedChatTile
-                    .contains(index)
-                // selectedChatTile.contains(index)
-                ? BlocProvider.of<IslongpressCubit>(
-                    context,
-                  ).removefromList(index)
-                // ? setState(() {
-                //     selectedChatTile.remove(index);
-                //   })
+            cubit.state.selectedChatTile.contains(index)
+                ? BlocProvider.of<IslongpressCubit>(context)
+                    .removefromList(index)
+                // cubit.removefromList(index)
+
                 : Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ChattingScreen(index: index)));
+                      builder: (context) => ChattingScreen(index: index),
+                    ),
+                  );
           },
           leading: Stack(
             children: [
@@ -155,14 +147,11 @@ class ChatTileWidget extends StatelessWidget {
                 ]),
           ),
         ),
-        // BlocProvider.of<IslongpressCubit>(context, listen: true)
-        //         .state
-        //         .islongpressed
         BlocProvider.of<IslongpressCubit>(context, listen: true)
                 .state
                 .selectedChatTile
                 .contains(index)
-            // selectedChatTile.contains(index)
+            // cubit.state.selectedChatTile.contains(index)
             ? Divider(
                 height: 0,
                 color: Colors.grey,
@@ -175,6 +164,5 @@ class ChatTileWidget extends StatelessWidget {
               )
       ],
     );
-    
   }
 }

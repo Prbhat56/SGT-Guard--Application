@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:sgt/presentation/time_sheet_screen/widgets/check_point_model.dart';
-
 import '../../utils/const.dart';
-import '../map_screen/map_screen.dart';
 import '../qr_screen/qr_screen.dart';
 import '../settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
 import 'check_point_map_screen.dart';

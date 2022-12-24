@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
-import 'package:sgt/presentation/connect_screen/widgets/chatting_screen.dart';
 import '../../utils/const.dart';
 import 'widgets/chattile_widget.dart';
 
@@ -16,16 +14,23 @@ class ConnectScreen extends StatefulWidget {
 }
 
 class _ConnectScreenState extends State<ConnectScreen> {
-  List selectedChatTile = [];
+  // List selectedChatTile = [];
 
   @override
   Widget build(BuildContext context) {
+    print(context.watch<IslongpressCubit>().state.selectedChatTile.isNotEmpty);
     return Scaffold(
       appBar:
-
-          // BlocProvider.of<IslongpressCubit>(context, listen: true)
-          // state.selectedChatTile.isNotEmpty
-          selectedChatTile.isNotEmpty
+          // context
+          //         .watch<IslongpressCubit>()
+          //         .state
+          //         .selectedChatTile
+          //         .isNotEmpty
+          BlocProvider.of<IslongpressCubit>(context, listen: true)
+                  .state
+                  .selectedChatTile
+                  .isNotEmpty
+              // selectedChatTile.isNotEmpty
               ? AppBar(
                   elevation: 0,
                   leadingWidth: 0,
@@ -42,12 +47,12 @@ class _ConnectScreenState extends State<ConnectScreen> {
                   actions: [
                     IconButton(
                         onPressed: () {
-                          // BlocProvider.of<IslongpressCubit>(
-                          //   context,
-                          // ).removeAll();
-                          setState(() {
-                            selectedChatTile.clear();
-                          });
+                          BlocProvider.of<IslongpressCubit>(
+                            context,
+                          ).removeAll();
+                          // setState(() {
+                          //   selectedChatTile.clear();
+                          // });
                         },
                         icon: Icon(
                           Icons.delete_outline,
@@ -124,9 +129,11 @@ class _ConnectScreenState extends State<ConnectScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //  BlocProvider.of<IslongpressCubit>(context, listen: true)
-            //state.selectedChatTile.isNotEmpty
-            selectedChatTile.isNotEmpty
+            BlocProvider.of<IslongpressCubit>(context, listen: true)
+                    .state
+                    .selectedChatTile
+                    .isNotEmpty
+                // selectedChatTile.isNotEmpty
                 ? Container()
                 : const Padding(
                     padding: EdgeInsets.only(left: 16.0, bottom: 10),
@@ -136,9 +143,11 @@ class _ConnectScreenState extends State<ConnectScreen> {
                           TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                     ),
                   ),
-            // BlocProvider.of<IslongpressCubit>(context, listen: true)
-            //state.selectedChatTile.isNotEmpty
-            selectedChatTile.isNotEmpty
+            BlocProvider.of<IslongpressCubit>(context, listen: true)
+                    .state
+                    .selectedChatTile
+                    .isNotEmpty
+                // selectedChatTile.isNotEmpty
                 ? Container()
                 : Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 10),
@@ -153,184 +162,14 @@ class _ConnectScreenState extends State<ConnectScreen> {
             ),
             SingleChildScrollView(
               child: SizedBox(
-                height:
-                    //BlocProvider.of<IslongpressCubit>(context, listen: true)
-                    // state.selectedChatTile.isNotEmpty
-                    selectedChatTile.isNotEmpty
-                        ? MediaQuery.of(context).size.height * 4 / 5
-                        : MediaQuery.of(context).size.height * 3.56 / 5,
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: dummyData.length,
-                  itemBuilder: (context, index) => Column(
-                    children: [
-                      ListTile(
-                        tileColor:
-                            // BlocProvider.of<IslongpressCubit>(
-                            //   context,
-                            // ).state.selectedChatTile.contains(index)
-                            selectedChatTile.contains(index)
-                                ? seconderyColor
-                                : null,
-                        onLongPress: () {
-                          // BlocProvider.of<IslongpressCubit>(
-                          //   context,
-                          // ).addtoList(index);
-                          setState(() {
-                            selectedChatTile.add(index);
-                          });
-                          print(selectedChatTile[index]);
-                        },
-                        onTap: () {
-                          // BlocProvider.of<IslongpressCubit>(context,
-                          //             listen: true)
-                          //         .state
-                          //         .selectedChatTile
-                          //         .contains(index)
-                          selectedChatTile.contains(index)
-                              // ? BlocProvider.of<IslongpressCubit>(
-                              //     context,
-                              //   ).removefromList(index)
-                              ? setState(() {
-                                  selectedChatTile.remove(index);
-                                })
-                              : Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChattingScreen(index: index)));
-                        },
-                        leading: Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: grey,
-                              backgroundImage: NetworkImage(
-                                dummyData[index].profileUrl,
-                              ),
-                            ),
-                            dummyData[index].isOnline
-                                ? Positioned(
-                                    top: 40,
-                                    left: 40,
-                                    child: Container(
-                                      height: 15,
-                                      width: 15,
-                                      decoration: BoxDecoration(
-                                        color: greenColor,
-                                        border:
-                                            Border.all(color: white, width: 2),
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                    ),
-                                  )
-                                : Positioned(
-                                    top: 40,
-                                    left: 40,
-                                    child: Container(),
-                                  )
-                          ],
-                        ),
-                        title: Text(dummyData[index].name),
-                        subtitle: dummyData[index].isSendByMe
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  dummyData[index].messagetype == 'not_send'
-                                      ? Icon(
-                                          Icons.av_timer,
-                                          size: 17.sp,
-                                        )
-                                      : Icon(
-                                          Icons.done_all_outlined,
-                                          size: 17.sp,
-                                          color: dummyData[index].ismessageSeen
-                                              ? primaryColor
-                                              : Colors.grey,
-                                        ),
-                                  dummyData[index].messagetype == 'photo'
-                                      ? Icon(
-                                          Icons.photo,
-                                          size: 16.sp,
-                                        )
-                                      : dummyData[index].messagetype == 'video'
-                                          ? Icon(
-                                              Icons.videocam,
-                                              size: 16.sp,
-                                            )
-                                          : Container(),
-                                  SizedBox(
-                                    width: 140.w,
-                                    child: Text(
-                                      dummyData[index].messagetype == 'photo'
-                                          ? 'Photo'
-                                          : dummyData[index].messagetype ==
-                                                  'video'
-                                              ? "Video"
-                                              : dummyData[index].message,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                    ),
-                                  )
-                                ],
-                              )
-                            : Text(
-                                dummyData[index].message,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                        trailing: SizedBox(
-                          height: 60.h,
-                          width: 64.w,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  dummyData[index].time,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                dummyData[index].msgNo != 0.toString()
-                                    ? Container(
-                                        height: 20,
-                                        width: 20,
-                                        decoration: BoxDecoration(
-                                            color: primaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(50)),
-                                        child: Center(
-                                          child: Text(
-                                            dummyData[index].msgNo,
-                                            style: TextStyle(color: white),
-                                          ),
-                                        ),
-                                      )
-                                    : Container()
-                              ]),
-                        ),
-                      ),
-
-                      // BlocProvider.of<IslongpressCubit>(context, listen: true)
-                      //         .state
-                      //         .selectedChatTile
-                      //         .contains(index)
-                      selectedChatTile.contains(index)
-                          ? Divider(
-                              height: 0,
-                              color: Colors.grey,
-                            )
-                          : const Padding(
-                              padding: EdgeInsets.only(left: 90.0),
-                              child: Divider(
-                                color: Colors.grey,
-                              ),
-                            )
-                    ],
-                  ),
+                height: BlocProvider.of<IslongpressCubit>(context, listen: true)
+                        .state
+                        .selectedChatTile
+                        .isNotEmpty
+                    ? MediaQuery.of(context).size.height * 4 / 5
+                    : MediaQuery.of(context).size.height * 3.56 / 5,
+                child: ChatTileListView(
+                  cubit: BlocProvider.of(context),
                 ),
               ),
             )
@@ -340,170 +179,370 @@ class _ConnectScreenState extends State<ConnectScreen> {
     );
   }
 
-  Column chatTile(int index, BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          tileColor: BlocProvider.of<IslongpressCubit>(
-            context,
-          ).state.selectedChatTile.contains(index)
-              // selectedChatTile.contains(index)
-              ? seconderyColor
-              : null,
-          onLongPress: () {
-            BlocProvider.of<IslongpressCubit>(
-              context,
-            ).addtoList(index);
-            // setState(() {
-            //   selectedChatTile.add(index);
-            // });
-            print(selectedChatTile[index]);
-          },
-          onTap: () {
-            BlocProvider.of<IslongpressCubit>(context, listen: true)
-                    .state
-                    .selectedChatTile
-                    .contains(index)
-                // selectedChatTile.contains(index)
-                ? BlocProvider.of<IslongpressCubit>(
-                    context,
-                  ).removefromList(index)
-                // ? setState(() {
-                //     selectedChatTile.remove(index);
-                //   })
-                : Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ChattingScreen(index: index)));
-          },
-          leading: Stack(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: grey,
-                backgroundImage: NetworkImage(
-                  dummyData[index].profileUrl,
-                ),
-              ),
-              dummyData[index].isOnline
-                  ? Positioned(
-                      top: 40,
-                      left: 40,
-                      child: Container(
-                        height: 15,
-                        width: 15,
-                        decoration: BoxDecoration(
-                          color: greenColor,
-                          border: Border.all(color: white, width: 2),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                    )
-                  : Positioned(
-                      top: 40,
-                      left: 40,
-                      child: Container(),
-                    )
-            ],
+  // Column chatTile(int index, BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       ListTile(
+  //         tileColor: BlocProvider.of<IslongpressCubit>(
+  //           context,
+  //         ).state.selectedChatTile.contains(index)
+  //             // selectedChatTile.contains(index)
+  //             ? seconderyColor
+  //             : null,
+  //         onLongPress: () {
+  //           BlocProvider.of<IslongpressCubit>(
+  //             context,
+  //           ).addtoList(index);
+  //           // setState(() {
+  //           //   selectedChatTile.add(index);
+  //           // });
+  //           //  print(selectedChatTile[index]);
+  //         },
+  //         onTap: () {
+  //           BlocProvider.of<IslongpressCubit>(context, listen: true)
+  //                   .state
+  //                   .selectedChatTile
+  //                   .contains(index)
+  //               // selectedChatTile.contains(index)
+  //               ? BlocProvider.of<IslongpressCubit>(
+  //                   context,
+  //                 ).removefromList(index)
+  //               // ? setState(() {
+  //               //     selectedChatTile.remove(index);
+  //               //   })
+  //               : Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                       builder: (context) => ChattingScreen(index: index)));
+  //         },
+  //         leading: Stack(
+  //           children: [
+  //             CircleAvatar(
+  //               radius: 30,
+  //               backgroundColor: grey,
+  //               backgroundImage: NetworkImage(
+  //                 dummyData[index].profileUrl,
+  //               ),
+  //             ),
+  //             dummyData[index].isOnline
+  //                 ? Positioned(
+  //                     top: 40,
+  //                     left: 40,
+  //                     child: Container(
+  //                       height: 15,
+  //                       width: 15,
+  //                       decoration: BoxDecoration(
+  //                         color: greenColor,
+  //                         border: Border.all(color: white, width: 2),
+  //                         borderRadius: BorderRadius.circular(50),
+  //                       ),
+  //                     ),
+  //                   )
+  //                 : Positioned(
+  //                     top: 40,
+  //                     left: 40,
+  //                     child: Container(),
+  //                   )
+  //           ],
+  //         ),
+  //         title: Text(dummyData[index].name),
+  //         subtitle: dummyData[index].isSendByMe
+  //             ? Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   dummyData[index].messagetype == 'not_send'
+  //                       ? Icon(
+  //                           Icons.av_timer,
+  //                           size: 17.sp,
+  //                         )
+  //                       : Icon(
+  //                           Icons.done_all_outlined,
+  //                           size: 17.sp,
+  //                           color: dummyData[index].ismessageSeen
+  //                               ? primaryColor
+  //                               : Colors.grey,
+  //                         ),
+  //                   dummyData[index].messagetype == 'photo'
+  //                       ? Icon(
+  //                           Icons.photo,
+  //                           size: 16.sp,
+  //                         )
+  //                       : dummyData[index].messagetype == 'video'
+  //                           ? Icon(
+  //                               Icons.videocam,
+  //                               size: 16.sp,
+  //                             )
+  //                           : Container(),
+  //                   SizedBox(
+  //                     width: 140.w,
+  //                     child: Text(
+  //                       dummyData[index].messagetype == 'photo'
+  //                           ? 'Photo'
+  //                           : dummyData[index].messagetype == 'video'
+  //                               ? "Video"
+  //                               : dummyData[index].message,
+  //                       maxLines: 1,
+  //                       overflow: TextOverflow.ellipsis,
+  //                       softWrap: false,
+  //                     ),
+  //                   )
+  //                 ],
+  //               )
+  //             : Text(
+  //                 dummyData[index].message,
+  //                 overflow: TextOverflow.ellipsis,
+  //               ),
+  //         trailing: SizedBox(
+  //           height: 60.h,
+  //           width: 64.w,
+  //           child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.end,
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Text(
+  //                   dummyData[index].time,
+  //                   style: const TextStyle(color: Colors.grey),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 6,
+  //                 ),
+  //                 dummyData[index].msgNo != 0.toString()
+  //                     ? Container(
+  //                         height: 20,
+  //                         width: 20,
+  //                         decoration: BoxDecoration(
+  //                             color: primaryColor,
+  //                             borderRadius: BorderRadius.circular(50)),
+  //                         child: Center(
+  //                           child: Text(
+  //                             dummyData[index].msgNo,
+  //                             style: TextStyle(color: white),
+  //                           ),
+  //                         ),
+  //                       )
+  //                     : Container()
+  //               ]),
+  //         ),
+  //       ),
+  //       // BlocProvider.of<IslongpressCubit>(context, listen: true)
+  //       //         .state
+  //       //         .islongpressed
+  //       BlocProvider.of<IslongpressCubit>(context, listen: true)
+  //               .state
+  //               .selectedChatTile
+  //               .contains(index)
+  //           // selectedChatTile.contains(index)
+  //           ? Divider(
+  //               height: 0,
+  //               color: Colors.grey,
+  //             )
+  //           : const Padding(
+  //               padding: EdgeInsets.only(left: 90.0),
+  //               child: Divider(
+  //                 color: Colors.grey,
+  //               ),
+  //             )
+  //     ],
+  //   );
+  // }
+
+}
+
+class ChatTileListView extends StatelessWidget {
+  const ChatTileListView({
+    Key? key,
+    required this.cubit,
+  }) : super(key: key);
+  final IslongpressCubit cubit;
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<IslongpressCubit, IslongpressState>(
+      listener: (context, state) {
+        print('index of listtile ---->${state.selectedChatTile}');
+      },
+      builder: (context, state) {
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          physics: const BouncingScrollPhysics(),
+          itemCount: dummyData.length,
+          itemBuilder: (context, index) => ChatTileWidget(
+            index: index,
+            color: state.selectedChatTile.contains(index)
+                ? seconderyColor
+                : Colors.transparent,
+            cubit: BlocProvider.of(context),
           ),
-          title: Text(dummyData[index].name),
-          subtitle: dummyData[index].isSendByMe
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    dummyData[index].messagetype == 'not_send'
-                        ? Icon(
-                            Icons.av_timer,
-                            size: 17.sp,
-                          )
-                        : Icon(
-                            Icons.done_all_outlined,
-                            size: 17.sp,
-                            color: dummyData[index].ismessageSeen
-                                ? primaryColor
-                                : Colors.grey,
-                          ),
-                    dummyData[index].messagetype == 'photo'
-                        ? Icon(
-                            Icons.photo,
-                            size: 16.sp,
-                          )
-                        : dummyData[index].messagetype == 'video'
-                            ? Icon(
-                                Icons.videocam,
-                                size: 16.sp,
-                              )
-                            : Container(),
-                    SizedBox(
-                      width: 140.w,
-                      child: Text(
-                        dummyData[index].messagetype == 'photo'
-                            ? 'Photo'
-                            : dummyData[index].messagetype == 'video'
-                                ? "Video"
-                                : dummyData[index].message,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                      ),
-                    )
-                  ],
-                )
-              : Text(
-                  dummyData[index].message,
-                  overflow: TextOverflow.ellipsis,
-                ),
-          trailing: SizedBox(
-            height: 60.h,
-            width: 64.w,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    dummyData[index].time,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  dummyData[index].msgNo != 0.toString()
-                      ? Container(
-                          height: 20,
-                          width: 20,
-                          decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Center(
-                            child: Text(
-                              dummyData[index].msgNo,
-                              style: TextStyle(color: white),
-                            ),
-                          ),
-                        )
-                      : Container()
-                ]),
-          ),
-        ),
-        // BlocProvider.of<IslongpressCubit>(context, listen: true)
-        //         .state
-        //         .islongpressed
-        BlocProvider.of<IslongpressCubit>(context, listen: true)
-                .state
-                .selectedChatTile
-                .contains(index)
-            // selectedChatTile.contains(index)
-            ? Divider(
-                height: 0,
-                color: Colors.grey,
-              )
-            : const Padding(
-                padding: EdgeInsets.only(left: 90.0),
-                child: Divider(
-                  color: Colors.grey,
-                ),
-              )
-      ],
+
+          // Column(
+          //   children: [
+          //     ListTile(
+          //       tileColor:
+          //           // BlocProvider.of<IslongpressCubit>(
+          //           //   context,
+          //           // ).state.selectedChatTile.contains(index)
+          //           selectedChatTile.contains(index)
+          //               ? seconderyColor
+          //               : null,
+          //       onLongPress: () {
+          //         // BlocProvider.of<IslongpressCubit>(
+          //         //   context,
+          //         // ).addtoList(index);
+          //         setState(() {
+          //           selectedChatTile.add(index);
+          //         });
+          //         print(selectedChatTile[index]);
+          //       },
+          //       onTap: () {
+          //         // BlocProvider.of<IslongpressCubit>(context,
+          //         //             listen: true)
+          //         //         .state
+          //         //         .selectedChatTile
+          //         //         .contains(index)
+          //         selectedChatTile.contains(index)
+          //             // ? BlocProvider.of<IslongpressCubit>(
+          //             //     context,
+          //             //   ).removefromList(index)
+          //             ? setState(() {
+          //                 selectedChatTile.remove(index);
+          //               })
+          //             : Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                     builder: (context) =>
+          //                         ChattingScreen(index: index)));
+          //       },
+          //       leading: Stack(
+          //         children: [
+          //           CircleAvatar(
+          //             radius: 30,
+          //             backgroundColor: grey,
+          //             backgroundImage: NetworkImage(
+          //               dummyData[index].profileUrl,
+          //             ),
+          //           ),
+          //           dummyData[index].isOnline
+          //               ? Positioned(
+          //                   top: 40,
+          //                   left: 40,
+          //                   child: Container(
+          //                     height: 15,
+          //                     width: 15,
+          //                     decoration: BoxDecoration(
+          //                       color: greenColor,
+          //                       border:
+          //                           Border.all(color: white, width: 2),
+          //                       borderRadius: BorderRadius.circular(50),
+          //                     ),
+          //                   ),
+          //                 )
+          //               : Positioned(
+          //                   top: 40,
+          //                   left: 40,
+          //                   child: Container(),
+          //                 )
+          //         ],
+          //       ),
+          //       title: Text(dummyData[index].name),
+          //       subtitle: dummyData[index].isSendByMe
+          //           ? Row(
+          //               mainAxisSize: MainAxisSize.min,
+          //               children: [
+          //                 dummyData[index].messagetype == 'not_send'
+          //                     ? Icon(
+          //                         Icons.av_timer,
+          //                         size: 17.sp,
+          //                       )
+          //                     : Icon(
+          //                         Icons.done_all_outlined,
+          //                         size: 17.sp,
+          //                         color: dummyData[index].ismessageSeen
+          //                             ? primaryColor
+          //                             : Colors.grey,
+          //                       ),
+          //                 dummyData[index].messagetype == 'photo'
+          //                     ? Icon(
+          //                         Icons.photo,
+          //                         size: 16.sp,
+          //                       )
+          //                     : dummyData[index].messagetype == 'video'
+          //                         ? Icon(
+          //                             Icons.videocam,
+          //                             size: 16.sp,
+          //                           )
+          //                         : Container(),
+          //                 SizedBox(
+          //                   width: 140.w,
+          //                   child: Text(
+          //                     dummyData[index].messagetype == 'photo'
+          //                         ? 'Photo'
+          //                         : dummyData[index].messagetype ==
+          //                                 'video'
+          //                             ? "Video"
+          //                             : dummyData[index].message,
+          //                     maxLines: 1,
+          //                     overflow: TextOverflow.ellipsis,
+          //                     softWrap: false,
+          //                   ),
+          //                 )
+          //               ],
+          //             )
+          //           : Text(
+          //               dummyData[index].message,
+          //               overflow: TextOverflow.ellipsis,
+          //             ),
+          //       trailing: SizedBox(
+          //         height: 60.h,
+          //         width: 64.w,
+          //         child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.end,
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               Text(
+          //                 dummyData[index].time,
+          //                 style: const TextStyle(color: Colors.grey),
+          //               ),
+          //               const SizedBox(
+          //                 height: 6,
+          //               ),
+          //               dummyData[index].msgNo != 0.toString()
+          //                   ? Container(
+          //                       height: 20,
+          //                       width: 20,
+          //                       decoration: BoxDecoration(
+          //                           color: primaryColor,
+          //                           borderRadius:
+          //                               BorderRadius.circular(50)),
+          //                       child: Center(
+          //                         child: Text(
+          //                           dummyData[index].msgNo,
+          //                           style: TextStyle(color: white),
+          //                         ),
+          //                       ),
+          //                     )
+          //                   : Container()
+          //             ]),
+          //       ),
+          //     ),
+
+          //     // BlocProvider.of<IslongpressCubit>(context, listen: true)
+          //     //         .state
+          //     //         .selectedChatTile
+          //     //         .contains(index)
+          //     selectedChatTile.contains(index)
+          //         ? Divider(
+          //             height: 0,
+          //             color: Colors.grey,
+          //           )
+          //         : const Padding(
+          //             padding: EdgeInsets.only(left: 90.0),
+          //             child: Divider(
+          //               color: Colors.grey,
+          //             ),
+          //           )
+          //   ],
+          // ),
+        );
+      },
     );
   }
 }
