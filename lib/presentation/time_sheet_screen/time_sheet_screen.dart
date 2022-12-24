@@ -38,13 +38,13 @@ class TimeSheetScreen extends StatelessWidget {
                         Tab(
                           icon: Text(
                             'Upcoming',
-                            style: TextStyle(color: black, fontSize: 20),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Tab(
                           icon: Text(
                             'Complete',
-                            style: TextStyle(color: black, fontSize: 20),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                       ],

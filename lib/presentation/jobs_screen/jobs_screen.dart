@@ -55,13 +55,13 @@ class JobsScreen extends StatelessWidget {
                     Tab(
                       icon: Text(
                         'Active',
-                        style: TextStyle(color: black, fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     Tab(
                       icon: Text(
                         'Inactive',
-                        style: TextStyle(color: black, fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                   ],

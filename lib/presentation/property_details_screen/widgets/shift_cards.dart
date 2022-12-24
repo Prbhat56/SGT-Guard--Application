@@ -13,8 +13,8 @@ class ShiftCards extends StatelessWidget {
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ShiftDetailsScreen()));
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => ShiftDetailsScreen()));
         },
         child: Container(
           height: 48,

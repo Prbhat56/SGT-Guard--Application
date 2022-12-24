@@ -35,13 +35,13 @@ class NotificationScreen extends StatelessWidget {
                   Tab(
                     icon: Text(
                       'General',
-                      style: TextStyle(color: black, fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                   Tab(
                     icon: Text(
                       'Tasks',
-                      style: TextStyle(color: black, fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ],
