@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/presentation/map_screen/map_screen.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/shift_cards.dart';
 import '../../utils/const.dart';
+import '../shift_details_screen/shift_details_sceen.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   const PropertyDetailsScreen({super.key});
@@ -94,14 +95,37 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           const SizedBox(
                             width: 30,
                           ),
-                          Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(color: Colors.grey)),
-                            child: Icon(Icons.add, color: primaryColor),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const ShiftDetailsScreen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return SlideTransition(
+                                      position: Tween<Offset>(
+                                              begin: const Offset(1, 0),
+                                              end: Offset.zero)
+                                          .animate(animation),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(color: Colors.grey)),
+                              child: Icon(Icons.add, color: primaryColor),
+                            ),
                           ),
                         ],
                       ),

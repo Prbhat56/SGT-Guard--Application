@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
@@ -334,18 +336,19 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 },
                 title: ReceivedMessageScreen(message: "Ok I will check ")),
             ListTile(
-                tileColor: selectedChatTile.contains(7) ? seconderyColor : null,
-                onLongPress: () {
-                  setState(() {
-                    selectedChatTile.add(7);
-                  });
-                },
-                onTap: () {
-                  setState(() {
-                    selectedChatTile.remove(7);
-                  });
-                },
-                title: SentMessageScreen(message: "Can we meet tomorrow?")),
+              tileColor: selectedChatTile.contains(7) ? seconderyColor : null,
+              onLongPress: () {
+                setState(() {
+                  selectedChatTile.add(7);
+                });
+              },
+              onTap: () {
+                setState(() {
+                  selectedChatTile.remove(7);
+                });
+              },
+              title: SentMessageScreen(message: "Can we meet tomorrow?"),
+            ),
             ListTile(
               tileColor: selectedChatTile.contains(8) ? seconderyColor : null,
               onLongPress: () {
@@ -394,7 +397,83 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 });
               },
               title: VideoPreviewWidget(),
-            )
+            ),
+            ListTile(
+              tileColor: selectedChatTile.contains(11) ? seconderyColor : null,
+              onLongPress: () {
+                setState(() {
+                  selectedChatTile.add(11);
+                });
+              },
+              onTap: () {
+                setState(() {
+                  selectedChatTile.remove(11);
+                });
+              },
+              title: Stack(
+                children: [
+                  Image.network(
+                    'https://images.pexels.com/photos/5702958/pexels-photo-5702958.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                    height: 150,
+                  ),
+                  Positioned(
+                    top: 250,
+                    child: Center(
+                      child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                          child: Container(
+                            child: Text(''),
+                          )),
+                    ),
+                  ),
+                  Positioned(
+                      top: 60,
+                      left: 70,
+                      child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                              color: black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.download_outlined,
+                                color: white,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Retry',
+                                style: TextStyle(color: white),
+                              ),
+                            ],
+                          ))),
+                ],
+              ),
+            ),
+            ListTile(
+              tileColor: selectedChatTile.contains(9) ? seconderyColor : null,
+              onLongPress: () {
+                setState(() {
+                  selectedChatTile.add(9);
+                });
+              },
+              onTap: () {
+                selectedChatTile.contains(9)
+                    ? setState(() {
+                        selectedChatTile.remove(9);
+                      })
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MediaPreviewScreen(index: widget.index)));
+              },
+              title: ImageMessage(),
+            ),
           ],
         ),
         bottomNavigationBar: Padding(
