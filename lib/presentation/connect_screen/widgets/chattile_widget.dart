@@ -31,12 +31,30 @@ class ChatTileWidget extends StatelessWidget {
                     .removefromList(index)
                 // cubit.removefromList(index)
 
-                : Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChattingScreen(index: index),
+                : Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          ChattingScreen(
+                        index: index,
+                      ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
                     ),
                   );
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => ChattingScreen(index: index),
+            //     ),
+            //   );
           },
           leading: Stack(
             children: [

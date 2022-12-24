@@ -35,10 +35,26 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const WorkReportScreen()));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const WorkReportScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const WorkReportScreen()));
                 },
                 icon: Icon(
                   Icons.add,
@@ -62,10 +78,26 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold)),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AllTeamMemberScreen()));
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const AllTeamMemberScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                                    begin: const Offset(1, 0), end: Offset.zero)
+                                .animate(animation),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const AllTeamMemberScreen()));
                   },
                   child: const Text('See all > ',
                       style: TextStyle(
@@ -95,10 +127,26 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold)),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const JobsScreen()));
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const JobsScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                                    begin: const Offset(1, 0), end: Offset.zero)
+                                .animate(animation),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const JobsScreen()));
                   },
                   child: const Text('See all > ',
                       style: TextStyle(

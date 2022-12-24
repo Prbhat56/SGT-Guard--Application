@@ -12,7 +12,6 @@ class CompletedWidgetTab extends StatelessWidget {
         itemCount: dummytimeSheetData.length,
         itemBuilder: (context, index) {
           return Column(
-            // mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 contentPadding: const EdgeInsets.only(

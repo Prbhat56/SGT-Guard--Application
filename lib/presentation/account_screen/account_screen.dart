@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sgt/presentation/qr_screen/qr_screen.dart';
 import 'package:sgt/presentation/settings_screen/settings_screen.dart';
-
 import '../../utils/const.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -15,9 +11,25 @@ class AccountScreen extends StatelessWidget {
       appBar: AppBar(backgroundColor: white, elevation: 0, actions: [
         IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return const SettingsScreen();
-            }));
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 500),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const SettingsScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                            begin: const Offset(1, 0), end: Offset.zero)
+                        .animate(animation),
+                    child: child,
+                  );
+                },
+              ),
+            );
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return const SettingsScreen();
+            // }));
           },
           icon: Icon(
             Icons.settings,

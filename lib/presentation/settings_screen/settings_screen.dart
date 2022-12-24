@@ -75,9 +75,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const ChangePasswordScreen();
-                  }));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ChangePasswordScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return const ChangePasswordScreen();
+                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -112,9 +128,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const EditAccountScreen();
-                  }));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const EditAccountScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return const EditAccountScreen();
+                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -150,9 +182,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const TermsandConditionScreen();
-                  }));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const TermsandConditionScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return const TermsandConditionScreen();
+                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -188,9 +236,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const PrivacyPolicyScreen();
-                  }));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const PrivacyPolicyScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return const PrivacyPolicyScreen();
+                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -228,9 +292,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const LanguagesScreen();
-                  }));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const LanguagesScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return const LanguagesScreen();
+                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),

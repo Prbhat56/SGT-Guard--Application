@@ -356,11 +356,31 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const ForgotPasswordScreen();
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) {
+                              //       return const ForgotPasswordScreen();
+                              //     },
+                              //   ),
+                              // );
+
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const ForgotPasswordScreen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return SlideTransition(
+                                      position: Tween<Offset>(
+                                              begin: const Offset(1, 0),
+                                              end: Offset.zero)
+                                          .animate(animation),
+                                      child: child,
+                                    );
                                   },
                                 ),
                               );
@@ -396,14 +416,34 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           onPressed: () {
                             isFormValid
-                                ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return const Home();
+                                ? Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 500),
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          const Home(),
+                                      transitionsBuilder: (context, animation,
+                                          secondaryAnimation, child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                                  begin: const Offset(1, 0),
+                                                  end: Offset.zero)
+                                              .animate(animation),
+                                          child: child,
+                                        );
                                       },
                                     ),
                                   )
+
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) {
+                                //         return const Home();
+                                //       },
+                                //     ),
+                                //   )
                                 : null;
                           }),
                     ),

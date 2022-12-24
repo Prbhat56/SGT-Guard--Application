@@ -17,10 +17,26 @@ class UpcomingWidgetTab extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ShiftDetailsScreen()));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ShiftDetailsScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const ShiftDetailsScreen()));
                 },
                 contentPadding: const EdgeInsets.only(
                     left: 10, right: 10, top: 10, bottom: 0),
