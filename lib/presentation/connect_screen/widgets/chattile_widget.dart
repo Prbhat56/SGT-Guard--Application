@@ -23,9 +23,16 @@ class ChatTileWidget extends StatelessWidget {
           tileColor: color,
           onLongPress: () {
             // cubit.addtoList(index);
-            BlocProvider.of<IslongpressCubit>(context).addtoList(index);
+            BlocProvider.of<IslongpressCubit>(
+              context,
+            ).state.selectedChatTile.contains(index)
+                ? null
+                : BlocProvider.of<IslongpressCubit>(context).addtoList(index);
           },
           onTap: () {
+            // BlocProvider.of<IslongpressCubit>(
+            //   context,
+            // ).state.selectedChatTile.contains(index)
             cubit.state.selectedChatTile.contains(index)
                 ? BlocProvider.of<IslongpressCubit>(context)
                     .removefromList(index)

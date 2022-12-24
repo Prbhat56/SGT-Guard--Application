@@ -169,7 +169,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     ? MediaQuery.of(context).size.height * 4 / 5
                     : MediaQuery.of(context).size.height * 3.56 / 5,
                 child: ChatTileListView(
-                  cubit: BlocProvider.of(context),
+                  cubit: BlocProvider.of<IslongpressCubit>(context),
                 ),
               ),
             )
@@ -370,7 +370,7 @@ class ChatTileListView extends StatelessWidget {
             color: state.selectedChatTile.contains(index)
                 ? seconderyColor
                 : Colors.transparent,
-            cubit: BlocProvider.of(context),
+            cubit: BlocProvider.of<IslongpressCubit>(context),
           ),
 
           // Column(

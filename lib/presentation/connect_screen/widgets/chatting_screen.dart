@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
 import 'package:sgt/presentation/connect_screen/widgets/media_preview_screen.dart';
@@ -266,6 +267,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   message:
                       "Hey John, I need you to head over to the leasing office to check up on the back door."),
             ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 4 / 5),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
             ListTile(
                 tileColor: selectedChatTile.contains(2) ? seconderyColor : null,
                 onLongPress: () {
@@ -293,6 +302,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 },
                 title: ReceivedMessageScreen(
                     message: "Should I look for something?")),
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
             ListTile(
                 tileColor: selectedChatTile.contains(4) ? seconderyColor : null,
                 onLongPress: () {
@@ -322,6 +338,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   message:
                       "A tenant brought up a concern about a open door and there might be someone there."),
             ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 4 / 5),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
             ListTile(
                 tileColor: selectedChatTile.contains(6) ? seconderyColor : null,
                 onLongPress: () {
@@ -335,6 +359,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   });
                 },
                 title: ReceivedMessageScreen(message: "Ok I will check ")),
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
             ListTile(
               tileColor: selectedChatTile.contains(7) ? seconderyColor : null,
               onLongPress: () {
@@ -348,6 +379,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 });
               },
               title: SentMessageScreen(message: "Can we meet tomorrow?"),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 4 / 5),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ),
             ListTile(
               tileColor: selectedChatTile.contains(8) ? seconderyColor : null,
@@ -363,6 +402,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
               },
               title: ReceivedMessageScreen(
                   message: "Yes, of course we will meet tomorrow"),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ),
             ListTile(
               tileColor: selectedChatTile.contains(9) ? seconderyColor : null,
@@ -384,6 +430,16 @@ class _ChattingScreenState extends State<ChattingScreen> {
               },
               title: ImageMessage(),
             ),
+            Padding(
+              padding: EdgeInsets.only(left: 15, bottom: 15),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             ListTile(
               tileColor: selectedChatTile.contains(10) ? seconderyColor : null,
               onLongPress: () {
@@ -398,59 +454,118 @@ class _ChattingScreenState extends State<ChattingScreen> {
               },
               title: VideoPreviewWidget(),
             ),
+            Padding(
+              padding: EdgeInsets.only(left: 15, top: 0, bottom: 15),
+              child: Text(
+                '10.23 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 120),
+              child: ListTile(
+                tileColor:
+                    selectedChatTile.contains(11) ? seconderyColor : null,
+                onLongPress: () {
+                  setState(() {
+                    selectedChatTile.add(11);
+                  });
+                },
+                onTap: () {
+                  setState(() {
+                    selectedChatTile.remove(11);
+                  });
+                },
+                title: Stack(
+                  children: [
+                    Image.network(
+                      'https://images.pexels.com/photos/5702958/pexels-photo-5702958.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                      height: 150,
+                    ),
+                    Positioned(
+                      top: 250,
+                      child: Center(
+                        child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                            child: Container(
+                              child: Text(''),
+                            )),
+                      ),
+                    ),
+                    Positioned(
+                        top: 60,
+                        left: 70,
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: black.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.download_outlined,
+                                  color: white,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Retry',
+                                  style: TextStyle(color: white),
+                                ),
+                              ],
+                            ))),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 4 / 5, bottom: 15),
+              child: Row(
+                children: [
+                  Text(
+                    '10.30 A.M.',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  Icon(Icons.av_timer, size: 17.sp, color: Colors.grey),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             ListTile(
-              tileColor: selectedChatTile.contains(11) ? seconderyColor : null,
+              tileColor: selectedChatTile.contains(7) ? seconderyColor : null,
               onLongPress: () {
                 setState(() {
-                  selectedChatTile.add(11);
+                  selectedChatTile.add(7);
                 });
               },
               onTap: () {
                 setState(() {
-                  selectedChatTile.remove(11);
+                  selectedChatTile.remove(7);
                 });
               },
-              title: Stack(
+              title: SentMessageScreen(
+                  message:
+                      "A tenant brought up a concern about a open door and there might be someone there."),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 4 / 5),
+              child: Row(
                 children: [
-                  Image.network(
-                    'https://images.pexels.com/photos/5702958/pexels-photo-5702958.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                    height: 150,
+                  Text(
+                    '10.30 A.M.',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
-                  Positioned(
-                    top: 250,
-                    child: Center(
-                      child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-                          child: Container(
-                            child: Text(''),
-                          )),
-                    ),
-                  ),
-                  Positioned(
-                      top: 60,
-                      left: 70,
-                      child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          decoration: BoxDecoration(
-                              color: black.withOpacity(0.6),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.download_outlined,
-                                color: white,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Retry',
-                                style: TextStyle(color: white),
-                              ),
-                            ],
-                          ))),
+                  Icon(Icons.av_timer, size: 17.sp, color: Colors.grey),
                 ],
               ),
             ),
@@ -473,6 +588,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                 MediaPreviewScreen(index: widget.index)));
               },
               title: ImageMessage(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                '10.30 A.M.',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ),
           ],
         ),

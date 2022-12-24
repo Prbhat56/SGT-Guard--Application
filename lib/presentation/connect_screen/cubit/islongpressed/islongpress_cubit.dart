@@ -12,7 +12,7 @@ class IslongpressCubit extends Cubit<IslongpressState> {
 
   void removefromList(int index) {
     emit(state.copyWith(
-        selectedChatTile: state.selectedChatTile..removeAt(index)));
+        selectedChatTile: state.selectedChatTile..remove(index)));
     print("removed index --->${state.selectedChatTile}");
   }
 
