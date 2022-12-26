@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -394,6 +395,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       style: TextStyle(color: Colors.grey),
                     ),
                     TextFormField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(6),
+                      ],
                       decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: grey, width: 2),
@@ -405,9 +409,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(color: grey),
                           ),
-                          hintText: '90045',
+                          hintText: '900451',
                           focusColor: primaryColor),
-                      validator: (input) => input!.isValidZipcode
+                      keyboardType: TextInputType.number,
+                      validator: (input) => input!.isNotEmpty
                           ? null
                           : "Please enter a valid zipcode",
                     ),
@@ -648,6 +653,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       style: TextStyle(color: Colors.grey),
                     ),
                     TextFormField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(10),
+                      ],
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: grey, width: 2),
@@ -661,9 +669,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         hintText: '(808) 628 8343',
                         focusColor: primaryColor,
                       ),
-                      validator: (input) => input!.isValidPhone
+                      keyboardType: TextInputType.number,
+                      validator: (input) => input!.isNotEmpty
                           ? null
-                          : 'Please enter a valid phone!',
+                          : "please enter your phone number",
                     ),
                     SizedBox(
                       height: 20.h,

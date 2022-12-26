@@ -321,45 +321,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                 ),
               ],
             ),
-            // child: Stack(
-            //   children: [
-            //     ListView.builder(
-            //         scrollDirection: Axis.horizontal,
-            //         itemCount: data.length,
-            //         itemBuilder: (context, index) {
-            //           return Image.network(
-            //             data[index],
-            //             height: MediaQuery.of(context).size.height,
-            //             width: MediaQuery.of(context).size.width,
-            //             fit: BoxFit.cover,
-            //           );
-            //         }),
-            //     Positioned(
-            //       top: 382.90,
-            //       left: 0,
-            //       child: IconButton(
-            //         onPressed: () {},
-            //         icon: Icon(
-            //           Icons.arrow_back_ios,
-            //           color: white,
-            //           size: 35,
-            //         ),
-            //       ),
-            //     ),
-            //     Positioned(
-            //       top: 382.90,
-            //       right: 0,
-            //       child: IconButton(
-            //         onPressed: () {},
-            //         icon: Icon(
-            //           Icons.arrow_forward_ios,
-            //           color: white,
-            //           size: 35,
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ),
         ],
       ),
