@@ -39,7 +39,7 @@ class SentMessageScreen extends StatelessWidget {
                 ),
               ),
             ),
-            CustomPaint(painter: CustomShape(Colors.cyan[900]!)),
+            CustomPaint(painter: CustomShape(primaryColor)),
           ],
         ),
       ),

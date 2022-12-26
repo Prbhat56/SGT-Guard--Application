@@ -24,4 +24,9 @@ extension StringValidator on String {
     final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
     return phoneRegExp.hasMatch(this);
   }
+
+  bool get isValidZipcode {
+    final zipCodeRegExp = RegExp(r"^[0-9]{5}(?:-[0-9]{4})?$");
+    return zipCodeRegExp.hasMatch(this);
+  }
 }

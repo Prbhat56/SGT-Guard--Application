@@ -775,12 +775,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                           children: [
                                             InkWell(
                                               onTap: () async {
-                                                // // Capture a photo
-                                                // final XFile? photo =
-                                                //     await _picker.pickImage(
-                                                //         source: ImageSource.camera);
-
-                                                // Capture a video
                                                 final XFile? video =
                                                     await _picker.pickVideo(
                                                         source:
@@ -811,20 +805,10 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                                // Pick an image
-                                                // final XFile? image =
-                                                //     await _picker.pickImage(
-                                                //         source: ImageSource.gallery);
-
-                                                // Pick a video
                                                 final XFile? video =
                                                     await _picker.pickVideo(
                                                         source: ImageSource
                                                             .gallery);
-
-                                                // Pick multiple images
-                                                // final List<XFile>? images =
-                                                //     await _picker.pickMultiImage();
                                               },
                                               child: Column(
                                                 children: [
@@ -900,25 +884,20 @@ class _ChattingScreenState extends State<ChattingScreen> {
                       borderRadius: BorderRadius.circular(7),
                       borderSide: BorderSide(color: grey),
                     ),
-                    // focusedBorder: UnderlineInputBorder(
-                    //   borderSide: BorderSide(color: grey),
-                    // ),
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(7),
                       borderSide: BorderSide(color: grey),
                     ),
-
-                    // border: OutlineInputBorder(
-                    //   borderRadius: BorderRadius.circular(7),
-                    //   borderSide: BorderSide(
-                    //     color: white,
-                    //   ),
-                    // ),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
                         borderSide: BorderSide(color: grey)),
                     hintText: 'Write a message',
                   ),
+                  onTap: () {
+                    setState(() {
+                      selectMedia = false;
+                    });
+                  },
                 ),
               ),
               IconButton(
