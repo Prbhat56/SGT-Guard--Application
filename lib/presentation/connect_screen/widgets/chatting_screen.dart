@@ -652,10 +652,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                                         source:
                                                             ImageSource.camera);
 
-                                                // // Capture a video
-                                                // final XFile? video =
-                                                //     await _picker.pickVideo(
-                                                //         source: ImageSource.camera);
+                                             
                                               },
                                               child: Column(
                                                 children: [
@@ -682,10 +679,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                                // Pick an image
-                                                // final XFile? image =
-                                                //     await _picker.pickImage(
-                                                //         source: ImageSource.gallery);
+                                         
 
                                                 // Pick multiple images
                                                 final List<XFile>? images =

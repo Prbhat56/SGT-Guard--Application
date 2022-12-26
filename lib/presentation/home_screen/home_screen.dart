@@ -94,10 +94,6 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                     );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const AllTeamMemberScreen()));
                   },
                   child: const Text('See all > ',
                       style: TextStyle(
@@ -143,10 +139,6 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                     );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const JobsScreen()));
                   },
                   child: const Text('See all > ',
                       style: TextStyle(
