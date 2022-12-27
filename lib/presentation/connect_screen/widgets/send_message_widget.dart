@@ -12,12 +12,7 @@ class SentMessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final messageTextGroup = Flexible(
-      child: Container(
-        // color: BlocProvider.of<MessagePressedCubit>(context, listen: true)
-        //         .state
-        //         .messagelongpressed
-        //     ? seconderyColor
-        //     : null,
+      child: Container(                                                                                                                 
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,

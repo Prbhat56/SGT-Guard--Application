@@ -10,6 +10,7 @@ import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pr
 import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
 import 'package:sgt/presentation/onboarding_screen/cubit/islastpage/islastpage_cubit.dart';
 import 'package:sgt/presentation/settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
+import 'package:sgt/presentation/work_report_screen/cubit/addpeople/addpeople_cubit.dart';
 import 'package:sgt/utils/const.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'presentation/onboarding_screen/onboarding_screen.dart';
@@ -17,18 +18,6 @@ import 'presentation/onboarding_screen/onboarding_screen.dart';
 void main() {
   runApp(const MyApp());
 }
-
-//final GoRouter _router = GoRouter(routes: <RouteBase>[
-// GoRoute(
-//     path: '/',
-//     builder: (BuildContext context, GoRouterState state) {
-//       return OnboardingScreen();
-//     }),
-// GoRoute(path: 'timesheet'),
-// GoRoute(path: 'connect'),
-// GoRoute(path: 'notificaion'),
-// GoRoute(path: 'account'),
-// ]);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -49,6 +38,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => IspasswordmarchedCubit()),
               BlocProvider(create: (context) => IslastpageCubit()),
               BlocProvider(create: (context) => IssearchingCubit()),
+              BlocProvider(create: (context) => AddpeopleCubit()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

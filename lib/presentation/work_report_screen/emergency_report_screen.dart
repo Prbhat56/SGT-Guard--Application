@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:dotted_border/dotted_border.dart';
@@ -10,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/map_screen/map_screen.dart';
 import '../../utils/const.dart';
 import '../home.dart';
+import 'cubit/addpeople/addpeople_cubit.dart';
 import 'widget/edit_location.dart';
 
 class EmergencyReportScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class EmergencyReportScreen extends StatefulWidget {
 
 class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   var value;
-  int peopleNo = 1;
+  // int peopleNo = 1;
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
   List imageNames = [];
@@ -299,9 +301,17 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                       child: Column(
                         children: [
                           Container(
-                            height: 90 * peopleNo.toDouble(),
+                            height: 90 *
+                                context
+                                    .read<AddpeopleCubit>()
+                                    .state
+                                    .peopleNo
+                                    .toDouble(),
                             child: ListView.builder(
-                                itemCount: peopleNo,
+                                itemCount: context
+                                    .watch<AddpeopleCubit>()
+                                    .state
+                                    .peopleNo,
                                 itemBuilder: (context, index) {
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -376,9 +386,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           ),
                           IconButton(
                               onPressed: () {
-                                setState(() {
-                                  peopleNo = peopleNo + 1;
-                                });
+                                context.read<AddpeopleCubit>().addPeople();
                               },
                               icon: const Icon(
                                 Icons.add,

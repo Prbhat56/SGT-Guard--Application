@@ -6,7 +6,11 @@ class IslongpressCubit extends Cubit<IslongpressState> {
   IslongpressCubit() : super(IslongpressState.initial());
 
   void addtoList(int index) {
-    emit(state.copyWith(selectedChatTile: state.selectedChatTile..add(index)));
+    var selectedTile = state.selectedChatTile;
+
+    selectedTile.add(index);
+
+    emit(state.copyWith(selectedChatTile: selectedTile));
     print("added index --->${state.selectedChatTile}");
   }
 

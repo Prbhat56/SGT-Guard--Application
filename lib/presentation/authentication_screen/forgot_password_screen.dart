@@ -112,7 +112,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             const SizedBox(
               height: 40,
             ),
-            Center(
+            Center(                             
               child: CupertinoButton(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 130, vertical: 15),

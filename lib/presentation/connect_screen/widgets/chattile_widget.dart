@@ -22,22 +22,13 @@ class ChatTileWidget extends StatelessWidget {
           selectedColor: color,
           tileColor: color,
           onLongPress: () {
-            // cubit.addtoList(index);
-            BlocProvider.of<IslongpressCubit>(
-              context,
-            ).state.selectedChatTile.contains(index)
+            cubit.state.selectedChatTile.contains(index)
                 ? null
                 : BlocProvider.of<IslongpressCubit>(context).addtoList(index);
           },
           onTap: () {
-            // BlocProvider.of<IslongpressCubit>(
-            //   context,
-            // ).state.selectedChatTile.contains(index)
             cubit.state.selectedChatTile.contains(index)
-                ? BlocProvider.of<IslongpressCubit>(context)
-                    .removefromList(index)
-                // cubit.removefromList(index)
-
+                ? cubit.removefromList(index)
                 : Navigator.of(context).push(
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 500),
@@ -56,12 +47,6 @@ class ChatTileWidget extends StatelessWidget {
                       },
                     ),
                   );
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => ChattingScreen(index: index),
-            //     ),
-            //   );
           },
           leading: Stack(
             children: [
@@ -172,11 +157,7 @@ class ChatTileWidget extends StatelessWidget {
                 ]),
           ),
         ),
-        BlocProvider.of<IslongpressCubit>(context, listen: true)
-                .state
-                .selectedChatTile
-                .contains(index)
-            // cubit.state.selectedChatTile.contains(index)
+        cubit.state.selectedChatTile.contains(index)
             ? Divider(
                 height: 0,
                 color: Colors.grey,
