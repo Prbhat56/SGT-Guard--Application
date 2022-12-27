@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/map_screen/map_screen.dart';
+import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import '../../utils/const.dart';
 import '../home.dart';
 import 'cubit/addpeople/addpeople_cubit.dart';
@@ -23,7 +24,7 @@ class EmergencyReportScreen extends StatefulWidget {
 
 class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   var value;
-  // int peopleNo = 1;
+
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
   List imageNames = [];
@@ -31,6 +32,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   TextEditingController timeinput = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    print(context.read<AddImageCubit>().state.imageList);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -168,8 +170,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                                     );
 
                                     if (pickedTime != null) {
-                                      print(pickedTime
-                                          .format(context)); //output 10:51 PM
+                                      print(pickedTime.format(context));
                                       DateTime parsedTime = DateFormat.jm()
                                           .parse(pickedTime
                                               .format(context)
@@ -514,12 +515,25 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     const SizedBox(
                       height: 18,
                     ),
+                    // context.watch<AddImageCubit>().state.imageList!.isNotEmpty
                     imageFileList!.isNotEmpty
                         ? SizedBox(
                             height: 110 * imageFileList!.length.toDouble(),
+                            // height: 110 *
+                            //     context
+                            //         .watch<AddImageCubit>()
+                            //         .state
+                            //         .imageList!
+                            //         .length
+                            //         .toDouble(),
                             child: ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: imageFileList!.length,
+                                // itemCount: context
+                                //     .read<AddImageCubit>()
+                                //     .state
+                                //     .imageList!
+                                //     .length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: EdgeInsets.symmetric(vertical: 20),
@@ -527,12 +541,19 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Container(
-                                              margin: EdgeInsets.all(5),
-                                              height: 60,
-                                              width: 60,
-                                              alignment: Alignment.center,
-                                              child: Image.file(File(
-                                                  imageFileList![index].path))),
+                                            margin: EdgeInsets.all(5),
+                                            height: 60,
+                                            width: 60,
+                                            alignment: Alignment.center,
+                                            child: Image.file(
+                                              // File(context
+                                              //       .read<AddImageCubit>()
+                                              //       .state
+                                              //       .imageList![index]
+                                              //       .path)
+                                              File(imageFileList![index].path),
+                                            ),
+                                          ),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,

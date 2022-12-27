@@ -10,6 +10,7 @@ import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pr
 import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
 import 'package:sgt/presentation/onboarding_screen/cubit/islastpage/islastpage_cubit.dart';
 import 'package:sgt/presentation/settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
+import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addpeople/addpeople_cubit.dart';
 import 'package:sgt/utils/const.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => IslastpageCubit()),
               BlocProvider(create: (context) => IssearchingCubit()),
               BlocProvider(create: (context) => AddpeopleCubit()),
+              BlocProvider(create: (context) => AddImageCubit()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
