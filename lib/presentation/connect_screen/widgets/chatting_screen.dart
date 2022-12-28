@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,8 +8,10 @@ import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
 import 'package:sgt/presentation/connect_screen/widgets/media_preview_screen.dart';
 import 'package:sgt/presentation/connect_screen/widgets/send_message_widget.dart';
 import 'package:sgt/presentation/connect_screen/widgets/share_to_connect_screen.dart';
+import 'package:sgt/presentation/connect_screen/widgets/video_sending_screen.dart';
 import '../../../utils/const.dart';
 import 'image_message.dart';
+import 'image_sending_screen.dart';
 import 'received_message_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -635,7 +638,11 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Color.fromARGB(
-                                                  255, 109, 109, 109)),
+                                                255,
+                                                109,
+                                                109,
+                                                109,
+                                              )),
                                         ),
                                         const SizedBox(
                                           height: 20,
@@ -651,8 +658,18 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                                     await _picker.pickImage(
                                                         source:
                                                             ImageSource.camera);
-
-                                             
+                                                photo != null
+                                                    ? Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ImageSendingScreen(
+                                                            file: File(
+                                                                photo.path),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : null;
                                               },
                                               child: Column(
                                                 children: [
@@ -679,12 +696,22 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                         
-
                                                 // Pick multiple images
                                                 final List<XFile>? images =
                                                     await _picker
                                                         .pickMultiImage();
+                                                images != null
+                                                    ? Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ImageSendingScreen(
+                                                            file: File(
+                                                                images[0].path),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : null;
                                               },
                                               child: Column(
                                                 children: [
@@ -703,8 +730,9 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                                           spreadRadius: 5,
                                                           blurRadius: 7,
                                                           offset: const Offset(
-                                                              0,
-                                                              3), // changes position of shadow
+                                                            0,
+                                                            3,
+                                                          ), // changes position of shadow
                                                         ),
                                                       ],
                                                     ),
@@ -756,9 +784,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                         const Text(
                                           'Use camera or select file from device gallery',
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              color: Color.fromARGB(
-                                                  255, 109, 109, 109)),
+                                            fontSize: 12,
+                                            color: Color.fromARGB(
+                                              255,
+                                              109,
+                                              109,
+                                              109,
+                                            ),
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 20,
@@ -769,10 +802,23 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                           children: [
                                             InkWell(
                                               onTap: () async {
-                                                final XFile? video =
+                                                final video =
                                                     await _picker.pickVideo(
                                                         source:
                                                             ImageSource.camera);
+                                                print(video);
+                                                video != null
+                                                    ? Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              VideoSendingScreen(
+                                                            file: File(
+                                                                video.path),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : null;
                                               },
                                               child: Column(
                                                 children: [
@@ -803,6 +849,19 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                                     await _picker.pickVideo(
                                                         source: ImageSource
                                                             .gallery);
+                                                print(video);
+                                                video != null
+                                                    ? Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              VideoSendingScreen(
+                                                            file: File(
+                                                                video.path),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : null;
                                               },
                                               child: Column(
                                                 children: [

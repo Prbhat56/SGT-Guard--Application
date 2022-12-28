@@ -309,6 +309,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                                     .peopleNo
                                     .toDouble(),
                             child: ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: context
                                     .watch<AddpeopleCubit>()
                                     .state
@@ -406,6 +407,65 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           textStyle:
                               TextStyle(fontSize: 17.sp, color: Colors.grey)),
                       textScaleFactor: 1.0,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Name',
+                                  style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                          fontSize: 17.sp, color: grey)),
+                                  textScaleFactor: 1.0,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: 'John Doe',
+                                      hintStyle: GoogleFonts.montserrat(
+                                        textStyle:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                      focusColor: primaryColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Phone',
+                                  style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                          fontSize: 17.sp, color: grey)),
+                                  textScaleFactor: 1.0,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: '8086288343',
+                                      hintStyle: GoogleFonts.montserrat(
+                                        textStyle:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                      focusColor: primaryColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 26,
