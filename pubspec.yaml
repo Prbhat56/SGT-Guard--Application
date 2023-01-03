@@ -65,7 +65,7 @@ dependencies:
   geocoding: ^2.0.5
   intl: ^0.18.0
   go_router: ^6.0.0
-  
+  flutter_svg: ^1.1.6
 
 dev_dependencies:
   flutter_test:
@@ -113,6 +113,14 @@ flutter:
     - assets/img3.png
     - assets/line.png
     - assets/rectangle_design.png
+    - assets/security.png
+    - assets/world.png
+    - assets/tool.svg
+    - assets/report.svg
+    - assets/message_notification.svg
+    - assets/call_missed.svg
+    - assets/add_location.svg
+    - assets/event_upcoming.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

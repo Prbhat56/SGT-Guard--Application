@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sgt/presentation/all_team_member/all_team_member_screen.dart';
 import 'package:sgt/presentation/home_screen/widgets/circular_profile_widget.dart';
 import 'package:sgt/presentation/home_screen/widgets/location_details_card.dart';
 import 'package:sgt/presentation/jobs_screen/jobs_screen.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import 'package:sgt/utils/const.dart';
+
+import '../guard_tools_screen/guard_tools_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,43 +27,60 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(color: black),
         ),
         actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.map,
-                color: black,
-                size: 30,
-              )),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const WorkReportScreen(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                                  begin: const Offset(1, 0), end: Offset.zero)
-                              .animate(animation),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const WorkReportScreen()));
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: black,
-                  size: 30,
-                )),
+          // IconButton(
+          //     onPressed: () {},
+          //     icon: Icon(
+          //       Icons.map,
+          //       color: black,
+          //       size: 30,
+          //     )),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 500),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const GuardToolScreen(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                              begin: const Offset(1, 0), end: Offset.zero)
+                          .animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: SvgPicture.asset('assets/tool.svg'),
+              // child: IconButton(
+              //     onPressed: () {
+              //       Navigator.of(context).push(
+              //         PageRouteBuilder(
+              //           transitionDuration: const Duration(milliseconds: 500),
+              //           pageBuilder: (context, animation, secondaryAnimation) =>
+              //               const WorkReportScreen(),
+              //           transitionsBuilder:
+              //               (context, animation, secondaryAnimation, child) {
+              //             return SlideTransition(
+              //               position: Tween<Offset>(
+              //                       begin: const Offset(1, 0), end: Offset.zero)
+              //                   .animate(animation),
+              //               child: child,
+              //             );
+              //           },
+              //         ),
+              //       );
+              //     },
+              //     icon: Icon(
+              //       Icons.add,
+              //       color: black,
+              //       size: 30,
+              //     )),
+            ),
           )
         ],
       ),

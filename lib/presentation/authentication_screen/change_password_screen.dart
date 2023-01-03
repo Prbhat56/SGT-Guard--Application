@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/helper/validator.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/password_change_success_screen.dart';
@@ -18,7 +20,7 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController _newpasswordController;
   late TextEditingController _reenteredpasswordController;
-
+  bool ispasswordvalid = true;
   @override
   void initState() {
     _reenteredpasswordController = TextEditingController();
@@ -86,6 +88,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   hintText: 'Enter new password',
                   focusColor: primaryColor),
               onChanged: (value) {
+                context
+                    .read<IsValidPasswordCubit>()
+                    .ispasswordValid(_newpasswordController.text);
                 _newpasswordController.text.toString() ==
                         _reenteredpasswordController.text.toString()
                     ? BlocProvider.of<IspasswordmarchedCubit>(context)
@@ -144,6 +149,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         .passwordnotMatched();
               },
             ),
+            context.watch<IsValidPasswordCubit>().state.ispasswordvalid
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: SizedBox(
+                      width: 145.w,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 17,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            'Passwords is too short!',
+                            style: TextStyle(color: Colors.red, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             BlocProvider.of<IspasswordmarchedCubit>(context, listen: true)
                     .state
                     .ispasswordmatched

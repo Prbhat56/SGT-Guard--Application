@@ -252,6 +252,29 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                     ),
                     const SizedBox(
+                      height: 7,
+                    ),
+                    iseamilvalid
+                        ? Container()
+                        : SizedBox(
+                            width: 143,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.error_outline,
+                                  color: Colors.red,
+                                  size: 17,
+                                ),
+                                Text(
+                                  ' Email ID is Incorrect',
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 13),
+                                ),
+                              ],
+                            ),
+                          ),
+                    const SizedBox(
                       height: 20,
                     ),
                     const Text(
@@ -309,69 +332,35 @@ class _SignInScreenState extends State<SignInScreen> {
                       height: 7,
                     ),
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ispasswordvalid
-                                ? Container()
-                                : SizedBox(
-                                    width: 143,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.error_outline,
-                                          color: Colors.red,
-                                          size: 17,
-                                        ),
-                                        Text(
-                                          'Password is Incorrect',
-                                          style: TextStyle(
-                                              color: Colors.red, fontSize: 13),
-                                        ),
-                                      ],
+                        ispasswordvalid
+                            ? Container()
+                            : SizedBox(
+                                width: 143,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red,
+                                      size: 17,
                                     ),
-                                  ),
-                            iseamilvalid
-                                ? Container()
-                                : SizedBox(
-                                    width: 143,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.error_outline,
-                                          color: Colors.red,
-                                          size: 17,
-                                        ),
-                                        Text(
-                                          'Email ID is Incorrect',
-                                          style: TextStyle(
-                                              color: Colors.red, fontSize: 13),
-                                        ),
-                                      ],
+                                    Text(
+                                      ' Wrong password',
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 13),
                                     ),
-                                  ),
-                          ],
-                        ),
+                                  ],
+                                ),
+                              ),
                         Padding(
                           padding: EdgeInsets.only(
-                            left:
-                                iseamilvalid && ispasswordvalid ? 200.w : 72.w,
+                            left: ispasswordvalid ? 200.w : 70.w,
                             right: 0,
                           ),
                           child: InkWell(
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) {
-                              //       return const ForgotPasswordScreen();
-                              //     },
-                              //   ),
-                              // );
-
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   transitionDuration:
@@ -442,63 +431,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                       },
                                     ),
                                   )
-
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) {
-                                //         return const Home();
-                                //       },
-                                //     ),
-                                //   )
                                 : null;
                           }),
                     ),
-                    // const SizedBox(height: 160),
-                    // InkWell(
-                    //   onTap: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) {
-                    //           return const SignUpScreen();
-                    //         },
-                    //       ),
-                    //     );
-                    //   },
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(left: 40.0),
-                    //     child: Row(
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         Center(
-                    //           child: Text(
-                    //             "Don't have an account?",
-                    //             textScaleFactor: 1.0,
-                    //             style: GoogleFonts.montserrat(
-                    //               textStyle: const TextStyle(
-                    //                 color: Colors.grey,
-                    //                 fontSize: 17,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         Expanded(
-                    //           child: Text(
-                    //             "Sign Up",
-                    //             textScaleFactor: 1.0,
-                    //             style: GoogleFonts.montserrat(
-                    //               textStyle: const TextStyle(
-                    //                 color: Colors.black,
-                    //                 fontSize: 18,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // )
                   ],
                 ),
               ),

@@ -22,7 +22,6 @@ class BuildPages extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: [
             SizedBox(
@@ -30,7 +29,7 @@ class BuildPages extends StatelessWidget {
             ),
             Image.asset(
               imageUrl,
-              fit: BoxFit.cover,
+              // fit: BoxFit.cover,
               height: 270.h,
               width: double.infinity,
             ),
@@ -49,34 +48,43 @@ class BuildPages extends StatelessWidget {
             SizedBox(
               height: 18.h,
             ),
-            Text(
-              smallText,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(fontSize: 20.sp, color: primaryColor),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                smallText,
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(fontSize: 20.sp, color: primaryColor),
+                ),
+                textScaleFactor: 1.0,
               ),
-              textScaleFactor: 1.0,
             ),
             SizedBox(
               height: 10.h,
             ),
-            Text(
-              bigText,
-              style: GoogleFonts.montserrat(
-                textStyle:
-                    TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                bigText,
+                style: GoogleFonts.montserrat(
+                  textStyle:
+                      TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
+                ),
+                textScaleFactor: 1.0,
               ),
-              textScaleFactor: 1.0,
             ),
             SizedBox(
               height: 10.h,
             ),
-            Text(
-              descriptionText,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                descriptionText,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey),
+                ),
+                textScaleFactor: 1.0,
               ),
-              textScaleFactor: 1.0,
             ),
           ],
         ),

@@ -13,6 +13,7 @@ import 'package:sgt/presentation/settings_screen/cubit/toggle_switch/toggleswitc
 import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addpeople/addpeople_cubit.dart';
 import 'package:sgt/utils/const.dart';
+import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'presentation/onboarding_screen/onboarding_screen.dart';
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => IssearchingCubit()),
               BlocProvider(create: (context) => AddpeopleCubit()),
               BlocProvider(create: (context) => AddImageCubit()),
+              BlocProvider(create: (context) => IsValidPasswordCubit())
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
