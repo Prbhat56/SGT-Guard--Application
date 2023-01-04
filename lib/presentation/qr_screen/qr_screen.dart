@@ -15,81 +15,85 @@ class _QrScreenState extends State<QrScreen> {
   String qrCodeResult = "Not Yet Scanned";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
-      ),
-      backgroundColor: white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: const Text(
-                'Check in',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        backgroundColor: white,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Take a photo of the QR code to complete the check in process  ',
-              textScaleFactor: 1.0,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, color: Colors.grey),
-            ),
-            SizedBox(
-              height: 100,
-            ),
-            Center(
-              child: Stack(
-                children: [
-                  Image.asset('assets/rectangle_design.png'),
-                  Positioned(top: 120, child: Image.asset('assets/line.png')),
-                ],
+              Center(
+                child: const Text(
+                  'Check in',
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              'Scan',
-              textScaleFactor: 1.0,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, color: Colors.grey),
-            ),
-            SizedBox(
-              height: 130.h,
-            ),
-            Center(
-              child: CupertinoButton(
-                  disabledColor: seconderyColor,
-                  padding: EdgeInsets.symmetric(horizontal: 90.w, vertical: 15),
-                  color: primaryColor,
-                  child: Text(
-                    'Take a photo',
-                    style: TextStyle(fontSize: 15.sp),
-                  ),
-                  onPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const ScanningScreen();
-                    }));
-                  }),
-            ),
-          ],
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Take a photo of the QR code to complete the check in process  ',
+                textScaleFactor: 1.0,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+              ),
+              SizedBox(
+                height: 100,
+              ),
+              Center(
+                child: Stack(
+                  children: [
+                    Image.asset('assets/rectangle_design.png'),
+                    Positioned(top: 120, child: Image.asset('assets/line.png')),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Text(
+                'Scan',
+                textScaleFactor: 1.0,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+              ),
+              SizedBox(
+                height: 130.h,
+              ),
+              Center(
+                child: CupertinoButton(
+                    disabledColor: seconderyColor,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 90.w, vertical: 15),
+                    color: primaryColor,
+                    child: Text(
+                      'Take a photo',
+                      style: TextStyle(fontSize: 15.sp),
+                    ),
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const ScanningScreen();
+                      }));
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );

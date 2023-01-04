@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../utils/const.dart';
 
-class CheckPointWidget extends StatelessWidget {
-  const CheckPointWidget({
+class CheckPointListsWidget extends StatelessWidget {
+  const CheckPointListsWidget({
     Key? key,
     required this.title,
     required this.imageUrl,
@@ -55,21 +55,10 @@ class CheckPointWidget extends StatelessWidget {
             const SizedBox(
               width: 50,
             ),
-            IconButton(
-                onPressed: () {},
-                icon: iscompleted == 'Complete'
-                    ? Icon(
-                        Icons.check_circle,
-                        color: greenColor,
-                      )
-                    : const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.grey,
-                      )),
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 90.0),
+          padding: const EdgeInsets.only(left: 60.0),
           child: Divider(
             color: Colors.grey,
           ),

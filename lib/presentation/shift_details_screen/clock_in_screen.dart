@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/shift_details_screen/check_in%20_error_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/time_sheet_screen/check_point_screen.dart';
 import '../../utils/const.dart';
 
@@ -21,7 +21,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
       child: Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -64,7 +64,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                     height: 40,
                   ),
                   Container(
-                    height: 350,
+                    // height: 350,
                     width: 311,
                     decoration: BoxDecoration(
                         color: white,
@@ -72,16 +72,17 @@ class _ClockInScreenState extends State<ClockInScreen> {
                         border: Border.all(color: Colors.grey)),
                     child: Column(children: [
                       const SizedBox(
-                        height: 20,
+                        height: 16,
                       ),
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 30,
+                        backgroundColor: grey,
                         backgroundImage: NetworkImage(
-                          'https://cdn2.iconfinder.com/data/icons/avatars-99/62/avatar-370-456322-512.png',
+                          'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 16,
                       ),
                       Text(
                         'Matheus Paolo',
@@ -91,6 +92,9 @@ class _ClockInScreenState extends State<ClockInScreen> {
                           color: black,
                         ),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       const Text(
                         'Greylock Security',
                         style: TextStyle(
@@ -99,86 +103,181 @@ class _ClockInScreenState extends State<ClockInScreen> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(
-                        'Date & Time',
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
-                      ),
-                      const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        'Monday, October 24',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        '10:00 AM',
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(
+                      Text(
                         'Property',
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                        style: TextStyle(fontSize: 15, color: primaryColor),
+                      ),
+                      const SizedBox(
+                        height: 7,
                       ),
                       const Text(
                         'Rivi Properties',
                         style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 7,
                       ),
                       const Text(
                         'Guard Post Duties',
                         style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Time:',
+                              style:
+                                  TextStyle(fontSize: 15, color: primaryColor),
+                            ),
+                            const Text(
+                              ' Monday, October 24',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Shift:',
+                              style:
+                                  TextStyle(fontSize: 15, color: primaryColor),
+                            ),
+                            const Text(
+                              ' 10:00 AM - 04:00 PM',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                '2',
+                                style: TextStyle(
+                                    fontSize: 15, color: primaryColor),
+                              ),
+                              Text(
+                                "Hours",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                          Text(
+                            ':',
+                            style: TextStyle(fontSize: 15, color: primaryColor),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '15',
+                                style: TextStyle(
+                                    fontSize: 15, color: primaryColor),
+                              ),
+                              Text(
+                                "Minutes",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                          Text(
+                            ':',
+                            style: TextStyle(fontSize: 15, color: primaryColor),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '12',
+                                style: TextStyle(
+                                    fontSize: 15, color: primaryColor),
+                              ),
+                              Text(
+                                "Seconds",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                     ]),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 15,
                   ),
                   CupertinoButton(
-                      color: grey,
+                      color: seconderyColor,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 140, vertical: 20),
                       child: Text(
                         'Back',
-                        style: TextStyle(color: black, fontSize: 17),
+                        style: TextStyle(color: primaryColor, fontSize: 17),
                       ),
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const CheckPointScreen();
-                        }));
+                        Navigator.pop(context);
                       }),
                   const SizedBox(
                     height: 20,
                   ),
                   CupertinoButton(
                       color: primaryColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 123, vertical: 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 105.w, vertical: 20),
                       child: Text(
-                        isClockedIn ? 'Clock Out' : 'Clock In',
+                        'Checkpoints',
                         style: TextStyle(color: white, fontSize: 17),
                       ),
                       onPressed: () {
-                        setState(() {
-                          isClockedIn = !isClockedIn;
-                        });
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const CheckPointScreen();
+                        }));
                       }),
                 ]),
           ),

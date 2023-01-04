@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/widgets/time_sheet_model.dart';
 import '../../../utils/const.dart';
 import '../../shift_details_screen/shift_details_sceen.dart';
@@ -21,7 +22,7 @@ class UpcomingWidgetTab extends StatelessWidget {
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 500),
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ShiftDetailsScreen(),
+                          const PropertyDetailsScreen(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         return SlideTransition(
@@ -33,11 +34,7 @@ class UpcomingWidgetTab extends StatelessWidget {
                       },
                     ),
                   );
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const ShiftDetailsScreen()));
-                },
+                   },
                 contentPadding: const EdgeInsets.only(
                     left: 10, right: 10, top: 10, bottom: 0),
                 dense: false,
@@ -83,7 +80,7 @@ class UpcomingWidgetTab extends StatelessWidget {
                       child: Center(
                         child: Text(
                           dummytimeSheetData[index].isCompleted
-                              ? 'Completed'
+                              ? 'Confirmed'
                               : 'Cenceled',
                           style: const TextStyle(
                               color: Colors.white, fontSize: 12),

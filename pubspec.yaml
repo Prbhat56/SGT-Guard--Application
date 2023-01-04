@@ -67,6 +67,7 @@ dependencies:
   go_router: ^6.0.0
   flutter_svg: ^1.1.6
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -121,6 +122,7 @@ flutter:
     - assets/call_missed.svg
     - assets/add_location.svg
     - assets/event_upcoming.svg
+    - assets/qr.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

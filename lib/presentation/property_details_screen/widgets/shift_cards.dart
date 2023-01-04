@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/shift_details_screen/shift_details_sceen.dart';
 import '../../../utils/const.dart';
+import '../../shift_details_screen/upcoming_shift_details_screen.dart';
 
 class ShiftCards extends StatelessWidget {
   const ShiftCards(
@@ -13,13 +13,15 @@ class ShiftCards extends StatelessWidget {
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: InkWell(
         onTap: () {
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => ShiftDetailsScreen()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UpcomingShiftDetailsScreen()));
         },
         child: Container(
           height: 48,
           width: 122,
-          margin: const EdgeInsets.all(10),
+          // margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: primaryColor,
             borderRadius: BorderRadius.circular(10),
