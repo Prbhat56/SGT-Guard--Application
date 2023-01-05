@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/utils/const.dart';
 
+import 'inactive_property_details_screen.dart';
+
 class JobsTile extends StatelessWidget {
   const JobsTile({super.key, required this.isActive});
   final bool isActive;
@@ -13,10 +15,16 @@ class JobsTile extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const PropertyDetailsScreen()));
+            isActive
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PropertyDetailsScreen()))
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const InActivePropertyDetailsScreen()));
           },
           child: Row(
             //mainAxisSize: MainAxisSize.min,

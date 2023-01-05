@@ -10,8 +10,6 @@ import 'package:sgt/presentation/shift_details_screen/clock_in_screen.dart';
 import '../../utils/const.dart';
 import '../cubit/timer_on/timer_on_cubit.dart';
 import '../qr_screen/qr_screen.dart';
-import '../shift_details_screen/shift_details_sceen.dart';
-import '../time_sheet_screen/check_point_screen.dart';
 import '../work_report_screen/submit_report_screen.dart';
 import 'check_points_list.dart';
 import 'cubit/showmore/showmore_cubit.dart';
