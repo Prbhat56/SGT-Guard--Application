@@ -43,18 +43,10 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
           child: ListView.builder(
             itemCount: checkpointData.length,
             itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const QrScreen()));
-                },
-                child: CheckPointListsWidget(
-                  title: checkpointData[index].title,
-                  imageUrl: checkpointData[index].imageUrl,
-                  iscompleted: checkpointData[index].isCompleted,
-                ),
+              return CheckPointListsWidget(
+                title: checkpointData[index].title,
+                imageUrl: checkpointData[index].imageUrl,
+                iscompleted: checkpointData[index].isCompleted,
               );
             },
           ),

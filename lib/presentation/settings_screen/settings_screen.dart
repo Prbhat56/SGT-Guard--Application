@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +12,7 @@ import 'package:sgt/presentation/settings_screen/privacy_policy_screen.dart';
 import 'package:sgt/presentation/settings_screen/terms_&_Condition_screen.dart';
 
 import '../../utils/const.dart';
+import '../apply_leave_screen/apply_leave_screen.dart';
 import 'cubit/toggle_switch/toggleswitch_cubit.dart';
 import 'edit_account_details_screen.dart';
 
@@ -79,59 +81,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 500),
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ChangePasswordScreen(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                                  begin: const Offset(1, 0), end: Offset.zero)
-                              .animate(animation),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return const ChangePasswordScreen();
-                  // }));
-                },
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                leading: Container(
-                    height: 30.h,
-                    width: 34.w,
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Icon(
-                      Icons.lock,
-                      color: white,
-                      size: 20.sp,
-                    )),
-                title: Text(
-                  'Change Password',
-                  style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                    fontSize: 15.sp,
-                    color: Colors.black,
-                  )),
-                ),
-                trailing: Icon(Icons.arrow_forward_ios),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 72.0),
-                child: Divider(
-                  height: 0,
-                  color: Colors.grey,
-                ),
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
                           const EditAccountScreen(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
@@ -144,9 +93,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                   );
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return const EditAccountScreen();
-                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -186,6 +132,102 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 500),
                       pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ApplyLeaveScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                leading: Container(
+                    height: 30.h,
+                    width: 34.w,
+                    decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Center(
+                        child: SvgPicture.asset('assets/close_white.svg'))),
+                title: Text(
+                  'Apply Leave',
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                    fontSize: 15.sp,
+                    color: Colors.black,
+                  )),
+                ),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 72.0),
+                child: Divider(
+                  height: 0,
+                  color: Colors.grey,
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ChangePasswordScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(1, 0), end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                leading: Container(
+                    height: 30.h,
+                    width: 34.w,
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Icon(
+                      Icons.lock,
+                      color: white,
+                      size: 20.sp,
+                    )),
+                title: Text(
+                  'Change Password',
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                    fontSize: 15.sp,
+                    color: Colors.black,
+                  )),
+                ),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 72.0),
+                child: Divider(
+                  height: 0,
+                  color: Colors.grey,
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 500),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
                           const TermsandConditionScreen(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
@@ -198,9 +240,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                   );
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return const TermsandConditionScreen();
-                  // }));
                 },
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0, horizontal: 10),

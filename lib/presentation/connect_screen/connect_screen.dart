@@ -118,7 +118,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                 state.selectedChatTile.isNotEmpty
                     ? Container()
                     : const Padding(
-                        padding: EdgeInsets.only(left: 16.0, bottom: 10),
+                        padding: EdgeInsets.only(left: 16.0, bottom: 12),
                         child: Text(
                           'Connect',
                           style: TextStyle(
@@ -128,10 +128,21 @@ class _ConnectScreenState extends State<ConnectScreen> {
                 state.selectedChatTile.isNotEmpty
                     ? Container()
                     : Padding(
-                        padding: const EdgeInsets.only(left: 16.0, bottom: 10),
-                        child: Text(
-                          'Chats',
-                          style: TextStyle(color: black, fontSize: 20),
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 10, right: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Chats',
+                              style: TextStyle(color: black, fontSize: 15),
+                            ),
+                            Text(
+                              'Mark All As Read',
+                              style:
+                                  TextStyle(color: primaryColor, fontSize: 14),
+                            ),
+                          ],
                         ),
                       ),
                 Divider(
