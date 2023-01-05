@@ -62,10 +62,10 @@ class JobsTile extends StatelessWidget {
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.location_on,
-                        color: Colors.grey,
+                        color: primaryColor,
                         size: 17,
                       ),
                       Text(

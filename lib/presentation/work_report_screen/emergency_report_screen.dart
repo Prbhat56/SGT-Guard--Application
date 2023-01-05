@@ -13,6 +13,7 @@ import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cub
 import '../../utils/const.dart';
 import '../home.dart';
 import 'cubit/addpeople/addpeople_cubit.dart';
+import 'report_success_screen.dart';
 import 'widget/edit_location.dart';
 
 class EmergencyReportScreen extends StatefulWidget {
@@ -836,14 +837,16 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           horizontal: 150, vertical: 15),
                       color: primaryColor,
                       child: const Text(
-                        'Send',
+                        'Done',
                         style: TextStyle(fontSize: 20),
                         textScaleFactor: 1.0,
                       ),
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return const Home();
+                          return const ReportSuccessScreen(
+                            isSubmitReportScreen: false,
+                          );
                         }));
                       }),
                 ),

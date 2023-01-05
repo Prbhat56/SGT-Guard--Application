@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../utils/const.dart';
 import '../../map_screen/map_screen.dart';
 import '../../property_details_screen/widgets/shift_cards.dart';
-import '../../shift_details_screen/shift_details_sceen.dart';
 
 class MissedShiftDetailsScreen extends StatelessWidget {
-  const MissedShiftDetailsScreen({super.key});
-
+  MissedShiftDetailsScreen({super.key});
+  LatLng currentlocation = const LatLng(22.572645, 88.363892);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +101,86 @@ class MissedShiftDetailsScreen extends StatelessWidget {
                     height: 20,
                   ),
                   ShiftCards(shiftdate: '6/20/22', shifttime: '07:30 AM'),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    'Description',
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                        color: primaryColor),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Lorem ipsum dolor sit amet, duo habemus fuisset epicuri ei. No sit tempor populo prodesset, ad cum dicta repudiare. Ex eos probo maluisset, invidunt deseruisse consectetuer id vel, convenire ',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Stack(
+                    children: [
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 195, 195, 195),
+                                  offset: Offset(1.5, 1.5),
+                                  blurRadius: 2.5,
+                                  spreadRadius: 2,
+                                ),
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(1.5, 1.5),
+                                  blurRadius: 1.5,
+                                  spreadRadius: 0.5,
+                                ),
+                              ]),
+                          height: 300,
+                          width: 500,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: GoogleMap(
+                                initialCameraPosition: CameraPosition(
+                                    target: currentlocation, zoom: 14)),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MapScreen()));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: white,
+                                border:
+                                    Border.all(color: primaryColor, width: 2),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.near_me,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),

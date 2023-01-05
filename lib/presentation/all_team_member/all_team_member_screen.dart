@@ -22,38 +22,30 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
         appBar: AppBar(
           elevation: 1,
           backgroundColor: white,
-          leading: Icon(
-            Icons.check_circle,
-            color: greenColor,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: black,
+            ),
           ),
-          title: Text(
-            'Greylock Security',
-            style: TextStyle(color: black),
+          title: Row(
+            children: [
+              Icon(
+                Icons.check_circle,
+                color: greenColor,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Greylock Security',
+                style: TextStyle(color: black),
+              ),
+            ],
           ),
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.map,
-                  color: black,
-                  size: 30,
-                )),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const WorkReportScreen()));
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    color: black,
-                    size: 30,
-                  )),
-            )
-          ],
         ),
         body: SingleChildScrollView(
             child: Column(

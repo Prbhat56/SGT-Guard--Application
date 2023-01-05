@@ -123,6 +123,8 @@ flutter:
     - assets/add_location.svg
     - assets/event_upcoming.svg
     - assets/qr.svg
+    - assets/close.svg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

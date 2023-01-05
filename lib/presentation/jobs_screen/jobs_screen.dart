@@ -13,29 +13,31 @@ class JobsScreen extends StatelessWidget {
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
         appBar: AppBar(
+          elevation: 1,
           backgroundColor: white,
-          leadingWidth: 20,
-          elevation: 0,
-          toolbarHeight: 80,
-          leading: IconButton(
-            icon: Icon(
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
               Icons.arrow_back_ios,
               color: black,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           ),
-          title: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(3, 3, 3, 0),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Search',
-                  suffixIcon: Icon(Icons.close)),
-            ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.check_circle,
+                color: greenColor,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Greylock Security',
+                style: TextStyle(color: black),
+              ),
+            ],
           ),
         ),
         body: DefaultTabController(

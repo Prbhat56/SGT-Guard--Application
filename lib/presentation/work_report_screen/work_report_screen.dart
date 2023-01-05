@@ -182,7 +182,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                         horizontal: 150, vertical: 15),
                     color: primaryColor,
                     child: const Text(
-                      'Next',
+                      'Done',
                       style: TextStyle(fontSize: 20),
                       textScaleFactor: 1.0,
                     ),

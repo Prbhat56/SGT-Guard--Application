@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/presentation/map_screen/map_screen.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/property_media_preview_screen.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/shift_cards.dart';
 import 'package:sgt/presentation/shift_details_screen/clock_in_screen.dart';
 import '../../utils/const.dart';
@@ -11,6 +12,7 @@ import '../cubit/timer_on/timer_on_cubit.dart';
 import '../qr_screen/qr_screen.dart';
 import '../shift_details_screen/shift_details_sceen.dart';
 import '../time_sheet_screen/check_point_screen.dart';
+import '../work_report_screen/submit_report_screen.dart';
 import 'check_points_list.dart';
 import 'cubit/showmore/showmore_cubit.dart';
 
@@ -250,7 +252,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                         const Duration(milliseconds: 500),
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
-                                        const ShiftDetailsScreen(),
+                                        const SubmitReportScreen(),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
                                       return SlideTransition(
@@ -444,15 +446,24 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       ),
                                       Opacity(
                                         opacity: 0.5,
-                                        child: Container(
-                                          height: 85,
-                                          width: 122,
-                                          color: Colors.black,
-                                          child: Center(
-                                            child: Text('+2',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 25)),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PropertyMediaPreviewScreen()));
+                                          },
+                                          child: Container(
+                                            height: 85,
+                                            width: 122,
+                                            color: Colors.black,
+                                            child: Center(
+                                              child: Text('+2',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25)),
+                                            ),
                                           ),
                                         ),
                                       )

@@ -69,6 +69,14 @@ class _VideoPreviewWidgetState extends State<VideoPreviewWidget> {
                     ),
                   ),
                 ),
+                // VideoProgressIndicator(
+                //   _controller,
+                //   allowScrubbing: true,
+                //   colors: VideoProgressColors(
+                //       backgroundColor: Colors.red,
+                //       bufferedColor: Colors.black,
+                //       playedColor: Colors.blueAccent),
+                // ),
               ],
             );
           } else {

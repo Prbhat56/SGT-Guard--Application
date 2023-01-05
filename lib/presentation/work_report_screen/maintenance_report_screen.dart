@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/const.dart';
 import '../home.dart';
+import 'report_success_screen.dart';
 
 class MaintenanceReportScreen extends StatefulWidget {
   const MaintenanceReportScreen({super.key});
@@ -339,14 +340,16 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                           horizontal: 150, vertical: 15),
                       color: primaryColor,
                       child: const Text(
-                        'Send',
+                        'Done',
                         style: TextStyle(fontSize: 20),
                         textScaleFactor: 1.0,
                       ),
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return const Home();
+                          return const ReportSuccessScreen(
+                            isSubmitReportScreen: false,
+                          );
                         }));
                       }),
                 ),

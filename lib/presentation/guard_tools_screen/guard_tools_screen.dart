@@ -4,6 +4,7 @@ import 'package:sgt/utils/const.dart';
 
 import '../map_screen/active_map_screen.dart';
 import '../notification_screen/notification_screen.dart';
+import '../qr_screen/qr_screen.dart';
 import '../time_sheet_screen/time_sheet_screen.dart';
 import '../time_sheet_screen/widgets/missed_shift_screen.dart';
 import '../work_report_screen/emergency_report_screen.dart';
@@ -16,7 +17,7 @@ class GuardToolScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery( 
+    return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -60,6 +61,40 @@ class GuardToolScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, top: 30),
               child: Column(
                 children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const QrScreen();
+                      }));
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/qr.svg',
+                          width: 17,
+                        ),
+                        SizedBox(
+                          width: 22,
+                        ),
+                        Text(
+                          'Scan Checkpoint',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 38.0),
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -317,6 +352,40 @@ class GuardToolScreen extends StatelessWidget {
                         ),
                         Text(
                           'Missed Shifts',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 38.0),
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const GeneralReportScreen();
+                      }));
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/close.svg',
+                          width: 17,
+                        ),
+                        SizedBox(
+                          width: 22,
+                        ),
+                        Text(
+                          'Cancelled Shifts',
                           style: TextStyle(fontSize: 17),
                         ),
                       ],

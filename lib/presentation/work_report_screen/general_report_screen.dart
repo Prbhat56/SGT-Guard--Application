@@ -8,6 +8,8 @@ import '../../utils/const.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
+import 'report_success_screen.dart';
+
 class GeneralReportScreen extends StatefulWidget {
   const GeneralReportScreen({super.key});
 
@@ -338,11 +340,18 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                           horizontal: 150, vertical: 15),
                       color: primaryColor,
                       child: const Text(
-                        'Send',
+                        'Done',
                         style: TextStyle(fontSize: 20),
                         textScaleFactor: 1.0,
                       ),
-                      onPressed: () {}),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const ReportSuccessScreen(
+                            isSubmitReportScreen: false,
+                          );
+                        }));
+                      }),
                 ),
               ),
             ],
