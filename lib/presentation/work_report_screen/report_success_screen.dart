@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
+import 'package:sgt/presentation/home.dart';
 import '../../utils/const.dart';
 
 class ReportSuccessScreen extends StatefulWidget {
@@ -52,10 +53,7 @@ class _ReportSuccessScreenState extends State<ReportSuccessScreen> {
                     widget.isSubmitReportScreen ? "Confirmed" : "Done",
                     textAlign: TextAlign.center,
                     textScaleFactor: 1.0,
-                    style: TextStyle(
-                        // color: primaryColor,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Center(
@@ -87,7 +85,7 @@ class _ReportSuccessScreenState extends State<ReportSuccessScreen> {
                           onPressed: () {
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) {
-                              return const SignInScreen();
+                              return const Home();
                             }));
                           },
                         ),

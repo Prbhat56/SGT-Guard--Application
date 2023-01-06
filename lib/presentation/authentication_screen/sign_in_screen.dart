@@ -332,7 +332,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       height: 7,
                     ),
                     Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ispasswordvalid
                             ? Container()
@@ -354,40 +354,34 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ],
                                 ),
                               ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: ispasswordvalid ? 200.w : 70.w,
-                            right: 0,
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 500),
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const ForgotPasswordScreen(),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return SlideTransition(
-                                      position: Tween<Offset>(
-                                              begin: const Offset(1, 0),
-                                              end: Offset.zero)
-                                          .animate(animation),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Forgot password',
-                              textScaleFactor: 1.0,
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                    color: Colors.blue, fontSize: 12.sp),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration:
+                                    const Duration(milliseconds: 500),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        const ForgotPasswordScreen(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                            begin: const Offset(1, 0),
+                                            end: Offset.zero)
+                                        .animate(animation),
+                                    child: child,
+                                  );
+                                },
                               ),
+                            );
+                          },
+                          child: Text(
+                            'Forgot password',
+                            textScaleFactor: 1.0,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                  color: Colors.blue, fontSize: 12.sp),
                             ),
                           ),
                         ),
@@ -397,42 +391,41 @@ class _SignInScreenState extends State<SignInScreen> {
                       height: 80.h,
                     ),
                     Center(
-                      child: CupertinoButton(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 120.w,
-                            vertical: 15,
-                          ),
-                          color: isFormValid ? primaryColor : seconderyColor,
-                          child: Text(
-                            'Sign In',
-                            textScaleFactor: 1.0,
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(fontSize: 15.sp),
+                      child: Container(
+                        width: 343.w,
+                        child: CupertinoButton(
+                            color: isFormValid ? primaryColor : seconderyColor,
+                            child: Text(
+                              'Sign In',
+                              textScaleFactor: 1.0,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(fontSize: 15.sp),
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            isFormValid
-                                ? Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      transitionDuration:
-                                          const Duration(milliseconds: 500),
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          const Home(),
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        return SlideTransition(
-                                          position: Tween<Offset>(
-                                                  begin: const Offset(1, 0),
-                                                  end: Offset.zero)
-                                              .animate(animation),
-                                          child: child,
-                                        );
-                                      },
-                                    ),
-                                  )
-                                : null;
-                          }),
+                            onPressed: () {
+                              isFormValid
+                                  ? Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        transitionDuration:
+                                            const Duration(milliseconds: 500),
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            const Home(),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          return SlideTransition(
+                                            position: Tween<Offset>(
+                                                    begin: const Offset(1, 0),
+                                                    end: Offset.zero)
+                                                .animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  : null;
+                            }),
+                      ),
                     ),
                   ],
                 ),

@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/const.dart';
-import '../home.dart';
 import 'report_success_screen.dart';
 
 class ParkingReportScreen extends StatefulWidget {

@@ -153,25 +153,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ? Container()
                 : Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: SizedBox(
-                      width: 145.w,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 17,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text(
-                            'Passwords is too short!',
-                            style: TextStyle(color: Colors.red, fontSize: 13),
-                          ),
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 17,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          'Passwords is too short!',
+                          style: TextStyle(color: Colors.red, fontSize: 13),
+                        ),
+                      ],
                     ),
                   ),
             BlocProvider.of<IspasswordmarchedCubit>(context, listen: true)
@@ -180,61 +177,59 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ? Container()
                 : Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: SizedBox(
-                      width: 143.w,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 17,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text(
-                            'Password not matched',
-                            style: TextStyle(color: Colors.red, fontSize: 13),
-                          ),
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 17,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          'Password not matched',
+                          style: TextStyle(color: Colors.red, fontSize: 13),
+                        ),
+                      ],
                     ),
                   ),
             SizedBox(
               height: 40.h,
             ),
             Center(
-              child: CupertinoButton(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 130, vertical: 15),
-                color: BlocProvider.of<IspasswordmarchedCubit>(context,
-                            listen: true)
-                        .state
-                        .isValid
-                    ? primaryColor
-                    : seconderyColor,
-                child: Text(
-                  'Send',
-                  textScaleFactor: 1.0,
-                  style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(fontSize: 17.sp)),
-                ),
-                onPressed: () {
-                  BlocProvider.of<IspasswordmarchedCubit>(context,
-                              listen: false)
+              child: Container(
+                width: 343.w,
+                child: CupertinoButton(
+                  color: BlocProvider.of<IspasswordmarchedCubit>(context,
+                              listen: true)
                           .state
                           .isValid
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const PasswordChangeSuccessScreen();
-                            },
-                          ),
-                        )
-                      : null;
-                },
+                      ? primaryColor
+                      : seconderyColor,
+                  child: Text(
+                    'Send',
+                    textScaleFactor: 1.0,
+                    style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(fontSize: 17.sp)),
+                  ),
+                  onPressed: () {
+                    BlocProvider.of<IspasswordmarchedCubit>(context,
+                                listen: false)
+                            .state
+                            .isValid
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const PasswordChangeSuccessScreen();
+                              },
+                            ),
+                          )
+                        : null;
+                  },
+                ),
               ),
             ),
           ]),

@@ -600,11 +600,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           style: TextStyle(color: white, fontSize: 17),
                         ),
                         onPressed: () {
-                          context.read<TimerOnCubit>().turnOnTimer();
+                          context.read<TimerOnCubit>().state.istimerOn
+                              ? null
+                              : context.read<TimerOnCubit>().turnOnTimer();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ClockInScreen()));
+                                  builder: (context) => QrScreen()));
                         }),
                   ],
                 ),

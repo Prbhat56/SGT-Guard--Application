@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:sgt/presentation/time_sheet_screen/widgets/check_point_model.dart';
 import '../../utils/const.dart';
+import '../property_details_screen/property_details_screen.dart';
+import '../qr_screen/chack_points_scanning_screen.dart';
 import '../qr_screen/qr_screen.dart';
 import '../settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
 import '../shift_details_screen/clock_out_screen.dart';
+import '../work_report_screen/submit_report_screen.dart';
 import 'check_point_map_screen.dart';
 import 'widgets/check_points_widget.dart';
 
@@ -174,10 +175,10 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => const QrScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const CheckPointScanningScreen()));
                             },
                             child: CheckPointWidget(
                               title: checkpointData[index].title,

@@ -12,6 +12,7 @@ import 'package:sgt/presentation/onboarding_screen/cubit/islastpage/islastpage_c
 import 'package:sgt/presentation/settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addpeople/addpeople_cubit.dart';
+import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/utils/const.dart';
 import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => IsValidPasswordCubit()),
               BlocProvider(create: (context) => ShowmoreCubit()),
               BlocProvider(create: (context) => TimerOnCubit()),
+              BlocProvider(create: (context) => ReportTypeCubit()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

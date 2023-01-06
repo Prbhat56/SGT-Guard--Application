@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/home.dart';
+import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/maintenance_report_screen.dart';
@@ -34,7 +36,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'Submit Report',
+          'Shift Report',
           textScaleFactor: 1.0,
           style: GoogleFonts.montserrat(
               textStyle: const TextStyle(
@@ -65,6 +67,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const GeneralReportScreen();
                   }));
+                  context.read<ReportTypeCubit>().clickGreport();
                 },
                 child: Container(
                   height: 45.h,
@@ -91,6 +94,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const MaintenanceReportScreen();
                   }));
+                  context.read<ReportTypeCubit>().clickMreport();
                 },
                 child: Container(
                   height: 45.h,
@@ -117,6 +121,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const ParkingReportScreen();
                   }));
+                  context.read<ReportTypeCubit>().clickPreport();
                 },
                 child: Container(
                   height: 45.h,
@@ -143,6 +148,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const EmergencyReportScreen();
                   }));
+                  context.read<ReportTypeCubit>().clickEreport();
                 },
                 child: Container(
                   height: 45.h,
@@ -182,15 +188,15 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                         horizontal: 150, vertical: 15),
                     color: primaryColor,
                     child: const Text(
-                      'Done',
+                      'Next',
                       style: TextStyle(fontSize: 20),
                       textScaleFactor: 1.0,
                     ),
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const Home();
-                      }));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //   return const Home();
+                      // }));
                     }),
               ),
             ),

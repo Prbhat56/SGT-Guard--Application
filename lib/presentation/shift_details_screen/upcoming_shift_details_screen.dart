@@ -131,32 +131,32 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
               SizedBox(
                 height: 200.h,
               ),
-              Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Start at:',
-                      style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      '6/20/22,',
-                      style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '07:30 AM',
-                      style: TextStyle(
-                        color: primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              // Center(
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       Text(
+              //         'Start at:',
+              //         style: TextStyle(
+              //             color: primaryColor, fontWeight: FontWeight.bold),
+              //       ),
+              //       SizedBox(
+              //         width: 15,
+              //       ),
+              //       Text(
+              //         '6/20/22,',
+              //         style: TextStyle(
+              //             color: primaryColor, fontWeight: FontWeight.bold),
+              //       ),
+              //       Text(
+              //         '07:30 AM',
+              //         style: TextStyle(
+              //           color: primaryColor,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),
