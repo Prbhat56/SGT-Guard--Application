@@ -5,9 +5,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/utils/const.dart';
 import 'widgets/custom_calender.dart';
 
-class ApplyLeaveScreen extends StatelessWidget {
+class ApplyLeaveScreen extends StatefulWidget {
   const ApplyLeaveScreen({super.key});
 
+  @override
+  State<ApplyLeaveScreen> createState() => _ApplyLeaveScreenState();
+}
+
+class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
+  bool leaveFromclicked = false;
+  bool leaveToclicked = false;
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -53,29 +60,36 @@ class ApplyLeaveScreen extends StatelessWidget {
                 SizedBox(
                   height: 6,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  decoration: BoxDecoration(
-                      color: seconderyColor.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(6)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Choose Date',
-                        style: TextStyle(color: primaryColor, fontSize: 12),
-                      ),
-                      Icon(
-                        Icons.expand_more,
-                        color: primaryColor,
-                      )
-                    ],
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      leaveFromclicked = !leaveFromclicked;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    decoration: BoxDecoration(
+                        color: seconderyColor.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(6)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Choose Date',
+                          style: TextStyle(color: primaryColor, fontSize: 12),
+                        ),
+                        Icon(
+                          Icons.expand_more,
+                          color: primaryColor,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 6,
                 ),
-                CustomCalenderWidget(),
+                leaveFromclicked ? CustomCalenderWidget() : Container(),
                 Text(
                   'To',
                   style: GoogleFonts.montserrat(
@@ -88,26 +102,33 @@ class ApplyLeaveScreen extends StatelessWidget {
                 SizedBox(
                   height: 6,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  decoration: BoxDecoration(
-                      color: seconderyColor.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(6)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Choose Date',
-                        style: TextStyle(color: primaryColor, fontSize: 12),
-                      ),
-                      Icon(
-                        Icons.expand_more,
-                        color: primaryColor,
-                      )
-                    ],
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      leaveToclicked = !leaveToclicked;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    decoration: BoxDecoration(
+                        color: seconderyColor.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(6)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Choose Date',
+                          style: TextStyle(color: primaryColor, fontSize: 12),
+                        ),
+                        Icon(
+                          Icons.expand_more,
+                          color: primaryColor,
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                CustomCalenderWidget(),
+                leaveToclicked ? CustomCalenderWidget() : Container(),
                 SizedBox(
                   height: 20,
                 ),

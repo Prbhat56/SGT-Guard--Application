@@ -35,8 +35,8 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Date & Time',
-                style: TextStyle(color: Colors.grey),
+                'Start at:',
+                style: TextStyle(color: primaryColor),
               ),
               Text(
                 'Monday, October 24',
@@ -63,7 +63,7 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Guard',
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: primaryColor),
                       ),
                       Text(
                         'Matheus Paolo',
@@ -98,7 +98,7 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
               ),
               Text(
                 'Property',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: primaryColor),
               ),
               Text(
                 'Rivi Properties',
