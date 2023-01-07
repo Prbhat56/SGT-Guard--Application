@@ -14,11 +14,8 @@ class InactiveJobsTab extends StatelessWidget {
               JobsTile(
                 isActive: false,
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 80.0),
-                child: Divider(
-                  color: Colors.grey,
-                ),
+              Divider(
+                color: Colors.grey,
               ),
             ],
           );

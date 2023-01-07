@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/const.dart';
 import 'report_success_screen.dart';
+import 'widget/success_popup.dart';
 
 class ParkingReportScreen extends StatefulWidget {
   const ParkingReportScreen({super.key});
@@ -500,12 +501,15 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                       textScaleFactor: 1.0,
                     ),
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const ReportSuccessScreen(
-                          isSubmitReportScreen: false,
-                        );
-                      }));
+                      showDialog(
+                          context: context,
+                          builder: (context) => SuccessPopup());
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //   return const ReportSuccessScreen(
+                      //     isSubmitReportScreen: false,
+                      //   );
+                      // }));
                     }),
               ),
             ),

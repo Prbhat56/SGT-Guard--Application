@@ -15,11 +15,8 @@ class ActiveJobsTab extends StatelessWidget {
               JobsTile(
                 isActive: true,
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 80.0),
-                child: Divider(
-                  color: Colors.grey,
-                ),
+              Divider(
+                color: Colors.grey,
               ),
             ],
           );

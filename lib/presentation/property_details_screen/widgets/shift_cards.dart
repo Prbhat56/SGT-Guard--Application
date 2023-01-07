@@ -23,7 +23,7 @@ class ShiftCards extends StatelessWidget {
           width: 122,
           // margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: primaryColor,
+            color: seconderyColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
@@ -31,14 +31,15 @@ class ShiftCards extends StatelessWidget {
             children: [
               Text(
                 shiftdate,
-                style: TextStyle(color: white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 5,
               ),
               Text(
                 shifttime,
-                style: TextStyle(color: white),
+                style: TextStyle(color: primaryColor),
               ),
             ],
           ),

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/validator.dart';
+import 'package:sgt/presentation/settings_screen/widgets/verify_mobile_no.dart';
 import '../../utils/const.dart';
 
 class EditAccountScreen extends StatefulWidget {
@@ -670,75 +670,15 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         focusColor: primaryColor,
                       ),
                       keyboardType: TextInputType.number,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VerifyMobileNoScreen()));
+                      },
                       validator: (input) => input!.isNotEmpty
                           ? null
                           : "please enter your phone number",
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Center(
-                      child: Text(
-                        'Verifying your number',
-                        style: TextStyle(color: black, fontSize: 16.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Center(
-                      child: Text(
-                        'Enter code',
-                        style: TextStyle(color: Colors.grey, fontSize: 15.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Center(
-                      child: Pinput(
-                        controller: _otpController,
-                        length: 6,
-                        defaultPinTheme: defaultPinTheme,
-                        focusedPinTheme: focusedPinTheme,
-                        submittedPinTheme: submittedPinTheme,
-                        validator: (s) {},
-                        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                        showCursor: true,
-                        onCompleted: (pin) => print(pin),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Didn't Receive OTP yet?,",
-                            style: TextStyle(color: black, fontSize: 12.sp),
-                          ),
-                          Text(
-                            "00:05",
-                            style:
-                                TextStyle(color: primaryColor, fontSize: 12.sp),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Center(
-                      child: Text(
-                        "Resend code",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 15.sp,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
                     ),
                     SizedBox(
                       height: 40.h,

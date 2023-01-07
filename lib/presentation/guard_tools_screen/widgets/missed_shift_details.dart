@@ -4,23 +4,36 @@ import '../../../utils/const.dart';
 import '../../map_screen/map_screen.dart';
 import '../../property_details_screen/widgets/shift_cards.dart';
 
-class MissedShiftDetailsScreen extends StatelessWidget {
+class MissedShiftDetailsScreen extends StatefulWidget {
   MissedShiftDetailsScreen({super.key});
+
+  @override
+  State<MissedShiftDetailsScreen> createState() =>
+      _MissedShiftDetailsScreenState();
+}
+
+class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
   LatLng currentlocation = const LatLng(22.572645, 88.363892);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: grey,
+        backgroundColor: white,
         leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: Icon(
             Icons.arrow_back_ios,
             color: black,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        ),
+        elevation: 1,
+        centerTitle: true,
+        title: Text(
+          'Missed Shifts',
+          style: TextStyle(color: black, fontWeight: FontWeight.w400),
         ),
       ),
       body: SingleChildScrollView(
@@ -28,36 +41,124 @@ class MissedShiftDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: grey,
+              padding: EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: seconderyLightColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Column(
                 children: [
-                  Center(
-                    child: Container(
-                      color: grey,
-                      child: const CircleAvatar(
-                        radius: 40,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const CircleAvatar(
+                        radius: 45,
                         backgroundImage: NetworkImage(
                           'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
                         ),
                       ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Rivi Properties',
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          const Text(
+                            '1517 South Centelella',
+                            style: TextStyle(fontSize: 13, color: Colors.grey),
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Last Shift:',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                ' October 24, 10:00 AM ~ 4:00 PM',
+                                style: TextStyle(
+                                  color: black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 33,
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Column(
+                          children: const [
+                            Text(
+                              '15',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Guards',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: const [
+                            Text(
+                              '10',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Points',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: const [
+                            Text(
+                              '7000',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Sqft',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text(
-                    'Rivi Properties',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    '1517 South Centelella',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                  const SizedBox(
-                    height: 30,
                   ),
                 ],
               ),

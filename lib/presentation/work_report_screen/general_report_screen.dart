@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sgt/presentation/work_report_screen/widget/success_popup.dart';
 import '../../utils/const.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
@@ -345,12 +346,15 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                         textScaleFactor: 1.0,
                       ),
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const ReportSuccessScreen(
-                            isSubmitReportScreen: false,
-                          );
-                        }));
+                        showDialog(
+                            context: context,
+                            builder: (context) => SuccessPopup());
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return const ReportSuccessScreen(
+                        //     isSubmitReportScreen: false,
+                        //   );
+                        // }));
                       }),
                 ),
               ),

@@ -15,6 +15,7 @@ import '../home.dart';
 import 'cubit/addpeople/addpeople_cubit.dart';
 import 'report_success_screen.dart';
 import 'widget/edit_location.dart';
+import 'widget/success_popup.dart';
 
 class EmergencyReportScreen extends StatefulWidget {
   const EmergencyReportScreen({super.key});
@@ -842,12 +843,15 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                         textScaleFactor: 1.0,
                       ),
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const ReportSuccessScreen(
-                            isSubmitReportScreen: false,
-                          );
-                        }));
+                        showDialog(
+                            context: context,
+                            builder: (context) => SuccessPopup());
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return const ReportSuccessScreen(
+                        //     isSubmitReportScreen: false,
+                        //   );
+                        // }));
                       }),
                 ),
               ),

@@ -2,9 +2,24 @@ import 'package:flutter/material.dart';
 import '../../../utils/const.dart';
 import '../../property_details_screen/property_details_screen.dart';
 
-class LocationDetailsCard extends StatelessWidget {
-  const LocationDetailsCard({super.key});
+class LocationDetailsCard extends StatefulWidget {
+  const LocationDetailsCard(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.address,
+      required this.duty,
+      required this.imageUrl});
+  final String title;
+  final String subtitle;
+  final String address;
+  final String duty;
+  final String imageUrl;
+  @override
+  State<LocationDetailsCard> createState() => _LocationDetailsCardState();
+}
 
+class _LocationDetailsCardState extends State<LocationDetailsCard> {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -24,59 +39,56 @@ class LocationDetailsCard extends StatelessWidget {
               Container(
                 height: 204,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
+                  image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg')),
+widget.imageUrl,)),
                   borderRadius: BorderRadius.circular(20),
                   color: grey,
                 ),
               ),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(20),
-              //   child: Image.network(
-              //     'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-              //   ),
-              // ),
               const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
-                    'Rivi Properties',
+                    widget.title,
                     style: TextStyle(fontSize: 17),
                   ),
                   Text(
-                    'Guard Post Duties',
-                    style: TextStyle(fontSize: 17),
+                    widget.duty,
+                    style: TextStyle(fontSize: 17, color: primaryColor),
                   )
                 ],
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Icon(
                     Icons.location_on,
-                    color: Colors.grey,
-                    size: 17,
+                    color: primaryColor,
+                    size: 15,
                   ),
                   Text(
-                    'Guard Post Duties',
-                    style: TextStyle(fontSize: 17, color: Colors.grey),
+                    widget.subtitle,
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
                   )
                 ],
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
-              const Text(
-                'Los Angeles California, 90293 ',
-                style: TextStyle(fontSize: 17, color: Colors.grey),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text(
+                  widget.address,
+                  style: TextStyle(fontSize: 13, color: black),
+                ),
               )
             ],
           ),

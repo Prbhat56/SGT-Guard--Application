@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../utils/const.dart';
 import '../../map_screen/map_screen.dart';
@@ -21,7 +22,8 @@ class _InActivePropertyDetailsScreenState
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
           appBar: AppBar(
-            elevation: 1,
+            shadowColor: Color.fromARGB(255, 186, 185, 185),
+            elevation: 6,
             backgroundColor: white,
             leading: InkWell(
               onTap: () {
@@ -32,9 +34,14 @@ class _InActivePropertyDetailsScreenState
                 color: black,
               ),
             ),
+            centerTitle: true,
+            title: Text(
+              'Inactive Property',
+              style: TextStyle(color: black, fontWeight: FontWeight.w400),
+            ),
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -44,44 +51,48 @@ class _InActivePropertyDetailsScreenState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CircleAvatar(
-                        radius: 40,
+                        radius: 42,
                         backgroundImage: NetworkImage(
                           'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Rivi Properties',
-                            style: TextStyle(
-                                fontSize: 28, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            '1517 South Centelella',
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Last Shift: ',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.red),
-                              ),
-                              Text(
-                                'October 24, 10:00 AM ~ 4:00 PM',
-                                style: TextStyle(fontSize: 12, color: black),
-                              ),
-                            ],
-                          )
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Rivi Properties',
+                              style: TextStyle(
+                                  fontSize: 28, fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              '1517 South Centelella',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Last Shift: ',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.red),
+                                ),
+                                Text(
+                                  'October 24, 10:00 AM ~ 4:00 PM',
+                                  style: TextStyle(fontSize: 12, color: black),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -96,7 +107,7 @@ class _InActivePropertyDetailsScreenState
                   'Job Details',
                   style: TextStyle(
                       fontSize: 17,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       color: primaryColor),
                 ),
                 const SizedBox(
@@ -108,13 +119,15 @@ class _InActivePropertyDetailsScreenState
                       'Gaurd Name:',
                       style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor),
+                          fontWeight: FontWeight.w300,
+                          color: black),
                     ),
                     Text(
                       ' Matheus Paolo',
                       style: TextStyle(
                         fontSize: 15,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ],
@@ -128,13 +141,15 @@ class _InActivePropertyDetailsScreenState
                       'Position:',
                       style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor),
+                          fontWeight: FontWeight.w300,
+                          color: black),
                     ),
                     Text(
                       ' Superviser',
                       style: TextStyle(
                         fontSize: 15,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ],
@@ -146,7 +161,7 @@ class _InActivePropertyDetailsScreenState
                   'Location',
                   style: TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                     color: primaryColor,
                   ),
                 ),
@@ -182,8 +197,8 @@ class _InActivePropertyDetailsScreenState
                                 spreadRadius: 0.5,
                               ),
                             ]),
-                        height: 300,
-                        width: 500,
+                        height: 231,
+                        width: 343.w,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: GoogleMap(

@@ -11,6 +11,7 @@ import '../work_report_screen/emergency_report_screen.dart';
 import '../work_report_screen/general_report_screen.dart';
 import '../work_report_screen/maintenance_report_screen.dart';
 import '../work_report_screen/parking_report_screen.dart';
+import 'widgets/leave_status_screen.dart';
 
 class GuardToolScreen extends StatelessWidget {
   const GuardToolScreen({super.key});
@@ -371,7 +372,7 @@ class GuardToolScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const GeneralReportScreen();
+                        return const LeaveStatusScreen();
                       }));
                     },
                     child: Row(
@@ -385,7 +386,7 @@ class GuardToolScreen extends StatelessWidget {
                           width: 22,
                         ),
                         Text(
-                          'Cancelled Shifts',
+                          'Leave Status',
                           style: TextStyle(fontSize: 17),
                         ),
                       ],

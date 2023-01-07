@@ -8,6 +8,7 @@ import '../../utils/const.dart';
 import '../property_details_screen/widgets/property_media_preview_screen.dart';
 import 'report_success_screen.dart';
 import 'widget/report_pdf_widget.dart';
+import 'widget/success_popup.dart';
 import 'work_report_screen.dart';
 
 class SubmitReportScreen extends StatefulWidget {
@@ -323,12 +324,15 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                         textScaleFactor: 1.0,
                       ),
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const ReportSuccessScreen(
-                            isSubmitReportScreen: true,
-                          );
-                        }));
+                        showDialog(
+                            context: context,
+                            builder: (context) => SuccessPopup());
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return const ReportSuccessScreen(
+                        //     isSubmitReportScreen: true,
+                        //   );
+                        // }));
                       }),
                 ),
               ),

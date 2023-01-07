@@ -27,20 +27,19 @@ class JobsTile extends StatelessWidget {
                             const InActivePropertyDetailsScreen()));
           },
           child: Row(
-            //mainAxisSize: MainAxisSize.min,
             children: [
               Stack(
                 children: [
                   const CircleAvatar(
-                    radius: 30,
+                    radius: 35,
                     backgroundImage: NetworkImage(
                       'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
                     ),
                   ),
                   isActive
                       ? Positioned(
-                          top: 43,
-                          left: 40,
+                          top: 47,
+                          left: 54,
                           child: Container(
                             height: 17,
                             width: 17,
@@ -65,7 +64,7 @@ class JobsTile extends StatelessWidget {
                     padding: EdgeInsets.only(left: 4.0),
                     child: Text(
                       'Rivi Properties',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 17),
                     ),
                   ),
                   Row(
@@ -83,11 +82,11 @@ class JobsTile extends StatelessWidget {
                     ],
                   ),
                   const Padding(
-                    padding: EdgeInsets.only(left: 18.0),
+                    padding: EdgeInsets.only(left: 18.0, top: 6),
                     child: Text(
                       'Guard Post Duties',
                       style: TextStyle(
-                          fontSize: 17, color: Color.fromARGB(255, 75, 75, 75)),
+                          fontSize: 15, color: Color.fromARGB(255, 75, 75, 75)),
                     ),
                   ),
                 ],

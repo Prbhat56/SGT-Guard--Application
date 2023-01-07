@@ -4,10 +4,10 @@ import 'package:sgt/presentation/all_team_member/all_team_member_screen.dart';
 import 'package:sgt/presentation/home_screen/widgets/circular_profile_widget.dart';
 import 'package:sgt/presentation/home_screen/widgets/location_details_card.dart';
 import 'package:sgt/presentation/jobs_screen/jobs_screen.dart';
-import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import 'package:sgt/utils/const.dart';
 
 import '../guard_tools_screen/guard_tools_screen.dart';
+import 'widgets/location_details_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,24 +16,25 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 1,
+        toolbarHeight: 48,
+        shadowColor: Color.fromARGB(255, 186, 185, 185),
+        elevation: 6,
         backgroundColor: white,
-        leading: Icon(
-          Icons.check_circle,
-          color: greenColor,
+        leading: Padding(
+          padding: const EdgeInsets.only(
+            left: 12.0,
+          ),
+          child: Icon(
+            Icons.check_circle,
+            color: greenColor,
+          ),
         ),
+        leadingWidth: 30,
         title: Text(
           'Greylock Security',
-          style: TextStyle(color: black),
+          style: TextStyle(color: black, fontWeight: FontWeight.w400),
         ),
         actions: [
-          // IconButton(
-          //     onPressed: () {},
-          //     icon: Icon(
-          //       Icons.map,
-          //       color: black,
-          //       size: 30,
-          //     )),
           InkWell(
             onTap: () {
               Navigator.of(context).push(
@@ -54,32 +55,8 @@ class HomeScreen extends StatelessWidget {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.only(right: 15.0),
               child: SvgPicture.asset('assets/tool.svg'),
-              // child: IconButton(
-              //     onPressed: () {
-              //       Navigator.of(context).push(
-              //         PageRouteBuilder(
-              //           transitionDuration: const Duration(milliseconds: 500),
-              //           pageBuilder: (context, animation, secondaryAnimation) =>
-              //               const WorkReportScreen(),
-              //           transitionsBuilder:
-              //               (context, animation, secondaryAnimation, child) {
-              //             return SlideTransition(
-              //               position: Tween<Offset>(
-              //                       begin: const Offset(1, 0), end: Offset.zero)
-              //                   .animate(animation),
-              //               child: child,
-              //             );
-              //           },
-              //         ),
-              //       );
-              //     },
-              //     icon: Icon(
-              //       Icons.add,
-              //       color: black,
-              //       size: 30,
-              //     )),
             ),
           )
         ],
@@ -95,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                     style: TextStyle(
                         color: black,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.w500)),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -115,11 +92,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('See all > ',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: const Text('See all',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 )
               ],
             ),
@@ -136,11 +116,14 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Active Jobs',
-                    style: TextStyle(
-                        color: black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
+                Text(
+                  'Active Jobs',
+                  style: TextStyle(
+                    color: black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -160,23 +143,34 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('See all > ',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: const Text('See all',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 )
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 1250,
+            Container(
+              // color: Colors.amber,
+              height: 290 * locationData.length.toDouble(),
               child: ListView.builder(
+                itemCount: locationData.length,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) => const LocationDetailsCard(),
+                itemBuilder: (context, index) => LocationDetailsCard(
+                  title: locationData[index].title,
+                  subtitle: locationData[index].subtitle,
+                  imageUrl: locationData[index].imageUrl,
+                  duty: locationData[index].duty,
+                  address: locationData[index].address,
+                ),
               ),
             ),
           ]),
