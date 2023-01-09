@@ -146,25 +146,26 @@ class _ScanningScreenState extends State<ScanningScreen> {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
               appBar: AppBar(
-                elevation: 0,
                 backgroundColor: Colors.white,
                 leading: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back_ios,
-                    color: Colors.black,
+                    color: primaryColor,
                   ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
+                centerTitle: true,
+                title: Text('QR Scan', style: TextStyle(color: primaryColor)),
               ),
               backgroundColor: white,
               body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 80),
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    // // mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(
                         height: 69,
@@ -180,7 +181,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          'Take a photo of the QR code to complete the check in process  ',
+                          'Scan QR code\n to clock in!',
                           textScaleFactor: 1.0,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 17, color: Colors.grey),

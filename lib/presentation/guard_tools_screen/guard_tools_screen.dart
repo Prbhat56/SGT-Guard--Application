@@ -6,7 +6,7 @@ import '../map_screen/active_map_screen.dart';
 import '../notification_screen/notification_screen.dart';
 import '../qr_screen/qr_screen.dart';
 import '../time_sheet_screen/time_sheet_screen.dart';
-import '../time_sheet_screen/widgets/missed_shift_screen.dart';
+import '../time_sheet_screen/missed_shift_screen.dart';
 import '../work_report_screen/emergency_report_screen.dart';
 import '../work_report_screen/general_report_screen.dart';
 import '../work_report_screen/maintenance_report_screen.dart';

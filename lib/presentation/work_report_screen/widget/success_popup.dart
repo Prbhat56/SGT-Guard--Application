@@ -9,6 +9,7 @@ class SuccessPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         content: Container(
           margin: EdgeInsets.all(10),
           child: Column(
@@ -20,6 +21,9 @@ class SuccessPopup extends StatelessWidget {
                 Icons.check_circle,
                 color: greenColor,
                 size: 60,
+              ),
+              SizedBox(
+                height: 30,
               ),
               Text(
                 "Done",

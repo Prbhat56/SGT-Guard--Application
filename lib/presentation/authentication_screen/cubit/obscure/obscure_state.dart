@@ -3,11 +3,17 @@ part of 'obscure_cubit.dart';
 
 class ObscureState extends Equatable {
   final bool isObscure;
-
-  ObscureState({required this.isObscure});
+  final bool oldpasswordObscure;
+  final bool newpasswordObscure;
+  ObscureState({
+    required this.isObscure,
+    required this.oldpasswordObscure,
+    required this.newpasswordObscure,
+  });
 
   factory ObscureState.initial() {
-    return ObscureState(isObscure: true);
+    return ObscureState(
+        isObscure: true, oldpasswordObscure: true, newpasswordObscure: true);
   }
 
   @override
@@ -17,13 +23,18 @@ class ObscureState extends Equatable {
   int get hashCode => isObscure.hashCode;
 
   @override
-  List<Object?> get props => [isObscure];
+  List<Object?> get props =>
+      [isObscure, oldpasswordObscure, newpasswordObscure];
 
   ObscureState copyWith({
     bool? isObscure,
+    bool? oldpasswordObscure,
+    bool? newpasswordObscure,
   }) {
     return ObscureState(
       isObscure: isObscure ?? this.isObscure,
+      oldpasswordObscure: oldpasswordObscure ?? this.oldpasswordObscure,
+      newpasswordObscure: newpasswordObscure ?? this.newpasswordObscure,
     );
   }
 }

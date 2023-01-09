@@ -3,21 +3,25 @@ class CheckPointModel {
   final String isCompleted;
   final String imageUrl;
   final String address;
+  final String date;
 
-  CheckPointModel(
-      {required this.title,
-      required this.isCompleted,
-      required this.imageUrl,
-      required this.address});
+  CheckPointModel({
+    required this.title,
+    required this.isCompleted,
+    required this.imageUrl,
+    required this.address,
+    required this.date,
+  });
 }
 
 List<CheckPointModel> checkpointData = [
   CheckPointModel(
     title: 'Building Hallway 1',
-    isCompleted: 'Check-in by 11:00am',
+    isCompleted: 'Completed',
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24 ",
   ),
   CheckPointModel(
     title: 'Building Hallway 2',
@@ -25,6 +29,7 @@ List<CheckPointModel> checkpointData = [
     imageUrl:
         'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24",
   ),
   CheckPointModel(
     title: 'Main Court Yard',
@@ -32,6 +37,7 @@ List<CheckPointModel> checkpointData = [
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24",
   ),
   CheckPointModel(
     title: 'Parking Structure 1',
@@ -39,6 +45,7 @@ List<CheckPointModel> checkpointData = [
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24",
   ),
   CheckPointModel(
     title: 'Parking Structure 2',
@@ -46,6 +53,7 @@ List<CheckPointModel> checkpointData = [
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24",
   ),
   CheckPointModel(
     title: 'Parking Structure 3',
@@ -53,6 +61,7 @@ List<CheckPointModel> checkpointData = [
     imageUrl:
         'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24",
   ),
   CheckPointModel(
     title: 'Leasing Office',
@@ -60,5 +69,6 @@ List<CheckPointModel> checkpointData = [
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
     address: "43 Bourke Street, Newbridge ",
+    date: "Monday, October 24",
   ),
 ];

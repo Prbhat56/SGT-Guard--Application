@@ -1,15 +1,16 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import '../../utils/const.dart';
 import '../property_details_screen/widgets/property_media_preview_screen.dart';
-import 'report_success_screen.dart';
-import 'widget/report_pdf_widget.dart';
 import 'widget/success_popup.dart';
-import 'work_report_screen.dart';
+import 'package:path/path.dart' as path;
 
 class SubmitReportScreen extends StatefulWidget {
   const SubmitReportScreen({super.key});
@@ -41,8 +42,11 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
     false,
     false,
   ];
-  List<int> pdf = [];
 
+  final ImagePicker _picker = ImagePicker();
+  List<XFile>? imageFileList = [];
+
+  List imageNames = [];
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<ReportTypeCubit>().state;
@@ -55,7 +59,7 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
           backgroundColor: white,
           title: Text(
             'Checkpoint 1 Details',
-            style: TextStyle(color: black),
+            style: TextStyle(color: primaryColor),
             textScaleFactor: 1.0,
           ),
           centerTitle: true,
@@ -63,10 +67,7 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: black,
-              )),
+              icon: Icon(Icons.arrow_back_ios, color: primaryColor)),
         ),
         backgroundColor: white,
         body: SingleChildScrollView(
@@ -153,7 +154,7 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                   children: [
                     Text(
                       'Tasks',
-                      style: TextStyle(fontSize: 17),
+                      style: TextStyle(fontSize: 17, color: primaryColor),
                     ),
                     const SizedBox(
                       height: 10,
@@ -203,11 +204,11 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                       children: [
                         Text(
                           'Additional comments',
-                          style: TextStyle(fontSize: 17),
+                          style: TextStyle(fontSize: 17, color: primaryColor),
                         ),
                         Text(
                           '(Optional)',
-                          style: TextStyle(fontSize: 10),
+                          style: TextStyle(fontSize: 10, color: primaryColor),
                         ),
                       ],
                     ),
@@ -226,69 +227,250 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                     const SizedBox(
                       height: 20,
                     ),
+                    imageFileList!.isNotEmpty
+                        ? Text(
+                            'Media',
+                            style: TextStyle(fontSize: 17, color: primaryColor),
+                          )
+                        : Container(),
+                    imageFileList!.isNotEmpty
+                        ? SizedBox(
+                            height: 110 * imageFileList!.length.toDouble(),
+                            child: ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: imageFileList!.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(vertical: 20),
+                                    child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              margin: EdgeInsets.all(5),
+                                              height: 60,
+                                              width: 60,
+                                              alignment: Alignment.center,
+                                              child: Image.file(File(
+                                                  imageFileList![index].path))),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                  width: 190,
+                                                  child: Text(imageNames[index],
+                                                      style: TextStyle())),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    height: 4,
+                                                    width: 200,
+                                                    decoration: BoxDecoration(
+                                                        color: primaryColor),
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Icon(
+                                                    Icons.check_circle_outline,
+                                                    color: greenColor,
+                                                    size: 20,
+                                                  ),
+                                                  // Text('100 %',
+                                                  //     style: TextStyle(
+                                                  //         fontSize: 12)),
+                                                  SizedBox(width: 5),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          Spacer(),
+                                          InkWell(
+                                            onTap: () {
+                                              print('remove');
+
+                                              setState(() {
+                                                imageFileList!.removeAt(index);
+                                                // imageNames.removeAt(index);
+                                              });
+                                              print(index);
+                                              print(imageFileList);
+                                              // imageNames
+                                              //     .add(path.dirname(photo.path));
+                                            },
+                                            child: Container(
+                                                height: 17,
+                                                width: 17,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    border: Border.all(
+                                                        color: primaryColor)),
+                                                child: Icon(Icons.close,
+                                                    size: 15)),
+                                          )
+                                        ]),
+                                  );
+                                }),
+                          )
+                        : Container(),
                     Text(
-                      'Generate Report',
-                      style: TextStyle(fontSize: 17),
+                      'Add Media',
+                      style: TextStyle(fontSize: 17, color: primaryColor),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    cubit.isgeneralReport
-                        ? PdfReport(
-                            title: 'General Report.pdf',
-                          )
-                        : Container(),
-                    cubit.ismaintenanceReport
-                        ? PdfReport(
-                            title: 'Maintenance Report.pdf',
-                          )
-                        : Container(),
-                    cubit.isparkingReport
-                        ? PdfReport(
-                            title: 'Parking Report.pdf',
-                          )
-                        : Container(),
-                    cubit.isemergencyReport
-                        ? PdfReport(
-                            title: 'Emergency Report.pdf',
-                          )
-                        : Container(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    cubit.isgeneralReport ||
-                            cubit.ismaintenanceReport ||
-                            cubit.isparkingReport ||
-                            cubit.isemergencyReport
-                        ? Padding(
-                            padding: const EdgeInsets.only(bottom: 18.0),
-                            child: Text(
-                              'Add Another Report',
-                              style: TextStyle(fontSize: 17),
-                            ),
-                          )
-                        : Container(),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          pdf.add(1);
-                        });
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return WorkReportScreen();
-                        }));
+                        showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 25),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      'Select Media From?',
+                                      textScaleFactor: 1.0,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    const Text(
+                                      'Use camera or select file from device gallery',
+                                      textScaleFactor: 1.0,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromARGB(
+                                              255, 109, 109, 109)),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        InkWell(
+                                          onTap: () async {
+                                            // Capture a photo
+                                            final XFile? photo =
+                                                await _picker.pickImage(
+                                                    source: ImageSource.camera);
+                                            if (photo != null) {
+                                              imageFileList?.add(photo);
+
+                                              imageNames.add(
+                                                  path.dirname(photo.path));
+                                              setState(() {});
+                                            }
+                                            print(
+                                                '$imageFileList   $imageNames');
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 60,
+                                                width: 60,
+                                                decoration: BoxDecoration(
+                                                  color: grey,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.camera_alt,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              const Text(
+                                                'Camera',
+                                                textScaleFactor: 1.0,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            // Pick multiple images
+                                            final List<XFile>? images =
+                                                await _picker.pickMultiImage();
+                                            if (images != null) {
+                                              for (var i = 0;
+                                                  i < images.length;
+                                                  i++) {
+                                                imageFileList?.add(images[i]);
+                                              }
+                                              imageNames.add(images[0].name);
+                                              setState(() {});
+                                            }
+                                            print(
+                                                '$imageFileList   $imageNames');
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 60,
+                                                width: 60,
+                                                decoration: BoxDecoration(
+                                                  color: white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 5,
+                                                      blurRadius: 7,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.folder_open_outlined,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              const Text(
+                                                'Gallery',
+                                                textScaleFactor: 1.0,
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
                       },
                       child: DottedBorder(
                         borderType: BorderType.RRect,
-                        color: primaryColor,
+                        color: Colors.blue,
+                        strokeWidth: 2,
+                        dashPattern: [10, 3],
                         radius: Radius.circular(10),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
+                          padding: EdgeInsets.symmetric(vertical: 20),
                           child: Center(
-                              child: Icon(
-                            Icons.add,
-                            color: primaryColor,
-                            size: 50,
+                              child: Text(
+                            'Choose a File',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )),
                         ),
                       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/widgets/time_sheet_model.dart';
 import '../../../utils/const.dart';

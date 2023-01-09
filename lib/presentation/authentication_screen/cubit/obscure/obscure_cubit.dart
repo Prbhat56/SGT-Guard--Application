@@ -8,4 +8,12 @@ class ObscureCubit extends Cubit<ObscureState> {
   void changeVisibility() {
     emit(state.copyWith(isObscure: !state.isObscure));
   }
+
+  void changeoldpasswordVisibility() {
+    emit(state.copyWith(oldpasswordObscure: !state.oldpasswordObscure));
+  }
+
+  void changenewpasswordVisibility() {
+    emit(state.copyWith(newpasswordObscure: !state.newpasswordObscure));
+  }
 }

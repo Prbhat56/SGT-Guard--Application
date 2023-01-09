@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sgt/presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
 import '../../utils/const.dart';
+import '../guard_tools_screen/guard_tools_screen.dart';
 import 'widgets/chattile_widget.dart';
 
 class ConnectScreen extends StatefulWidget {
@@ -47,67 +49,52 @@ class _ConnectScreenState extends State<ConnectScreen> {
                   ],
                 )
               : AppBar(
-                  elevation: 0,
-                  leadingWidth: 0,
+                  toolbarHeight: 48,
+                  shadowColor: Color.fromARGB(255, 186, 185, 185),
+                  elevation: 6,
                   backgroundColor: white,
-                  title:
-                      BlocProvider.of<IssearchingCubit>(context, listen: true)
-                              .state
-                              .isSearching
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: grey,
-                                    isDense: true,
-                                    contentPadding:
-                                        const EdgeInsets.fromLTRB(30, 5, 30, 0),
-                                    prefixIcon: Icon(
-                                      Icons.arrow_back_ios,
-                                      color: black,
-                                      size: 25,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(7),
-                                      borderSide: const BorderSide(
-                                          color: Colors.transparent,
-                                          width: 0.0),
-                                    ),
-                                    hintText: 'Search',
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        context
-                                            .read<IssearchingCubit>()
-                                            .searchingChecker();
-                                      },
-                                      icon: Icon(
-                                        Icons.search,
-                                        size: 25,
-                                        color: black,
-                                      ),
-                                    )),
-                              ),
-                            )
-                          : Container(),
+                  leading: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 12.0,
+                    ),
+                    child: Icon(
+                      Icons.check_circle,
+                      color: greenColor,
+                    ),
+                  ),
+                  leadingWidth: 30,
+                  title: Text(
+                    'Connect',
+                    style: TextStyle(color: black, fontWeight: FontWeight.w400),
+                  ),
                   actions: [
-                    context.watch<IssearchingCubit>().state.isSearching
-                        ? Container()
-                        : Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: IconButton(
-                              onPressed: () {
-                                context
-                                    .read<IssearchingCubit>()
-                                    .searchingChecker();
-                              },
-                              icon: Icon(
-                                Icons.search,
-                                color: black,
-                                size: 35,
-                              ),
-                            ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 500),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const GuardToolScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                        begin: const Offset(1, 0),
+                                        end: Offset.zero)
+                                    .animate(animation),
+                                child: child,
+                              );
+                            },
                           ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: SvgPicture.asset('assets/tool.svg'),
+                      ),
+                    )
                   ],
                 ),
           backgroundColor: white,
@@ -115,16 +102,9 @@ class _ConnectScreenState extends State<ConnectScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                state.selectedChatTile.isNotEmpty
-                    ? Container()
-                    : const Padding(
-                        padding: EdgeInsets.only(left: 16.0, bottom: 12),
-                        child: Text(
-                          'Connect',
-                          style: TextStyle(
-                              fontSize: 40, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                SizedBox(
+                  height: 20,
+                ),
                 state.selectedChatTile.isNotEmpty
                     ? Container()
                     : Padding(
@@ -135,19 +115,24 @@ class _ConnectScreenState extends State<ConnectScreen> {
                           children: [
                             Text(
                               'Chats',
-                              style: TextStyle(color: black, fontSize: 15),
+                              style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500),
                             ),
                             Text(
                               'Mark All As Read',
-                              style:
-                                  TextStyle(color: primaryColor, fontSize: 14),
+                              style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
                       ),
                 Divider(
                   thickness: 3,
-                  color: primaryColor,
+                  color: seconderyColor,
                 ),
                 SingleChildScrollView(
                   child: SizedBox(

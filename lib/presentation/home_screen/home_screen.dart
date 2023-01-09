@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                     child: const Text('See all',
                         style: TextStyle(
                             color: Colors.blue,
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold)),
                   ),
                 )
@@ -148,7 +148,7 @@ class HomeScreen extends StatelessWidget {
                     child: const Text('See all',
                         style: TextStyle(
                             color: Colors.blue,
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold)),
                   ),
                 )

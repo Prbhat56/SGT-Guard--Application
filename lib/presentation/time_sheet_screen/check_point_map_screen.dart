@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../utils/const.dart';
 import 'widgets/check_point_model.dart';
 
@@ -18,7 +17,7 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 600,
+      height: MediaQuery.of(context).size.height * 4.5 / 5,
       width: MediaQuery.of(context).size.width,
       child: Stack(
         children: [
