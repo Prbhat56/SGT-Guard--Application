@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/const.dart';
-import 'report_success_screen.dart';
 import 'widget/success_popup.dart';
 
 class ParkingReportScreen extends StatefulWidget {
@@ -31,15 +30,14 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
           centerTitle: true,
           title: Text(
             'Parking Report',
-            style: TextStyle(color: black),
+            style: TextStyle(color: primaryColor),
             textScaleFactor: 1.0,
           ),
-          elevation: 0,
           backgroundColor: white,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: black,
+              color: primaryColor,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -59,18 +57,61 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     height: 26,
                   ),
                   Text(
+                    'Title',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
+                    textScaleFactor: 1.0,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.only(top: 0, bottom: 0, left: 10),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: seconderyMediumColor)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: primaryColor)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: seconderyMediumColor)),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: seconderyMediumColor,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: seconderyMediumColor,
+                      hintText: 'Something here',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      focusColor: primaryColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Text(
                     'Vechicle Type',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         hintText: 'Something here',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         focusColor: primaryColor),
                   ),
                   const SizedBox(
@@ -78,17 +119,20 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   ),
                   Text(
                     'Model',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         hintText: 'Something here',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         focusColor: primaryColor),
                   ),
                   const SizedBox(
@@ -96,17 +140,20 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   ),
                   Text(
                     'Color',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         hintText: 'Something here',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         focusColor: primaryColor),
                   ),
                   const SizedBox(
@@ -114,87 +161,94 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   ),
                   Text(
                     'License Number',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         hintText: 'Something here',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         focusColor: primaryColor),
                   ),
                   const SizedBox(
                     height: 26,
                   ),
                   Text(
-                    'Title',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    'State',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         hintText: 'Something here',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         focusColor: primaryColor),
                   ),
                   const SizedBox(
-                    height: 26,
+                    height: 25,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: [
-                          'Andhra Pradesh',
-                          'Arunachal Pradesh',
-                          'Assam',
-                          'Bihar'
-                        ].map((String val) {
-                          return DropdownMenuItem<String>(
-                            value: val,
-                            child: Row(
-                              children: <Widget>[
-                                Text(val),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        hint: Text(
-                          'Select State',
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        onChanged: (v) {
-                          setState(() {
-                            value = v;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 26,
-                  ),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width,
+                  //   decoration: BoxDecoration(
+                  //     border: Border(
+                  //       bottom: BorderSide(color: Colors.grey),
+                  //     ),
+                  //   ),
+                  //   child: DropdownButtonHideUnderline(
+                  //     child: DropdownButton(
+                  //       icon: const Icon(Icons.keyboard_arrow_down),
+                  //       items: [
+                  //         'Andhra Pradesh',
+                  //         'Arunachal Pradesh',
+                  //         'Assam',
+                  //         'Bihar'
+                  //       ].map((String val) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: val,
+                  //           child: Row(
+                  //             children: <Widget>[
+                  //               Text(val),
+                  //             ],
+                  //           ),
+                  //         );
+                  //       }).toList(),
+                  //       hint: Text(
+                  //         'Select State',
+                  //         style: GoogleFonts.montserrat(
+                  //           textStyle: const TextStyle(color: Colors.grey),
+                  //         ),
+                  //       ),
+                  //       onChanged: (v) {
+                  //         setState(() {
+                  //           value = v;
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 26,
+                  // ),
                   Text(
                     'Towed',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   Container(
@@ -215,9 +269,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                         }).toList(),
                         hint: Text(
                           'Select Yes or No',
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(color: Colors.grey),
-                          ),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                         onChanged: (v) {},
                       ),
@@ -226,36 +278,13 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   const SizedBox(
                     height: 26,
                   ),
-                  Text(
-                    'Notes',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                    textScaleFactor: 1.0,
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  TextFormField(
-                    maxLines: 8,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      hintText: 'Something here',
-                      hintStyle: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(color: Colors.grey),
-                      ),
-                      focusColor: primaryColor,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+
                   Text(
                     'Upload Record Sample',
-                    style: GoogleFonts.montserrat(
-                        textStyle:
-                            TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                     textScaleFactor: 1.0,
                   ),
                   const SizedBox(
@@ -283,6 +312,8 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Container(
                                                 width: 190,
@@ -297,42 +328,45 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                                                       color: primaryColor),
                                                 ),
                                                 SizedBox(width: 5),
-                                                Text('100 %',
-                                                    style: TextStyle(
-                                                        fontSize: 12)),
+                                                Icon(
+                                                  Icons.check_circle_outline,
+                                                  color: greenColor,
+                                                  size: 20,
+                                                ),
+                                                // Text('100 %',
+                                                //     style: TextStyle(
+                                                //         fontSize: 12)),
                                                 SizedBox(width: 5),
-                                                InkWell(
-                                                  onTap: () {
-                                                    print('remove');
-
-                                                    setState(() {
-                                                      imageFileList!
-                                                          .removeAt(index);
-                                                      // imageNames.removeAt(index);
-                                                    });
-                                                    print(index);
-                                                    print(imageFileList);
-                                                    // imageNames
-                                                    //     .add(path.dirname(photo.path));
-                                                  },
-                                                  child: Container(
-                                                      height: 15,
-                                                      width: 15,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100),
-                                                          border: Border.all(
-                                                              color:
-                                                                  primaryColor)),
-                                                      child: Icon(Icons.close,
-                                                          size: 12)),
-                                                )
                                               ],
                                             )
                                           ],
                                         ),
+                                        Spacer(),
+                                        InkWell(
+                                          onTap: () {
+                                            print('remove');
+
+                                            setState(() {
+                                              imageFileList!.removeAt(index);
+                                              // imageNames.removeAt(index);
+                                            });
+                                            print(index);
+                                            print(imageFileList);
+                                            // imageNames
+                                            //     .add(path.dirname(photo.path));
+                                          },
+                                          child: Container(
+                                              height: 15,
+                                              width: 15,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                  border: Border.all(
+                                                      color: primaryColor)),
+                                              child:
+                                                  Icon(Icons.close, size: 12)),
+                                        )
                                       ]),
                                 );
                               }),
@@ -466,14 +500,21 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                           });
                     },
                     child: DottedBorder(
-                      color: Colors.grey,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                      borderType: BorderType.RRect,
+                      color: Colors.blue,
+                      strokeWidth: 2,
+                      dashPattern: [10, 3],
+                      radius: Radius.circular(10),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
                         child: Center(
-                            child: Icon(
-                          Icons.add,
-                          color: Colors.grey,
-                          size: 50,
+                            child: Text(
+                          'Choose a File',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
                         )),
                       ),
                     ),
@@ -484,9 +525,6 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
             const SizedBox(
               height: 26,
             ),
-            const Divider(
-              color: Colors.grey,
-            ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
               child: Center(
@@ -496,7 +534,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                         horizontal: 150, vertical: 15),
                     color: primaryColor,
                     child: const Text(
-                      'Done',
+                      'Next',
                       style: TextStyle(fontSize: 20),
                       textScaleFactor: 1.0,
                     ),

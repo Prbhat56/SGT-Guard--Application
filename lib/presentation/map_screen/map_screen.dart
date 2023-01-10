@@ -11,19 +11,19 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final Map<String, Marker> _markers = {};
   // Future<void> _onMapCreated(GoogleMapController controller) async {
-    // final googleOffices = await locations.getGoogleOffices();
-    // setState(() {
-    //   _markers.clear();
+  // final googleOffices = await locations.getGoogleOffices();
+  // setState(() {
+  //   _markers.clear();
 
-      // final marker = Marker(
-      //   markerId: MarkerId(office.name),
-      //   position: LatLng(office.lat, office.lng),
-      //   infoWindow: InfoWindow(
-      //     title: office.name,
-      //     snippet: office.address,
-      //   ),
-      // );
-      // _markers[office.name] = marker;
+  // final marker = Marker(
+  //   markerId: MarkerId(office.name),
+  //   position: LatLng(office.lat, office.lng),
+  //   infoWindow: InfoWindow(
+  //     title: office.name,
+  //     snippet: office.address,
+  //   ),
+  // );
+  // _markers[office.name] = marker;
   //   });
   // }
 
@@ -33,6 +33,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       body: SafeArea(
         child: GoogleMap(
+            zoomGesturesEnabled: false,
             initialCameraPosition:
                 CameraPosition(target: currentlocation, zoom: 14)),
       ),

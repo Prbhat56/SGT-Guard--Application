@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/presentation/settings_screen/settings_screen.dart';
 import '../../utils/const.dart';
+import '../guard_tools_screen/guard_tools_screen.dart';
+import '../widgets/main_appbar_widget.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -8,47 +11,88 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: white, elevation: 0, actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const SettingsScreen(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                            begin: const Offset(1, 0), end: Offset.zero)
-                        .animate(animation),
-                    child: child,
-                  );
-                },
-              ),
-            );
-            // Navigator.push(context, MaterialPageRoute(builder: (context) {
-            //   return const SettingsScreen();
-            // }));
-          },
-          icon: Icon(
-            Icons.settings,
-            color: black,
-          ),
-        ),
-      ]),
+      appBar: MainAppBarWidget(appBarTitle: 'Account'),
+      // appBar: AppBar(
+      //   toolbarHeight: 48,
+      //   shadowColor: Color.fromARGB(255, 186, 185, 185),
+      //   elevation: 6,
+      //   backgroundColor: white,
+      //   leading: Padding(
+      //     padding: const EdgeInsets.only(
+      //       left: 12.0,
+      //     ),
+      //     child: Icon(
+      //       Icons.check_circle,
+      //       color: greenColor,
+      //     ),
+      //   ),
+      //   leadingWidth: 30,
+      //   title: Text(
+      //     'Account',
+      //     style: TextStyle(color: black, fontWeight: FontWeight.w400),
+      //   ),
+      //   actions: [
+      //     InkWell(
+      //       onTap: () {
+      //         Navigator.of(context).push(
+      //           PageRouteBuilder(
+      //             transitionDuration: const Duration(milliseconds: 500),
+      //             pageBuilder: (context, animation, secondaryAnimation) =>
+      //                 const GuardToolScreen(),
+      //             transitionsBuilder:
+      //                 (context, animation, secondaryAnimation, child) {
+      //               return SlideTransition(
+      //                 position: Tween<Offset>(
+      //                         begin: const Offset(1, 0), end: Offset.zero)
+      //                     .animate(animation),
+      //                 child: child,
+      //               );
+      //             },
+      //           ),
+      //         );
+      //       },
+      //       child: Padding(
+      //         padding: const EdgeInsets.only(right: 15.0),
+      //         child: SvgPicture.asset('assets/tool.svg'),
+      //       ),
+      //     ),
+      //     IconButton(
+      //       onPressed: () {
+      //         Navigator.of(context).push(
+      //           PageRouteBuilder(
+      //             transitionDuration: const Duration(milliseconds: 500),
+      //             pageBuilder: (context, animation, secondaryAnimation) =>
+      //                 const SettingsScreen(),
+      //             transitionsBuilder:
+      //                 (context, animation, secondaryAnimation, child) {
+      //               return SlideTransition(
+      //                 position: Tween<Offset>(
+      //                         begin: const Offset(1, 0), end: Offset.zero)
+      //                     .animate(animation),
+      //                 child: child,
+      //               );
+      //             },
+      //           ),
+      //         );
+      //       },
+      //       icon: Icon(
+      //         Icons.settings_outlined,
+      //         color: black,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       backgroundColor: white,
       body: MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: SafeArea(
-            child: SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Center(
                   child: CircleAvatar(
@@ -245,7 +289,7 @@ class AccountScreen extends StatelessWidget {
               ],
             ),
           ),
-        )),
+        ),
       ),
     );
   }

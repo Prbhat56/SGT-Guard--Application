@@ -4,11 +4,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/const.dart';
-import '../home.dart';
-import 'report_success_screen.dart';
 import 'widget/success_popup.dart';
 
 class MaintenanceReportScreen extends StatefulWidget {
@@ -29,12 +26,11 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
           backgroundColor: white,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: black,
+              color: primaryColor,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -43,8 +39,8 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
           centerTitle: true,
           title: Text(
             'Maintenance Report',
-            style: TextStyle(color: black),
             textScaleFactor: 1.0,
+            style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
           ),
         ),
         backgroundColor: white,
@@ -54,53 +50,83 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 26,
+              SizedBox(
+                height: 30,
               ),
               Text(
                 'Title',
-                style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(fontSize: 17.sp, color: grey)),
+                style: TextStyle(
+                    fontSize: 17,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500),
                 textScaleFactor: 1.0,
+              ),
+              SizedBox(
+                height: 10,
               ),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: 'Something here',
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    focusColor: primaryColor),
+                  contentPadding: EdgeInsets.only(top: 0, bottom: 0, left: 10),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryColor)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  filled: true,
+                  fillColor: seconderyMediumColor,
+                  hintText: 'Something here',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  focusColor: primaryColor,
+                ),
               ),
               const SizedBox(
-                height: 26,
+                height: 30,
               ),
               Text(
                 'Notes',
-                style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(fontSize: 17.sp, color: grey)),
+                style: TextStyle(
+                    fontSize: 17,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500),
                 textScaleFactor: 1.0,
               ),
               const SizedBox(
-                height: 18,
+                height: 20,
               ),
               TextFormField(
-                maxLines: 8,
+                maxLines: 5,
                 decoration: InputDecoration(
-                    border:
-                        OutlineInputBorder(borderSide: BorderSide(color: grey)),
-                    hintText: 'Something here',
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    focusColor: primaryColor),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryColor)),
+                  hintText: 'Something here',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  focusColor: primaryColor,
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
               Text(
                 'Upload Record Sample',
-                style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                style: TextStyle(
+                    fontSize: 17,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500),
                 textScaleFactor: 1.0,
               ),
               const SizedBox(
-                height: 18,
+                height: 20,
               ),
               imageFileList!.isNotEmpty
                   ? SizedBox(
@@ -124,6 +150,8 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                             width: 190,
@@ -138,39 +166,42 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                                                   color: primaryColor),
                                             ),
                                             SizedBox(width: 5),
-                                            Text('100 %',
-                                                style: TextStyle(fontSize: 12)),
+                                            Icon(
+                                              Icons.check_circle_outline,
+                                              color: greenColor,
+                                              size: 20,
+                                            ),
+                                            // Text('100 %',
+                                            //     style: TextStyle(fontSize: 12)),
                                             SizedBox(width: 5),
-                                            InkWell(
-                                              onTap: () {
-                                                print('remove');
-
-                                                setState(() {
-                                                  imageFileList!
-                                                      .removeAt(index);
-                                                  // imageNames.removeAt(index);
-                                                });
-                                                print(index);
-                                                print(imageFileList);
-                                                // imageNames
-                                                //     .add(path.dirname(photo.path));
-                                              },
-                                              child: Container(
-                                                  height: 15,
-                                                  width: 15,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      border: Border.all(
-                                                          color: primaryColor)),
-                                                  child: Icon(Icons.close,
-                                                      size: 12)),
-                                            )
                                           ],
                                         )
                                       ],
                                     ),
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        print('remove');
+
+                                        setState(() {
+                                          imageFileList!.removeAt(index);
+                                          // imageNames.removeAt(index);
+                                        });
+                                        print(index);
+                                        print(imageFileList);
+                                        // imageNames
+                                        //     .add(path.dirname(photo.path));
+                                      },
+                                      child: Container(
+                                          height: 15,
+                                          width: 15,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              border: Border.all(
+                                                  color: primaryColor)),
+                                          child: Icon(Icons.close, size: 12)),
+                                    )
                                   ]),
                             );
                           }),
@@ -214,13 +245,11 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                                       final XFile? photo =
                                           await _picker.pickImage(
                                               source: ImageSource.camera);
-
                                       if (photo != null) {
                                         imageFileList?.add(photo);
 
                                         imageNames
                                             .add(path.dirname(photo.path));
-
                                         setState(() {});
                                       }
                                       print('$imageFileList   $imageNames');
@@ -309,14 +338,21 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                       });
                 },
                 child: DottedBorder(
-                  color: Colors.grey,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                  borderType: BorderType.RRect,
+                  color: Colors.blue,
+                  strokeWidth: 2,
+                  dashPattern: [10, 3],
+                  radius: Radius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
                     child: Center(
-                        child: Icon(
-                      Icons.add,
-                      color: Colors.grey,
-                      size: 50,
+                        child: Text(
+                      'Choose a File',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
                   ),
                 ),
@@ -325,40 +361,31 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
           ),
         )),
         bottomNavigationBar: SizedBox(
-          height: 120,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Divider(
-                color: Colors.grey,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                child: Center(
-                  child: CupertinoButton(
-                      disabledColor: seconderyColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 150, vertical: 15),
-                      color: primaryColor,
-                      child: const Text(
-                        'Done',
-                        style: TextStyle(fontSize: 20),
-                        textScaleFactor: 1.0,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => SuccessPopup());
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return const ReportSuccessScreen(
-                        //     isSubmitReportScreen: false,
-                        //   );
-                        // }));
-                      }),
-                ),
-              ),
-            ],
+          height: 100.h,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+            child: Center(
+              child: CupertinoButton(
+                  disabledColor: seconderyColor,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 150, vertical: 15),
+                  color: primaryColor,
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(fontSize: 20),
+                    textScaleFactor: 1.0,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context, builder: (context) => SuccessPopup());
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return const ReportSuccessScreen(
+                    //     isSubmitReportScreen: false,
+                    //   );
+                    // }));
+                  }),
+            ),
           ),
         ),
       ),

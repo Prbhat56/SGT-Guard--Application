@@ -19,6 +19,7 @@ import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'presentation/onboarding_screen/onboarding_screen.dart';
 import 'presentation/property_details_screen/cubit/showmore/showmore_cubit.dart';
+import 'presentation/work_report_screen/cubit/addwitness/addwitness_cubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => ShowmoreCubit()),
               BlocProvider(create: (context) => TimerOnCubit()),
               BlocProvider(create: (context) => ReportTypeCubit()),
+              BlocProvider(create: (context) => AddwitnessCubit())
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

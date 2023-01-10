@@ -37,8 +37,8 @@ class BuildPages extends StatelessWidget {
               height: 10.h,
             ),
             Container(
-              height: 50.h,
-              width: 55.w,
+              height: 56,
+              width: 56,
               decoration: BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.circular(50),
@@ -46,44 +46,37 @@ class BuildPages extends StatelessWidget {
               child: Center(child: Image.asset(iconImage)),
             ),
             SizedBox(
-              height: 18.h,
+              height: 5.h,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+            Center(
               child: Text(
                 smallText,
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(fontSize: 20.sp, color: primaryColor),
-                ),
+                style: TextStyle(fontSize: 15, color: primaryColor),
                 textScaleFactor: 1.0,
               ),
             ),
             SizedBox(
-              height: 10.h,
+              height: 12.h,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+            Center(
               child: Text(
                 bigText,
-                style: GoogleFonts.montserrat(
-                  textStyle:
-                      TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold),
-                ),
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 textScaleFactor: 1.0,
               ),
             ),
             SizedBox(
-              height: 10.h,
+              height: 12.h,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
-                descriptionText,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.w),
+                child: Text(
+                  descriptionText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 17, color: Colors.grey),
+                  textScaleFactor: 1.0,
                 ),
-                textScaleFactor: 1.0,
               ),
             ),
           ],

@@ -218,11 +218,13 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                     TextFormField(
                       maxLines: 4,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: grey)),
-                          hintText: 'Something here',
-                          hintStyle: TextStyle(color: grey),
-                          focusColor: primaryColor),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: grey),
+                        ),
+                        hintText: 'Something here',
+                        hintStyle: TextStyle(color: grey),
+                        focusColor: primaryColor,
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
@@ -302,13 +304,17 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                                                 height: 17,
                                                 width: 17,
                                                 decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    border: Border.all(
-                                                        color: primaryColor)),
-                                                child: Icon(Icons.close,
-                                                    size: 15)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                  border: Border.all(
+                                                    color: primaryColor,
+                                                  ),
+                                                ),
+                                                child: Icon(
+                                                  Icons.close,
+                                                  size: 15,
+                                                )),
                                           )
                                         ]),
                                   );

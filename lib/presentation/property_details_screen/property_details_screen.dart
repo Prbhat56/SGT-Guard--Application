@@ -11,6 +11,7 @@ import '../../utils/const.dart';
 import '../cubit/timer_on/timer_on_cubit.dart';
 import '../qr_screen/qr_screen.dart';
 import '../work_report_screen/submit_report_screen.dart';
+import '../work_report_screen/work_report_screen.dart';
 import 'check_points_list.dart';
 import 'cubit/showmore/showmore_cubit.dart';
 
@@ -261,7 +262,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                         const Duration(milliseconds: 500),
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
-                                        const SubmitReportScreen(),
+                                        const WorkReportScreen(),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
                                       return SlideTransition(
@@ -491,20 +492,38 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   child: ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(0.5),
-                                        child: Image.network(
-                                          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                                          height: 88,
-                                          width: 122,
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PropertyMediaPreviewScreen()));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0.5),
+                                          child: Image.network(
+                                            'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
+                                            height: 88,
+                                            width: 122,
+                                          ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(0.5),
-                                        child: Image.network(
-                                          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                                          height: 88,
-                                          width: 122,
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PropertyMediaPreviewScreen()));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0.5),
+                                          child: Image.network(
+                                            'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
+                                            height: 88,
+                                            width: 122,
+                                          ),
                                         ),
                                       ),
                                       Padding(

@@ -5,8 +5,7 @@ import 'package:sgt/presentation/home_screen/widgets/circular_profile_widget.dar
 import 'package:sgt/presentation/home_screen/widgets/location_details_card.dart';
 import 'package:sgt/presentation/jobs_screen/jobs_screen.dart';
 import 'package:sgt/utils/const.dart';
-
-import '../guard_tools_screen/guard_tools_screen.dart';
+import '../widgets/main_appbar_widget.dart';
 import 'widgets/location_details_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,52 +14,55 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 48,
-        shadowColor: Color.fromARGB(255, 186, 185, 185),
-        elevation: 6,
-        backgroundColor: white,
-        leading: Padding(
-          padding: const EdgeInsets.only(
-            left: 12.0,
-          ),
-          child: Icon(
-            Icons.check_circle,
-            color: greenColor,
-          ),
-        ),
-        leadingWidth: 30,
-        title: Text(
-          'Greylock Security',
-          style: TextStyle(color: black, fontWeight: FontWeight.w400),
-        ),
-        actions: [
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  transitionDuration: const Duration(milliseconds: 500),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const GuardToolScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                              begin: const Offset(1, 0), end: Offset.zero)
-                          .animate(animation),
-                      child: child,
-                    );
-                  },
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: SvgPicture.asset('assets/tool.svg'),
-            ),
-          )
-        ],
+      appBar: MainAppBarWidget(
+        appBarTitle: 'Greylock Security',
       ),
+      // appBar: AppBar(
+      //   toolbarHeight: 48,
+      //   shadowColor: Color.fromARGB(255, 186, 185, 185),
+      //   elevation: 6,
+      //   backgroundColor: white,
+      //   leading: Padding(
+      //     padding: const EdgeInsets.only(
+      //       left: 12.0,
+      //     ),
+      //     child: Icon(
+      //       Icons.check_circle,
+      //       color: greenColor,
+      //     ),
+      //   ),
+      //   leadingWidth: 30,
+      //   title: Text(
+      //     'Greylock Security',
+      //     style: TextStyle(color: black, fontWeight: FontWeight.w400),
+      //   ),
+      //   actions: [
+      //     InkWell(
+      //       onTap: () {
+      //         Navigator.of(context).push(
+      //           PageRouteBuilder(
+      //             transitionDuration: const Duration(milliseconds: 500),
+      //             pageBuilder: (context, animation, secondaryAnimation) =>
+      //                 const GuardToolScreen(),
+      //             transitionsBuilder:
+      //                 (context, animation, secondaryAnimation, child) {
+      //               return SlideTransition(
+      //                 position: Tween<Offset>(
+      //                         begin: const Offset(1, 0), end: Offset.zero)
+      //                     .animate(animation),
+      //                 child: child,
+      //               );
+      //             },
+      //           ),
+      //         );
+      //       },
+      //       child: Padding(
+      //         padding: const EdgeInsets.only(right: 15.0),
+      //         child: SvgPicture.asset('assets/tool.svg'),
+      //       ),
+      //     )
+      //   ],
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),

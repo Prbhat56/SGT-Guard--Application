@@ -42,4 +42,79 @@ List<NotificationModel> notificationdummydata = [
     '10:00 PM',
     'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
+  NotificationModel(
+    'Lorem ipsum dolor sit amet duo habemus fuisset epicuri ei. ',
+    '10:00 PM',
+    'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ),
 ];

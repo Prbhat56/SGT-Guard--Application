@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sgt/presentation/home.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
@@ -23,12 +22,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         backgroundColor: white,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: black,
+            color: primaryColor,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -39,8 +37,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
           'Shift Report',
           textScaleFactor: 1.0,
           style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w500)),
+              textStyle:
+                  TextStyle(color: primaryColor, fontWeight: FontWeight.w500)),
         ),
       ),
       backgroundColor: white,
@@ -56,7 +54,10 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               Text(
                 'Select report type below',
                 style: TextStyle(
-                    color: black, fontSize: 17.sp, fontWeight: FontWeight.bold),
+                  color: primaryColor,
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                ),
                 textScaleFactor: 1.0,
               ),
               SizedBox(
@@ -72,6 +73,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                 child: Container(
                   height: 45.h,
                   decoration: BoxDecoration(
+                      color: seconderyMediumColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: primaryColor)),
                   child: Center(
@@ -101,11 +103,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey)),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Maintenance Report',
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: primaryColor,
                         fontSize: 15,
                       ),
                       textScaleFactor: 1.0,
@@ -128,11 +130,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey)),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Parking Report',
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: primaryColor,
                         fontSize: 15,
                       ),
                       textScaleFactor: 1.0,
@@ -155,11 +157,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey)),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Emergency Report',
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: primaryColor,
                         fontSize: 15,
                       ),
                       textScaleFactor: 1.0,

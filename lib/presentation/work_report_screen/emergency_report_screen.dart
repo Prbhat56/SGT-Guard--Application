@@ -11,9 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/map_screen/map_screen.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import '../../utils/const.dart';
-import '../home.dart';
 import 'cubit/addpeople/addpeople_cubit.dart';
-import 'report_success_screen.dart';
+import 'cubit/addwitness/addwitness_cubit.dart';
 import 'widget/edit_location.dart';
 import 'widget/success_popup.dart';
 
@@ -42,7 +41,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
           centerTitle: true,
           title: Text(
             'Emergency Report',
-            style: TextStyle(color: black),
+            style: TextStyle(color: primaryColor),
             textScaleFactor: 1.0,
           ),
           elevation: 0,
@@ -50,7 +49,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: black,
+              color: primaryColor,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -68,12 +67,56 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 26.h,
+                      height: 26,
+                    ),
+                    Text(
+                      'Title',
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textScaleFactor: 1.0,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.only(top: 0, bottom: 0, left: 10),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: seconderyMediumColor)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: primaryColor)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: seconderyMediumColor)),
+                        disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: seconderyMediumColor)),
+                        filled: true,
+                        fillColor: seconderyMediumColor,
+                        hintText: 'Something here',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        focusColor: primaryColor,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 26,
                     ),
                     Text(
                       'Emergency Date & Time',
-                      style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(fontSize: 17.sp, color: black)),
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
                       textScaleFactor: 1.0,
                     ),
                     const SizedBox(
@@ -91,19 +134,18 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                               children: [
                                 Text(
                                   'Date',
-                                  style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                          fontSize: 17.sp, color: Colors.grey)),
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   textScaleFactor: 1.0,
                                 ),
                                 TextFormField(
                                   controller: dateinput,
                                   decoration: InputDecoration(
                                     hintText: '00/00/00',
-                                    hintStyle: GoogleFonts.montserrat(
-                                      textStyle:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
+                                    hintStyle: TextStyle(color: primaryColor),
                                     focusColor: primaryColor,
                                   ),
                                   readOnly:
@@ -147,19 +189,18 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                               children: [
                                 Text(
                                   'Time',
-                                  style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                          fontSize: 17.sp, color: Colors.grey)),
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   textScaleFactor: 1.0,
                                 ),
                                 TextFormField(
                                   controller: timeinput,
                                   decoration: InputDecoration(
                                     hintText: '00:00',
-                                    hintStyle: GoogleFonts.montserrat(
-                                      textStyle:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
+                                    hintStyle: TextStyle(color: primaryColor),
                                     focusColor: primaryColor,
                                   ),
                                   readOnly:
@@ -245,338 +286,417 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          color: primaryColor,
-                          size: 30,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          width: 250,
-                          child: Text(
-                              'Güntherstraße 42A, 60528 Frankfurt am Main, Germany'),
-                        )
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Icon(
+                    //       Icons.location_on,
+                    //       color: primaryColor,
+                    //       size: 30,
+                    //     ),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    // SizedBox(
+                    //   width: 250,
+                    //   child: Text(
+                    //       'Güntherstraße 42A, 60528 Frankfurt am Main, Germany'),
+                    // )
+                    //   ],
+                    // ),
                     const SizedBox(
                       height: 28,
                     ),
                     Text(
-                      'Action Taken',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                      'Emergency Details',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500),
                       textScaleFactor: 1.0,
                     ),
                     const SizedBox(
-                      height: 18,
+                      height: 20,
                     ),
                     TextFormField(
-                      maxLines: 8,
+                      maxLines: 5,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: grey)),
-                          hintText: 'Something here',
-                          hintStyle: TextStyle(color: grey),
-                          focusColor: primaryColor),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintText: 'Something here',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        focusColor: primaryColor,
+                      ),
                     ),
+                    // Text(
+                    //   'Action Taken',
+                    //   style: GoogleFonts.montserrat(
+                    //       textStyle:
+                    //           TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                    //   textScaleFactor: 1.0,
+                    // ),
+                    // const SizedBox(
+                    //   height: 18,
+                    // ),
+                    // TextFormField(
+                    //   maxLines: 8,
+                    //   decoration: InputDecoration(
+                    //       border: OutlineInputBorder(
+                    //           borderSide: BorderSide(color: grey)),
+                    //       hintText: 'Something here',
+                    //       hintStyle: TextStyle(color: grey),
+                    //       focusColor: primaryColor),
+                    // ),
                     const SizedBox(
                       height: 28,
                     ),
                     Text(
                       'People Involved',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: black,
+                          fontWeight: FontWeight.w500),
                       textScaleFactor: 1.0,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    Container(
+                      height: 170 *
+                          context
+                              .read<AddpeopleCubit>()
+                              .state
+                              .peopleNo
+                              .toDouble(),
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              context.watch<AddpeopleCubit>().state.peopleNo,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Name',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w500),
+                                  textScaleFactor: 1.0,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: 'Something here',
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: seconderyColor)),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: primaryColor)),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      focusColor: primaryColor),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Phone Number',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w500),
+                                  textScaleFactor: 1.0,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: 'Something here',
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: seconderyColor)),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: primaryColor)),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      focusColor: primaryColor),
+                                ),
+                              ],
+                            );
+                          }),
+                    ),
+
+                    InkWell(
+                      onTap: () {
+                        context.read<AddpeopleCubit>().addPeople();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          'Add peoples +',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Witness',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: black,
+                          fontWeight: FontWeight.w500),
+                      textScaleFactor: 1.0,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    Container(
+                      height: 170 *
+                          context
+                              .read<AddwitnessCubit>()
+                              .state
+                              .witness
+                              .toDouble(),
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              context.watch<AddwitnessCubit>().state.witness,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Name',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w500),
+                                  textScaleFactor: 1.0,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: 'Something here',
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: seconderyColor)),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: primaryColor)),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      focusColor: primaryColor),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Phone Number',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w500),
+                                  textScaleFactor: 1.0,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: 'Something here',
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: seconderyColor)),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: primaryColor)),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      focusColor: primaryColor),
+                                ),
+                              ],
+                            );
+                          }),
+                    ),
+
+                    InkWell(
+                      onTap: () {
+                        context.read<AddwitnessCubit>().addwitness();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          'Add peoples +',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 26,
+                    ),
+                    Text(
+                      'Action Taker',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500),
+                      textScaleFactor: 1.0,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: seconderyColor)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: primaryColor)),
+                        hintText: 'Something here',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        focusColor: primaryColor,
+                      ),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
+                    Text(
+                      'Police Report#',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500),
+                      textScaleFactor: 1.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          hintText: 'Something here',
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: seconderyColor)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primaryColor)),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusColor: primaryColor),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      'Officer Name#',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500),
+                      textScaleFactor: 1.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          hintText: 'Something here',
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: seconderyColor)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primaryColor)),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusColor: primaryColor),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      'Officer#',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500),
+                      textScaleFactor: 1.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          hintText: 'Something here',
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: seconderyColor)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primaryColor)),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusColor: primaryColor),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      'Towed',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500),
+                      textScaleFactor: 1.0,
+                    ),
                     Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 90 *
-                                context
-                                    .read<AddpeopleCubit>()
-                                    .state
-                                    .peopleNo
-                                    .toDouble(),
-                            child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: context
-                                    .watch<AddpeopleCubit>()
-                                    .state
-                                    .peopleNo,
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                'Name',
-                                                style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 17.sp,
-                                                        color: grey)),
-                                                textScaleFactor: 1.0,
-                                              ),
-                                              TextFormField(
-                                                decoration: InputDecoration(
-                                                    hintText: 'John Doe',
-                                                    hintStyle:
-                                                        GoogleFonts.montserrat(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              color:
-                                                                  Colors.grey),
-                                                    ),
-                                                    focusColor: primaryColor),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                'Phone',
-                                                style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 17.sp,
-                                                        color: grey)),
-                                                textScaleFactor: 1.0,
-                                              ),
-                                              TextFormField(
-                                                decoration: InputDecoration(
-                                                    hintText: '8086288343',
-                                                    hintStyle:
-                                                        GoogleFonts.montserrat(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              color:
-                                                                  Colors.grey),
-                                                    ),
-                                                    focusColor: primaryColor),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.grey),
+                        ),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          items: ['Yes', 'No'].map((String val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(val),
+                            );
+                          }).toList(),
+                          hint: Text(
+                            'Select Yes or No',
+                            style: const TextStyle(color: Colors.grey),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                context.read<AddpeopleCubit>().addPeople();
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.grey,
-                                size: 45,
-                              ))
-                        ],
+                          onChanged: (v) {},
+                        ),
                       ),
                     ),
                     const SizedBox(
-                      height: 28,
-                    ),
-                    Text(
-                      'Witnesses',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                      textScaleFactor: 1.0,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Name',
-                                  style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                          fontSize: 17.sp, color: grey)),
-                                  textScaleFactor: 1.0,
-                                ),
-                                TextFormField(
-                                  decoration: InputDecoration(
-                                      hintText: 'John Doe',
-                                      hintStyle: GoogleFonts.montserrat(
-                                        textStyle:
-                                            const TextStyle(color: Colors.grey),
-                                      ),
-                                      focusColor: primaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Phone',
-                                  style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                          fontSize: 17.sp, color: grey)),
-                                  textScaleFactor: 1.0,
-                                ),
-                                TextFormField(
-                                  decoration: InputDecoration(
-                                      hintText: '8086288343',
-                                      hintStyle: GoogleFonts.montserrat(
-                                        textStyle:
-                                            const TextStyle(color: Colors.grey),
-                                      ),
-                                      focusColor: primaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 26,
-                    ),
-                    Text(
-                      'Notes',
-                      style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(fontSize: 17.sp, color: grey)),
-                      textScaleFactor: 1.0,
-                    ),
-                    const SizedBox(
-                      height: 18,
-                    ),
-                    TextFormField(
-                      maxLines: 8,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: grey)),
-                        hintText: 'Something here',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
-                        focusColor: primaryColor,
-                      ),
+                      height: 25,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 50,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Police Report #',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                      textScaleFactor: 1.0,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          hintText: '00000',
-                          hintStyle: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(color: Colors.grey),
-                          ),
-                          focusColor: primaryColor),
-                    ),
-                    const SizedBox(
-                      height: 26,
-                    ),
-                    Text(
-                      'Officer Name',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                      textScaleFactor: 1.0,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'John Doe',
-                        hintStyle: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(color: Colors.grey),
-                        ),
-                        focusColor: primaryColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 26,
-                    ),
-                    Text(
-                      'Officer #',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                      textScaleFactor: 1.0,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'Officer #',
-                          hintStyle: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(color: Colors.grey),
-                          ),
-                          focusColor: primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Upload Record Sample',
-                      style: GoogleFonts.montserrat(
-                          textStyle:
-                              TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                      textScaleFactor: 1.0,
-                    ),
-                    const SizedBox(
-                      height: 18,
-                    ),
+                    imageFileList!.isNotEmpty
+                        ? Text(
+                            'Media',
+                            style: TextStyle(fontSize: 17, color: primaryColor),
+                          )
+                        : Container(),
                     // context.watch<AddImageCubit>().state.imageList!.isNotEmpty
                     imageFileList!.isNotEmpty
                         ? SizedBox(
@@ -633,9 +753,14 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                                                         color: primaryColor),
                                                   ),
                                                   SizedBox(width: 5),
-                                                  Text('100 %',
-                                                      style: TextStyle(
-                                                          fontSize: 12)),
+                                                  Icon(
+                                                    Icons.check_circle_outline,
+                                                    color: greenColor,
+                                                    size: 20,
+                                                  ),
+                                                  // Text('100 %',
+                                                  //     style: TextStyle(
+                                                  //         fontSize: 12)),
                                                   SizedBox(width: 5),
                                                   InkWell(
                                                     onTap: () {
@@ -674,6 +799,17 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                                 }),
                           )
                         : Container(),
+                    const SizedBox(
+                      height: 18,
+                    ),
+                    Text(
+                      'Upload Record Sample',
+                      style: TextStyle(fontSize: 17.sp, color: primaryColor),
+                      textScaleFactor: 1.0,
+                    ),
+                    const SizedBox(
+                      height: 18,
+                    ),
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -808,14 +944,21 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                             });
                       },
                       child: DottedBorder(
-                        color: Colors.grey,
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
+                        borderType: BorderType.RRect,
+                        color: Colors.blue,
+                        strokeWidth: 2,
+                        dashPattern: [10, 3],
+                        radius: Radius.circular(10),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
                           child: Center(
-                              child: Icon(
-                            Icons.add,
-                            color: Colors.grey,
-                            size: 50,
+                              child: Text(
+                            'Choose a File',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )),
                         ),
                       ),
@@ -826,9 +969,6 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
               const SizedBox(
                 height: 35,
               ),
-              const Divider(
-                color: Colors.grey,
-              ),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                 child: Center(
@@ -838,7 +978,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           horizontal: 150, vertical: 15),
                       color: primaryColor,
                       child: const Text(
-                        'Done',
+                        'Next',
                         style: TextStyle(fontSize: 20),
                         textScaleFactor: 1.0,
                       ),

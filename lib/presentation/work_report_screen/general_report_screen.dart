@@ -9,8 +9,6 @@ import '../../utils/const.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
-import 'report_success_screen.dart';
-
 class GeneralReportScreen extends StatefulWidget {
   const GeneralReportScreen({super.key});
 
@@ -29,12 +27,11 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
           backgroundColor: white,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: black,
+              color: primaryColor,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -44,9 +41,7 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
           title: Text(
             'General Report',
             textScaleFactor: 1.0,
-            style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w500)),
+            style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
           ),
         ),
         backgroundColor: white,
@@ -61,49 +56,75 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
               ),
               Text(
                 'Title',
-                style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                style: TextStyle(
+                  fontSize: 17,
+                  color: primaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
                 textScaleFactor: 1.0,
+              ),
+              SizedBox(
+                height: 10,
               ),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: 'Something here',
-                    hintStyle: TextStyle(color: grey),
-                    focusColor: primaryColor),
+                  contentPadding: EdgeInsets.only(top: 0, bottom: 0, left: 10),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryColor)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  filled: true,
+                  fillColor: seconderyMediumColor,
+                  hintText: 'Something here',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  focusColor: primaryColor,
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
               Text(
                 'Notes',
-                style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey)),
+                style: TextStyle(
+                    fontSize: 17,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500),
                 textScaleFactor: 1.0,
               ),
               const SizedBox(
                 height: 20,
               ),
               TextFormField(
-                maxLines: 8,
+                maxLines: 5,
                 decoration: InputDecoration(
-                    border:
-                        OutlineInputBorder(borderSide: BorderSide(color: grey)),
-                    hintText: 'Something here',
-                    hintStyle: TextStyle(color: grey),
-                    focusColor: primaryColor),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryColor)),
+                  hintText: 'Something here',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  focusColor: primaryColor,
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
-              Text(
-                'Upload Record Sample',
-                style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(fontSize: 17.sp, color: Colors.grey)),
-                textScaleFactor: 1.0,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              imageFileList!.isNotEmpty
+                  ? Text(
+                      'Media',
+                      style: TextStyle(fontSize: 17, color: primaryColor),
+                    )
+                  : Container(),
               imageFileList!.isNotEmpty
                   ? SizedBox(
                       height: 110 * imageFileList!.length.toDouble(),
@@ -126,6 +147,8 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                             width: 190,
@@ -140,44 +163,58 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                                                   color: primaryColor),
                                             ),
                                             SizedBox(width: 5),
-                                            Text('100 %',
-                                                style: TextStyle(fontSize: 12)),
+                                            Icon(
+                                              Icons.check_circle_outline,
+                                              color: greenColor,
+                                              size: 20,
+                                            ),
+                                            // Text('100 %',
+                                            //     style: TextStyle(fontSize: 12)),
                                             SizedBox(width: 5),
-                                            InkWell(
-                                              onTap: () {
-                                                print('remove');
-
-                                                setState(() {
-                                                  imageFileList!
-                                                      .removeAt(index);
-                                                  // imageNames.removeAt(index);
-                                                });
-                                                print(index);
-                                                print(imageFileList);
-                                                // imageNames
-                                                //     .add(path.dirname(photo.path));
-                                              },
-                                              child: Container(
-                                                  height: 15,
-                                                  width: 15,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      border: Border.all(
-                                                          color: primaryColor)),
-                                                  child: Icon(Icons.close,
-                                                      size: 12)),
-                                            )
                                           ],
                                         )
                                       ],
                                     ),
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        print('remove');
+
+                                        setState(() {
+                                          imageFileList!.removeAt(index);
+                                          // imageNames.removeAt(index);
+                                        });
+                                        print(index);
+                                        print(imageFileList);
+                                        // imageNames
+                                        //     .add(path.dirname(photo.path));
+                                      },
+                                      child: Container(
+                                          height: 15,
+                                          width: 15,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              border: Border.all(
+                                                  color: primaryColor)),
+                                          child: Icon(Icons.close, size: 12)),
+                                    )
                                   ]),
                             );
                           }),
                     )
                   : Container(),
+              Text(
+                'Upload Record Sample',
+                style: TextStyle(
+                    fontSize: 17,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500),
+                textScaleFactor: 1.0,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -309,14 +346,21 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                       });
                 },
                 child: DottedBorder(
-                  color: Colors.grey,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                  borderType: BorderType.RRect,
+                  color: Colors.blue,
+                  strokeWidth: 2,
+                  dashPattern: [10, 3],
+                  radius: Radius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
                     child: Center(
-                        child: Icon(
-                      Icons.add,
-                      color: Colors.grey,
-                      size: 50,
+                        child: Text(
+                      'Choose a File',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
                   ),
                 ),
@@ -326,39 +370,30 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
         )),
         bottomNavigationBar: SizedBox(
           height: 100.h,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Divider(
-                color: Colors.grey,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                child: Center(
-                  child: CupertinoButton(
-                      disabledColor: seconderyColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 150, vertical: 15),
-                      color: primaryColor,
-                      child: const Text(
-                        'Done',
-                        style: TextStyle(fontSize: 20),
-                        textScaleFactor: 1.0,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => SuccessPopup());
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return const ReportSuccessScreen(
-                        //     isSubmitReportScreen: false,
-                        //   );
-                        // }));
-                      }),
-                ),
-              ),
-            ],
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+            child: Center(
+              child: CupertinoButton(
+                  disabledColor: seconderyColor,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 150, vertical: 15),
+                  color: primaryColor,
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(fontSize: 20),
+                    textScaleFactor: 1.0,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context, builder: (context) => SuccessPopup());
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return const ReportSuccessScreen(
+                    //     isSubmitReportScreen: false,
+                    //   );
+                    // }));
+                  }),
+            ),
           ),
         ),
       ),

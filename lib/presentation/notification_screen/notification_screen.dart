@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sgt/presentation/notification_screen/widgets/general_tab.dart';
 import 'package:sgt/presentation/notification_screen/widgets/tasks_tab.dart';
 import '../../utils/const.dart';
+import '../widgets/main_appbar_widget.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -11,6 +12,9 @@ class NotificationScreen extends StatelessWidget {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
+        appBar: MainAppBarWidget(
+          appBarTitle: 'Notifications',
+        ),
         body: SafeArea(
           child: DefaultTabController(
             length: 2,
@@ -19,25 +23,20 @@ class NotificationScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 60,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 16.0, bottom: 20),
-                  child: Text(
-                    'Notifications',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                  ),
+                  height: 5,
                 ),
                 TabBar(
                   labelColor: black,
                   unselectedLabelColor: Colors.grey,
-                  indicatorWeight: 4,
+                  indicatorWeight: 2,
                   indicatorColor: primaryColor,
                   tabs: [
                     Tab(
                       icon: Text(
                         'General',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                     Tab(
