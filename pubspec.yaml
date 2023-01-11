@@ -124,6 +124,9 @@ flutter:
     - assets/add_location.svg
     - assets/event_upcoming.svg
     - assets/qr.svg
+    - assets/qr1.svg
+    - assets/plus.svg
+    - assets/map.svg
     - assets/close.svg
     - assets/close_white.svg
     - assets/green_tick.svg

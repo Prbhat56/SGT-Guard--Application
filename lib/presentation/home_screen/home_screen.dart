@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/helper/navigator_functions.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/all_team_member/all_team_member_screen.dart';
 import 'package:sgt/presentation/home_screen/widgets/circular_profile_widget.dart';
 import 'package:sgt/presentation/home_screen/widgets/location_details_card.dart';

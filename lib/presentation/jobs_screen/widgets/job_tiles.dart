@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/helper/navigator_functions.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/utils/const.dart';
 import '../../property_details_screen/inactive_property_details_screen.dart';

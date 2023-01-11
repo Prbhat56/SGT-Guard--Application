@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/widgets/time_sheet_model.dart';
+import '../../../helper/navigator_function.dart';
 import '../../../utils/const.dart';
+import '../../widgets/custom_circular_image_widget.dart';
 
 class UpcomingWidgetTab extends StatelessWidget {
   const UpcomingWidgetTab({super.key});
@@ -18,37 +20,16 @@ class UpcomingWidgetTab extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const PropertyDetailsScreen(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                                    begin: const Offset(1, 0), end: Offset.zero)
-                                .animate(animation),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
+                    screenNavigator(context, PropertyDetailsScreen());
                   },
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: Row(children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: grey,
-                          backgroundImage: NetworkImage(
-                            dummytimeSheetData[index].imageUrl,
-                          ),
-                        ),
-                      ),
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: CustomCircularImage.getlgCircularImage(
+                              dummytimeSheetData[index].imageUrl, false)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,

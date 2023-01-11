@@ -201,7 +201,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ShiftCards(shiftdate: '6/20/22', shifttime: '07:30 AM'),
+                  // ShiftCards(shiftdate: '6/20/22', shifttime: '07:30 AM'),
                   const SizedBox(
                     height: 40,
                   ),

@@ -20,10 +20,7 @@ class JobsScreen extends StatelessWidget {
             child: Column(
               children: [
                 TabBar(
-                  // labelColor: black,
-                  // unselectedLabelColor: Colors.grey,
                   indicatorWeight: 2,
-                  // indicatorColor: primaryColor,
                   tabs: [
                     Tab(
                       icon: Text(

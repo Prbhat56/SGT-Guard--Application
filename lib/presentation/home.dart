@@ -9,9 +9,9 @@ import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/presentation/notification_screen/notification_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/time_sheet_screen.dart';
 import 'package:sgt/presentation/timer/timer.dart';
-import 'package:sgt/presentation/widgets/bottom_navigation_bar_model.dart';
 import 'package:sgt/presentation/widgets/should_pop_alert_dialog.dart';
 import 'home_screen/home_screen.dart';
+import 'widgets/bottom_navigation_bar_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

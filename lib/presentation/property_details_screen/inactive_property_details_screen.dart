@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
 import '../map_screen/map_screen.dart';
 
@@ -15,31 +18,14 @@ class InActivePropertyDetailsScreen extends StatefulWidget {
 class _InActivePropertyDetailsScreenState
     extends State<InActivePropertyDetailsScreen> {
   LatLng currentlocation = const LatLng(22.572645, 88.363892);
-
+  final imageUrl =
+      'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg';
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-          appBar: AppBar(
-            shadowColor: Color.fromARGB(255, 186, 185, 185),
-            elevation: 6,
-            backgroundColor: white,
-            leading: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: black,
-              ),
-            ),
-            centerTitle: true,
-            title: Text(
-              'Inactive Property',
-              style: TextStyle(color: black, fontWeight: FontWeight.w400),
-            ),
-          ),
+          appBar: CustomAppBarWidget(appbarTitle: 'Inactive Property'),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -50,12 +36,8 @@ class _InActivePropertyDetailsScreenState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleAvatar(
-                        radius: 42,
-                        backgroundImage: NetworkImage(
-                          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                        ),
-                      ),
+                      CustomCircularImage.getCircularImage(
+                          imageUrl, false, 42, 0, 0),
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0),
                         child: Column(
@@ -105,10 +87,7 @@ class _InActivePropertyDetailsScreenState
                 ),
                 Text(
                   'Job Details',
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      color: primaryColor),
+                  style: CustomTheme.textField_Headertext_Style,
                 ),
                 const SizedBox(
                   height: 10,
@@ -159,11 +138,7 @@ class _InActivePropertyDetailsScreenState
                 ),
                 Text(
                   'Location',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: primaryColor,
-                  ),
+                  style: CustomTheme.textField_Headertext_Style,
                 ),
                 const SizedBox(
                   height: 5,
@@ -183,20 +158,7 @@ class _InActivePropertyDetailsScreenState
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(255, 195, 195, 195),
-                                offset: Offset(1.5, 1.5),
-                                blurRadius: 2.5,
-                                spreadRadius: 2,
-                              ),
-                              BoxShadow(
-                                color: Colors.grey,
-                                offset: Offset(1.5, 1.5),
-                                blurRadius: 1.5,
-                                spreadRadius: 0.5,
-                              ),
-                            ]),
+                            boxShadow: CustomTheme.mapCardShadow),
                         height: 231,
                         width: 343.w,
                         child: ClipRRect(

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sgt/presentation/time_sheet_screen/widgets/upcoming_tab.dart';
+import 'package:sgt/presentation/time_sheet_screen/subscreen/upcoming_tab.dart';
 import '../../utils/const.dart';
-import '../guard_tools_screen/guard_tools_screen.dart';
 import '../widgets/main_appbar_widget.dart';
-import 'widgets/completed_widget_tab.dart';
+import 'subscreen/completed_widget_tab.dart';
 
 class TimeSheetScreen extends StatelessWidget {
   const TimeSheetScreen({super.key});
@@ -29,10 +27,9 @@ class TimeSheetScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         TabBar(
-                          labelColor: black,
-                          unselectedLabelColor: Colors.grey,
+                       
                           indicatorWeight: 2,
-                          indicatorColor: primaryColor,
+                         
                           tabs: [
                             Tab(
                               icon: Text(

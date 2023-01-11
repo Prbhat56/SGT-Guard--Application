@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/helper/navigator_functions.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chatting_screen.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/presentation/widgets/main_appbar_widget.dart';
@@ -57,8 +57,12 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  CustomCircularImage.getsmCircularImage(
-                                      dummyData[index].profileUrl, false),
+                                  CustomCircularImage.getCircularImage(
+                                      dummyData[index].profileUrl,
+                                      false,
+                                      25,
+                                      4,
+                                      43),
                                   SizedBox(
                                     width: 15,
                                   ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/helper/navigator_functions.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
 import '../../connect_screen/widgets/chatting_screen.dart';
 import '../../widgets/custom_circular_image_widget.dart';
@@ -23,8 +23,12 @@ class CircularProfile extends StatelessWidget {
                   onTap: () {
                     screenNavigator(context, ChattingScreen(index: index));
                   },
-                  child: CustomCircularImage.getmdCircularImage(
-                      dummyData[index].profileUrl, dummyData[index].isOnline),
+                  child: CustomCircularImage.getCircularImage(
+                      dummyData[index].profileUrl,
+                      dummyData[index].isOnline,
+                      30,
+                      4,
+                      43),
                 ),
                 SizedBox(
                   width: 70,
