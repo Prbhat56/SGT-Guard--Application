@@ -9,6 +9,7 @@ import '../../utils/const.dart';
 import 'package:sgt/helper/validator.dart';
 
 import '../widgets/custom_underline_textfield_widget.dart';
+import 'change_password_after_forgot.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -96,12 +97,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 buttonTitle: 'Send',
                 btnColor: isValid ? primaryColor : seconderyColor,
                 onBtnPress: () {
-                  isValid
-                      ? Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                          return const ChangePasswordScreen();
-                        }))
-                      : null;
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const ChangePasswordAfterForgotScreen();
+                  }));
+                  // isValid
+                  //     ? Navigator.push(context,
+                  //         MaterialPageRoute(builder: (context) {
+                  //         return const ChangePasswordScreen();
+                  //       }))
+                  //     : null;
                 }),
             SizedBox(
               height: 60.h,

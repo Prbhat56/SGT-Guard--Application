@@ -1,3 +1,4 @@
+//data model class fro location
 class LocationDetailsModel {
   final String title;
   final String subtitle;
@@ -13,6 +14,7 @@ class LocationDetailsModel {
   });
 }
 
+//list of locationdetails model class
 List<LocationDetailsModel> locationData = [
   LocationDetailsModel(
       title: 'Rivi Properties',

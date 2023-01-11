@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../utils/const.dart';
 import '../guard_tools_screen/guard_tools_screen.dart';
 import '../settings_screen/settings_screen.dart';
 
 class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(49);
   const MainAppBarWidget({
     super.key,
     required this.appBarTitle,

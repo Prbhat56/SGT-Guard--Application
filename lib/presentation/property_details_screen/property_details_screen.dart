@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/presentation/map_screen/map_screen.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/property_media_preview_screen.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/shift_cards.dart';
+import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
 import '../cubit/timer_on/timer_on_cubit.dart';
 import '../qr_screen/qr_screen.dart';
@@ -593,23 +594,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               Center(
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(255, 195, 195, 195),
-                                        offset: Offset(1.5, 1.5),
-                                        blurRadius: 2.5,
-                                        spreadRadius: 2,
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(1.5, 1.5),
-                                        blurRadius: 1.5,
-                                        spreadRadius: 0.5,
-                                      ),
-                                    ],
-                                  ),
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: CustomTheme.mapCardShadow),
                                   height: 231,
                                   width: 339.w,
                                   child: ClipRRect(

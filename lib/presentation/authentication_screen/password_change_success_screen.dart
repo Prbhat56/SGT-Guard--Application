@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
+import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import '../../utils/const.dart';
 
 class PasswordChangeSuccessScreen extends StatefulWidget {
@@ -18,36 +20,19 @@ class _PasswordChangeSuccessScreenState
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        body: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
+        body: SafeArea(
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Container(
-                    height: 150,
-                    width: 250,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/success.png"),
-                      ),
-                    ),
-                  ),
+                const SizedBox(
+                  height: 254,
+                ),
+                Center(child: SvgPicture.asset('assets/green_tick.svg')),
+                const SizedBox(
+                  height: 30,
                 ),
                 Center(
                   child: Text(
@@ -56,42 +41,36 @@ class _PasswordChangeSuccessScreenState
                     textScaleFactor: 1.0,
                     style: TextStyle(
                         color: primaryColor,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold),
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
-                const SizedBox(
-                  height: 200,
-                ),
+                Spacer(),
                 const Center(
                   child: Text(
                     'You can now log-in to your SGT account',
                     textScaleFactor: 1.0,
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 13),
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 8,
                 ),
-                Center(
-                  child: CupertinoButton(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 15),
-                    color: primaryColor,
-                    child: const Text(
-                      'BACK TO LOGIN',
-                      textScaleFactor: 1.0,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const SignInScreen();
-                      }));
-                    },
-                  ),
+                CustomButtonWidget(
+                  buttonTitle: 'Back To Log In',
+                  onBtnPress: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const SignInScreen();
+                    }));
+                  },
                 ),
-              ]),
+                SizedBox(
+                  height: 30.h,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

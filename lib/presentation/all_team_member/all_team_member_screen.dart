@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sgt/helper/navigator_functions.dart';
+import 'package:sgt/presentation/connect_screen/widgets/chatting_screen.dart';
+import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/presentation/widgets/main_appbar_widget.dart';
+import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
 import '../connect_screen/widgets/chat_model.dart';
-import '../guard_tools_screen/guard_tools_screen.dart';
 
 class AllTeamMemberScreen extends StatefulWidget {
   const AllTeamMemberScreen({super.key});
@@ -17,51 +20,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          shadowColor: Color.fromARGB(255, 186, 185, 185),
-          elevation: 6,
-          backgroundColor: white,
-          leading: Padding(
-            padding: const EdgeInsets.only(
-              left: 12.0,
-            ),
-            child: Icon(
-              Icons.check_circle,
-              color: greenColor,
-            ),
-          ),
-          leadingWidth: 30,
-          title: Text(
-            'Greylock Security',
-            style: TextStyle(color: black, fontWeight: FontWeight.w400),
-          ),
-          actions: [
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    transitionDuration: const Duration(milliseconds: 500),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const GuardToolScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                                begin: const Offset(1, 0), end: Offset.zero)
-                            .animate(animation),
-                        child: child,
-                      );
-                    },
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: SvgPicture.asset('assets/tool.svg'),
-              ),
-            )
-          ],
-        ),
+        appBar: MainAppBarWidget(appBarTitle: 'Greylock Security'),
         body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -73,23 +32,24 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Text(
-                  'Team',
-                  style: TextStyle(
-                    color: black,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child:
+                    Text('Team', style: CustomTheme.textField_Headertext_Style),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 4 / 5,
+              Container(
+                //giving height to the list view by multiplying
+                //the height of one widget with length of data
+                height: 74 * dummyData.length.toDouble(),
                 child: ListView.builder(
                     itemCount: dummyData.length,
+                    physics:
+                        NeverScrollableScrollPhysics(), //stoping default scrolling behaviour
                     itemBuilder: (context, index) {
-                      return Container(
+                      return InkWell(
+                        onTap: () {
+                          screenNavigator(
+                              context, ChattingScreen(index: index));
+                        },
                         child: Column(
-                          // mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -97,13 +57,8 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: grey,
-                                    backgroundImage: NetworkImage(
-                                      dummyData[index].profileUrl,
-                                    ),
-                                  ),
+                                  CustomCircularImage.getsmCircularImage(
+                                      dummyData[index].profileUrl, false),
                                   SizedBox(
                                     width: 15,
                                   ),

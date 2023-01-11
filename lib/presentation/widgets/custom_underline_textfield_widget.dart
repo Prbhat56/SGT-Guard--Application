@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
 
 // ignore: must_be_immutable
@@ -24,11 +25,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
       children: [
         Text(
           textfielsTitle,
-          style: TextStyle(
-            fontSize: 17,
-            color: primaryColor,
-            fontWeight: FontWeight.w500,
-          ),
+          style: CustomTheme.textField_Headertext_Style,
           textScaleFactor: 1.0,
         ),
         TextFormField(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/helper/navigator_functions.dart';
 import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/utils/const.dart';
-
-import 'inactive_property_details_screen.dart';
+import '../../property_details_screen/inactive_property_details_screen.dart';
+import '../../widgets/custom_circular_image_widget.dart';
 
 class JobsTile extends StatelessWidget {
   const JobsTile({super.key, required this.isActive});
@@ -16,43 +17,14 @@ class JobsTile extends StatelessWidget {
         child: InkWell(
           onTap: () {
             isActive
-                ? Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PropertyDetailsScreen()))
-                : Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const InActivePropertyDetailsScreen()));
+                ? screenNavigator(context, PropertyDetailsScreen())
+                : screenNavigator(context, InActivePropertyDetailsScreen());
           },
           child: Row(
             children: [
-              Stack(
-                children: [
-                  const CircleAvatar(
-                    radius: 35,
-                    backgroundImage: NetworkImage(
-                      'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                    ),
-                  ),
-                  isActive
-                      ? Positioned(
-                          top: 47,
-                          left: 54,
-                          child: Container(
-                            height: 17,
-                            width: 17,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: white, width: 3),
-                              color: greenColor,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
+              CustomCircularImage.getlgCircularImage(
+                  'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
+                  isActive),
               const SizedBox(
                 width: 20,
               ),
