@@ -52,7 +52,20 @@ class CustomTheme {
     color: primaryColor,
     fontWeight: FontWeight.w500,
   );
-  //box shadow for map card
+
+//black text style
+  static blackTextStyle(double fontsize) {
+    return TextStyle(
+        fontSize: fontsize, fontWeight: FontWeight.w400, color: black);
+  }
+
+//blue text style
+  static blueTextStyle(double fontsize, FontWeight fontweight) {
+    return TextStyle(
+        fontSize: fontsize, color: primaryColor, fontWeight: fontweight);
+  }
+
+//box shadow for map card
   static const mapCardShadow = [
     BoxShadow(
       color: Color.fromARGB(255, 195, 195, 195),
@@ -75,5 +88,18 @@ class CustomTheme {
       unselectedLabelColor: Colors.grey,
     ),
     indicatorColor: primaryColor,
+  );
+
+  static final clockInCardStyle = BoxDecoration(
+    color: seconderyLightColor,
+    borderRadius: BorderRadius.circular(10),
+    boxShadow: const [
+      BoxShadow(
+        color: Color.fromARGB(255, 216, 216, 216),
+        offset: Offset(0, 20),
+        blurRadius: 20,
+        spreadRadius: 0.1,
+      ),
+    ],
   );
 }

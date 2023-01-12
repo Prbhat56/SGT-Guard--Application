@@ -1,10 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../helper/navigator_function.dart';
 import '../../../utils/const.dart';
-import '../../qr_screen/qr_screen.dart';
+import '../../qr_screen/scanning_screen.dart';
 
 //model class for customicon
 class CustomIconsDataModel {
@@ -35,7 +33,7 @@ class CustomIconWidget extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            screenNavigator(context, QrScreen());
+            screenNavigator(context, ScanningScreen());
           },
           child: Container(
             height: 32,

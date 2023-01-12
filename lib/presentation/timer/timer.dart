@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import '../../utils/const.dart';
 
 class TimerWidget extends StatefulWidget {
@@ -9,14 +8,12 @@ class TimerWidget extends StatefulWidget {
 }
 
 class _TimerWidgetState extends State<TimerWidget> {
-
   Duration duration = Duration();
   Timer? timer;
   @override
   void initState() {
     super.initState();
     startTimer();
-   
   }
 
   void addTime() {
@@ -30,8 +27,6 @@ class _TimerWidgetState extends State<TimerWidget> {
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (_) => addTime());
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
