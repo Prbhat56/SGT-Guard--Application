@@ -59,6 +59,12 @@ class CustomTheme {
         fontSize: fontsize, fontWeight: FontWeight.w400, color: black);
   }
 
+//grey text style
+  static greyTextStyle(double fontsize) {
+    return TextStyle(
+        fontSize: fontsize, fontWeight: FontWeight.w400, color: Colors.grey);
+  }
+
 //blue text style
   static blueTextStyle(double fontsize, FontWeight fontweight) {
     return TextStyle(

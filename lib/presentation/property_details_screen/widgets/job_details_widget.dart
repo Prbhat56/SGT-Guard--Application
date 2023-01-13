@@ -24,6 +24,7 @@ class JobDetailsWidget extends StatelessWidget {
     return Container(
       height: 30 * jobData.length.toDouble(),
       child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           itemCount: jobData.length,
           itemBuilder: (context, index) {
             return Column(

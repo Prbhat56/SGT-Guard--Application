@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/guard_tools_screen/widgets/missed_shift_details.dart';
-import 'package:sgt/presentation/time_sheet_screen/widgets/time_sheet_model.dart';
+import 'package:sgt/presentation/time_sheet_screen/widget/time_sheet_model.dart';
 import '../../utils/const.dart';
 
 class MissedShiftScreen extends StatelessWidget {

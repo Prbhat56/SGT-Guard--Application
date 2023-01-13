@@ -67,6 +67,7 @@ dependencies:
   go_router: ^6.0.0
   flutter_svg: ^1.1.6
   flutter_calendar_carousel: ^2.4.1
+  timelines: ^0.1.0
 
 
 dev_dependencies:
@@ -132,6 +133,8 @@ flutter:
     - assets/green_tick.svg
     - assets/clock.svg
     - assets/guard_logo.svg
+    - assets/curve.svg
+    - assets/curve.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

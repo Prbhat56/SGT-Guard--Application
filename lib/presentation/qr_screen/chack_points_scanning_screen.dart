@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/presentation/work_report_screen/submit_report_screen.dart';
 import '../../utils/const.dart';
-import '../shift_details_screen/clock_in_screen.dart';
+import '../clocked_in_out_screen/clock_in_screen.dart';
 
 class CheckPointScanningScreen extends StatefulWidget {
   const CheckPointScanningScreen({super.key});

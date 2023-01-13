@@ -31,6 +31,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       child: Scaffold(
         appBar: CustomAppBarWidget(appbarTitle: 'Property Detail'),
         body: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,6 +50,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             .map((e) => CustomIconWidget(
                                   iconUrl: e.iconUrl,
                                   title: e.title,
+                                  widget: e.widget,
                                 ))
                             .toList()),
                     SizedBox(height: 20),

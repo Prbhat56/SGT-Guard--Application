@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/time_sheet_screen/check_point_screen.dart';
+import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
-import 'widgets/time_details_widget.dart';
-import 'widgets/time_stamp_widget.dart';
+import 'clock_out_error_screen.dart';
+import '../shift_details_screen/widgets/time_details_widget.dart';
+import '../shift_details_screen/widgets/time_stamp_widget.dart';
 
 class ClockInScreen extends StatefulWidget {
   const ClockInScreen({super.key});
@@ -84,7 +85,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                       style: TextStyle(fontSize: 15, color: Colors.grey),
                     ),
                     const SizedBox(height: 15),
-                    Center(child: TimeDetailsWidget()),
+                    Center(child: TimeDetailsWidget(isClockOutScreen: false)),
                     const SizedBox(height: 6),
                     const SizedBox(height: 15),
                     Padding(
@@ -102,10 +103,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                           style: TextStyle(color: white, fontSize: 17),
                         ),
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const CheckPointScreen();
-                          }));
+                          screenNavigator(context, CheckPointScreen());
                         }),
                     const SizedBox(
                       height: 16,
@@ -120,7 +118,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
             CustomButtonWidget(
                 buttonTitle: 'Clock Out',
                 onBtnPress: () {
-                  screenNavigator(context, CheckPointScreen());
+                  screenNavigator(context, ClockOutErrorScreen());
                 }),
           ]),
         ),

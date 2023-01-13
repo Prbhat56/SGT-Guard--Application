@@ -9,15 +9,17 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
       required this.textfielsTitle,
       required this.hintText,
       this.obscureText = false,
+      this.readonly = false,
       this.onChanged,
       this.suffixIcon,
-      required this.controller});
+      this.controller});
   final String textfielsTitle;
   final String hintText;
-  final TextEditingController controller;
+  TextEditingController? controller;
   final bool obscureText;
   ValueChanged<String>? onChanged;
   Widget? suffixIcon;
+  bool? readonly;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,6 +31,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
           textScaleFactor: 1.0,
         ),
         TextFormField(
+          readOnly: readonly!,
           obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hintText,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/presentation/property_details_screen/check_points_list.dart';
+import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import '../../../helper/navigator_function.dart';
 import '../../../utils/const.dart';
 import '../../qr_screen/scanning_screen.dart';
@@ -8,32 +10,42 @@ import '../../qr_screen/scanning_screen.dart';
 class CustomIconsDataModel {
   final String iconUrl;
   final String title;
+  final Widget widget;
   CustomIconsDataModel({
     required this.iconUrl,
     required this.title,
+    required this.widget,
   });
 }
 
 //data list of customicon
 List<CustomIconsDataModel> customIconsData = [
-  CustomIconsDataModel(iconUrl: 'assets/qr1.svg', title: 'Scan QR'),
-  CustomIconsDataModel(iconUrl: 'assets/map.svg', title: 'Checkpoints'),
-  CustomIconsDataModel(iconUrl: 'assets/plus.svg', title: 'Report'),
+  CustomIconsDataModel(
+      iconUrl: 'assets/qr1.svg', title: 'Scan QR', widget: ScanningScreen()),
+  CustomIconsDataModel(
+      iconUrl: 'assets/map.svg',
+      title: 'Checkpoints',
+      widget: CheckPointListsScreen()),
+  CustomIconsDataModel(iconUrl: 'assets/plus.svg', title: 'Report',widget: WorkReportScreen()),
 ];
 
 //custom-icon widget
 class CustomIconWidget extends StatelessWidget {
   const CustomIconWidget(
-      {super.key, required this.iconUrl, required this.title});
+      {super.key,
+      required this.iconUrl,
+      required this.title,
+      required this.widget});
   final String iconUrl;
   final String title;
+  final Widget widget;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         InkWell(
           onTap: () {
-            screenNavigator(context, ScanningScreen());
+            screenNavigator(context, widget);
           },
           child: Container(
             height: 32,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sgt/presentation/time_sheet_screen/widgets/check_point_model.dart';
+import 'package:sgt/presentation/check_point_screen/widgets/check_point_model.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
 import 'widgets/check_points_lists_widget.dart';
+import 'widgets/checkpoints_alert_dialog.dart';
 
 class CheckPointListsScreen extends StatefulWidget {
   const CheckPointListsScreen({super.key});
@@ -17,28 +19,30 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: white,
-          title: Text('Checkpoints List',
-              style: TextStyle(color: black), textScaleFactor: 1.0),
-          centerTitle: true,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios, color: black)),
+        appBar: CustomAppBarWidget(
+          appbarTitle: 'Checkpoints',
         ),
         backgroundColor: white,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10),
           child: ListView.builder(
             itemCount: checkpointData.length,
             itemBuilder: (context, index) {
-              return CheckPointListsWidget(
-                title: checkpointData[index].title,
-                imageUrl: checkpointData[index].imageUrl,
-                iscompleted: checkpointData[index].isCompleted,
+              return InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CheckpointsAlertDialog();
+                      });
+                },
+                child: CheckPointListsWidget(
+                  title: checkpointData[index].title,
+                  imageUrl: checkpointData[index].imageUrl,
+                  iscompleted: checkpointData[index].isCompleted,
+                  checkpointNo: checkpointData[index].checkpointsNo,
+                  date: checkpointData[index].date,
+                ),
               );
             },
           ),

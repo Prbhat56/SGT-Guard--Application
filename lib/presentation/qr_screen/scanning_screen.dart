@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
-import '../shift_details_screen/clock_in_screen.dart';
+import '../clocked_in_out_screen/clock_in_screen.dart';
 
 class ScanningScreen extends StatefulWidget {
   const ScanningScreen({super.key});

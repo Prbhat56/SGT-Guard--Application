@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
 class CheckPointListsWidget extends StatelessWidget {
@@ -9,10 +11,14 @@ class CheckPointListsWidget extends StatelessWidget {
     required this.title,
     required this.imageUrl,
     required this.iscompleted,
+    required this.checkpointNo,
+    required this.date,
   }) : super(key: key);
   final String title;
   final String imageUrl;
   final String iscompleted;
+  final String date;
+  final int checkpointNo;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,48 +26,47 @@ class CheckPointListsWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: grey,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              height: 62,
-              width: 62,
-              child: Image.network(
-                fit: BoxFit.contain,
-                imageUrl,
-              ),
-            ),
+            CustomCircularImage.getCircularImage(imageUrl, false, 35, 0, 0),
             const SizedBox(
               width: 10,
             ),
-            SizedBox(
-              width: 138.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: CustomTheme.blackTextStyle(15),
+                ),
+                Text(
+                  date,
+                  style: CustomTheme.blackTextStyle(13),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: 10,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Text(iscompleted,
+                          style:
+                              CustomTheme.blueTextStyle(10, FontWeight.w400)),
+                      VerticalDivider(
+                        color: primaryColor,
+                      ),
+                      Text("$checkpointNo Checkpoints",
+                          style:
+                              CustomTheme.blueTextStyle(10, FontWeight.w400)),
+                    ],
                   ),
-                  Text(
-                    iscompleted,
-                    style: const TextStyle(fontSize: 15, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 50,
+                ),
+              ],
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 60.0),
-          child: Divider(
-            color: Colors.grey,
-          ),
+        Divider(
+          color: primaryColor,
         )
       ],
     );

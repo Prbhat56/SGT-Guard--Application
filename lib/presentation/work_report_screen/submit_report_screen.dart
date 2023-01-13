@@ -6,11 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
+import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import 'package:sgt/presentation/widgets/media_uploading_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import '../../utils/const.dart';
 import '../property_details_screen/widgets/property_media_preview_screen.dart';
+import '../property_details_screen/widgets/show_property_images_widget.dart';
+import '../widgets/dotted_choose_file_widget.dart';
 import 'widget/success_popup.dart';
 import 'package:path/path.dart' as path;
+
+import 'widget/tasks_list_widget.dart';
 
 class SubmitReportScreen extends StatefulWidget {
   const SubmitReportScreen({super.key});
@@ -20,33 +28,32 @@ class SubmitReportScreen extends StatefulWidget {
 }
 
 class _SubmitReportScreenState extends State<SubmitReportScreen> {
-  List<String> tasksData = [
-    "Met with manager",
-    "Checked server room",
-    "Checked server room",
-    "Take a tour of parking",
-    "Check car number 5298",
-    "Create a general report",
-    "Check all security cameras",
-    "Create parking report",
-    "Take a tour of server room",
-  ];
-  List<bool> checkbox = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
-
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
-
   List imageNames = [];
+
+//pick image from camera
+  void pickCameraImage() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      imageFileList?.add(photo);
+      imageNames.add(path.dirname(photo.path));
+      setState(() {});
+    }
+  }
+
+//pick image from gallery
+  void pickGalleryImage() async {
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if (images != null) {
+      for (var i = 0; i < images.length; i++) {
+        imageFileList?.add(images[i]);
+      }
+      imageNames.add(images[0].name);
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<ReportTypeCubit>().state;
@@ -54,98 +61,21 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: white,
-          title: Text(
-            'Checkpoint 1 Details',
-            style: TextStyle(color: primaryColor),
-            textScaleFactor: 1.0,
-          ),
-          centerTitle: true,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios, color: primaryColor)),
+        appBar: CustomAppBarWidget(
+          appbarTitle: 'Building Hallway 1',
         ),
         backgroundColor: white,
         body: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
-                height: 90,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(1),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                          height: 88,
-                          width: 122,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(1),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                          height: 88,
-                          width: 122,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(1),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                              height: 88,
-                              width: 122,
-                            ),
-                          ),
-                          Opacity(
-                            opacity: 0.5,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PropertyMediaPreviewScreen(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 85,
-                                width: 122,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '+2',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 25),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                height: 30,
+              ),
+              Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: PropertyImagesWidget()),
+              SizedBox(
+                height: 20,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -159,44 +89,8 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      // color: Colors.amber,
-                      height: 28.2 * tasksData.length.toDouble(),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10,
-                      ),
-                      child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: tasksData.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              // color: Colors.red,
-                              margin: EdgeInsets.only(bottom: 11),
-                              height: 16,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    tasksData[index],
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                  Checkbox(
-                                    onChanged: (v) {
-                                      setState(
-                                        () {
-                                          checkbox[index] = v!;
-                                        },
-                                      );
-                                      print(v);
-                                    },
-                                    value: checkbox[index],
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                    ),
+                    //showing list of tasks
+                    TasksListWidget(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -242,82 +136,15 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: imageFileList!.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(vertical: 20),
-                                    child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                              margin: EdgeInsets.all(5),
-                                              height: 60,
-                                              width: 60,
-                                              alignment: Alignment.center,
-                                              child: Image.file(File(
-                                                  imageFileList![index].path))),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                  width: 190,
-                                                  child: Text(imageNames[index],
-                                                      style: TextStyle())),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    height: 4,
-                                                    width: 200,
-                                                    decoration: BoxDecoration(
-                                                        color: primaryColor),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Icon(
-                                                    Icons.check_circle_outline,
-                                                    color: greenColor,
-                                                    size: 20,
-                                                  ),
-                                                  // Text('100 %',
-                                                  //     style: TextStyle(
-                                                  //         fontSize: 12)),
-                                                  SizedBox(width: 5),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          InkWell(
-                                            onTap: () {
-                                              print('remove');
-
-                                              setState(() {
-                                                imageFileList!.removeAt(index);
-                                                // imageNames.removeAt(index);
-                                              });
-                                              print(index);
-                                              print(imageFileList);
-                                              // imageNames
-                                              //     .add(path.dirname(photo.path));
-                                            },
-                                            child: Container(
-                                                height: 17,
-                                                width: 17,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                  border: Border.all(
-                                                    color: primaryColor,
-                                                  ),
-                                                ),
-                                                child: Icon(
-                                                  Icons.close,
-                                                  size: 15,
-                                                )),
-                                          )
-                                        ]),
-                                  );
+                                  return MediaUploadingWidget(
+                                      imageFileList: imageFileList!,
+                                      imageNames: imageNames,
+                                      clickClose: () {
+                                        setState(() {
+                                          imageFileList!.removeAt(index);
+                                        });
+                                      },
+                                      index: index);
                                 }),
                           )
                         : Container(),
@@ -330,199 +157,33 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                     ),
                     InkWell(
                       onTap: () {
+                        //showing bottom model sheet to upload image
                         showModalBottomSheet(
                             context: context,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             builder: (context) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 25),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Select Media From?',
-                                      textScaleFactor: 1.0,
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    const Text(
-                                      'Use camera or select file from device gallery',
-                                      textScaleFactor: 1.0,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color.fromARGB(
-                                              255, 109, 109, 109)),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        InkWell(
-                                          onTap: () async {
-                                            // Capture a photo
-                                            final XFile? photo =
-                                                await _picker.pickImage(
-                                                    source: ImageSource.camera);
-                                            if (photo != null) {
-                                              imageFileList?.add(photo);
-
-                                              imageNames.add(
-                                                  path.dirname(photo.path));
-                                              setState(() {});
-                                            }
-                                            print(
-                                                '$imageFileList   $imageNames');
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 60,
-                                                width: 60,
-                                                decoration: BoxDecoration(
-                                                  color: grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.camera_alt,
-                                                  size: 30,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              const Text(
-                                                'Camera',
-                                                textScaleFactor: 1.0,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                            // Pick multiple images
-                                            final List<XFile>? images =
-                                                await _picker.pickMultiImage();
-                                            if (images != null) {
-                                              for (var i = 0;
-                                                  i < images.length;
-                                                  i++) {
-                                                imageFileList?.add(images[i]);
-                                              }
-                                              imageNames.add(images[0].name);
-                                              setState(() {});
-                                            }
-                                            print(
-                                                '$imageFileList   $imageNames');
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 60,
-                                                width: 60,
-                                                decoration: BoxDecoration(
-                                                  color: white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 5,
-                                                      blurRadius: 7,
-                                                      offset: const Offset(0,
-                                                          3), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: const Icon(
-                                                  Icons.folder_open_outlined,
-                                                  size: 30,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              const Text(
-                                                'Gallery',
-                                                textScaleFactor: 1.0,
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                              return CustomBottomModelSheet(
+                                cameraClick: () {
+                                  pickCameraImage();
+                                },
+                                galleryClick: () {
+                                  pickGalleryImage();
+                                },
                               );
                             });
                       },
-                      child: DottedBorder(
-                        borderType: BorderType.RRect,
-                        color: Colors.blue,
-                        strokeWidth: 2,
-                        dashPattern: [10, 3],
-                        radius: Radius.circular(10),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Center(
-                              child: Text(
-                            'Choose a File',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )),
-                        ),
-                      ),
+                      child: DottedChooseFileWidget(),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
-        ),
-        bottomNavigationBar: SizedBox(
-          height: 100.h,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Divider(
-                color: Colors.grey,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                child: Center(
-                  child: CupertinoButton(
-                      disabledColor: seconderyColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 150, vertical: 15),
-                      color: primaryColor,
-                      child: const Text(
-                        'Send',
-                        style: TextStyle(fontSize: 20),
-                        textScaleFactor: 1.0,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => SuccessPopup());
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return const ReportSuccessScreen(
-                        //     isSubmitReportScreen: true,
-                        //   );
-                        // }));
-                      }),
-                ),
+              CustomButtonWidget(buttonTitle: 'Send', onBtnPress: () {}),
+              const SizedBox(
+                height: 30,
               ),
             ],
           ),

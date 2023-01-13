@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../utils/const.dart';
-import 'widgets/check_point_model.dart';
+import '../check_point_screen/widgets/check_point_model.dart';
 
 class CheckPointMapScreen extends StatefulWidget {
   const CheckPointMapScreen({super.key});

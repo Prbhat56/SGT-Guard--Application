@@ -4,6 +4,7 @@ class CheckPointModel {
   final String imageUrl;
   final String address;
   final String date;
+  final int checkpointsNo;
 
   CheckPointModel({
     required this.title,
@@ -11,13 +12,14 @@ class CheckPointModel {
     required this.imageUrl,
     required this.address,
     required this.date,
+    this.checkpointsNo = 13,
   });
 }
 
 List<CheckPointModel> checkpointData = [
   CheckPointModel(
     title: 'Building Hallway 1',
-    isCompleted: 'Completed',
+    isCompleted: 'Check-in by 11:00am',
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7d89NKKnm9Lr6fqEt2il6YGOURq0htBmn6A&usqp=CAU',
     address: "43 Bourke Street, Newbridge ",

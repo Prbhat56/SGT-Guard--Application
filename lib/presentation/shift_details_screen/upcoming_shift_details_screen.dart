@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/theme/custom_theme.dart';
 
 import '../../utils/const.dart';
 
@@ -11,40 +14,30 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-            elevation: 0,
-            centerTitle: true,
-            backgroundColor: white,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: black,
-              ),
-            ),
-            title: Text(
-              'Shift details',
-              style: TextStyle(color: black),
-            )),
+        appBar: CustomAppBarWidget(appbarTitle: 'Shift details'),
         backgroundColor: white,
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Start at:',
-                style: TextStyle(color: primaryColor),
+                'Shift Timing',
+                style: CustomTheme.blueTextStyle(17, FontWeight.w400),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Text(
                 'Monday, October 24',
-                style: TextStyle(color: black, fontSize: 17),
+                style: CustomTheme.blackTextStyle(17),
+              ),
+              SizedBox(
+                height: 5,
               ),
               Text(
                 '10:00 AM ~ 4:00 PM',
-                style: TextStyle(color: black),
+                style: CustomTheme.greyTextStyle(13),
               ),
               SizedBox(
                 height: 15,
@@ -63,27 +56,26 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Guard',
-                        style: TextStyle(color: primaryColor),
+                        style: CustomTheme.blueTextStyle(17, FontWeight.w400),
                       ),
                       Text(
                         'Matheus Paolo',
-                        style: TextStyle(color: black, fontSize: 17),
+                        style: CustomTheme.blackTextStyle(17),
                       ),
                       Text(
                         'Executive Protection',
-                        style: TextStyle(color: black),
+                        style: CustomTheme.greyTextStyle(13),
                       ),
                     ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: grey,
-                      backgroundImage: NetworkImage(
+                    child: CustomCircularImage.getCircularImage(
                         'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                      ),
-                    ),
+                        false,
+                        20,
+                        0,
+                        0),
                   ),
                 ],
               ),
@@ -98,15 +90,15 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
               ),
               Text(
                 'Property',
-                style: TextStyle(color: primaryColor),
+                style: CustomTheme.blueTextStyle(17, FontWeight.w400),
               ),
               Text(
                 'Rivi Properties',
-                style: TextStyle(color: black, fontSize: 17),
+                style: CustomTheme.blackTextStyle(17),
               ),
               Text(
                 'Guard Post Duties',
-                style: TextStyle(color: black),
+                style: CustomTheme.greyTextStyle(13),
               ),
               SizedBox(
                 height: 15,
@@ -119,44 +111,18 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
               ),
               Text(
                 'Job Details',
-                style: TextStyle(color: Colors.grey),
+                style: CustomTheme.blueTextStyle(17, FontWeight.w400),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 20.0, top: 10),
                 child: Text(
                   'Lorem ipsum dolor sit amet, duo habemus fuisset epicuri ei. No sit tempor populo prodesset, ad cum dicta repudiare. Ex eos probo maluisset, invidunt deseruisse consectetuer id vel, convenire comprehensam et nec. Dico facilisis ut has, quo homero nostro menandri id. Graeco nusquam splendide et vim.',
-                  style: TextStyle(color: black),
+                  style: CustomTheme.blackTextStyle(13),
                 ),
               ),
               SizedBox(
                 height: 200.h,
               ),
-              // Center(
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       Text(
-              //         'Start at:',
-              //         style: TextStyle(
-              //             color: primaryColor, fontWeight: FontWeight.bold),
-              //       ),
-              //       SizedBox(
-              //         width: 15,
-              //       ),
-              //       Text(
-              //         '6/20/22,',
-              //         style: TextStyle(
-              //             color: primaryColor, fontWeight: FontWeight.bold),
-              //       ),
-              //       Text(
-              //         '07:30 AM',
-              //         style: TextStyle(
-              //           color: primaryColor,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // )
             ],
           ),
         ),

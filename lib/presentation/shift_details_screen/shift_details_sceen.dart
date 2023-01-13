@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/shift_details_screen/clock_in_screen.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/clock_in_screen.dart';
 import '../../utils/const.dart';
 
 class ShiftDetailsScreen extends StatelessWidget {

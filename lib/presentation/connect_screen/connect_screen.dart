@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sgt/presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
-import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
 import '../../utils/const.dart';
-import '../guard_tools_screen/guard_tools_screen.dart';
 import '../widgets/main_appbar_widget.dart';
 import 'widgets/chattile_widget.dart';
 
