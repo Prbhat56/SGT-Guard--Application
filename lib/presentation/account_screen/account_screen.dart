@@ -3,6 +3,7 @@ import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
 import '../widgets/custom_underline_textfield_widget.dart';
 import '../widgets/main_appbar_widget.dart';
+import 'widgets/guard_card_widget.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -101,6 +102,17 @@ class AccountScreen extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: 40,
+                ),
+                Text(
+                  'Guard Cards',
+                  style: CustomTheme.blackTextStyle(21),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                GuardCard(),
+                const SizedBox(
+                  height: 30,
                 ),
               ],
             ),

@@ -135,7 +135,7 @@ flutter:
     - assets/guard_logo.svg
     - assets/curve.svg
     - assets/curve.png
-
+    - assets/ac_qr.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
