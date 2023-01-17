@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/presentation/account_screen/edit_account_details_screen.dart';
+import 'package:sgt/presentation/settings_screen/widgets/sign_out_dialog.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import '../../../helper/navigator_function.dart';
 import '../../../theme/custom_theme.dart';
@@ -84,7 +85,15 @@ class SettingsOptions extends StatelessWidget {
               children: [
                 ListTile(
                   onTap: () {
-                    screenNavigator(context, settingsOptionlist[index].widget!);
+                    print(index);
+                    index == 8
+                        ? showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SignOutDialog();
+                            })
+                        : screenNavigator(
+                            context, settingsOptionlist[index].widget!);
                   },
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 0, horizontal: 10),
