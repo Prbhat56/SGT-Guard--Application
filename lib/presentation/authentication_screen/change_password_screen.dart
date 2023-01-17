@@ -8,6 +8,7 @@ import 'package:sgt/presentation/authentication_screen/cubit/isValidPassword/is_
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/password_change_success_screen.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
 import 'forgot_password_screen.dart';
 
@@ -44,27 +45,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            'Change Password',
-            textScaleFactor: 1.0,
-            style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w500)),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: CustomAppBarWidget(appbarTitle: 'Change Password'),
         body: Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 30),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
@@ -21,26 +22,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: primaryColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-        title: Text(
-          'Shift Report',
-          textScaleFactor: 1.0,
-          style: GoogleFonts.montserrat(
-              textStyle:
-                  TextStyle(color: primaryColor, fontWeight: FontWeight.w500)),
-        ),
-      ),
+      appBar: CustomAppBarWidget(appbarTitle: 'Shift Report'),
       backgroundColor: white,
       body: SingleChildScrollView(
         child: Padding(

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/utils/const.dart';
 import 'widgets/custom_calender.dart';
 
@@ -20,27 +21,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          centerTitle: true,
-          title: Text(
-            'Apply Leave',
-            textScaleFactor: 1.0,
-            style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w600)),
-          ),
-        ),
+        appBar: CustomAppBarWidget(appbarTitle: 'Apply Leave'),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
@@ -48,6 +29,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 20),
                 Text(
                   'Leave From',
                   style: GoogleFonts.montserrat(

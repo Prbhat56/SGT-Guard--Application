@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
 
 class TermsandConditionScreen extends StatefulWidget {
@@ -14,27 +15,7 @@ class _TermsandConditionScreenState extends State<TermsandConditionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          'Terms and Conditions',
-          textScaleFactor: 1.0,
-          style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w500)),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: CustomAppBarWidget(appbarTitle: 'Terms and Conditions'),
       backgroundColor: white,
       body: Padding(
         padding: const EdgeInsets.all(30.0),

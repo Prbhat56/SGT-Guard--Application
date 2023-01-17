@@ -9,7 +9,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/validator.dart';
 import 'package:sgt/presentation/settings_screen/widgets/verify_mobile_no.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
+import '../widgets/custom_underline_textfield_widget.dart';
+import '../widgets/dotted_choose_file_widget.dart';
 
 class EditAccountScreen extends StatefulWidget {
   const EditAccountScreen({super.key});
@@ -26,7 +31,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
-  TextEditingController _otpController = TextEditingController();
+
   @override
   void dispose() {
     pinController.dispose();
@@ -61,27 +66,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            'Edit Account Details',
-            textScaleFactor: 1.0,
-            style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w500)),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: CustomAppBarWidget(appbarTitle: 'Edit Account Details'),
         backgroundColor: white,
         body: Form(
           key: _formKey,
@@ -269,159 +254,73 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     ),
                     Text(
                       'Personal',
-                      style: TextStyle(color: black, fontSize: 17),
+                      style: CustomTheme.blackTextStyle(21),
                     ),
-                    SizedBox(
-                      height: 20.h,
+                    const SizedBox(
+                      height: 20,
                     ),
-                    const Text(
-                      'Name',
-                      style: TextStyle(color: Colors.grey),
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'Name',
+                      hintText: 'Jenny Doe',
+                      readonly: true,
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          hintText: 'Jenny Doe',
-                          focusColor: primaryColor),
-                      validator: (input) =>
-                          input!.isNotEmpty ? null : "Please enter your name",
+                    const SizedBox(
+                      height: 20,
                     ),
-                    SizedBox(
-                      height: 20.h,
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'Email',
+                      hintText: 'johndoe@mail.com',
+                      readonly: true,
                     ),
-                    const Text(
-                      'Email',
-                      style: TextStyle(color: Colors.grey),
+                    const SizedBox(
+                      height: 20,
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          hintText: 'johndoe@mail.com',
-                          focusColor: primaryColor),
-                      validator: (input) => input!.isValidEmail
-                          ? null
-                          : 'Please enter a valid email',
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'Phone',
+                      hintText: '(808)628 8343',
+                      readonly: true,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Address',
+                      style: CustomTheme.blackTextStyle(21),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'Street',
+                      hintText: 'Sample Street',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'City',
+                      hintText: 'Los Angeles',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'State',
+                      hintText: 'CA',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomUnderlineTextFieldWidget(
+                      textfielsTitle: 'Zipcode',
+                      hintText: '90045',
                     ),
                     SizedBox(
                       height: 20.h,
                     ),
                     Text(
-                      'Address',
-                      style: TextStyle(color: black, fontSize: 17),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const Text(
-                      'Street',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          hintText: 'Sample Street',
-                          focusColor: primaryColor),
-                      validator: (input) => input!.isNotEmpty
-                          ? null
-                          : "Please enter your street name",
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const Text(
-                      'City',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          hintText: 'Los Angeles',
-                          focusColor: primaryColor),
-                      validator: (input) => input!.isNotEmpty
-                          ? null
-                          : "Please enter your city name",
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const Text(
-                      'State',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          hintText: 'CA',
-                          focusColor: primaryColor),
-                      validator: (input) => input!.isNotEmpty
-                          ? null
-                          : "Please enter your state name",
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const Text(
-                      'Zipcode',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    TextFormField(
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(6),
-                      ],
-                      decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey, width: 2),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: grey),
-                          ),
-                          hintText: '900451',
-                          focusColor: primaryColor),
-                      keyboardType: TextInputType.number,
-                      validator: (input) => input!.isNotEmpty
-                          ? null
-                          : "Please enter a valid zipcode",
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const Text(
                       'Upload Guard Card',
-                      style: TextStyle(color: Colors.grey),
+                      style: CustomTheme.blackTextStyle(21),
                     ),
                     SizedBox(
                       height: 20.h,
@@ -475,10 +374,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                                             .removeAt(index);
                                                         // imageNames.removeAt(index);
                                                       });
-                                                      print(index);
-                                                      print(guardcard);
-                                                      // imageNames
-                                                      //     .add(path.dirname(photo.path));
                                                     },
                                                     child: Container(
                                                         height: 15,
@@ -504,204 +399,151 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           )
                         : Container(),
                     InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            builder: (context) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 25),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Select Media From?',
-                                      textScaleFactor: 1.0,
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    const Text(
-                                      'Use camera or select file from device gallery',
-                                      textScaleFactor: 1.0,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color.fromARGB(
-                                              255, 109, 109, 109)),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        InkWell(
-                                          onTap: () async {
-                                            // Capture a photo
-                                            final XFile? photo =
-                                                await _picker.pickImage(
-                                                    source: ImageSource.camera);
-                                            if (photo != null) {
-                                              guardcard!.add(photo);
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              builder: (context) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 25),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Select Media From?',
+                                        textScaleFactor: 1.0,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const Text(
+                                        'Use camera or select file from device gallery',
+                                        textScaleFactor: 1.0,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Color.fromARGB(
+                                                255, 109, 109, 109)),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              // Capture a photo
+                                              final XFile? photo =
+                                                  await _picker.pickImage(
+                                                      source:
+                                                          ImageSource.camera);
+                                              if (photo != null) {
+                                                guardcard!.add(photo);
 
-                                              imageNames.add(photo.name);
-                                              setState(() {});
-                                            }
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 60,
-                                                width: 60,
-                                                decoration: BoxDecoration(
-                                                  color: grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.camera_alt,
-                                                  size: 30,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              const Text(
-                                                'Camera',
-                                                textScaleFactor: 1.0,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                            // Pick multiple images
-                                            final List<XFile>? images =
-                                                await _picker.pickMultiImage();
-                                            if (images != null) {
-                                              for (var i = 0;
-                                                  i < images.length;
-                                                  i++) {
-                                                guardcard!.add(images[i]);
+                                                imageNames.add(photo.name);
+                                                setState(() {});
                                               }
-                                              imageNames.add(images[0].name);
-                                              setState(() {});
-                                            }
-                                            print('$guardcard   $imageNames');
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 60,
-                                                width: 60,
-                                                decoration: BoxDecoration(
-                                                  color: white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 5,
-                                                      blurRadius: 7,
-                                                      offset: const Offset(0,
-                                                          3), // changes position of shadow
-                                                    ),
-                                                  ],
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: 60,
+                                                  width: 60,
+                                                  decoration: BoxDecoration(
+                                                    color: grey,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.camera_alt,
+                                                    size: 30,
+                                                  ),
                                                 ),
-                                                child: const Icon(
-                                                  Icons.folder_open_outlined,
-                                                  size: 30,
+                                                const SizedBox(
+                                                  height: 8,
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              const Text(
-                                                'Gallery',
-                                                textScaleFactor: 1.0,
-                                              )
-                                            ],
+                                                const Text(
+                                                  'Camera',
+                                                  textScaleFactor: 1.0,
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
-                      },
-                      child: DottedBorder(
-                        color: Colors.grey,
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Center(
-                              child: Icon(
-                            Icons.add,
-                            color: Colors.grey,
-                            size: 50,
-                          )),
-                        ),
-                      ),
-                    ),
+                                          InkWell(
+                                            onTap: () async {
+                                              // Pick multiple images
+                                              final List<XFile>? images =
+                                                  await _picker
+                                                      .pickMultiImage();
+                                              if (images != null) {
+                                                for (var i = 0;
+                                                    i < images.length;
+                                                    i++) {
+                                                  guardcard!.add(images[i]);
+                                                }
+                                                imageNames.add(images[0].name);
+                                                setState(() {});
+                                              }
+                                              print('$guardcard   $imageNames');
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: 60,
+                                                  width: 60,
+                                                  decoration: BoxDecoration(
+                                                    color: white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.5),
+                                                        spreadRadius: 5,
+                                                        blurRadius: 7,
+                                                        offset: const Offset(0,
+                                                            3), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.folder_open_outlined,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                const Text(
+                                                  'Gallery',
+                                                  textScaleFactor: 1.0,
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                        child: DottedChooseFileWidget()),
                     SizedBox(
-                      height: 20.h,
+                      height: 30,
                     ),
-                    const Text(
-                      'Phone',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    TextFormField(
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                      ],
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: grey, width: 2),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: primaryColor, width: 2),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: grey),
-                        ),
-                        hintText: '(808) 628 8343',
-                        focusColor: primaryColor,
-                      ),
-                      keyboardType: TextInputType.number,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VerifyMobileNoScreen()));
-                      },
-                      validator: (input) => input!.isNotEmpty
-                          ? null
-                          : "please enter your phone number",
-                    ),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    Center(
-                      child: CupertinoButton(
-                        disabledColor: seconderyColor,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 130, vertical: 15),
-                        color: primaryColor,
-                        child: Text(
-                          'Verify',
-                          style: TextStyle(fontSize: 20.sp),
-                        ),
-                        onPressed: () {
+                    CustomButtonWidget(
+                        buttonTitle: 'Verify',
+                        onBtnPress: () {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
                             );
                           }
-                        },
-                      ),
-                    ),
+                        }),
                     SizedBox(
                       height: 40.h,
                     ),

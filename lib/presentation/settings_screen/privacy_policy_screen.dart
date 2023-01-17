@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -13,27 +14,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          'Privacy Policy',
-          textScaleFactor: 1.0,
-          style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w500)),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: CustomAppBarWidget(appbarTitle: 'Privacy Policy'),
       backgroundColor: white,
       body: Padding(
         padding: const EdgeInsets.all(30.0),

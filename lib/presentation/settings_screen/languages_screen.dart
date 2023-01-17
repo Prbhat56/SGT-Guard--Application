@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
 
 class LanguagesScreen extends StatefulWidget {
@@ -28,27 +29,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            'Languages',
-            textScaleFactor: 1.0,
-            style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w500)),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: CustomAppBarWidget(appbarTitle: 'Languages'),
         backgroundColor: white,
         body: Column(children: [
           SizedBox(

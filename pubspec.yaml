@@ -136,6 +136,13 @@ flutter:
     - assets/curve.svg
     - assets/curve.png
     - assets/ac_qr.png
+    - assets/profile.svg
+    - assets/leave.svg
+    - assets/leave.png
+    - assets/globe.svg
+    - assets/hand.svg
+    - assets/lock.svg
+    - assets/logout.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
