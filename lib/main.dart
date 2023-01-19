@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/password_checker/password_checker_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pressed_cubit.dart';
 import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
@@ -15,6 +17,7 @@ import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_typ
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
+import 'presentation/authentication_screen/cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'presentation/onboarding_screen/onboarding_screen.dart';
@@ -50,7 +53,10 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => ShowmoreCubit()),
               BlocProvider(create: (context) => TimerOnCubit()),
               BlocProvider(create: (context) => ReportTypeCubit()),
-              BlocProvider(create: (context) => AddwitnessCubit())
+              BlocProvider(create: (context) => AddwitnessCubit()),
+              BlocProvider(create: (context) => EmailCheckerCubit()),
+              BlocProvider(create: (context) => PasswordCheckerCubit()),
+              BlocProvider(create: (context) => IssigninvalidCubit())
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

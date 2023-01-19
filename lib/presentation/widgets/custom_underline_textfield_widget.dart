@@ -4,15 +4,17 @@ import '../../utils/const.dart';
 
 // ignore: must_be_immutable
 class CustomUnderlineTextFieldWidget extends StatelessWidget {
-  CustomUnderlineTextFieldWidget(
-      {super.key,
-      required this.textfieldTitle,
-      required this.hintText,
-      this.obscureText = false,
-      this.readonly = false,
-      this.onChanged,
-      this.suffixIcon,
-      this.controller});
+  CustomUnderlineTextFieldWidget({
+    super.key,
+    required this.textfieldTitle,
+    required this.hintText,
+    this.obscureText = false,
+    this.readonly = false,
+    this.onChanged,
+    this.suffixIcon,
+    this.controller,
+    this.bottomPadding = 25,
+  });
   final String textfieldTitle;
   final String hintText;
   TextEditingController? controller;
@@ -20,10 +22,11 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
   ValueChanged<String>? onChanged;
   Widget? suffixIcon;
   bool? readonly;
+  double bottomPadding;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 25),
+      padding:  EdgeInsets.only(bottom: bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,6 +36,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
             textScaleFactor: 1.0,
           ),
           TextFormField(
+            onChanged: onChanged,
             readOnly: readonly!,
             obscureText: obscureText,
             decoration: InputDecoration(

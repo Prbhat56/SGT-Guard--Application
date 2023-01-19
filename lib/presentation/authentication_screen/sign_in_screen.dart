@@ -1,17 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/helper/validator.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/password_checker/password_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/forgot_password_screen.dart';
+import 'package:sgt/presentation/authentication_screen/widget/error_widgets.dart';
 import 'package:sgt/presentation/authentication_screen/widget/language_change_oprion_widget.dart';
 import 'package:sgt/presentation/home.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
-import 'package:sgt/utils/const.dart';
+import 'package:sgt/theme/custom_theme.dart';
+
+import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -23,9 +27,6 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
-  bool iseamilvalid = true;
-  bool ispasswordvalid = true;
-  bool isFormValid = false;
 
   @override
   void initState() {
@@ -44,7 +45,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    print(iseamilvalid);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -67,9 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Text(
                       'Welcome back',
                       textScaleFactor: 1.0,
-                      style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                              fontSize: 25.sp, fontWeight: FontWeight.w600)),
+                      style: CustomTheme.blackTextStyle(25),
                     ),
                   ),
                   SizedBox(
@@ -79,55 +77,29 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Text(
                         textScaleFactor: 1.0,
                         'Sign in to continue',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 17,
-                          ),
-                        )),
+                        style: CustomTheme.greyTextStyle(17)),
                   ),
                   SizedBox(
                     height: 30.h,
                   ),
                   CustomUnderlineTextFieldWidget(
+                    bottomPadding: 7,
                     textfieldTitle: 'Email',
                     hintText: 'Enter Email',
                     controller: _emailController,
                     onChanged: (value) {
-                      setState(() {
-                        iseamilvalid = value.isValidEmail;
-                      });
-                      print(iseamilvalid);
+                      print(value);
+                      context.read<EmailCheckerCubit>().checkEmail(value);
                     },
                   ),
-
-                  const SizedBox(
-                    height: 7,
-                  ),
-                  iseamilvalid
+                  context.watch<EmailCheckerCubit>().state.isemailValid
                       ? Container()
-                      : SizedBox(
-                          width: 143,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.error_outline,
-                                color: Colors.red,
-                                size: 17,
-                              ),
-                              Text(
-                                ' Email ID is Incorrect',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 13),
-                              ),
-                            ],
-                          ),
-                        ),
+                      : CustomErrorWidget.emailError(),
                   SizedBox(
                     height: 24.h,
                   ),
                   CustomUnderlineTextFieldWidget(
+                    bottomPadding: 7,
                     textfieldTitle: 'Password',
                     hintText: 'Enter Password',
                     controller: _passwordController,
@@ -149,12 +121,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                     ),
                     onChanged: (value) {
-                      setState(() {
-                        ispasswordvalid = value.isValidPassword;
-                        iseamilvalid && ispasswordvalid
-                            ? isFormValid = true
-                            : "";
-                      });
+                      context.read<PasswordCheckerCubit>().checkPassword(value);
+                      context.read<IssigninvalidCubit>().checkSignIn(context
+                              .read<EmailCheckerCubit>()
+                              .state
+                              .isemailValid ||
+                          context.read<PasswordCheckerCubit>().state.password);
                     },
                   ),
 
@@ -164,55 +136,16 @@ class _SignInScreenState extends State<SignInScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ispasswordvalid
+                      context.watch<PasswordCheckerCubit>().state.password
                           ? Container()
-                          : SizedBox(
-                              width: 143,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.error_outline,
-                                    color: Colors.red,
-                                    size: 17,
-                                  ),
-                                  Text(
-                                    ' Wrong password',
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 13),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          : CustomErrorWidget.passwordError(),
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 500),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const ForgotPasswordScreen(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                          begin: const Offset(1, 0),
-                                          end: Offset.zero)
-                                      .animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
+                          screenNavigator(context, ForgotPasswordScreen());
                         },
                         child: Text(
                           'Forgot password',
-                          textScaleFactor: 1.0,
-                          style: GoogleFonts.montserrat(
-                            textStyle:
-                                TextStyle(color: Colors.blue, fontSize: 12.sp),
-                          ),
+                          style: TextStyle(color: Colors.blue, fontSize: 12.sp),
                         ),
                       ),
                     ],
@@ -220,31 +153,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   Spacer(),
 
                   CustomButtonWidget(
+                      isValid: context
+                          .watch<IssigninvalidCubit>()
+                          .state
+                          .issigninValid,
                       buttonTitle: 'Sign In',
-                      btnColor: isFormValid ? primaryColor : seconderyColor,
                       onBtnPress: () {
-                        // isFormValid
-                        //     ?
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            transitionDuration:
-                                const Duration(milliseconds: 500),
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    const Home(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return SlideTransition(
-                                position: Tween<Offset>(
-                                        begin: const Offset(1, 0),
-                                        end: Offset.zero)
-                                    .animate(animation),
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                        // : null;
+                        screenNavigator(context, Home());
                       }),
                   SizedBox(
                     height: 30.h,
