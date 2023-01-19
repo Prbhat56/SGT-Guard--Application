@@ -108,4 +108,29 @@ class CustomTheme {
       ),
     ],
   );
+
+  static textfieldDecoration(String hintText, bool isfilled) {
+    return InputDecoration(
+      contentPadding: isfilled
+          ? EdgeInsets.only(top: 0, bottom: 0, left: 10)
+          : EdgeInsets.all(10),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: seconderyMediumColor)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: primaryColor)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: seconderyMediumColor)),
+      disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: seconderyMediumColor)),
+      filled: isfilled,
+      fillColor: seconderyMediumColor,
+      hintText: hintText,
+      hintStyle: TextStyle(color: Colors.grey),
+      focusColor: primaryColor,
+    );
+  }
 }

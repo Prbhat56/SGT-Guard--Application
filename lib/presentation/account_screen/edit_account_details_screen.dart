@@ -260,7 +260,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'Name',
+                      textfieldTitle: 'Name',
                       hintText: 'Jenny Doe',
                       readonly: true,
                     ),
@@ -268,7 +268,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'Email',
+                      textfieldTitle: 'Email',
                       hintText: 'johndoe@mail.com',
                       readonly: true,
                     ),
@@ -276,7 +276,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'Phone',
+                      textfieldTitle: 'Phone',
                       hintText: '(808)628 8343',
                       readonly: true,
                     ),
@@ -291,28 +291,28 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'Street',
+                      textfieldTitle: 'Street',
                       hintText: 'Sample Street',
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'City',
+                      textfieldTitle: 'City',
                       hintText: 'Los Angeles',
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'State',
+                      textfieldTitle: 'State',
                       hintText: 'CA',
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfielsTitle: 'Zipcode',
+                      textfieldTitle: 'Zipcode',
                       hintText: '90045',
                     ),
                     SizedBox(

@@ -57,7 +57,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 40,
             ),
             CustomUnderlineTextFieldWidget(
-                textfielsTitle: 'Email',
+                textfieldTitle: 'Email',
                 hintText: "Enter Email",
                 controller: emailController,
                 onChanged: (value) {

@@ -15,7 +15,6 @@ import '../../utils/const.dart';
 import '../property_details_screen/widgets/property_media_preview_screen.dart';
 import '../property_details_screen/widgets/show_property_images_widget.dart';
 import '../widgets/dotted_choose_file_widget.dart';
-import 'widget/success_popup.dart';
 import 'package:path/path.dart' as path;
 
 import 'widget/tasks_list_widget.dart';

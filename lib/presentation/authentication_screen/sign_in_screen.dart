@@ -90,7 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 30.h,
                   ),
                   CustomUnderlineTextFieldWidget(
-                    textfielsTitle: 'Email',
+                    textfieldTitle: 'Email',
                     hintText: 'Enter Email',
                     controller: _emailController,
                     onChanged: (value) {
@@ -128,7 +128,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 24.h,
                   ),
                   CustomUnderlineTextFieldWidget(
-                    textfielsTitle: 'Password',
+                    textfieldTitle: 'Password',
                     hintText: 'Enter Password',
                     controller: _passwordController,
                     obscureText: context.watch<ObscureCubit>().state.isObscure,

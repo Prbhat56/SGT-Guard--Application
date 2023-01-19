@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
-import 'package:sgt/presentation/work_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/maintenance_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/parking_report_screen.dart';

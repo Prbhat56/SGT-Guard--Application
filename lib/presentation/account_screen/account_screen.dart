@@ -41,7 +41,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'Name',
+                  textfieldTitle: 'Name',
                   hintText: 'Jenny Doe',
                   readonly: true,
                 ),
@@ -49,7 +49,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'Email',
+                  textfieldTitle: 'Email',
                   hintText: 'johndoe@mail.com',
                   readonly: true,
                 ),
@@ -57,7 +57,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'Phone',
+                  textfieldTitle: 'Phone',
                   hintText: '(808)628 8343',
                   readonly: true,
                 ),
@@ -72,7 +72,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'Street',
+                  textfieldTitle: 'Street',
                   hintText: 'Sample Street',
                   readonly: true,
                 ),
@@ -80,7 +80,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'City',
+                  textfieldTitle: 'City',
                   hintText: 'Los Angeles',
                   readonly: true,
                 ),
@@ -88,7 +88,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'State',
+                  textfieldTitle: 'State',
                   hintText: 'CA',
                   readonly: true,
                 ),
@@ -96,7 +96,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
-                  textfielsTitle: 'Zipcode',
+                  textfieldTitle: 'Zipcode',
                   hintText: '90045',
                   readonly: true,
                 ),

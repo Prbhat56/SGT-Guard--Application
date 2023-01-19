@@ -55,7 +55,7 @@ class _ChangePasswordAfterForgotScreenState
               height: 30.h,
             ),
             CustomUnderlineTextFieldWidget(
-              textfielsTitle: 'New Password',
+              textfieldTitle: 'New Password',
               hintText: 'Enter Password',
               controller: _newpasswordController,
               suffixIcon: IconButton(
@@ -90,7 +90,7 @@ class _ChangePasswordAfterForgotScreenState
               height: 30.h,
             ),
             CustomUnderlineTextFieldWidget(
-              textfielsTitle: 'Re-Enter New Password',
+              textfieldTitle: 'Re-Enter New Password',
               hintText: 'Enter password',
               controller: _reenteredpasswordController,
               suffixIcon: IconButton(

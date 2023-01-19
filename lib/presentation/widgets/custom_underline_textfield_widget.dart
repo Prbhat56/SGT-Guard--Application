@@ -6,14 +6,14 @@ import '../../utils/const.dart';
 class CustomUnderlineTextFieldWidget extends StatelessWidget {
   CustomUnderlineTextFieldWidget(
       {super.key,
-      required this.textfielsTitle,
+      required this.textfieldTitle,
       required this.hintText,
       this.obscureText = false,
       this.readonly = false,
       this.onChanged,
       this.suffixIcon,
       this.controller});
-  final String textfielsTitle;
+  final String textfieldTitle;
   final String hintText;
   TextEditingController? controller;
   final bool obscureText;
@@ -22,29 +22,32 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
   bool? readonly;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          textfielsTitle,
-          style: CustomTheme.textField_Headertext_Style,
-          textScaleFactor: 1.0,
-        ),
-        TextFormField(
-          readOnly: readonly!,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-            hintText: hintText,
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: seconderyColor)),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: primaryColor)),
-            hintStyle: const TextStyle(color: Colors.grey),
-            focusColor: primaryColor,
-            suffixIcon: suffixIcon,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            textfieldTitle,
+            style: CustomTheme.textField_Headertext_Style,
+            textScaleFactor: 1.0,
           ),
-        ),
-      ],
+          TextFormField(
+            readOnly: readonly!,
+            obscureText: obscureText,
+            decoration: InputDecoration(
+              hintText: hintText,
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: seconderyColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: primaryColor)),
+              hintStyle: const TextStyle(color: Colors.grey),
+              focusColor: primaryColor,
+              suffixIcon: suffixIcon,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
