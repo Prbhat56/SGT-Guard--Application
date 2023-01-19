@@ -125,7 +125,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       context.read<IssigninvalidCubit>().checkSignIn(context
                               .read<EmailCheckerCubit>()
                               .state
-                              .isemailValid ||
+                              .isemailValid &&
                           context.read<PasswordCheckerCubit>().state.password);
                     },
                   ),
@@ -159,7 +159,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           .issigninValid,
                       buttonTitle: 'Sign In',
                       onBtnPress: () {
-                        screenNavigator(context, Home());
+                        context.watch<IssigninvalidCubit>().state.issigninValid
+                            ? screenNavigator(context, Home())
+                            : null;
                       }),
                   SizedBox(
                     height: 30.h,

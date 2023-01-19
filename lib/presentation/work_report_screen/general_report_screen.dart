@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/work_report_screen/widget/success_popup.dart';
@@ -16,6 +17,7 @@ import '../widgets/custom_bottom_model_sheet.dart';
 import '../widgets/custom_textfield_widget.dart';
 import '../widgets/dotted_choose_file_widget.dart';
 import '../widgets/media_uploading_widget.dart';
+import 'widget/report_submit_success.dart';
 
 class GeneralReportScreen extends StatefulWidget {
   const GeneralReportScreen({super.key});
@@ -139,7 +141,10 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
               Container(
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: CustomButtonWidget(
-                      buttonTitle: 'Send', onBtnPress: () {}))
+                      buttonTitle: 'Send',
+                      onBtnPress: () {
+                        screenNavigator(context, ReportSubmitSuccess());
+                      }))
             ],
           ),
         )),

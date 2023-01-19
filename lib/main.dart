@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
@@ -108,24 +109,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void startTimer() {
     Timer(const Duration(seconds: 1), () {
-      navigateUser(); //It will redirect  after 1 seconds
+      screenReplaceNavigator(
+          context, OnboardingScreen()); //It will redirect  after 1 seconds
     });
-  }
-
-  void navigateUser() async {
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const OnboardingScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SlideTransition(
-            position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
-                .animate(animation),
-            child: child,
-          );
-        },
-      ),
-    );
   }
 }

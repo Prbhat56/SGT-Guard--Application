@@ -9,13 +9,14 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.isFilled,
     this.maxLines = 1,
+    this.isSearching = false,
   });
   final String textfieldTitle;
   final String hintText;
   TextEditingController? controller;
   final bool isFilled;
   int? maxLines;
-
+  bool? isSearching;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,7 +35,8 @@ class CustomTextField extends StatelessWidget {
           TextFormField(
             controller: controller,
             maxLines: maxLines,
-            decoration: CustomTheme.textfieldDecoration(hintText, isFilled),
+            decoration: CustomTheme.textfieldDecoration(
+                hintText, isFilled, isSearching!),
           ),
         ],
       ),

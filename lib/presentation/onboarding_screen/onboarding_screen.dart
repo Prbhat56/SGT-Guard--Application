@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/onboarding_screen/widgets/build_pages.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -65,9 +66,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-            // SizedBox(
-            //   height: 16.h,
-            // ),
             Center(
               child: SmoothPageIndicator(
                 controller: pagecontroller,
@@ -87,18 +85,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             SizedBox(
-              height: 63.h,
+              height: 88.h,
             ),
             isLastPage
                 ? CustomButtonWidget(
                     buttonTitle: 'Get Started',
                     onBtnPress: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignInScreen(),
-                        ),
-                      );
+                      screenReplaceNavigator(context, SignInScreen());
                     })
                 : InkWell(
                     onTap: () {
@@ -115,68 +108,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
           ],
         ),
-        // bottomSheet: Container(
-        //   color: Colors.white,
-        //   padding: const EdgeInsets.symmetric(horizontal: 10),
-        //   height: 120.h,
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     crossAxisAlignment: CrossAxisAlignment.center,
-        //     children: [
-        //       Center(
-        //         child: SmoothPageIndicator(
-        //           controller: pagecontroller,
-        //           count: 3,
-        //           onDotClicked: (index) => pagecontroller.animateToPage(
-        //             index,
-        //             duration: const Duration(milliseconds: 500),
-        //             curve: Curves.easeInOut,
-        //           ),
-        //           effect: WormEffect(
-        //             dotHeight: 10,
-        //             dotWidth: 10,
-        //             spacing: 16,
-        //             dotColor: Colors.grey,
-        //             activeDotColor: primaryColor,
-        //           ),
-        //         ),
-        //       ),
-        //       SizedBox(
-        //         height: 15.h,
-        //       ),
-        //       isLastPage
-        //           ? InkWell(
-        //               onTap: () {
-        //                 Navigator.pushReplacement(
-        //                   context,
-        //                   MaterialPageRoute(
-        //                     builder: (context) => SignInScreen(),
-        //                   ),
-        //                 );
-        //               },
-        //               child: Center(
-        //                   child: Text(
-        //                 'Get Started',
-        //                 style: TextStyle(fontSize: 25.sp, color: Colors.grey),
-        //               )),
-        //             )
-        //           : InkWell(
-        //               onTap: () {
-        //                 pagecontroller.nextPage(
-        //                     duration: const Duration(milliseconds: 500),
-        //                     curve: Curves.easeInOut);
-        //               },
-        //               child: Center(
-        //                 child: Text(
-        //                   'Next',
-        //                   style: TextStyle(fontSize: 20, color: Colors.grey),
-        //                 ),
-        //               ),
-        //             ),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }

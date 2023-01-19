@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
+import '../../helper/navigator_function.dart';
 import '../../utils/const.dart';
 import '../widgets/custom_bottom_model_sheet.dart';
 import '../widgets/custom_button_widget.dart';
@@ -11,6 +12,7 @@ import '../widgets/custom_textfield_widget.dart';
 import '../widgets/dotted_choose_file_widget.dart';
 import '../widgets/media_uploading_widget.dart';
 import 'widget/drop_down_widget.dart';
+import 'widget/report_submit_success.dart';
 
 class ParkingReportScreen extends StatefulWidget {
   const ParkingReportScreen({super.key});
@@ -154,8 +156,11 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
             ),
             Container(
                 margin: EdgeInsets.symmetric(vertical: 30),
-                child:
-                    CustomButtonWidget(buttonTitle: 'Send', onBtnPress: () {}))
+                child: CustomButtonWidget(
+                    buttonTitle: 'Send',
+                    onBtnPress: () {
+                      screenNavigator(context, ReportSubmitSuccess());
+                    }))
           ],
         )),
       ),

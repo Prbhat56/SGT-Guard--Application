@@ -9,7 +9,10 @@ import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emer
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/maintenance_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/parking_report_screen.dart';
+import '../../helper/navigator_function.dart';
+import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
+import 'widget/report_submit_success.dart';
 
 class WorkReportScreen extends StatefulWidget {
   const WorkReportScreen({super.key});
@@ -35,11 +38,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               Text(
                 'Select report type below',
-                style: TextStyle(
-                  color: primaryColor,
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: CustomTheme.blueTextStyle(17, FontWeight.bold),
                 textScaleFactor: 1.0,
               ),
               SizedBox(
@@ -47,9 +46,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const GeneralReportScreen();
-                  }));
+                  screenNavigator(context, GeneralReportScreen());
+
                   context.read<ReportTypeCubit>().clickGreport();
                 },
                 child: Container(
@@ -75,9 +73,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const MaintenanceReportScreen();
-                  }));
+                  screenNavigator(context, MaintenanceReportScreen());
+
                   context.read<ReportTypeCubit>().clickMreport();
                 },
                 child: Container(
@@ -102,9 +99,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const ParkingReportScreen();
-                  }));
+                  screenNavigator(context, ParkingReportScreen());
+
                   context.read<ReportTypeCubit>().clickPreport();
                 },
                 child: Container(
@@ -129,9 +125,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const EmergencyReportScreen();
-                  }));
+                  screenNavigator(context, EmergencyReportScreen());
+
                   context.read<ReportTypeCubit>().clickEreport();
                 },
                 child: Container(
@@ -176,12 +171,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                       style: TextStyle(fontSize: 20),
                       textScaleFactor: 1.0,
                     ),
-                    onPressed: () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return const Home();
-                      // }));
-                    }),
+                    onPressed: () {}),
               ),
             ),
           ],

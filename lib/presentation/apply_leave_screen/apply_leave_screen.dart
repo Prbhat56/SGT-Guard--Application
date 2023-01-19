@@ -2,8 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/utils/const.dart';
+import '../../theme/custom_theme.dart';
+import '../widgets/custom_button_widget.dart';
+import 'apply_leave_screen2.dart';
+import 'widgets/choose_date_widget.dart';
 import 'widgets/custom_calender.dart';
 
 class ApplyLeaveScreen extends StatefulWidget {
@@ -30,59 +35,29 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
-                Text(
-                  'Leave From',
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
-                    ),
-                  ),
+                Text('Leave From',
+                    style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
+                SizedBox(
+                  height: 15,
                 ),
                 SizedBox(
                   height: 6,
                 ),
                 InkWell(
-                  onTap: () {
-                    setState(() {
-                      leaveFromclicked = !leaveFromclicked;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                    decoration: BoxDecoration(
-                        color: seconderyColor.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(6)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Choose Date',
-                          style: TextStyle(color: primaryColor, fontSize: 12),
-                        ),
-                        Icon(
-                          Icons.expand_more,
-                          color: primaryColor,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                    onTap: () {
+                      setState(() {
+                        leaveFromclicked = !leaveFromclicked;
+                      });
+                    },
+                    child: ChooseDateWidget()),
                 SizedBox(
-                  height: 6,
+                  height: 25,
                 ),
                 leaveFromclicked ? CustomCalenderWidget() : Container(),
-                Text(
-                  'To',
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+                Text('To',
+                    style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
                 SizedBox(
-                  height: 6,
+                  height: 15,
                 ),
                 InkWell(
                   onTap: () {
@@ -90,25 +65,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                       leaveToclicked = !leaveToclicked;
                     });
                   },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                    decoration: BoxDecoration(
-                        color: seconderyColor.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(6)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Choose Date',
-                          style: TextStyle(color: primaryColor, fontSize: 12),
-                        ),
-                        Icon(
-                          Icons.expand_more,
-                          color: primaryColor,
-                        )
-                      ],
-                    ),
-                  ),
+                  child: ChooseDateWidget(),
                 ),
                 leaveToclicked ? CustomCalenderWidget() : Container(),
                 SizedBox(
@@ -126,159 +83,47 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 8, right: 6),
-                        height: 3,
-                        width: 3,
-                        color: black,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                            ),
+                Container(
+                  height: 52 * 5,
+                  child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 8, right: 6),
+                                height: 3,
+                                width: 3,
+                                color: black,
+                              ),
+                              SizedBox(
+                                width: 300,
+                                child: Text(
+                                  'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 8, right: 6),
-                        height: 3,
-                        width: 3,
-                        color: black,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 8, right: 6),
-                        height: 3,
-                        width: 3,
-                        color: black,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 8, right: 6),
-                        height: 3,
-                        width: 3,
-                        color: black,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 8, right: 6),
-                        height: 3,
-                        width: 3,
-                        color: black,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                      }),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 120,
                 ),
-                Center(
-                  child: CupertinoButton(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 126.w, vertical: 15),
-                    color: primaryColor,
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    onPressed: () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return const VerificationScreen();
-                      // }));
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                CustomButtonWidget(
+                    buttonTitle: 'Continue',
+                    onBtnPress: () {
+                      screenNavigator(context, ApplyLeaveScreen2());
+                    }),
               ],
             ),
           ),

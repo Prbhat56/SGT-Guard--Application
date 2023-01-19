@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
-import '../../utils/const.dart';
+import '../../theme/custom_theme.dart';
 
 class PasswordChangeSuccessScreen extends StatefulWidget {
   const PasswordChangeSuccessScreen({super.key});
@@ -15,6 +17,14 @@ class PasswordChangeSuccessScreen extends StatefulWidget {
 
 class _PasswordChangeSuccessScreenState
     extends State<PasswordChangeSuccessScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 2), () {
+      Navigator.pop(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -38,11 +48,7 @@ class _PasswordChangeSuccessScreenState
                   child: Text(
                     "Password Changed\nSuccessfully!",
                     textAlign: TextAlign.center,
-                    textScaleFactor: 1.0,
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w500),
+                    style: CustomTheme.blueTextStyle(25, FontWeight.w500),
                   ),
                 ),
                 Spacer(),
@@ -59,10 +65,7 @@ class _PasswordChangeSuccessScreenState
                 CustomButtonWidget(
                   buttonTitle: 'Back To Log In',
                   onBtnPress: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const SignInScreen();
-                    }));
+                    screenReplaceNavigator(context, SignInScreen());
                   },
                 ),
                 SizedBox(

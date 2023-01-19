@@ -9,6 +9,7 @@ import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
 import '../../apply_leave_screen/apply_leave_screen.dart';
 import '../../authentication_screen/change_password_screen.dart';
+import '../../work_report_screen/your_report_screen/your_report_screen.dart';
 import '../languages_screen.dart';
 import '../privacy_policy_screen.dart';
 import '../terms_&_Condition_screen.dart';
@@ -42,7 +43,7 @@ List<SettingsOptionModel> settingsOptionlist = [
   SettingsOptionModel(
       optionTitle: 'Reports',
       imageWidget: Image.asset('assets/leave.png'),
-      widget: WorkReportScreen()),
+      widget: YourReportScreen()),
   SettingsOptionModel(
       optionTitle: 'Change Password',
       imageWidget: SvgPicture.asset('assets/lock.svg'),
@@ -107,7 +108,7 @@ class SettingsOptions extends StatelessWidget {
                           Center(child: settingsOptionlist[index].imageWidget)),
                   title: Text(
                     settingsOptionlist[index].optionTitle,
-                    style: CustomTheme.blackTextStyle(15),
+                    style: CustomTheme.blackTextStyle(17),
                   ),
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),

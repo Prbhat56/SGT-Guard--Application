@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/authentication_screen/change_password_screen.dart';
-import 'package:sgt/presentation/settings_screen/languages_screen.dart';
-import 'package:sgt/presentation/settings_screen/privacy_policy_screen.dart';
-import 'package:sgt/presentation/settings_screen/terms_&_Condition_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
-import '../apply_leave_screen/apply_leave_screen.dart';
 import 'cubit/toggle_switch/toggleswitch_cubit.dart';
-import '../account_screen/edit_account_details_screen.dart';
 import 'widgets/settings_option_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -46,13 +36,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: EdgeInsets.only(left: 10.0),
                 child: Text(
                   'Account',
-                  style: CustomTheme.blueTextStyle(15, FontWeight.bold),
+                  style: CustomTheme.blueTextStyle(17, FontWeight.bold),
                 ),
               ),
               SizedBox(
                 height: 20.h,
               ),
-              SettingsOptions(),//settings option screens
+              SettingsOptions(), //settings option screens
               SizedBox(
                 height: 20.h,
               ),
@@ -60,11 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Text(
                   'Notification Alert ',
-                  style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                          fontSize: 15.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold)),
+                  style: CustomTheme.blueTextStyle(17, FontWeight.bold),
                 ),
               ),
               Container(
@@ -103,13 +89,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Divider(
-                  height: 30.h,
-                  color: Colors.grey,
                 ),
               ),
             ]),
