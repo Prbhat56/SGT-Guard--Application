@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:sgt/presentation/work_report_screen/submit_report_screen.dart';
+import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
 import '../../utils/const.dart';
 import '../clocked_in_out_screen/clock_in_screen.dart';
+import '../widgets/custom_appbar_widget.dart';
 
 class CheckPointScanningScreen extends StatefulWidget {
   const CheckPointScanningScreen({super.key});
@@ -21,20 +23,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
   Barcode? result;
 
   void navigateUser() async {
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const ClockInScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SlideTransition(
-            position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
-                .animate(animation),
-            child: child,
-          );
-        },
-      ),
-    );
+    screenReplaceNavigator(context, ClockInScreen());
   }
 
   @override
@@ -60,61 +49,37 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
   @override
   Widget build(BuildContext context) {
     return result != null
-        ? SubmitReportScreen()
+        ? CheckpointReportScreen()
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                centerTitle: true,
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: primaryColor,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                title: Text('QR Scan', style: TextStyle(color: primaryColor)),
-              ),
+              appBar: CustomAppBarWidget(appbarTitle: 'QR Scan'),
               backgroundColor: white,
               body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 80),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 69,
-                      ),
-                      const Text(
-                        'Check in',
-                        style: TextStyle(
-                            fontSize: 40, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'Scan QR code to view\n checkpoint details ',
-                          textScaleFactor: 1.0,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 17, color: Colors.grey),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 88,
-                      ),
-                      SizedBox(
-                        height: 242,
-                        width: 242,
-                        child: buildQrView(context),
-                      )
-                    ]),
+                child: Column(children: [
+                  SizedBox(
+                    height: 69,
+                  ),
+                  const Text(
+                    'Check in',
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Scan QR code\n to clock in!',
+                      textScaleFactor: 1.0,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 17, color: Colors.grey),
+                    ),
+                  ),
+                  SizedBox(height: 88),
+                  SizedBox(height: 242, width: 242, child: buildQrView(context))
+                ]),
               ),
             ),
           );

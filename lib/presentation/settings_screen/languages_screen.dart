@@ -39,47 +39,47 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
             SizedBox(
               height: 10.h,
             ),
-            CustomTextField(
-              textfieldTitle: '',
-              hintText: 'Search Langauge ',
-              isFilled: true,
-              isSearching: true,
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(vertical: 10),
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       enabledBorder: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10),
-            //           borderSide: BorderSide(color: seconderyMediumColor)),
-            //       focusedBorder: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10),
-            //           borderSide: BorderSide(color: primaryColor)),
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10),
-            //           borderSide: BorderSide(color: seconderyMediumColor)),
-            //       disabledBorder: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10),
-            //           borderSide: BorderSide(color: seconderyMediumColor)),
-            //       filled: true,
-            //       fillColor: CustomTheme.seconderyLightColor,
-            //       isDense: true,
-            //       contentPadding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-            //       prefixIcon: IconButton(
-            //         onPressed: () {},
-            //         icon: Icon(
-            //           Icons.search,
-            //           size: 25,
-            //           color: CustomTheme.primaryColor,
-            //         ),
-            //       ),
-            //       hintStyle: TextStyle(
-            //         color: CustomTheme.primaryColor,
-            //       ),
-            //       hintText: 'Search Langauge ',
-            //     ),
-            //   ),
+            // CustomTextField(
+            //   textfieldTitle: '',
+            //   hintText: 'Search Langauge ',
+            //   isFilled: true,
+            //   isSearching: true,
             // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: primaryColor)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: seconderyMediumColor)),
+                  filled: true,
+                  fillColor: CustomTheme.seconderyLightColor,
+                  isDense: true,
+                  contentPadding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                  prefixIcon: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.search,
+                      size: 25,
+                      color: CustomTheme.primaryColor,
+                    ),
+                  ),
+                  hintStyle: TextStyle(
+                    color: CustomTheme.primaryColor,
+                  ),
+                  hintText: 'Search Langauge ',
+                ),
+              ),
+            ),
             SizedBox(
               height: 20.h,
             ),

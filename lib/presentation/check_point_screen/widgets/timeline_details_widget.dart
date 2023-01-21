@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/work_report_screen/submit_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
+
+import '../../qr_screen/chack_points_scanning_screen.dart';
 
 class TimeLineDetailsWidget extends StatelessWidget {
   const TimeLineDetailsWidget({super.key});
@@ -19,7 +21,7 @@ class TimeLineDetailsWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                screenNavigator(context, SubmitReportScreen());
+                screenNavigator(context, CheckPointScanningScreen());
               },
               child: Column(
                 children: [

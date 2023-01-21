@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
-import 'package:sgt/presentation/work_report_screen/widget/success_popup.dart';
+import 'package:sgt/presentation/work_report_screen/widget/check_point_sccess.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
 import 'dart:io';

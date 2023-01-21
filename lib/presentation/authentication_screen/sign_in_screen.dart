@@ -152,17 +152,23 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   Spacer(),
 
-                  CustomButtonWidget(
-                      isValid: context
-                          .watch<IssigninvalidCubit>()
-                          .state
-                          .issigninValid,
-                      buttonTitle: 'Sign In',
-                      onBtnPress: () {
-                        context.watch<IssigninvalidCubit>().state.issigninValid
-                            ? screenNavigator(context, Home())
-                            : null;
-                      }),
+                  context.watch<IssigninvalidCubit>().state.issigninValid
+                      ? CustomButtonWidget(
+                          isValid: context
+                              .watch<IssigninvalidCubit>()
+                              .state
+                              .issigninValid,
+                          buttonTitle: 'Sign In',
+                          onBtnPress: () {
+                            screenNavigator(context, Home());
+                          })
+                      : CustomButtonWidget(
+                          isValid: context
+                              .watch<IssigninvalidCubit>()
+                              .state
+                              .issigninValid,
+                          buttonTitle: 'Sign In',
+                          onBtnPress: () {}),
                   SizedBox(
                     height: 30.h,
                   ),

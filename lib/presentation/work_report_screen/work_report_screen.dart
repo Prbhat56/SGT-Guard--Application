@@ -74,7 +74,6 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               InkWell(
                 onTap: () {
                   screenNavigator(context, MaintenanceReportScreen());
-
                   context.read<ReportTypeCubit>().clickMreport();
                 },
                 child: Container(

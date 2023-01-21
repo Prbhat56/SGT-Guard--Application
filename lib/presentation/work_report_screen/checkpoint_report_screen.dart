@@ -1,32 +1,28 @@
-import 'dart:io';
-
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import 'package:sgt/presentation/widgets/custom_textfield_widget.dart';
 import 'package:sgt/presentation/widgets/media_uploading_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import '../../utils/const.dart';
-import '../property_details_screen/widgets/property_media_preview_screen.dart';
 import '../property_details_screen/widgets/show_property_images_widget.dart';
 import '../widgets/dotted_choose_file_widget.dart';
 import 'package:path/path.dart' as path;
-
+import 'widget/check_point_sccess.dart';
 import 'widget/tasks_list_widget.dart';
 
-class SubmitReportScreen extends StatefulWidget {
-  const SubmitReportScreen({super.key});
+class CheckpointReportScreen extends StatefulWidget {
+  const CheckpointReportScreen({super.key});
 
   @override
-  State<SubmitReportScreen> createState() => _SubmitReportScreenState();
+  State<CheckpointReportScreen> createState() => _CheckpointReportScreenState();
 }
 
-class _SubmitReportScreenState extends State<SubmitReportScreen> {
+class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
   List imageNames = [];
@@ -105,20 +101,13 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
+                    CustomTextField(
+                      textfieldTitle: '',
+                      hintText: 'Something here',
+                      isFilled: false,
+                      maxLines: 5,
                     ),
-                    TextFormField(
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: grey),
-                        ),
-                        hintText: 'Something here',
-                        hintStyle: TextStyle(color: grey),
-                        focusColor: primaryColor,
-                      ),
-                    ),
+
                     const SizedBox(
                       height: 20,
                     ),
@@ -180,7 +169,11 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
                   ],
                 ),
               ),
-              CustomButtonWidget(buttonTitle: 'Send', onBtnPress: () {}),
+              CustomButtonWidget(
+                  buttonTitle: 'Send',
+                  onBtnPress: () {
+                    screenNavigator(context, CheckPointCompleteSuccess());
+                  }),
               const SizedBox(
                 height: 30,
               ),
