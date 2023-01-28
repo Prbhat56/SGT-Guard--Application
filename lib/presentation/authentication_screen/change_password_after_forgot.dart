@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,8 +54,11 @@ class _ChangePasswordAfterForgotScreenState
               height: 30.h,
             ),
             CustomUnderlineTextFieldWidget(
+              bottomPadding: 7,
               textfieldTitle: 'New Password',
               hintText: 'Enter Password',
+              obscureText:
+                  context.read<ObscureCubit>().state.newpasswordObscure,
               controller: _newpasswordController,
               suffixIcon: IconButton(
                 onPressed: () {
@@ -90,9 +92,11 @@ class _ChangePasswordAfterForgotScreenState
               height: 30.h,
             ),
             CustomUnderlineTextFieldWidget(
+              bottomPadding: 7,
               textfieldTitle: 'Re-Enter New Password',
               hintText: 'Enter password',
               controller: _reenteredpasswordController,
+              obscureText: context.watch<ObscureCubit>().state.isObscure,
               suffixIcon: IconButton(
                 onPressed: () {
                   context.read<ObscureCubit>().changeVisibility();

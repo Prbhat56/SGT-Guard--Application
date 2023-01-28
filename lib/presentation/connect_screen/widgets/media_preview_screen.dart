@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
+import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
+import 'delete_dialog.dart';
 import 'share_to_connect_screen.dart';
 
 class MediaPreviewScreen extends StatefulWidget {
@@ -91,106 +94,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12.0))),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    'Delete media?',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Text(
-                                      'Are you sure you want to delete this media?',
-                                      textAlign: TextAlign.center,
-                                      textScaleFactor: 1.0,
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.grey),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Divider(
-                                    height: 0,
-                                    color: Colors.grey,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 15),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            color: white,
-                                            border:
-                                                Border.all(color: primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              'Cencel',
-                                              textScaleFactor: 1.0,
-                                              style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontSize: 15),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 70,
-                                        ),
-                                        Container(
-                                          height: 40,
-                                          width: 1,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 65,
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            color: primaryColor,
-                                            border:
-                                                Border.all(color: primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              'Delete',
-                                              textScaleFactor: 1.0,
-                                              style: TextStyle(
-                                                  color: white, fontSize: 15),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
+                            return DeleteDialog();
                           });
                     },
                     child: Container(
@@ -200,12 +104,15 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                         children: [
                           Icon(
                             Icons.delete_outline,
-                            color: Colors.grey,
+                            color: CustomTheme.primaryColor,
                           ),
                           SizedBox(
                             width: 10,
                           ),
-                          Text("Delete", style: TextStyle(color: Colors.grey)),
+                          Text("Delete",
+                              style: TextStyle(
+                                color: CustomTheme.primaryColor,
+                              )),
                         ],
                       ),
                     ),
@@ -214,28 +121,13 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                   height: 0,
                   child: Divider(
                     height: 0,
-                    color: Colors.grey,
+                    color: CustomTheme.primaryColor,
                   )),
               PopupMenuItem(
                 height: 40,
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const ShareToConnection(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                                    begin: const Offset(1, 0), end: Offset.zero)
-                                .animate(animation),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
+                    screenNavigator(context, ShareToConnection());
                   },
                   child: Container(
                     height: 20,
@@ -244,12 +136,15 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                       children: [
                         Icon(
                           Icons.upload_outlined,
-                          color: Colors.grey,
+                          color: CustomTheme.primaryColor,
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Text("Share", style: TextStyle(color: Colors.grey)),
+                        Text("Share",
+                            style: TextStyle(
+                              color: CustomTheme.primaryColor,
+                            )),
                       ],
                     ),
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/theme/custom_theme.dart';
 
 import '../../../utils/const.dart';
 
@@ -17,24 +19,9 @@ class _ShareToConnectionState extends State<ShareToConnection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: selectedChatTile.isNotEmpty
-          ? AppBar(
-              elevation: 0,
-              leadingWidth: 10,
-              backgroundColor: white,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: black,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: Text(
-                '${selectedChatTile.length} Selected',
-                style: TextStyle(color: black),
-              ),
-              actions: [
+          ? CustomAppBarWidget(
+              appbarTitle: '${selectedChatTile.length} Selected',
+              widgets: [
                 IconButton(
                     onPressed: () {
                       // setState(() {
@@ -43,29 +30,14 @@ class _ShareToConnectionState extends State<ShareToConnection> {
                     },
                     icon: Icon(
                       Icons.search,
-                      color: black,
+                      color: CustomTheme.primaryColor,
                       size: 25,
                     ))
               ],
             )
-          : AppBar(
-              elevation: 0,
-              leadingWidth: 10,
-              backgroundColor: white,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: black,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: Text(
-                'Share to..',
-                style: TextStyle(color: black),
-              ),
-              actions: [
+          : CustomAppBarWidget(
+              appbarTitle: 'Share to',
+              widgets: [
                 IconButton(
                     onPressed: () {
                       // setState(() {
@@ -74,7 +46,7 @@ class _ShareToConnectionState extends State<ShareToConnection> {
                     },
                     icon: Icon(
                       Icons.search,
-                      color: black,
+                      color: CustomTheme.primaryColor,
                       size: 25,
                     ))
               ],

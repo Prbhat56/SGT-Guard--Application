@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/guard_tools_screen/widgets/missed_shift_details.dart';
+import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/time_sheet_screen/widget/missed_shift_details.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/time_sheet_model.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import '../../utils/const.dart';
 
 class MissedShiftScreen extends StatelessWidget {
@@ -11,25 +13,7 @@ class MissedShiftScreen extends StatelessWidget {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: black,
-            ),
-          ),
-          elevation: 1,
-          shadowColor: seconderyColor,
-          centerTitle: true,
-          title: Text(
-            'Missed Shifts',
-            style: TextStyle(color: black),
-          ),
-        ),
+        appBar: CustomAppBarWidget(appbarTitle: 'Missed Shifts'),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -46,10 +30,8 @@ class MissedShiftScreen extends StatelessWidget {
                         children: [
                           ListTile(
                             onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return MissedShiftDetailsScreen();
-                              }));
+                              screenNavigator(
+                                  context, MissedShiftDetailsScreen());
                             },
                             contentPadding: const EdgeInsets.only(
                                 left: 10, right: 10, top: 10, bottom: 0),

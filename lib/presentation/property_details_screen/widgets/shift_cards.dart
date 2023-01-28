@@ -21,7 +21,9 @@ List<ShiftCardModel> shiftCardsData = [
 ];
 
 class ShiftCards extends StatelessWidget {
-  const ShiftCards({super.key});
+  const ShiftCards({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

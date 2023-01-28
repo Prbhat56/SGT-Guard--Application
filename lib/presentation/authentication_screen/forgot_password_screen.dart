@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:sgt/presentation/authentication_screen/change_password_screen.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import '../../utils/const.dart';
 import 'package:sgt/helper/validator.dart';
-
 import '../widgets/custom_underline_textfield_widget.dart';
 import 'change_password_after_forgot.dart';
 
@@ -57,6 +54,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 40,
             ),
             CustomUnderlineTextFieldWidget(
+                bottomPadding: 7,
                 textfieldTitle: 'Email',
                 hintText: "Enter Email",
                 controller: emailController,
@@ -97,9 +95,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 buttonTitle: 'Send',
                 btnColor: isValid ? primaryColor : seconderyColor,
                 onBtnPress: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const ChangePasswordAfterForgotScreen();
-                  }));
+                  screenNavigator(context, ChangePasswordAfterForgotScreen());
                   // isValid
                   //     ? Navigator.push(context,
                   //         MaterialPageRoute(builder: (context) {

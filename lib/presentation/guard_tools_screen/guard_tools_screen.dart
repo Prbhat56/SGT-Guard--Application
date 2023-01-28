@@ -137,7 +137,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -172,7 +171,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -207,7 +205,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -242,7 +239,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -277,7 +273,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -312,7 +307,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -347,7 +341,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -382,36 +375,6 @@ class GuardToolScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // SizedBox(
-                  //   height: 15,
-                  // ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     Navigator.push(context,
-                  //         MaterialPageRoute(builder: (context) {
-                  //       return const NotificationScreen();
-                  //     }));
-                  //   },
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       SvgPicture.asset(
-                  //         'assets/message_notification.svg',
-                  //         width: 17,
-                  //       ),
-                  //       SizedBox(
-                  //         width: 15,
-                  //       ),
-                  //       Text(
-                  //         'Message Notification',
-                  //         style: TextStyle(
-                  //           fontSize: 17,
-                  //           color: primaryColor,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
             )
