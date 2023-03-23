@@ -78,16 +78,19 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'Name',
                       hintText: 'Jenny Doe',
                       readonly: true,
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'Email',
                       hintText: 'johndoe@mail.com',
                       readonly: true,
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'Phone',
                       hintText: '(808)628 8343',
                       readonly: true,
@@ -100,18 +103,22 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'Street',
                       hintText: 'Sample Street',
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'City',
                       hintText: 'Los Angeles',
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'State',
                       hintText: 'CA',
                     ),
                     CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
                       textfieldTitle: 'Zipcode',
                       hintText: '90045',
                     ),

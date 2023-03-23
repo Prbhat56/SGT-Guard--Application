@@ -41,6 +41,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'Name',
                   hintText: 'Jenny Doe',
                   readonly: true,
@@ -49,6 +50,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'Email',
                   hintText: 'johndoe@mail.com',
                   readonly: true,
@@ -57,6 +59,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'Phone',
                   hintText: '(808)628 8343',
                   readonly: true,
@@ -72,6 +75,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'Street',
                   hintText: 'Sample Street',
                   readonly: true,
@@ -80,6 +84,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'City',
                   hintText: 'Los Angeles',
                   readonly: true,
@@ -88,6 +93,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'State',
                   hintText: 'CA',
                   readonly: true,
@@ -96,6 +102,7 @@ class AccountScreen extends StatelessWidget {
                   height: 20,
                 ),
                 CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
                   textfieldTitle: 'Zipcode',
                   hintText: '90045',
                   readonly: true,
