@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path/path.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/verify_otp.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
+import 'package:sgt/service/constant/constant.dart';
 import '../../utils/const.dart';
 import 'package:sgt/helper/validator.dart';
 import '../widgets/custom_underline_textfield_widget.dart';
@@ -16,7 +23,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  bool iseamilvalid = true;
+  bool isemailvalid = false;
   bool isValid = false;
   late TextEditingController emailController;
   @override
@@ -60,15 +67,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 controller: emailController,
                 onChanged: (value) {
                   setState(() {
-                    iseamilvalid = value.isValidEmail;
-                    isValid = iseamilvalid ? true : false;
+                    isemailvalid = value.isValidEmail;
+                    isValid = isemailvalid ? false : true;
                   });
                 }),
 
             const SizedBox(
               height: 7,
             ),
-            iseamilvalid
+            isemailvalid
                 ? Container()
                 : SizedBox(
                     width: 143,
@@ -95,7 +102,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 buttonTitle: 'Send',
                 btnColor: isValid ? primaryColor : seconderyColor,
                 onBtnPress: () {
-                  screenNavigator(context, ChangePasswordAfterForgotScreen());
+                        var map = new Map<String, dynamic>();
+                        map['email'] = emailController.text.toString();
+                        var commonService = CommonService();
+                        var apiService = ApiCallMethodsService();
+                        apiService.post(apiRoutes['forgetPassword']!, map).then((value) {
+                          // print("Value ======> ${value}");
+                          var response = jsonDecode(value);
+                          if(response['status']== 400)
+                          {
+                            commonService.openSnackBar(response['error'].toString(), context);
+                          }
+                          else{
+                            commonService.openSnackBar('Otp is '+response['otp'].toString(), context);
+                            screenNavigator(context,VerifyOTPScreen(email: emailController.text));
+                          }
+                          // var commonService = CommonService();
+                          // commonService.openSnackBar();
+                          // screenNavigator(context, Home());    
+                        }).onError((error, stackTrace) {
+                          print(error);
+                        });
+                      // }
+                  // screenNavigator(context, VerifyOTPScreen());
                   // isValid
                   //     ? Navigator.push(context,
                   //         MaterialPageRoute(builder: (context) {

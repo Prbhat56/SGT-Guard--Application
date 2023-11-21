@@ -1,17 +1,41 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/constant/constant.dart';
 import '../../utils/const.dart';
 
+var terms_condition;
 class TermsandConditionScreen extends StatefulWidget {
   const TermsandConditionScreen({super.key});
-
+  
   @override
-  State<TermsandConditionScreen> createState() =>
-      _TermsandConditionScreenState();
+  State<TermsandConditionScreen> createState() =>_TermsandConditionScreenState();
 }
 
 class _TermsandConditionScreenState extends State<TermsandConditionScreen> {
+
+@override
+ void initState() {
+    super.initState();
+    termsAndCondition();
+ }
+
+ termsAndCondition(){
+   var apiCallService=ApiCallMethodsService();
+     apiCallService.get(apiRoutes['termsCondition']!).then((value) async{
+       Map<String, dynamic> jsonData = jsonDecode(value);
+       setState(() {
+        terms_condition =jsonData['data']['description'];
+       });
+       return terms_condition;
+      }).onError((error, stackTrace) {
+        print(error);
+      });
+ }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +45,7 @@ class _TermsandConditionScreenState extends State<TermsandConditionScreen> {
         padding: const EdgeInsets.all(30.0),
         child: Column(children: [
           Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            (terms_condition==null ? '': terms_condition.toString()),
             textScaleFactor: 1.0,
             style: GoogleFonts.montserrat(
                 textStyle: const TextStyle(
@@ -32,4 +56,6 @@ class _TermsandConditionScreenState extends State<TermsandConditionScreen> {
       ),
     );
   }
+
+  
 }

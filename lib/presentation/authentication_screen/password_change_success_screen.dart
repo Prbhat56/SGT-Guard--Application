@@ -21,7 +21,8 @@ class _PasswordChangeSuccessScreenState
   void initState() {
     super.initState();
     Timer(Duration(seconds: 2), () {
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      screenReplaceNavigator(context, SignInScreen());
     });
   }
 

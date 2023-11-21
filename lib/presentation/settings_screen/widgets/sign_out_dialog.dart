@@ -1,4 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
+import 'package:sgt/service/constant/constant.dart';
 import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
@@ -79,10 +86,14 @@ class SignOutDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Center(
-                    child: Text(
-                      'Yes',
-                      textScaleFactor: 1.0,
-                      style: TextStyle(color: white),
+                    child:TextButton(
+                      onPressed: () { _handlesignOut(context);
+                      },
+                      child: Text(
+                        'Yes',
+                        textScaleFactor: 1.0,
+                        style: TextStyle(color: white),
+                      ),
                     ),
                   ),
                 ),
@@ -92,5 +103,20 @@ class SignOutDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+
+   void _handlesignOut(context){
+      var apiService = ApiCallMethodsService();
+      apiService.post(apiRoutes['logout']!, '').then((value) {
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        Map<String, dynamic> jsonMap = json.decode(value);
+        commonService.openSnackBar(jsonMap['message'],context);
+        // commonService.clearLocalStorage();
+        commonService.logDataClear();
+         screenNavigator(context,SignInScreen());
+      }).onError((error, stackTrace) {
+        print(error);
+      });
   }
 }

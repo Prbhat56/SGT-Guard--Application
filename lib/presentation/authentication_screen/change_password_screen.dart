@@ -1,18 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/helper/validator.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/password_change_success_screen.dart';
+import 'package:sgt/presentation/authentication_screen/verify_otp.dart';
 import 'package:sgt/presentation/authentication_screen/widget/error_widgets.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/service/globals.dart';
 import '../../utils/const.dart';
 import '../widgets/custom_underline_textfield_widget.dart';
-import 'forgot_password_screen.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -26,6 +32,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController _newpasswordController;
   late TextEditingController _reenteredpasswordController;
   bool ispasswordvalid = true;
+  var userD = jsonDecode(userDetail);
   @override
   void initState() {
     _reenteredpasswordController = TextEditingController();
@@ -154,7 +161,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 width: 343.w,
                 child: CupertinoButton(
                   color: BlocProvider.of<IspasswordmarchedCubit>(context,
-                              listen: true)
+                            listen: true)
                           .state
                           .isValid
                       ? primaryColor
@@ -170,14 +177,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 listen: false)
                             .state
                             .isValid
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const PasswordChangeSuccessScreen();
-                              },
-                            ),
-                          )
+                        ?
+                        passwordChange(_oldpasswordController.text.toString(),_newpasswordController.text.toString(),_reenteredpasswordController.text.toString())
+                        //  Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) {
+                        //         return const PasswordChangeSuccessScreen();
+                        //       },
+                        //     ),
+                        //   )
                         : null;
                   },
                 ),
@@ -188,4 +197,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
     );
   }
+
+ void passwordChange(oldPassword,newPassword,newPasswordConfirmation) async{
+   var map = new Map<String,dynamic>();
+      map['email']=userD['user_details']['email_address'];
+      map['old_password']= oldPassword;
+      map['new_password']= newPassword;
+      map['new_password_confirmation']= newPasswordConfirmation;
+      var apiService = ApiCallMethodsService();
+      apiService.post(apiRoutes['updatePassword']!, map).then((value) {
+        // print("Value ======> $value");
+        var response = jsonDecode(value);
+        if(response['status']== 400)
+        {
+            print("error => ${response['error']}");
+        }
+        else{
+            screenNavigator(context, PasswordChangeSuccessScreen());
+        }
+      }).onError((error, stackTrace) {
+        print(error);
+      });
+ }
 }

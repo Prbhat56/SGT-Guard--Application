@@ -7,11 +7,14 @@ import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/password_checker/password_checker_cubit.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pressed_cubit.dart';
 import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
+import 'package:sgt/presentation/home.dart';
 import 'package:sgt/presentation/onboarding_screen/cubit/islastpage/islastpage_cubit.dart';
 import 'package:sgt/presentation/settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
+import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addpeople/addpeople_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
@@ -24,6 +27,10 @@ import 'presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'presentation/onboarding_screen/onboarding_screen.dart';
 import 'presentation/property_details_screen/cubit/showmore/showmore_cubit.dart';
 import 'presentation/work_report_screen/cubit/addwitness/addwitness_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+
+
 
 void main() {
   runApp(const MyApp());
@@ -108,9 +115,32 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void startTimer() {
-    Timer(const Duration(seconds: 1), () {
-      screenReplaceNavigator(
-          context, OnboardingScreen()); //It will redirect  after 1 seconds
+    Timer(const Duration(seconds: 1), () async {
+      SharedPreferences prefs =await SharedPreferences.getInstance();
+      print(prefs.getString('welcome'));
+      if(prefs.getString('welcome')!=null){
+        if(prefs.getString('token')!=null){
+           LocationPermission permission;
+         permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.denied) {
+              screenNavigator(context, ShareLocationScreen());
+          if (permission == LocationPermission.deniedForever) {
+            return Future.error('Location Not Available');
+          }
+        } else {
+          if(permission== LocationPermission.always || permission== LocationPermission.whileInUse){
+              screenNavigator(context,Home());
+          }
+        } 
+        }
+        else{
+          screenReplaceNavigator(context, SignInScreen()); 
+        }
+      }
+      else
+      {
+        screenReplaceNavigator(context, OnboardingScreen()); 
+      }
     });
   }
 }

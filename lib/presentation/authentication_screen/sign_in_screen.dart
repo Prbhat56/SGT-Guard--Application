@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
+import 'package:sgt/service/common_service.dart';
+import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
@@ -13,9 +16,14 @@ import 'package:sgt/presentation/authentication_screen/widget/language_change_op
 import 'package:sgt/presentation/home.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
+import 'package:geolocator/geolocator.dart';
+
+
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -45,6 +53,12 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+  //   var myObj = {
+  //   "name": "kaham",
+  //   "last": "das"
+  // };
+  // print(myObj);
+  // print(myObj['name']);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -88,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     hintText: 'Enter Email',
                     controller: _emailController,
                     onChanged: (value) {
-                      print(value);
+                      // print(value);
                       context.read<EmailCheckerCubit>().checkEmail(value);
                     },
                   ),
@@ -161,7 +175,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           buttonTitle: 'Sign In',
                           onBtnPress: () {
                             handle_SignIn(_emailController.text.toString(),_passwordController.text.toString());
-                            screenNavigator(context, Home());
+                            // screenNavigator(context, Home());
                           })
                       : CustomButtonWidget(
                           isValid: context
@@ -181,27 +195,38 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
-  handle_SignIn(String email,password)
+
+
+void handle_SignIn(String email,String password)
    async{  
-    try{
-      Response response = await post(
-        Uri.parse('https://reqres.in/api/login'),
-        body: {
-          'email':email,
-          'password':password
+      var map = new Map<String,dynamic>();
+      map['email']= email;
+      map['password']=password;
+      var apiService = ApiCallMethodsService();
+      apiService.post(apiRoutes['login']!, map).then((value) async {
+        apiService.updateUserDetails(value);
+        Map<String, dynamic> jsonMap = json.decode(value);
+        // Map<String, dynamic> userDetails = jsonMap['user_details'];
+        String token = jsonMap['token'];
+        var commonService = CommonService();
+        commonService.setUserToken(token);
+        commonService.openSnackBar(jsonMap['message'],context);
+        // apiService.updateUserDetails(userDetails);
+        // screenNavigator(context, Home());
+         LocationPermission permission;
+         permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.denied) {
+              screenNavigator(context, ShareLocationScreen());
+          if (permission == LocationPermission.deniedForever) {
+            return Future.error('Location Not Available');
+          }
+        } else {
+          if(permission== LocationPermission.always || permission== LocationPermission.whileInUse){
+              screenNavigator(context,Home());
+          }
         }
-        );
-        if(response.statusCode==200){
-          var data = jsonDecode(response.body.toString());
-          print(data);
-          print('Sign In SuccessFul');
-        }
-        else{
-          print('Failed');
-        }
-    }
-    catch(err){
-      print(err.toString());
-    }
-  }
+      }).onError((error, stackTrace) {
+        print(error);
+      });
+   }
 }

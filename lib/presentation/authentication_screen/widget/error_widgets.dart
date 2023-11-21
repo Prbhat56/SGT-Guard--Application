@@ -105,17 +105,17 @@ class CustomErrorWidget {
                   ),
           ],
         ),
-        Spacer(),
-        InkWell(
-          onTap: () {
-            screenNavigator(context, ForgotPasswordScreen());
-          },
-          child: Text(
-            'Forgot password',
-            textScaleFactor: 1.0,
-            style: TextStyle(color: Colors.blue, fontSize: 12),
-          ),
-        ),
+        // Spacer(),
+        // InkWell(
+        //   onTap: () {
+        //     screenNavigator(context, ForgotPasswordScreen());
+        //   },
+        //   child: Text(
+        //     'Forgot password',
+        //     textScaleFactor: 1.0,
+        //     style: TextStyle(color: Colors.blue, fontSize: 12),
+        //   ),
+        // ),
       ],
     );
   }

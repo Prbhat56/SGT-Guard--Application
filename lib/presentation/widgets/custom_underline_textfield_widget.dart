@@ -39,6 +39,8 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
             onChanged: onChanged,
             readOnly: readonly!,
             obscureText: obscureText,
+            controller:controller,
+            onEditingComplete: () => {},
             decoration: InputDecoration(
               hintText: hintText,
               enabledBorder: UnderlineInputBorder(

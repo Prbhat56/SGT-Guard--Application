@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/service/globals.dart';
 import 'package:sgt/utils/const.dart';
 import '../../theme/custom_theme.dart';
 import '../widgets/custom_button_widget.dart';
@@ -11,16 +16,40 @@ import 'apply_leave_screen2.dart';
 import 'widgets/choose_date_widget.dart';
 import 'widgets/custom_calender.dart';
 
+var leaveTerms=null;
+var done = false;
 class ApplyLeaveScreen extends StatefulWidget {
   const ApplyLeaveScreen({super.key});
 
+
   @override
   State<ApplyLeaveScreen> createState() => _ApplyLeaveScreenState();
+
 }
 
 class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   bool leaveFromclicked = false;
   bool leaveToclicked = false;
+
+   @override
+    void initState() {
+    super.initState();
+    applyLeavePolicy();
+ }
+
+  applyLeavePolicy(){
+    var userD = jsonDecode(userDetail); 
+     var apiCallService=ApiCallMethodsService();
+        apiCallService.get(apiRoutes['leavePolicy']!+'?property_owner_id=${userD['user_details']['property_owner_id']}').then((value) {
+            Map<String, dynamic> jsonData = jsonDecode(value);
+            setState(() {
+              leaveTerms = jsonData['data']['policies'];
+            });
+            return leaveTerms;
+          }).onError((error, stackTrace) {
+            print(error);
+          });
+    }
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -102,7 +131,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                               SizedBox(
                                 width: 300,
                                 child: Text(
-                                  'Lorem ipsum dolor sit amet, consectetur  elit. Etiam eu turpis',
+                                  (leaveTerms!=null ? leaveTerms : ''),
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       fontSize: 17,
