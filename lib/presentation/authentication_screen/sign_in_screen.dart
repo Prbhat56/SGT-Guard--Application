@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +14,7 @@ import 'package:sgt/presentation/home.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
-
+import 'package:http/http.dart';
 import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -158,6 +160,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               .issigninValid,
                           buttonTitle: 'Sign In',
                           onBtnPress: () {
+                            handle_SignIn(_emailController.text.toString(),_passwordController.text.toString());
                             screenNavigator(context, Home());
                           })
                       : CustomButtonWidget(
@@ -177,5 +180,28 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
+  }
+  handle_SignIn(String email,password)
+   async{  
+    try{
+      Response response = await post(
+        Uri.parse('https://reqres.in/api/login'),
+        body: {
+          'email':email,
+          'password':password
+        }
+        );
+        if(response.statusCode==200){
+          var data = jsonDecode(response.body.toString());
+          print(data);
+          print('Sign In SuccessFul');
+        }
+        else{
+          print('Failed');
+        }
+    }
+    catch(err){
+      print(err.toString());
+    }
   }
 }

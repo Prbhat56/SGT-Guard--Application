@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import '../../../utils/const.dart';
 
 class LanguageChangeOptionWidget extends StatelessWidget {
-  const LanguageChangeOptionWidget({super.key});
 
+  const LanguageChangeOptionWidget({super.key});
   @override
   Widget build(BuildContext context) {
     List<String> languages = [
@@ -71,6 +72,15 @@ class LanguageChangeOptionWidget extends StatelessWidget {
                           ),
                         ),
                       ),
+
+                      // child: CustomUnderlineTextFieldWidget(
+                      //       // bottomPadding: 7,
+                      //       textfieldTitle: '',
+                      //       hintText: 'Search Language',
+                      //       controller: _searchLanguageController,
+                      //       onChanged: (value) {
+                      //       },
+                      //     ),
                       child: TextFormField(
                         readOnly: true,
                         decoration: InputDecoration(
@@ -84,7 +94,7 @@ class LanguageChangeOptionWidget extends StatelessWidget {
                             borderSide: BorderSide(color: grey),
                           ),
                           prefixIcon: const Icon(Icons.search),
-                          hintText: 'Spanish',
+                          hintText: 'Search Language',
                           hintStyle: GoogleFonts.montserrat(
                               textStyle: TextStyle(color: grey, fontSize: 17)),
                           focusColor: primaryColor,
@@ -102,13 +112,17 @@ class LanguageChangeOptionWidget extends StatelessWidget {
                                   bottom: BorderSide(width: 2.0, color: grey),
                                 ),
                               ),
-                              child: Center(
-                                child: Text(
-                                  languages[index],
-                                  textScaleFactor: 1.0,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle:
-                                        TextStyle(color: black, fontSize: 17),
+                              child: GestureDetector(
+                                onTap: (() => 
+                                  print('language selected')),
+                                child: Center(
+                                  child: Text(
+                                    languages[index],
+                                    textScaleFactor: 1.0,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle:
+                                          TextStyle(color: black, fontSize: 17),
+                                    ),
                                   ),
                                 ),
                               ),

@@ -24,11 +24,13 @@ class _ChangePasswordAfterForgotScreenState
     extends State<ChangePasswordAfterForgotScreen> {
   late TextEditingController _newpasswordController;
   late TextEditingController _reenteredpasswordController;
+  late TextEditingController _verificationOtpController;
   bool ispasswordvalid = true;
   @override
   void initState() {
     _reenteredpasswordController = TextEditingController();
     _newpasswordController = TextEditingController();
+    _verificationOtpController = TextEditingController();
     super.initState();
   }
 
@@ -50,6 +52,17 @@ class _ChangePasswordAfterForgotScreenState
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            SizedBox(
+              height: 30.h,
+            ),
+            CustomUnderlineTextFieldWidget(
+              bottomPadding: 7,
+              textfieldTitle: 'Verification OTP',
+              hintText: 'Enter OTP',
+              controller: _verificationOtpController,
+              onChanged: (value) {
+              },
+            ),
             SizedBox(
               height: 30.h,
             ),
