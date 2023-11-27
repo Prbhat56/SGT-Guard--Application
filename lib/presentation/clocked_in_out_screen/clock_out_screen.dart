@@ -57,7 +57,7 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     const SizedBox(height: 16),
                     CustomCircularImage.getCircularImage(
-                        imageUrl, false, 30, 0, 0),
+                        '',imageUrl, false, 30, 0, 0),
                     const SizedBox(
                       height: 10,
                     ),

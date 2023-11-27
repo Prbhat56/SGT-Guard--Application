@@ -14,6 +14,9 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
     this.suffixIcon,
     this.controller,
     this.bottomPadding = 25,
+    this.focusNode,
+    this.onEditCompleted,
+    this.keyboardType,
   });
   final String textfieldTitle;
   final String hintText;
@@ -23,10 +26,13 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
   Widget? suffixIcon;
   bool? readonly;
   double bottomPadding;
+  FocusNode? focusNode;
+  VoidCallback? onEditCompleted;
+  TextInputType? keyboardType;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.only(bottom: bottomPadding),
+      padding: EdgeInsets.only(bottom: bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,10 +41,18 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
             style: CustomTheme.textField_Headertext_Style,
             textScaleFactor: 1.0,
           ),
-          TextFormField(
+          TextField(
+            keyboardType: keyboardType,
             onChanged: onChanged,
+            focusNode: focusNode,
             readOnly: readonly!,
             obscureText: obscureText,
+            controller: controller,
+            onEditingComplete: onEditCompleted,
+            
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
             decoration: InputDecoration(
               hintText: hintText,
               enabledBorder: UnderlineInputBorder(

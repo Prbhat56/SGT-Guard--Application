@@ -19,7 +19,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
             width: 40,
             padding: const EdgeInsets.only(
               top: 6,
-              left: 10,
+              left: 15,
             ),
             decoration: BoxDecoration(
                 color: Colors.green, borderRadius: BorderRadius.circular(4)),
@@ -41,7 +41,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
             width: 40,
             padding: const EdgeInsets.only(
               top: 6,
-              left: 8,
+              left: 12,
             ),
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(4)),

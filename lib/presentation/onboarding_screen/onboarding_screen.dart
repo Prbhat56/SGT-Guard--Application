@@ -5,6 +5,7 @@ import 'package:sgt/presentation/onboarding_screen/widgets/build_pages.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/utils/const.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -90,7 +91,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             isLastPage
                 ? CustomButtonWidget(
                     buttonTitle: 'Get Started',
-                    onBtnPress: () {
+                    onBtnPress: () async {
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('welcome','1');
                       screenReplaceNavigator(context, SignInScreen());
                     })
                 : InkWell(

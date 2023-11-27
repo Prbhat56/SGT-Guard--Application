@@ -161,7 +161,10 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                               );
                             });
                       },
-                      child: DottedChooseFileWidget(),
+                      child: DottedChooseFileWidget(
+                        title: 'Choose a file',
+                        height: 50,
+                      ),
                     ),
                     const SizedBox(
                       height: 30,

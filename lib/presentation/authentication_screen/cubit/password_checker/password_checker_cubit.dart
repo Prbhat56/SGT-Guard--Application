@@ -9,6 +9,6 @@ class PasswordCheckerCubit extends Cubit<PasswordCheckerState> {
 
   checkPassword(String password) {
     emit(state.copyWith(password: password.isValidPassword));
-    print(password);
+    // print(password);
   }
 }

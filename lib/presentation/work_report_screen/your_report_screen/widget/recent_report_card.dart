@@ -32,7 +32,7 @@ class RecentReportCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(children: [
                     CustomCircularImage.getCircularImage(
-                        imageUrl, false, 20, 0, 0),
+                        '',imageUrl, false, 20, 0, 0),
                     SizedBox(
                       height: 8,
                     ),

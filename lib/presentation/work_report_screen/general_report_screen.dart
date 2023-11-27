@@ -127,7 +127,10 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                           );
                         });
                   },
-                  child: DottedChooseFileWidget()),
+                  child: DottedChooseFileWidget(
+                     title: 'Choose a file',
+                        height: 50,
+                  )),
               imageFileList!.isNotEmpty
                   ? Container()
                   : SizedBox(

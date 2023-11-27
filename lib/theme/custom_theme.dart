@@ -38,9 +38,9 @@ class CustomTheme {
   );
 
 //home screen location details card styling
-  static locationCardStyle(String imageUrl) {
+  static locationCardStyle(String image_base_url,String imageUrl) {
     return BoxDecoration(
-      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(imageUrl)),
+      image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image_base_url+'/'+imageUrl)),
       borderRadius: BorderRadius.circular(20),
       color: grey,
     );

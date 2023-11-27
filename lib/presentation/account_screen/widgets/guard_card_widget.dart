@@ -1,15 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:sgt/service/globals.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 
 class GuardCard extends StatelessWidget {
   const GuardCard({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    var userD = jsonDecode(userDetail);
+    print(userD['image_base_url']+'/'+userD['user_details']['front_side_id_card']);
     return Container(
       // height: 196,
-      decoration: BoxDecoration(
-          color: primaryColor, borderRadius: BorderRadius.circular(10)),
+      // decoration: BoxDecoration(
+      //     color: primaryColor, borderRadius: BorderRadius.circular(10)),
+        // child: Image.network(userD['image_base_url']+'/'+userD['user_details']['front_side_id_card'],),
+        // child: Image.network(userD['image_base_url']+'/'+userD['user_details']['back_side_id_card'],),
       child: Column(
         children: [
           SizedBox(
@@ -29,10 +38,14 @@ class GuardCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                    userD['image_base_url']+'/'+userD['user_details']['front_side_id_card'],
+                    // 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                     height: 68,
                     width: 68,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.error,color: Colors.red);
+                    },
                   ),
                 ),
                 Column(
@@ -46,7 +59,7 @@ class GuardCard extends StatelessWidget {
                       height: 6,
                     ),
                     Text(
-                      'Phone: +91 5464166454',
+                      userD['user_details']['contact_code'].toString()+" "+userD['user_details']['contact_number'].toString(),
                       style: TextStyle(color: Colors.white, fontSize: 8),
                     ),
                   ],
@@ -70,7 +83,7 @@ class GuardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'John Doe',
+                      userD['user_details']['first_name'].toString()+" "+userD['user_details']['last_name'].toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 8,
@@ -104,7 +117,7 @@ class GuardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '#1314549495',
+                      userD['user_details']['guard_user_id'].toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 8,

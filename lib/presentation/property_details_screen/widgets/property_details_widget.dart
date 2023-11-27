@@ -21,7 +21,7 @@ class PropertyDetailsWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CustomCircularImage.getCircularImage(imageUrl, false, 42, 0, 0),
+              CustomCircularImage.getCircularImage('',imageUrl, false, 42, 0, 0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
