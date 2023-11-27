@@ -16,6 +16,13 @@ class CommonService {
     await prefs.setString('token', userToken);
   }
 
+
+  setTempUserEmailAndPassword(String email,String password) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
+    await prefs.setString('password', password);
+  }
+
   Future<String?> getUserToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');

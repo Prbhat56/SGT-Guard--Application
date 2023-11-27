@@ -203,13 +203,14 @@ void handle_SignIn(String email,String password)
       map['email']= email;
       map['password']=password;
       var apiService = ApiCallMethodsService();
-      apiService.post(apiRoutes['login']!, map).then((value) async {
+      apiService.post(apiRoutes['login']!,map).then((value) async {
         apiService.updateUserDetails(value);
         Map<String, dynamic> jsonMap = json.decode(value);
         // Map<String, dynamic> userDetails = jsonMap['user_details'];
         String token = jsonMap['token'];
         var commonService = CommonService();
         commonService.setUserToken(token);
+        commonService.setTempUserEmailAndPassword(email,password);
         commonService.openSnackBar(jsonMap['message'],context);
         // apiService.updateUserDetails(userDetails);
         // screenNavigator(context, Home());

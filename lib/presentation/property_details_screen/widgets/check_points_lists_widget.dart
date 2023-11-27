@@ -26,7 +26,7 @@ class CheckPointListsWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomCircularImage.getCircularImage(imageUrl, false, 35, 0, 0),
+            CustomCircularImage.getCircularImage('',imageUrl, false, 35, 0, 0),
             const SizedBox(
               width: 10,
             ),

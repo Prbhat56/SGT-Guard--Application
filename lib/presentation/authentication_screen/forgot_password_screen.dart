@@ -116,10 +116,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           else{
                             commonService.openSnackBar('Otp is '+response['otp'].toString(), context);
                             screenNavigator(context,VerifyOTPScreen(email: emailController.text));
-                          }
-                          // var commonService = CommonService();
-                          // commonService.openSnackBar();
-                          // screenNavigator(context, Home());    
+                          }  
                         }).onError((error, stackTrace) {
                           print(error);
                         });

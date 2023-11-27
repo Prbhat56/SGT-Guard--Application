@@ -134,7 +134,10 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                           );
                         });
                   },
-                  child: DottedChooseFileWidget()),
+                  child: DottedChooseFileWidget(
+                     title: 'Choose a file',
+                        height: 50,
+                  )),
               imageFileList!.isNotEmpty
                   ? Container()
                   : SizedBox(

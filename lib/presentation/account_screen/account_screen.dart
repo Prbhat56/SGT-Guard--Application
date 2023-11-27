@@ -1,12 +1,17 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/clock_in_screen.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/service/globals.dart';
 import 'package:sgt/theme/custom_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 import '../widgets/custom_underline_textfield_widget.dart';
 import '../widgets/main_appbar_widget.dart';
-import 'widgets/guard_card_widget.dart';
+import 'package:http/http.dart' as http;
+
 
 // String stringResponse;
 late Map mapResponse;
@@ -14,12 +19,43 @@ late Map mapResponse;
 // List listResponse;
 late List listResponse;
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
   @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  @override
+ void initState() {
+    super.initState();
+ }
+
+
+Future<dynamic> getPropertyGuardListAPI() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, String> myHeader = <String, String>{
+      "Authorization": "Bearer ${prefs.getString('token')}",
+    };
+    // print(myHeader);
+
+    String apiUrl = baseUrl + apiRoutes['userDetails']!;
+    final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+    var data = jsonDecode(response.body.toString());
+
+    if (response.statusCode == 200) {
+      return data;
+    } else {
+      setState(() {
+        return data;
+      });
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    var userD = jsonDecode(userDetail);
     return Scaffold(
       appBar: MainAppBarWidget(appBarTitle: 'Account'),
       backgroundColor: white,
@@ -28,7 +64,13 @@ class AccountScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
+            child: FutureBuilder<dynamic>(
+              future: getPropertyGuardListAPI(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
@@ -36,11 +78,29 @@ class AccountScreen extends StatelessWidget {
                 ),
                 Center(
                   child: CircleAvatar(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(70),
+                      child: CachedNetworkImage(
+                          // imageUrl:(snapshot.data!.imageBaseUrl.toString()+'/'+snapshot.data!.userDetails!.avatar.toString())
+                          imageUrl:(snapshot.data['image_base_url'].toString()+'/'+snapshot.data['user_details']['avatar'].toString())
+                          // imageUrl: userD['image_base_url'] +
+                          //     '/' +
+                          //     userD['user_details']['avatar']
+                              ,
+                          fit: BoxFit.fill,
+                          width: 140,
+                          height: 140,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(
+                                strokeCap: StrokeCap.round,
+                              ),
+                          errorWidget: (context, url, error) => Image.asset(
+                                'assets/sgt_logo.jpg',
+                                fit: BoxFit.fill,
+                              )),
+                    ),
                     radius: 70,
                     backgroundColor: grey,
-                    backgroundImage:  NetworkImage(
-                      userD['image_base_url']+'/'+userD['user_details']['avatar'],
-                    ),
                   ),
                 ),
                 Text(
@@ -53,7 +113,8 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'First Name',
-                  hintText: (userD['user_details']['first_name'] !=null ? userD['user_details']['first_name'].toString() : ''),
+                  hintText: (snapshot.data['user_details']['first_name']==null ? '': snapshot.data['user_details']['first_name'].toString()),
+                  // snapshot.data!.userDetails!.firstName.toString(),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -62,7 +123,8 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Last Name',
-                  hintText: (userD['user_details']['last_name'] !=null ? userD['user_details']['last_name'].toString() : ''),
+                  hintText:(snapshot.data['user_details']['last_name']==null ? '':snapshot.data['user_details']['last_name'].toString()),
+                  // snapshot.data!.userDetails!.lastName.toString(),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -71,7 +133,8 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Email',
-                  hintText: userD['user_details']['email_address'].toString(),
+                  hintText: snapshot.data['user_details']['email_address'].toString(),
+                  // snapshot.data!.userDetails!.emailAddress.toString(),
                   readonly: true,
                 ),
                 // const SizedBox(
@@ -89,7 +152,9 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Phone',
-                  hintText: (userD['user_details']['contact_code'] !=null ? userD['user_details']['contact_code'].toString():'')+' '+(userD['user_details']['contact_number'] !=null ? userD['user_details']['contact_number'].toString():''),
+                  hintText: (snapshot.data['user_details']['contact_code']==null ? '' : snapshot.data['user_details']['contact_code'].toString()) +
+                      ' ' +
+                      (snapshot.data['user_details']['contact_number']==null ? '': snapshot.data['user_details']['contact_number'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -105,7 +170,7 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Street',
-                  hintText: (userD['user_details']['street'] !=null ? userD['user_details']['street'].toString():''),
+                  hintText: (snapshot.data['user_details']['street']==null ? '':snapshot.data['user_details']['street'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -114,7 +179,7 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'City',
-                  hintText: (userD['user_details']['city'] !=null ? userD['user_details']['city'].toString():''),
+                  hintText: (snapshot.data['user_details']['city']==null ? '':snapshot.data['user_details']['city'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -123,7 +188,7 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'State',
-                  hintText: (userD['user_details']['state'] !=null ? userD['user_details']['state'].toString():''),
+                  hintText: (snapshot.data['user_details']['state']==null ? '':snapshot.data['user_details']['state'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -132,7 +197,7 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Country',
-                  hintText: (userD['user_details']['country'] !=null ? userD['user_details']['country'].toString():''),
+                  hintText: (snapshot.data['user_details']['country']==null ? '':snapshot.data['user_details']['country'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -141,7 +206,7 @@ class AccountScreen extends StatelessWidget {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Zipcode',
-                  hintText: (userD['user_details']['zip_code'] !=null ? userD['user_details']['zip_code'].toString():''),
+                  hintText: snapshot.data['user_details']['zip_code']==null ? '':snapshot.data['user_details']['zip_code'].toString(),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -154,15 +219,95 @@ class AccountScreen extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                GuardCard(),
+                //GuardCard(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                      'Front Side Guard Id',
+                      style: CustomTheme.textField_Headertext_Style,
+                      textScaleFactor: 1.0,
+                      ),
+                      Container(
+                        height: 180,
+                        width: MediaQuery.of(context).size.width * 1,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: snapshot.data['user_details']['front_side_id_card']!=null ?CachedNetworkImage(
+                                  imageUrl: (snapshot.data['image_base_url'].toString() +
+                                      '/' +
+                                      snapshot.data['user_details']['front_side_id_card'].toString()),
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) => Center(
+                                      child: const CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                        'assets/sgt_logo.jpg',
+                                        fit: BoxFit.fill,
+                                      )) : Image.asset(
+                                        'assets/sgt_logo.jpg',
+                                        fit: BoxFit.fill,
+                                      )
+                              ),
+                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                      'Back Side Guard Id',
+                      style: CustomTheme.textField_Headertext_Style,
+                      textScaleFactor: 1.0,
+                      ),
+                      Container(
+                        height: 180,
+                        width: MediaQuery.of(context).size.width * .9,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: snapshot.data['user_details']['back_side_id_card']!=null ?
+                          CachedNetworkImage(
+                                  imageUrl: snapshot.data['image_base_url'].toString() +
+                                      '/' +
+                                      snapshot.data['user_details']['back_side_id_card'].toString(),
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) =>
+                                      Center(
+                                        child: const CircularProgressIndicator(
+                                          strokeCap: StrokeCap.round,
+                                        ),
+                                      ),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                        'assets/sgt_logo.jpg',
+                                        fit: BoxFit.fill,
+                                      )) : Image.asset(
+                                        'assets/sgt_logo.jpg',
+                                        fit: BoxFit.fill,
+                                      )
+                              ),
+                        ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 30,
                 ),
               ],
-            ),
-          ),
-        ),
+            );
+          }
+        }
+        )
       ),
+    ),
+  )
     );
   }
 }

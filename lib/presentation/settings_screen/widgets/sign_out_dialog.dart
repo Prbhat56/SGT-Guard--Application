@@ -11,7 +11,7 @@ import '../../../utils/const.dart';
 
 class SignOutDialog extends StatelessWidget {
   const SignOutDialog({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -57,10 +57,14 @@ class SignOutDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Center(
-                    child: Text(
-                      'No',
-                      textScaleFactor: 1.0,
-                      style: TextStyle(color: CustomTheme.primaryColor),
+                    child:TextButton(
+                      onPressed: () { Navigator.of(context, rootNavigator: true).pop(context);
+                      },
+                      child: Text(
+                        'No',
+                        textScaleFactor: 1.0,
+                        style: TextStyle(color: CustomTheme.primaryColor),
+                      ),
                     ),
                   ),
                 ),

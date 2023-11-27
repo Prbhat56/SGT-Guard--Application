@@ -71,7 +71,7 @@ class UpcomingShiftDetailsScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: CustomCircularImage.getCircularImage(
-                        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                      '','https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                         false,
                         20,
                         0,

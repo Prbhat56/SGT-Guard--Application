@@ -196,7 +196,10 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                             );
                           });
                     },
-                    child: DottedChooseFileWidget()),
+                    child: DottedChooseFileWidget(
+                       title: 'Choose a file',
+                       height: 50,
+                    )),
                 Center(
                   child: Container(
                       margin: EdgeInsets.symmetric(vertical: 30),

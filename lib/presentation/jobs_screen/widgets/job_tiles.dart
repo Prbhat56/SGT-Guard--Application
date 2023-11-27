@@ -22,7 +22,7 @@ class JobsTile extends StatelessWidget {
           },
           child: Row(
             children: [
-              CustomCircularImage.getlgCircularImage(
+              CustomCircularImage.getlgCircularImage('',
                   'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
                   isActive),
               const SizedBox(

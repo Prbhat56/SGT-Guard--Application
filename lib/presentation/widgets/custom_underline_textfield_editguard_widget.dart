@@ -3,8 +3,8 @@ import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
 
 // ignore: must_be_immutable
-class CustomUnderlineTextFieldWidget extends StatelessWidget {
-  CustomUnderlineTextFieldWidget({
+class CustomUnderlineTextFieldEditGuardWidget extends StatelessWidget {
+  CustomUnderlineTextFieldEditGuardWidget({
     super.key,
     required this.textfieldTitle,
     required this.hintText,
@@ -14,9 +14,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
     this.suffixIcon,
     this.controller,
     this.bottomPadding = 25,
-    this.focusNode,
-    this.onEditCompleted,
-    this.keyboardType,
+    this.focusnode,
   });
   final String textfieldTitle;
   final String hintText;
@@ -26,13 +24,12 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
   Widget? suffixIcon;
   bool? readonly;
   double bottomPadding;
-  FocusNode? focusNode;
-  VoidCallback? onEditCompleted;
-  TextInputType? keyboardType;
+  var focusnode;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: bottomPadding),
+      padding:  EdgeInsets.only(bottom: bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,18 +38,13 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
             style: CustomTheme.textField_Headertext_Style,
             textScaleFactor: 1.0,
           ),
-          TextField(
-            keyboardType: keyboardType,
+          TextFormField(
+            focusNode: focusnode,
             onChanged: onChanged,
-            focusNode: focusNode,
             readOnly: readonly!,
             obscureText: obscureText,
-            controller: controller,
-            onEditingComplete: onEditCompleted,
-            
-            onTapOutside: (event) {
-              FocusScope.of(context).unfocus();
-            },
+            controller:controller,
+            // onEditingComplete:oneditingcomplete,
             decoration: InputDecoration(
               hintText: hintText,
               enabledBorder: UnderlineInputBorder(

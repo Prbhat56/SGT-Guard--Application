@@ -29,7 +29,7 @@ class UpcomingWidgetTab extends StatelessWidget {
                       Padding(
                           padding: const EdgeInsets.only(right: 20.0),
                           child: CustomCircularImage.getlgCircularImage(
-                              dummytimeSheetData[index].imageUrl, false)),
+                              '',dummytimeSheetData[index].imageUrl, false)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,

@@ -334,6 +334,9 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
                     //         .state
                     //         .isValid
                     //     ?
+                        // print(widget.email);
+                        // print(_newpasswordController.text.toString());
+                        // print(_reenteredpasswordController.text.toString());
                         passwordChanged(widget.email,_newpasswordController.text.toString(),_reenteredpasswordController.text.toString(),context);
                         //  Navigator.push(
                         //     context,
@@ -355,14 +358,17 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
     );
   }
 
-  void passwordChanged(String email,String newPassword, String reEnterPassword,context) 
+  void passwordChanged(email,newPassword,reEnterPassword,context) 
     async{  
+  print(email);
+  print(newPassword);
+  print(reEnterPassword);
       var map = new Map<String,dynamic>();
-      map['email']= email.toString();
-      map['password']=newPassword.toString();
-      map['password_confirmation']=reEnterPassword.toString();
+      map['email']= email;
+      map['password']=newPassword;
+      map['password_confirmation']=reEnterPassword;
       var apiService = ApiCallMethodsService();
-      apiService.post(apiRoutes['reset-password']!, map).then((value) {
+      apiService.post(apiRoutes['resetPassword']!, map).then((value) {
         screenNavigator(context, PasswordChangeSuccessScreen());
       }).onError((error, stackTrace) {
         print(error);

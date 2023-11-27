@@ -78,6 +78,7 @@ dependencies:
   country_pickers: ^2.0.0
   dio: ^5.3.3
   geolocator: ^10.1.0
+  cached_network_image: ^3.3.0
 
 
 dev_dependencies:

@@ -37,7 +37,7 @@ class _InActivePropertyDetailsScreenState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomCircularImage.getCircularImage(
-                          imageUrl, false, 42, 0, 0),
+                          '',imageUrl, false, 42, 0, 0),
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0),
                         child: Column(

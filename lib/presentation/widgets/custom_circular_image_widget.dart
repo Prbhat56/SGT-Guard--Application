@@ -6,6 +6,7 @@ import '../../utils/const.dart';
 class CustomCircularImage {
   //widge† for showing circularImage
   static Widget getCircularImage(
+    String baseUrl,
     String imageUrl,
     bool isOnline,
     double radius,
@@ -17,7 +18,7 @@ class CustomCircularImage {
         CircleAvatar(
           radius: radius,
           backgroundColor: grey,
-          backgroundImage: NetworkImage(imageUrl),
+          backgroundImage: NetworkImage(baseUrl+'/'+imageUrl),
         ),
         Positioned(
           bottom: bottom,
@@ -35,13 +36,13 @@ class CustomCircularImage {
   }
 
 //widge† for large size circularImage
-  static getlgCircularImage(String imageUrl, bool isActive) {
+  static getlgCircularImage(String baseUrl,String imageUrl, bool isActive) {
     return Stack(
       children: [
         CircleAvatar(
           radius: 35,
           backgroundColor: grey,
-          backgroundImage: NetworkImage(imageUrl),
+          backgroundImage: NetworkImage(baseUrl+'/'+imageUrl),
         ),
         isActive
             ? Positioned(

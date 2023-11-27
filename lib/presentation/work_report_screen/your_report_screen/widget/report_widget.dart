@@ -21,7 +21,7 @@ class ReportWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       CustomCircularImage.getCircularImage(
-                          imageUrl, false, 20, 0, 0),
+                          '',imageUrl, false, 20, 0, 0),
                       SizedBox(
                         width: 10,
                       ),

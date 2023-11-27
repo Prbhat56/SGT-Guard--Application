@@ -101,7 +101,8 @@ class ApiCallMethodsService {
   }
 
   void updateUserDetails(userDetail) {
-        emitUserDetail(userDetail.toString());
+        globals.userDetail = userDetail.toString();
+        // emitUserDetail(userDetail.toString());
         var commonService = CommonService();
         commonService.setUserDetail(userDetail.toString());
   }

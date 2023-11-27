@@ -146,7 +146,10 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                             );
                           });
                     },
-                    child: DottedChooseFileWidget(),
+                    child: DottedChooseFileWidget(
+                       title: 'Choose a file',
+                        height: 50,
+                    ),
                   ),
                 ],
               ),

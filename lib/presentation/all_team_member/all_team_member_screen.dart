@@ -58,6 +58,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                               child: Row(
                                 children: [
                                   CustomCircularImage.getCircularImage(
+                                      '',
                                       dummyData[index].profileUrl,
                                       false,
                                       25,

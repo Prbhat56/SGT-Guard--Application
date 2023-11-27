@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sgt/service/api_call_service.dart';
-import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/service/globals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../theme/custom_theme.dart';
 import '../../widgets/custom_bottom_model_sheet.dart';
 import 'add_profilepic_icon.dart';
 import 'package:http/http.dart' as http;
 
-
 var userD = jsonDecode(userDetail);
+
 class AddProfilePicWidget extends StatefulWidget {
   const AddProfilePicWidget({super.key});
 
@@ -21,19 +21,31 @@ class AddProfilePicWidget extends StatefulWidget {
 }
 
 class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
-  // final ImagePicker _picker = ImagePicker();
-  // File? imageFile ;
-
-   File? imageFile;
+  File? image;
   final _picker = ImagePicker();
-  bool showSpinner = false;
 
-  Future pickGprofilePic() async {
+  Future pickGalleryImage() async {
     final pickedFile =
         await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
 
     if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
+      image = File(pickedFile.path);
+      print(image);
+      setState(() {
+        uploadImage();
+      });
+    } else {
+      print('Something went wrong');
+    }
+  }
+
+  Future pickCameraImage() async {
+    final pickedFile =
+        await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+      print(image);
       setState(() {
         uploadImage();
       });
@@ -43,91 +55,42 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
   }
 
   Future<void> uploadImage() async {
-    setState(() {
-      showSpinner = true;
-    });
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return Center(child: CircularProgressIndicator());
+        }));
 
-    var stream = new http.ByteStream(imageFile!.openRead());
+    var stream = new http.ByteStream(image!.openRead());
     stream.cast();
 
-    var length = await imageFile!.length();
+    var length = await image!.length();
+    String apiUrl = baseUrl + apiRoutes['updateProfilePic']!;
+    var request = new http.MultipartRequest('POST', Uri.parse(apiUrl));
 
-    var request = new http.MultipartRequest(
-        'POST', Uri.parse('https://sgt-inhouse.myclientdemo.us/api/guard/update-profile-pic'));
-    request.fields['avatar'] = 'avatar';
+    var multipart = new http.MultipartFile('avatar', stream, length,
+        filename: image!.path.split('/').last);
 
-    var multipart = new http.MultipartFile('image', stream, length);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
     request.files.add(multipart);
 
     var response = await request.send();
-
     print(response.stream.toString());
 
-    if (response.statusCode == 200) {
+    //final respStr = await response.stream.bytesToString();
+    if (response.statusCode == 201) {
       setState(() {
-        showSpinner = false;
+        Navigator.of(context).pop();
+        Navigator.pop(context);
       });
       print('Image Uploaded');
     } else {
       setState(() {
-        showSpinner = false;
+        Navigator.of(context).pop();
+        Navigator.pop(context);
       });
       print('Failed');
-    }
-  }
-
-
-
-
-
-
-
-
-  // void pickGprofilePic() async {
-  //   // Pick an image
-  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     setState(() {
-  //       imageFile = File(image.path);
-  //       print("gallery image file ==> $imageFile");
-  //       print(image.path);
-  //       var map = new Map<String, dynamic>();
-  //       map['avatar'] = imageFile;
-  //        var apiService = ApiCallMethodsService();
-  //             apiService.post(apiRoutes['profileUpdate']!, map).then((value) {
-  //             print("api response ==> $value");
-  //             // apiService.updateUserDetails(value);
-  //             Map<String, dynamic> jsonMap = json.decode(value);
-  //             var commonService = CommonService();
-  //               commonService.openSnackBar(jsonMap['message'], context);
-  //               Navigator.pop(context);
-  //         }).onError((error, stackTrace) {
-  //               print(error);
-  //           });
-  //     });
-  //   }
-  // }
-
-  void pickCprofilePic() async {
-    // Capture a photo
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-    if (photo != null) {
-      setState(() {
-        imageFile = File(photo.path);
-         var map = new Map<String, dynamic>();
-        map['avatar'] = photo.path;
-         var apiService = ApiCallMethodsService();
-              apiService.post(apiRoutes['profileUpdate']!, map).then((value) {
-              print("api response ==> $value");
-              // apiService.updateUserDetails(value);
-              Map<String, dynamic> jsonMap = json.decode(value);
-              var commonService = CommonService();
-                commonService.openSnackBar(jsonMap['message'], context);
-                Navigator.pop(context);
-          }).onError((error, stackTrace) {
-                print(error);
-            });
-      });
     }
   }
 
@@ -135,19 +98,49 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        imageFile != null
+        image != null
             ? CircleAvatar(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(70),
+                  child: Image.file(
+                    File(image!.path).absolute,
+                    fit: BoxFit.fill,
+                    width: 140,
+                    height: 140,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/sgt_logo.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                ),
                 radius: 70,
                 backgroundColor: CustomTheme.grey,
-                backgroundImage: FileImage(File(imageFile!.path)),
+                //backgroundImage: FileImage(File(image!.path).absolute),
               )
             : CircleAvatar(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(70),
+                  child: CachedNetworkImage(
+                      imageUrl: userD['image_base_url'] +
+                          '/' +
+                          userD['user_details']['avatar'],
+                      fit: BoxFit.fill,
+                      width: 140,
+                      height: 140,
+                      placeholder: (context, url) => Center(
+                            child: const CircularProgressIndicator(
+                              strokeCap: StrokeCap.round,
+                            ),
+                          ),
+                      errorWidget: (context, url, error) => Image.asset(
+                            'assets/sgt_logo.jpg',
+                            fit: BoxFit.fill,
+                          )),
+                ),
                 radius: 70,
                 backgroundColor: CustomTheme.grey,
-                backgroundImage:  AssetImage(
-                  'assets/profile.svg'
-                  // userD['image_base_url']+'/'+userD['user_details']['avatar'],  
-                ),
               ),
         Positioned(
           top: 100,
@@ -162,10 +155,10 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
                   builder: (context) {
                     return CustomBottomModelSheet(
                       cameraClick: () {
-                        pickCprofilePic();
+                        pickCameraImage();
                       },
                       galleryClick: () {
-                        pickGprofilePic();
+                        pickGalleryImage();
                       },
                     );
                   });
