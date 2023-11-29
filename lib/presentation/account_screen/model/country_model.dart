@@ -4,7 +4,7 @@ class CountryModel {
 
     CountryModel({
         this.countries,
-        this.status, required bool error, required String msg, required List data,
+        this.status,
     });
 
 }

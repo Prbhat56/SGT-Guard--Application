@@ -11,10 +11,11 @@ class ActiveJobsTab extends StatelessWidget {
         itemBuilder: (context, index) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              JobsTile(
-                isActive: true,
-              ),
+            children:  [
+              // JobsTile(
+              //   isActive: true,
+              // ),
+              JobsTile(isActive: true),
               Divider(
                 color: Colors.grey,
               ),

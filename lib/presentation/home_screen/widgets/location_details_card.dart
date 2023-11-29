@@ -70,7 +70,7 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
                                     Container(
                                       height: 204,
                                       decoration: CustomTheme.locationCardStyle(
-                                        snapshot.data!.imageBaseUrl.toString(),
+                                        snapshot.data!.propertyImageBaseUrl.toString(),
                                         snapshot.data!.jobs!.data![index].propertyAvatars![0].propertyAvatar.toString()),
                                           // (locationData[index].imageUrl),
                                     ),

@@ -126,10 +126,12 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
   Stack Edit_Image(BuildContext context) {
     return Stack(children: [
       Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width * .4,
+          height: 180,
+          width: MediaQuery.of(context).size.width * 1,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey)),
           child: image != null
               ? Image.file(
                   File(image!.path).absolute,

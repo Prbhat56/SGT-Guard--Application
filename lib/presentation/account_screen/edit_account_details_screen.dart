@@ -4,9 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/account_screen/model/country_model.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_back_images.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_front_images.dart';
+import 'package:sgt/presentation/account_screen/widgets/dropdown_Country.dart';
+import 'package:sgt/presentation/account_screen/widgets/dropdown_State.dart';
+import 'package:sgt/presentation/account_screen/widgets/dropdown_city.dart';
 import 'package:sgt/presentation/settings_screen/settings_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -101,6 +106,12 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           ? jsonDecode(userDetail)['user_details']['zip_code'].toString()
           : ''));
   FocusNode zip_code_FocusNode = FocusNode();
+  TextEditingController dob_Controller = TextEditingController(
+      text: (jsonDecode(userDetail)['user_details']['date_of_birth'] != null
+          ? jsonDecode(userDetail)['user_details']['date_of_birth'].toString()
+          : ''));
+  FocusNode dob_FocusNode = FocusNode();
+
 
   @override
   void dispose() {
@@ -114,6 +125,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     state_FocusNode.dispose();
     country_FocusNode.dispose();
     zip_code_FocusNode.dispose();
+    dob_FocusNode.dispose();
   }
 
 //pick image from camera
@@ -208,35 +220,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   //   super.dispose();
   // }
 
-// Future<CountryModel> countryList() async{
-  // try {
-  //   var url = Uri.parse(apiRoutes['countryList']!);
-  //   var response = await http.get(url);
-  //   if(response.statusCode==200){
-  //         final CountryModel responseModel = countryStateModelFromJson(response.body);
-  //         return responseModel;
-  //       }
-  //       else{
-  //         return CountryModel(error:true,msg:'Something went wrong ${response.statusCode}',data:[]);
-  //       }
-  // }
-  // catch (e){
-  //     log('Exception: ${e.toString()}');
-  //     throw Exception(e.toString());
-  // }
-  // var apiCallService=ApiCallMethodsService();
-  //  apiCallService.get(apiRoutes['countryList']!).then((value) async{
-  //   print(value);
-  //    Map<String, dynamic> countrylist = jsonDecode(value);
-  //    setState(() {
-  //       countries = countrylist as List;
-  //    });
-  //    print(countrylist['countries']);
-// }
-
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    String selectedGender = (userD['user_details']['gender'] !=null ? userD['user_details']['gender']:'Select a Gender');
     // countryList();
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -371,6 +358,63 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     Text(
+                          'Gender',
+                          style: CustomTheme.textField_Headertext_Style,
+                          textScaleFactor: 1.0,
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          value: selectedGender,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedGender = newValue!;
+                            });
+                          },
+                          items: <String>['Male', 'Female', 'Other']
+                            .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Date Of Birth',
+                          style: CustomTheme.textField_Headertext_Style,
+                          textScaleFactor: 1.0,
+                        ),
+                        TextField(
+                          focusNode: dob_FocusNode,
+                          controller: dob_Controller, //editing controller of this TextField
+                          decoration: InputDecoration( 
+                            // icon: Icon(Icons.calendar_today), //icon of text field
+                            // labelText: "Date Of Birth" //label text of field
+                          ),
+                          readOnly: true,  //set it true, so that user will not able to edit text
+                          onTap: () async {
+                                DateTime? pickedDate = await showDatePicker(
+                                    context: context, initialDate: DateTime.now(),
+                                    firstDate: DateTime(1970), //DateTime.now() - not to allow to choose before today.
+                                    lastDate: DateTime(2101)
+                              );
+                        if(pickedDate != null ){
+                          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); 
+                            //you can implement different kind of Date Format here according to your requirement
+
+                          setState(() {
+                            dob_Controller.text = formattedDate;
+                            // dateinput.text = formattedDate; //set output date to TextField value. 
+                          });
+                        }else{
+                          print("Date is not selected");
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
                       'Address',
                       style: CustomTheme.blackTextStyle(21),
                     ),
@@ -389,6 +433,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                             context, street_FocusNode, city_FocusNode);
                       },
                     ),
+
+                    dropdownCountry(),
+                    // dropdownState(),
+                    // dropDownCity(),
                     CustomUnderlineTextFieldWidget(
                       bottomPadding: 7,
                       keyboardType: TextInputType.streetAddress,
@@ -441,7 +489,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     // SizedBox(
                     //   height: 20.h,
                     // ),
-
+                     
+                    // dropdownState(),
+                    // dropDownCity(),
                     CustomUnderlineTextFieldWidget(
                       bottomPadding: 7,
                       keyboardType: TextInputType.number,
@@ -575,10 +625,30 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     //   ),
                     // ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                              'Front Side Guard Id',
+                              style: CustomTheme.textField_Headertext_Style,
+                              textScaleFactor: 1.0,
+                              ),
+                        ),
                         AddFrontCardImage(),
+                        SizedBox(
+                      height: 20,
+                    ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom:8),
+                          child: Text(
+                            'Back Side Guard Id',
+                            style: CustomTheme.textField_Headertext_Style,
+                            textScaleFactor: 1.0,
+                            ),
+                        ),
                         AddBackCardImage(),
                       ],
                     ),
@@ -606,6 +676,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                               phone_code_Controller.text.toString();
                           map['contact_number'] =
                               contact_number_Controller.text.toString();
+                          map['gender'] = selectedGender.toString();
+                          map['date_of_birth'] = dob_Controller.text.toString();
                           map['street'] = streetController.text.toString();
                           map['city'] = cityController.text.toString();
                           map['state'] = stateController.text.toString();
@@ -621,7 +693,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                             var commonService = CommonService();
                             commonService.openSnackBar(
                                 jsonMap['message'], context);
-                            screenNavigator(context, SettingsScreen());
+                            // screenNavigator(context, SettingsScreen());
+                            Navigator.of(context).pop();
                           }).onError((error, stackTrace) {
                             print(error);
                           });

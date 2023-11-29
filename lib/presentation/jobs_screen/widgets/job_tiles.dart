@@ -5,11 +5,18 @@ import 'package:sgt/utils/const.dart';
 import '../../property_details_screen/inactive_property_details_screen.dart';
 import '../../widgets/custom_circular_image_widget.dart';
 
-class JobsTile extends StatelessWidget {
-  const JobsTile({super.key, required this.isActive});
-  final bool isActive;
+class JobsTile extends StatefulWidget {
+  final bool isActive=false;
+   JobsTile({super.key, required bool isActive});
+
+  @override
+  State<JobsTile> createState() => _JobsTileState();
+}
+
+class _JobsTileState extends State<JobsTile> {
   @override
   Widget build(BuildContext context) {
+  final bool isActive = widget.isActive;
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Padding(

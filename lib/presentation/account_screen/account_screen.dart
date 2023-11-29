@@ -27,9 +27,11 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+
   @override
- void initState() {
+  void initState() {
     super.initState();
+    getPropertyGuardListAPI();
  }
 
 
@@ -52,7 +54,6 @@ Future<dynamic> getPropertyGuardListAPI() async {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +156,24 @@ Future<dynamic> getPropertyGuardListAPI() async {
                   hintText: (snapshot.data['user_details']['contact_code']==null ? '' : snapshot.data['user_details']['contact_code'].toString()) +
                       ' ' +
                       (snapshot.data['user_details']['contact_number']==null ? '': snapshot.data['user_details']['contact_number'].toString()),
+                  readonly: true,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
+                  textfieldTitle: 'Gender',
+                  hintText: (snapshot.data['user_details']['gender']==null ? '':snapshot.data['user_details']['gender'].toString()),
+                  readonly: true,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
+                  textfieldTitle: 'Date Of Birth',
+                  hintText: (snapshot.data['user_details']['date_of_birth']==null ? '':snapshot.data['user_details']['date_of_birth'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(

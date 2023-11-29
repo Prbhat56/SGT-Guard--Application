@@ -1,5 +1,5 @@
 class StateModel {
-    List<State>? states;
+    List<States>? states;
     int? status;
 
     StateModel({
@@ -9,14 +9,14 @@ class StateModel {
 
 }
 
-class State {
+class States {
     int? id;
     String? name;
     int? countryId;
     dynamic createdAt;
     dynamic updatedAt;
 
-    State({
+    States({
         this.id,
         this.name,
         this.countryId,

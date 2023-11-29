@@ -10,7 +10,7 @@ class InactiveJobsTab extends StatelessWidget {
         itemCount: 15,
         itemBuilder: (context, index) {
           return Column(
-            children: const [
+            children:  [
               JobsTile(
                 isActive: false,
               ),

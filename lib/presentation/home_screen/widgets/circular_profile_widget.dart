@@ -71,7 +71,6 @@ class _CircularProfileState extends State<CircularProfile> {
                       // itemCount: dummyData.length,
                       itemCount: snapshot.data!.teams!.data!.length,
                       itemBuilder: (context, index) {
-                        print(snapshot.data?.imageBaseUrl);
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -84,7 +83,9 @@ class _CircularProfileState extends State<CircularProfile> {
                                   snapshot.data!.teams!.data![index].avatar.toString(),
                                   // dummyData[index].profileUrl,
                                   // dummyData[index].isOnline,
-                                  true,
+                                  // true,
+                                  snapshot.data!.teams!.data![index].apiToken !=null ? true :   
+                                  false,
                                   30,
                                   4,
                                   43
