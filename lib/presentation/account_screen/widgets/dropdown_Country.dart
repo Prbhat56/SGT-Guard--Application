@@ -126,10 +126,13 @@ class _dropdownCountryState extends State<dropdownCountry> {
                 padding: EdgeInsets.only(bottom: 25),
                 child: Column(
                   children: [
-                    Text(
-                      'Country',
-                      style: CustomTheme.textField_Headertext_Style,
-                      textScaleFactor: 1.0,
+                    Container(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        'Country',
+                        style: CustomTheme.textField_Headertext_Style,
+                        textScaleFactor: 1.0,
+                      ),
                     ),
                     DropdownButton(
                         isExpanded: true,
@@ -152,10 +155,13 @@ class _dropdownCountryState extends State<dropdownCountry> {
                           //
                         }),
                     const SizedBox(height: 20),
-                    Text(
-                      'State',
-                      style: CustomTheme.textField_Headertext_Style,
-                      textScaleFactor: 1.0,
+                    Container(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        'State',
+                        style: CustomTheme.textField_Headertext_Style,
+                        textScaleFactor: 1.0,
+                      ),
                     ),
                     DropdownButton(
                         isExpanded: true,
@@ -175,10 +181,13 @@ class _dropdownCountryState extends State<dropdownCountry> {
                           //
                         }),
                     const SizedBox(height: 20),
-                    Text(
-                      'City',
-                      style: CustomTheme.textField_Headertext_Style,
-                      textScaleFactor: 1.0,
+                    Container(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        'City',
+                        style: CustomTheme.textField_Headertext_Style,
+                        textScaleFactor: 1.0,
+                      ),
                     ),
                     DropdownButton(
                         isExpanded: true,

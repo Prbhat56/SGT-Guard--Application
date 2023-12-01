@@ -31,7 +31,10 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    getPropertyGuardListAPI();
+    // getPropertyGuardListAPI();
+    setState(() {
+      
+    });
  }
 
 
@@ -179,6 +182,15 @@ Future<dynamic> getPropertyGuardListAPI() async {
                 const SizedBox(
                   height: 20,
                 ),
+                CustomUnderlineTextFieldWidget(
+                  bottomPadding: 7,
+                  textfieldTitle: 'Guard Position',
+                  hintText: (snapshot.data['user_details']['guard_position']==null ? '':snapshot.data['user_details']['guard_position'].toString()),
+                  readonly: true,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Text(
                   'Address',
                   style: CustomTheme.blackTextStyle(21),
@@ -198,7 +210,7 @@ Future<dynamic> getPropertyGuardListAPI() async {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'City',
-                  hintText: (snapshot.data['user_details']['city']==null ? '':snapshot.data['user_details']['city'].toString()),
+                  hintText: (snapshot.data['user_details']['city_text']==null ? '':snapshot.data['user_details']['city_text'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -207,7 +219,7 @@ Future<dynamic> getPropertyGuardListAPI() async {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'State',
-                  hintText: (snapshot.data['user_details']['state']==null ? '':snapshot.data['user_details']['state'].toString()),
+                  hintText: (snapshot.data['user_details']['state_text']==null ? '':snapshot.data['user_details']['state_text'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -216,7 +228,7 @@ Future<dynamic> getPropertyGuardListAPI() async {
                 CustomUnderlineTextFieldWidget(
                   bottomPadding: 7,
                   textfieldTitle: 'Country',
-                  hintText: (snapshot.data['user_details']['country']==null ? '':snapshot.data['user_details']['country'].toString()),
+                  hintText: (snapshot.data['user_details']['country_text']==null ? '':snapshot.data['user_details']['country_text'].toString()),
                   readonly: true,
                 ),
                 const SizedBox(
@@ -245,11 +257,15 @@ Future<dynamic> getPropertyGuardListAPI() async {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                       Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child:
                       Text(
-                      'Front Side Guard Id',
+                      'Front Side Id Card',
                       style: CustomTheme.textField_Headertext_Style,
                       textScaleFactor: 1.0,
                       ),
+                       ),
                       Container(
                         height: 180,
                         width: MediaQuery.of(context).size.width * 1,
@@ -278,11 +294,15 @@ Future<dynamic> getPropertyGuardListAPI() async {
                       SizedBox(
                         height: 10,
                       ),
+                       Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child:
                       Text(
-                      'Back Side Guard Id',
+                      'Back Side Id Card',
                       style: CustomTheme.textField_Headertext_Style,
                       textScaleFactor: 1.0,
                       ),
+                       ),
                       Container(
                         height: 180,
                         width: MediaQuery.of(context).size.width * .9,

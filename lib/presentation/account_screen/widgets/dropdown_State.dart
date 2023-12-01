@@ -31,9 +31,10 @@ Future<StateModel> getStateList() async {
   var data = jsonDecode(response.body.toString());
 
   if (response.statusCode == 200) {
-    return StateModel(states: data);
+    print(data['states']);
+    return StateModel(states: data['states']);
   } else {
-    return StateModel(states: data);
+    return StateModel(states: data['states']);
   }
 }
 
@@ -47,11 +48,11 @@ class _dropdownstateState extends State<dropdownState> {
         padding: EdgeInsets.only(bottom: bottomPadding),
         child: FutureBuilder<StateModel>(
             future: getStateList(),
-            builder: (context, snapshot) {
+            builder: (context,AsyncSnapshot<StateModel> snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               } else {
-                print(snapshot.data!.states);
+                print(snapshot.data);
                 return ListView.builder(
                     physics: BouncingScrollPhysics(),
                     itemCount: snapshot.data!.states!.length,
@@ -66,7 +67,7 @@ class _dropdownstateState extends State<dropdownState> {
                             textScaleFactor: 1.0,
                           ),
                           DropdownButtonFormField<String>(
-                            value: userD['user_details']['state'],
+                            value: userD['user_details']['state_text'],
                             onChanged: (String? newValue) {
                               // getCountry();
                               setState(() {

@@ -19,6 +19,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
           child: Container(
             height: 30,
             width: 40,
+            alignment: AlignmentDirectional.center,
             // padding: const EdgeInsets.only(
             //   top: 6,
             //   left: 15,
@@ -27,7 +28,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
                 color: Colors.green, borderRadius: BorderRadius.circular(4)),
             child: const Text(
               "No",
-              // textScaleFactor: 1.0,
+              textScaleFactor: 1.0,
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -45,15 +46,16 @@ class ShouldPopAlertDialog extends StatelessWidget {
           child: Container(
             height: 30,
             width: 40,
+            alignment: AlignmentDirectional.center,
             // padding: const EdgeInsets.only(
-            //   top: 6,
-            //   left: 12,
+            //   top: 12,
+            //   left: 20,
             // ),
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(4)),
             child: const Text(
               "Yes",
-              // textScaleFactor: 1.0,
+              textScaleFactor: 1.0,
               style: TextStyle(
                 color: Colors.white,
               ),

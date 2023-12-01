@@ -23,7 +23,8 @@ Map<String, String> apiRoutes = {
   "checkpointListPropertyWise":"guard/checkpoint-list",
   "checkpointDetails":"guard/checkpoint-details",
   "checkpointTaskList":"guard/checkpoint-task-list",
-  "dutyList":"guard/checkpoint-task-list",
-  "dutyDetails":"guard/checkpoint-task-list",
+  "dutyList":"guard/duty-list",
+  "dutyDetails":"guard/guard/duty-details/",
+  "timeSheet":"guard/timesheet",
   "activePropertyList":"guard/active-property-list",
 };

@@ -42,6 +42,35 @@ class Utils {
 }
 
 class _EditAccountScreenState extends State<EditAccountScreen> {
+
+ @override
+  void initState() {
+    super.initState();
+    getPropertyGuardListAPI();
+ }
+
+ Future<dynamic> getPropertyGuardListAPI() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, String> myHeader = <String, String>{
+      "Authorization": "Bearer ${prefs.getString('token')}",
+    };
+    // print(myHeader);
+
+    String apiUrl = baseUrl + apiRoutes['userDetails']!;
+    final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+    var data = jsonDecode(response.body.toString());
+
+    if (response.statusCode == 200) {
+      print("userDetails ====>  $data");
+      return data;
+    } else {
+      setState(() {
+        print("userDetails setState====>  $data");
+        return data;
+      });
+    }
+  }
+
   List imageNames = [];
   List<XFile>? imageFileList = [];
   final pinController = TextEditingController();
@@ -86,6 +115,11 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           ? jsonDecode(userDetail)['user_details']['street'].toString()
           : ''));
   FocusNode street_FocusNode = FocusNode();
+  TextEditingController guard_position_controller = TextEditingController(
+      text: (jsonDecode(userDetail)['user_details']['guard_position'] != null
+          ? jsonDecode(userDetail)['user_details']['guard_position'].toString()
+          : ''));
+  FocusNode guard_position_FocusNode = FocusNode();
   TextEditingController cityController = TextEditingController(
       text: (jsonDecode(userDetail)['user_details']['city'] != null
           ? jsonDecode(userDetail)['user_details']['city'].toString()
@@ -112,7 +146,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           : ''));
   FocusNode dob_FocusNode = FocusNode();
 
-
   @override
   void dispose() {
     super.dispose();
@@ -126,6 +159,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     country_FocusNode.dispose();
     zip_code_FocusNode.dispose();
     dob_FocusNode.dispose();
+    guard_position_FocusNode.dispose();
   }
 
 //pick image from camera
@@ -223,7 +257,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    String selectedGender = (userD['user_details']['gender'] !=null ? userD['user_details']['gender']:'Select a Gender');
+    String selectedGender = (userD['user_details']['gender'] != null
+        ? userD['user_details']['gender']
+        : 'Select a Gender');
     // countryList();
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -358,58 +394,73 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       height: 20,
                     ),
                     Text(
-                          'Gender',
-                          style: CustomTheme.textField_Headertext_Style,
-                          textScaleFactor: 1.0,
-                        ),
-                        SizedBox(height: 10),
-                        DropdownButtonFormField<String>(
-                          value: selectedGender,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedGender = newValue!;
-                            });
-                          },
-                          items: <String>['Male', 'Female', 'Other']
-                            .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Date Of Birth',
-                          style: CustomTheme.textField_Headertext_Style,
-                          textScaleFactor: 1.0,
-                        ),
-                        TextField(
-                          focusNode: dob_FocusNode,
-                          controller: dob_Controller, //editing controller of this TextField
-                          decoration: InputDecoration( 
-                            // icon: Icon(Icons.calendar_today), //icon of text field
-                            // labelText: "Date Of Birth" //label text of field
+                      'Gender',
+                      style: CustomTheme.textField_Headertext_Style,
+                      textScaleFactor: 1.0,
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonFormField<String>(
+                      value: selectedGender,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedGender = newValue!;
+                        });
+                      },
+                      items: <String>['Male', 'Female', 'Other']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Date Of Birth',
+                      style: CustomTheme.textField_Headertext_Style,
+                      textScaleFactor: 1.0,
+                    ),
+                    TextField(
+                      focusNode: dob_FocusNode,
+                      controller:
+                          dob_Controller, //editing controller of this TextField
+                      decoration: InputDecoration(
+                          // icon: Icon(Icons.calendar_today), //icon of text field
+                          // labelText: "Date Of Birth" //label text of field
                           ),
-                          readOnly: true,  //set it true, so that user will not able to edit text
-                          onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                    context: context, initialDate: DateTime.now(),
-                                    firstDate: DateTime(1970), //DateTime.now() - not to allow to choose before today.
-                                    lastDate: DateTime(2101)
-                              );
-                        if(pickedDate != null ){
-                          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); 
-                            //you can implement different kind of Date Format here according to your requirement
+                      readOnly:
+                          true, //set it true, so that user will not able to edit text
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(
+                                1970), //DateTime.now() - not to allow to choose before today.
+                            lastDate: DateTime(2101));
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          //you can implement different kind of Date Format here according to your requirement
 
                           setState(() {
                             dob_Controller.text = formattedDate;
-                            // dateinput.text = formattedDate; //set output date to TextField value. 
+                            // dateinput.text = formattedDate; //set output date to TextField value.
                           });
-                        }else{
+                        } else {
                           print("Date is not selected");
                         }
                       },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomUnderlineTextFieldWidget(
+                      bottomPadding: 7,
+                      keyboardType: TextInputType.name,
+                      textfieldTitle: 'Guard Position',
+                      hintText: 'Guard position',
+                      controller: guard_position_controller,
+                      readonly: true,
                     ),
                     const SizedBox(
                       height: 20,
@@ -437,43 +488,44 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     dropdownCountry(),
                     // dropdownState(),
                     // dropDownCity(),
-                    CustomUnderlineTextFieldWidget(
-                      bottomPadding: 7,
-                      keyboardType: TextInputType.streetAddress,
-                      textfieldTitle: 'City',
-                      hintText: 'City',
-                      controller: cityController,
-                      focusNode: city_FocusNode,
-                      onEditCompleted: () {
-                        Utils.fieldFocusChnage(
-                            context, city_FocusNode, state_FocusNode);
-                      },
-                    ),
-                    CustomUnderlineTextFieldWidget(
-                      bottomPadding: 7,
-                      keyboardType: TextInputType.streetAddress,
-                      textfieldTitle: 'State',
-                      hintText: 'State',
-                      controller: stateController,
-                      focusNode: state_FocusNode,
-                      onEditCompleted: () {
-                        Utils.fieldFocusChnage(
-                            context, state_FocusNode, country_FocusNode);
-                      },
-                    ),
-                    CustomUnderlineTextFieldWidget(
-                      bottomPadding: 7,
-                      keyboardType: TextInputType.streetAddress,
-                      textfieldTitle: 'Country',
-                      hintText: 'Country',
-                      controller: countryController,
-                      focusNode: country_FocusNode,
-                      onEditCompleted: () {
-                        Utils.fieldFocusChnage(
-                            context, country_FocusNode, zip_code_FocusNode);
-                      },
-                    ),
-                   
+
+                    // CustomUnderlineTextFieldWidget(
+                    //   bottomPadding: 7,
+                    //   keyboardType: TextInputType.streetAddress,
+                    //   textfieldTitle: 'City',
+                    //   hintText: 'City',
+                    //   controller: cityController,
+                    //   focusNode: city_FocusNode,
+                    //   onEditCompleted: () {
+                    //     Utils.fieldFocusChnage(
+                    //         context, city_FocusNode, state_FocusNode);
+                    //   },
+                    // ),
+                    // CustomUnderlineTextFieldWidget(
+                    //   bottomPadding: 7,
+                    //   keyboardType: TextInputType.streetAddress,
+                    //   textfieldTitle: 'State',
+                    //   hintText: 'State',
+                    //   controller: stateController,
+                    //   focusNode: state_FocusNode,
+                    //   onEditCompleted: () {
+                    //     Utils.fieldFocusChnage(
+                    //         context, state_FocusNode, country_FocusNode);
+                    //   },
+                    // ),
+                    // CustomUnderlineTextFieldWidget(
+                    //   bottomPadding: 7,
+                    //   keyboardType: TextInputType.streetAddress,
+                    //   textfieldTitle: 'Country',
+                    //   hintText: 'Country',
+                    //   controller: countryController,
+                    //   focusNode: country_FocusNode,
+                    //   onEditCompleted: () {
+                    //     Utils.fieldFocusChnage(
+                    //         context, country_FocusNode, zip_code_FocusNode);
+                    //   },
+                    // ),
+
                     // DropdownField(
                     //   heading:'Choose Country'),
                     // SizedBox(
@@ -489,7 +541,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     // SizedBox(
                     //   height: 20.h,
                     // ),
-                     
+
                     // dropdownState(),
                     // dropDownCity(),
                     CustomUnderlineTextFieldWidget(
@@ -502,6 +554,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       onEditCompleted: () {
                         FocusScope.of(context).unfocus();
                       },
+                    ),
+                    const SizedBox(
+                      height: 40,
                     ),
                     Text(
                       'Upload Guard Card',
@@ -632,22 +687,22 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: Text(
-                              'Front Side Guard Id',
-                              style: CustomTheme.textField_Headertext_Style,
-                              textScaleFactor: 1.0,
-                              ),
+                            'Front Side Id Card',
+                            style: CustomTheme.textField_Headertext_Style,
+                            textScaleFactor: 1.0,
+                          ),
                         ),
                         AddFrontCardImage(),
                         SizedBox(
-                      height: 20,
-                    ),
+                          height: 20,
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom:8),
+                          padding: const EdgeInsets.only(bottom: 8),
                           child: Text(
-                            'Back Side Guard Id',
+                            'Back Side Id Card',
                             style: CustomTheme.textField_Headertext_Style,
                             textScaleFactor: 1.0,
-                            ),
+                          ),
                         ),
                         AddBackCardImage(),
                       ],
@@ -683,6 +738,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           map['state'] = stateController.text.toString();
                           map['country'] = countryController.text.toString();
                           map['zip_code'] = zip_code_Controller.text.toString();
+                          // map['guard_position'] = guard_position_controller.text.toString();
                           var apiService = ApiCallMethodsService();
                           apiService
                               .post(apiRoutes['profileUpdate']!, map)
