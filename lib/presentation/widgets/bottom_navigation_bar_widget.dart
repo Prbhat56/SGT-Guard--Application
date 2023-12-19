@@ -5,8 +5,24 @@ import '../../utils/const.dart';
 import '../cubit/navigation/navigation_cubit.dart';
 import 'bottom_navigation_bar_model.dart';
 
-class BottomNavigationBarItemList extends StatelessWidget {
+class BottomNavigationBarItemList extends StatefulWidget {
   const BottomNavigationBarItemList({super.key});
+
+  @override
+  State<BottomNavigationBarItemList> createState() =>
+      _BottomNavigationBarItemListState();
+}
+
+class _BottomNavigationBarItemListState
+    extends State<BottomNavigationBarItemList> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      context.read<NavigationCubit>().changeIndex(_selectedIndex);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +32,13 @@ class BottomNavigationBarItemList extends StatelessWidget {
       ),
       child: BottomNavigationBar(
           elevation: 20,
-          currentIndex: context.watch<NavigationCubit>().state.selectedIndex,
+          currentIndex:
+              _selectedIndex, //context.watch<NavigationCubit>().state.selectedIndex,
           selectedItemColor: primaryColor,
           selectedLabelStyle: TextStyle(color: primaryColor, fontSize: 12),
           type: BottomNavigationBarType.fixed,
-          onTap: (index) => context.read<NavigationCubit>().changeIndex(index),
+          // onTap: (index) => context.read<NavigationCubit>().changeIndex(index),
+          onTap: _onItemTapped,
           items: bottmNavigationItemData.map((e) {
             return BottomNavigationBarItem(
               activeIcon: e.label == 'Connect'

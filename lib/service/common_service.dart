@@ -16,8 +16,7 @@ class CommonService {
     await prefs.setString('token', userToken);
   }
 
-
-  setTempUserEmailAndPassword(String email,String password) async{
+  setTempUserEmailAndPassword(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('email', email);
     await prefs.setString('password', password);
@@ -26,18 +25,18 @@ class CommonService {
   Future<String?> getUserToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
-  } 
+  }
 
   getWelcomeClicked() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('welcome');
-  } 
+  }
 
   setUserDetail(String userDetail) {
     userProfileDetail = userDetail;
   }
 
- Future<String> getUserDetail() async{
+  Future<String> getUserDetail() async {
     await Future.delayed(Duration(seconds: 8));
     return Future.value(userProfileDetail);
   }
@@ -47,14 +46,21 @@ class CommonService {
     await prefs.clear();
   }
 
-  logDataClear() async{
+  logDataClear() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
   }
 
-  Future<void> openSnackBar(String message,context, {int durationInSeconds = 2}) async {
+  Future<void> openSnackBar(String message, context,
+      {int durationInSeconds = 2}) async {
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+      SnackBar(content: Text(message)),
     );
+  }
+
+  static fieldFocusChnage(
+      BuildContext context, FocusNode current, FocusNode nextFocus) {
+    current.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 }

@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/show_property_images_widget.dart';
 import '../../../utils/const.dart';
 import '../cubit/showmore/showmore_cubit.dart';
 import 'property_media_preview_screen.dart';
 
 class PropertyDescriptionWidget extends StatelessWidget {
-  const PropertyDescriptionWidget({super.key});
+  InactiveDatum? activeData = InactiveDatum();
+  String? imageBaseUrl;
+  PropertyDescriptionWidget({super.key, this.activeData, this.imageBaseUrl});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
               width: 300,
               child: Text(
-                'Lorem ipsum dolor sit amet, duo habemus fuisset epicuri ei. No sit tempor populo prodesset, ad cum dicta repudiare. Ex eos probo maluisset, invidunt deseruisse consectetuer id vel, convenire ',
+                activeData!.propertyDescription.toString(),
                 maxLines:
                     context.watch<ShowmoreCubit>().state.showmore ? 1000 : 3,
                 overflow: TextOverflow.ellipsis,
@@ -44,7 +47,10 @@ class PropertyDescriptionWidget extends StatelessWidget {
           ],
         ),
         context.watch<ShowmoreCubit>().state.showmore
-            ? PropertyImagesWidget()
+            ? PropertyImagesWidget(
+                avatars: activeData!.propertyAvatars,
+                imageBaseUrl: imageBaseUrl,
+              )
             : Container(),
       ],
     );

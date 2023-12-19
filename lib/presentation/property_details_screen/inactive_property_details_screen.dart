@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -8,7 +10,10 @@ import '../../utils/const.dart';
 import '../map_screen/map_screen.dart';
 
 class InActivePropertyDetailsScreen extends StatefulWidget {
-  const InActivePropertyDetailsScreen({super.key});
+  InactiveDatum? inActiveData = InactiveDatum();
+  String? imageBaseUrl;
+  InActivePropertyDetailsScreen(
+      {super.key, this.inActiveData, this.imageBaseUrl});
 
   @override
   State<InActivePropertyDetailsScreen> createState() =>
@@ -17,9 +22,8 @@ class InActivePropertyDetailsScreen extends StatefulWidget {
 
 class _InActivePropertyDetailsScreenState
     extends State<InActivePropertyDetailsScreen> {
-  LatLng currentlocation = const LatLng(22.572645, 88.363892);
-  final imageUrl =
-      'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg';
+  //LatLng currentlocation = const LatLng(22.572645, 88.363892);
+  //final imageUrl = 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg';
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -37,43 +41,63 @@ class _InActivePropertyDetailsScreenState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomCircularImage.getCircularImage(
-                          '',imageUrl, false, 42, 0, 0),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Rivi Properties',
-                              style: TextStyle(
-                                  fontSize: 28, fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              '1517 South Centelella',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Last Shift: ',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.red),
-                                ),
-                                Text(
-                                  'October 24, 10:00 AM ~ 4:00 PM',
-                                  style: TextStyle(fontSize: 12, color: black),
-                                ),
-                              ],
-                            )
-                          ],
+                          widget.imageBaseUrl.toString(),
+                          widget.inActiveData!.propertyAvatars!.first
+                              .propertyAvatar
+                              .toString(),
+                          false,
+                          42,
+                          0,
+                          0),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.inActiveData!.propertyName.toString(),
+                                style: TextStyle(
+                                    fontSize: 28, fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.inActiveData!.location.toString(),
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'Last Shift: ',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red),
+                                  ),
+                                  Text(
+                                    //'October 24, 10:00 AM ~ 4:00 PM',
+
+                                    widget.inActiveData!.shifts!.last.clockIn
+                                            .toString() +
+                                        '~' +
+                                        widget
+                                            .inActiveData!.shifts!.last.clockOut
+                                            .toString(),
+                                    style:
+                                        TextStyle(fontSize: 12, color: black),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -143,8 +167,8 @@ class _InActivePropertyDetailsScreenState
                 const SizedBox(
                   height: 5,
                 ),
-                const Text(
-                  '43 Bourke Street, Newbridge NSW 837\nRaffles Place, Boat Band M83',
+                Text(
+                  widget.inActiveData!.location.toString(),
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -165,7 +189,15 @@ class _InActivePropertyDetailsScreenState
                           borderRadius: BorderRadius.circular(20),
                           child: GoogleMap(
                               initialCameraPosition: CameraPosition(
-                                  target: currentlocation, zoom: 14)),
+                                  target: LatLng(
+                                      double.parse(widget.inActiveData!.latitude
+                                              .toString())
+                                          .toDouble(),
+                                      double.parse(widget
+                                              .inActiveData!.longitude
+                                              .toString())
+                                          .toDouble()),
+                                  zoom: 14)),
                         ),
                       ),
                     ),
@@ -196,9 +228,9 @@ class _InActivePropertyDetailsScreenState
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
               ],
             ),
           )),

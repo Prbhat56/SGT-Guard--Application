@@ -9,6 +9,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
     required this.textfieldTitle,
     required this.hintText,
     this.obscureText = false,
+    this.autoCorrect = true,
     this.readonly = false,
     this.onChanged,
     this.suffixIcon,
@@ -22,6 +23,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
   final String hintText;
   TextEditingController? controller;
   final bool obscureText;
+  final bool autoCorrect;
   ValueChanged<String>? onChanged;
   Widget? suffixIcon;
   bool? readonly;
@@ -49,7 +51,7 @@ class CustomUnderlineTextFieldWidget extends StatelessWidget {
             obscureText: obscureText,
             controller: controller,
             onEditingComplete: onEditCompleted,
-            
+            autocorrect: true,
             onTapOutside: (event) {
               FocusScope.of(context).unfocus();
             },

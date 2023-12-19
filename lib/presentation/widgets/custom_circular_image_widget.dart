@@ -18,7 +18,7 @@ class CustomCircularImage {
         CircleAvatar(
           radius: radius,
           backgroundColor: grey,
-          backgroundImage: NetworkImage(baseUrl+'/'+imageUrl),
+          backgroundImage: NetworkImage(baseUrl + '/' + imageUrl),
         ),
         Positioned(
           bottom: bottom,
@@ -36,13 +36,13 @@ class CustomCircularImage {
   }
 
 //widge† for large size circularImage
-  static getlgCircularImage(String baseUrl,String imageUrl, bool isActive) {
+  static getlgCircularImage(String baseUrl, String imageUrl, bool isActive) {
     return Stack(
       children: [
         CircleAvatar(
           radius: 35,
           backgroundColor: grey,
-          backgroundImage: NetworkImage(baseUrl+'/'+imageUrl),
+          backgroundImage: NetworkImage(baseUrl + '/' + imageUrl),
         ),
         isActive
             ? Positioned(

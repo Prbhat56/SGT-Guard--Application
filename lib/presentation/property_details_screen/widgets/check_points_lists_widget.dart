@@ -10,13 +10,13 @@ class CheckPointListsWidget extends StatelessWidget {
     Key? key,
     required this.title,
     required this.imageUrl,
-    required this.iscompleted,
+    // required this.iscompleted,
     required this.checkpointNo,
     required this.date,
   }) : super(key: key);
   final String title;
   final String imageUrl;
-  final String iscompleted;
+  // final String iscompleted;
   final String date;
   final int checkpointNo;
   @override
@@ -49,15 +49,15 @@ class CheckPointListsWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Row(
                     children: [
-                      Text(iscompleted,
-                          style:
-                              CustomTheme.blueTextStyle(10, FontWeight.w400)),
+                      // Text(iscompleted,
+                      //     style:
+                      //         CustomTheme.blueTextStyle(10, FontWeight.w400)),
                       VerticalDivider(
                         color: primaryColor,
                       ),
-                      Text("$checkpointNo Checkpoints",
-                          style:
-                              CustomTheme.blueTextStyle(10, FontWeight.w400)),
+                      // Text("$checkpointNo Checkpoints",
+                      //     style:
+                      //         CustomTheme.blueTextStyle(10, FontWeight.w400)),
                     ],
                   ),
                 ),

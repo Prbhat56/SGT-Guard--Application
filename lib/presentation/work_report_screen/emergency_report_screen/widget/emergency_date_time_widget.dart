@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 
 import '../../../../theme/custom_theme.dart';
 
@@ -50,8 +51,7 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(
-                              2000), //DateTime.now() - not to allow to choose before today.
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101));
 
                       if (pickedDate != null) {
@@ -65,6 +65,8 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
 
                         setState(() {
                           dateinput.text = formattedDate;
+                          EmergencyReportScreen.of(context)!.dateValue =
+                              formattedDate;
                         });
                       } else {
                         print("Date is not selected");
@@ -108,17 +110,21 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
 
                       if (pickedTime != null) {
                         print(pickedTime.format(context));
-                        DateTime parsedTime = DateFormat.jm()
-                            .parse(pickedTime.format(context).toString());
-                        //converting to DateTime so that we can further format on different pattern.
-                        print(parsedTime); //output 1970-01-01 22:53:00.000
-                        String formattedTime =
-                            DateFormat('HH:mm:ss').format(parsedTime);
-                        print(formattedTime); //output 14:59:00
-                        //DateFormat() is from intl package, you can format the time on any pattern you need.
+                        // DateTime parsedTime = DateFormat.jm()
+                        //     .parse(pickedTime.format(context).toString());
+                        // //converting to DateTime so that we can further format on different pattern.
+                        // print(parsedTime); //output 1970-01-01 22:53:00.000
+                        // String formattedTime =
+                        //     DateFormat('HH:mm:ss').format(parsedTime);
+                        // print(formattedTime); //output 14:59:00
+
+                        var dt = DateFormat("h:mm a")
+                            .parse(pickedTime.format(context));
+                        var formattedTime = DateFormat('HH:mm:ss').format(dt);
 
                         setState(() {
-                          timeinput.text =
+                          timeinput.text = formattedTime;
+                          EmergencyReportScreen.of(context)!.timeValue =
                               formattedTime; //set the value of text field.
                         });
                       } else {

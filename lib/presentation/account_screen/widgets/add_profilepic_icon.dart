@@ -13,8 +13,8 @@ class AddProfilePicIcon extends StatelessWidget {
           color: CustomTheme.primaryColor,
           borderRadius: BorderRadius.circular(50)),
       child: const Icon(
-        Icons.add,
-        size: 30,
+        Icons.edit,
+        size: 24,
         color: Colors.white,
       ),
     );

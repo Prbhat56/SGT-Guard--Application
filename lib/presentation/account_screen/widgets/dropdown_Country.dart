@@ -1,218 +1,214 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/account_screen/model/cities_model.dart';
+import 'package:sgt/presentation/account_screen/edit_account_details_screen.dart';
+import 'package:sgt/presentation/account_screen/model/city_model.dart';
+import 'package:sgt/presentation/account_screen/model/country_model.dart'
+    as c_model;
 import 'package:sgt/presentation/account_screen/model/country_model.dart';
+import 'package:sgt/presentation/account_screen/model/state_model.dart'
+    as s_model;
+import 'package:sgt/presentation/account_screen/model/state_model.dart';
 import 'package:sgt/presentation/account_screen/repositories/country_state_city_repo.dart';
-import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/service/globals.dart';
 import 'package:sgt/theme/custom_theme.dart';
-import 'package:sgt/utils/const.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
-import '../model/country_state_model.dart' as cs_model;
-
-
-var userD = jsonDecode(userDetail);
-class dropdownCountry extends StatefulWidget {
-
-   @override
-  State<dropdownCountry> createState() => _dropdownCountryState();
+class DropdownCountry extends StatefulWidget {
+  String cName;
+  int cId;
+  String sName;
+  int sId;
+  String cityName;
+  int citId;
+  DropdownCountry(
+      {super.key,
+      required this.cName,
+      required this.cId,
+      required this.sName,
+      required this.sId,
+      required this.cityName,
+      required this.citId});
+  @override
+  State<DropdownCountry> createState() => _DropdownCountryState(
+      cName: cName,
+      cId: cId,
+      sName: sName,
+      sId: sId,
+      cityName: cityName,
+      citId: citId);
 }
 
-class _dropdownCountryState extends State<dropdownCountry> {
+class _DropdownCountryState extends State<DropdownCountry> {
+  _DropdownCountryState(
+      {required this.cName,
+      required this.cId,
+      required this.sName,
+      required this.sId,
+      required this.cityName,
+      required this.citId});
+
   final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
-  List<String> countries = [];
-  List<String> states = [];
-  List<String> cities = [];
+  String cName;
+  int cId;
+  String sName;
+  int sId;
+  String cityName;
+  int citId;
 
-  cs_model.CountryStateModel countryStateModel =
-      cs_model.CountryStateModel(error: false, msg: '', data: []);
-  CitiesModel citiesModel = CitiesModel(error: false, msg: '', data: []);
+  c_model.CountryModel countryModel =
+      c_model.CountryModel(countries: [], status: 500);
+  s_model.StateModel stateModel = s_model.StateModel(states: [], status: 500);
+  CityModel cityModel = CityModel(cities: [], status: 500);
 
-  String selectedCountry = 'Select Country';
-  String selectedState = 'Select State';
-  String selectedCity = 'Select City';
+  Country? selectedCountry;
+  state? selectedState;
+  City? selectedCity;
+
   bool isDataLoaded = false;
-  String finalTextToBeDisplayed = '';
 
   getCountries() async {
     //
-    countryStateModel = await _countryStateCityRepo.getCountriesStates();
-    countries.add('Select Country');
-    for (var element in countryStateModel.data) {
-      countries.add(element.name);
-    }
-    isDataLoaded = true;
-    setState(() {});
+    setState(() {
+      isDataLoaded = false;
+    });
+    countryModel = await _countryStateCityRepo.getCountries();
+    // for (var element in countryModel.countries ?? []) {
+    //   countries.add(element.name ?? "");
+    //   countriesId.add(element.id ?? -1);
+    // }
+    setState(() {
+      isDataLoaded = true;
+    });
     //
   }
-  getStates() async {
-      //
-      for (var element in countryStateModel.data) {
-        if (selectedCountry == element.name) {
-          //
-          setState(() {
-            resetStates();
-            resetCities();
-          });
-          //
-          for (var state in element.states) {
-            states.add(state.name);
-          }
-        }
-      }
-      //
-    }
-     getCities() async {
-        //
-        isDataLoaded = false;
-        citiesModel = await _countryStateCityRepo.getCities(
-            country: selectedCountry, state: selectedState);
-        setState(() {
-          resetCities();
-        });
-        for (var city in citiesModel.data) {
-          cities.add(city);
-        }
-        isDataLoaded = true;
-        setState(() {});
-        //
-      }
-      resetCities() {
-        cities = [];
-        cities.add('Select City');
-        selectedCity = 'Select City';
-        finalTextToBeDisplayed = '';
-      }
 
-      resetStates() {
-        states = [];
-        states.add('Select State');
-        selectedState = 'Select State';
-        finalTextToBeDisplayed = '';
-      }
-  @override
-  void initState() {
-    getCountries();
-    super.initState();
+  getStates(int cId) async {
+    //
+    setState(() {
+      isDataLoaded = false;
+    });
+
+    stateModel = await _countryStateCityRepo.getStates(countryCode: cId);
+    setState(() {
+      isDataLoaded = true;
+    });
+    //
   }
 
-//  Future<dynamic> getCountryAPI() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     Map<String, String> myHeader = <String, String>{
-//       "Authorization": "Bearer ${prefs.getString('token')}",
-//     };
-//     // print(myHeader);
+  getCities(int sId) async {
+    //
+    setState(() {
+      isDataLoaded = false;
+    });
+    cityModel = await _countryStateCityRepo.getCities(stateCode: sId);
+    setState(() {
+      isDataLoaded = true;
+    });
+    //
+  }
 
-//     String apiUrl = baseUrl + apiRoutes['country']!;
-//     final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
-//     var data = jsonDecode(response.body.toString());
+  @override
+  void initState() {
+    super.initState();
+    loadInitialData();
+  }
 
-//     if (response.statusCode == 200) {
-//       return data;
-//     } else {
-//       setState(() {
-//         return data;
-//       });
-//     }
-//   }
+  loadInitialData() async {
+    await getCountries();
+    selectedCountry = countryModel.countries.firstWhere(
+      (element) {
+        return element.id == cId;
+      },
+    );
+    await getStates(cId);
+    selectedState = stateModel.states.firstWhere(
+      (element) {
+        return element.id == sId;
+      },
+    );
+
+    await getCities(sId);
+
+    selectedCity = cityModel.cities.firstWhere(
+      (element) {
+        return element.id == citId;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-  // String selectedCountry = (userD['user_details']['country_text'] !=null ? userD['user_details']['country_text']:'Select Country');
-    return Padding(
-                padding: EdgeInsets.only(bottom: 25),
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        'Country',
-                        style: CustomTheme.textField_Headertext_Style,
-                        textScaleFactor: 1.0,
-                      ),
-                    ),
-                    DropdownButton(
-                        isExpanded: true,
-                        value: selectedCountry,
-                        items: countries
-                            .map((String country) => DropdownMenuItem(
-                                value: country, child: Text(country)))
-                            .toList(),
-                        onChanged: (selectedValue) {
-                          //
-                          setState(() {
-                            selectedCountry = selectedValue!;
-                          });
-                          // In Video we have used getStates();
-                          // getStates();
-                          // But for improvement we can use one extra check
-                          if (selectedCountry != 'Select Country') {
-                            getStates();
-                          }
-                          //
-                        }),
-                    const SizedBox(height: 20),
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        'State',
-                        style: CustomTheme.textField_Headertext_Style,
-                        textScaleFactor: 1.0,
-                      ),
-                    ),
-                    DropdownButton(
-                        isExpanded: true,
-                        value: selectedState,
-                        items: states
-                            .map((String state) => DropdownMenuItem(
-                                value: state, child: Text(state)))
-                            .toList(),
-                        onChanged: (selectedValue) {
-                          //
-                          setState(() {
-                            selectedState = selectedValue!;
-                          });
-                          if (selectedState != 'Select State') {
-                            getCities();
-                          }
-                          //
-                        }),
-                    const SizedBox(height: 20),
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        'City',
-                        style: CustomTheme.textField_Headertext_Style,
-                        textScaleFactor: 1.0,
-                      ),
-                    ),
-                    DropdownButton(
-                        isExpanded: true,
-                        value: selectedCity,
-                        items: cities
-                            .map((String city) => DropdownMenuItem(
-                                value: city, child: Text(city)))
-                            .toList(),
-                        onChanged: (selectedValue) {
-                          //
-                          setState(() {
-                            selectedCity = selectedValue!;
-                          });
-                          if (selectedCity != 'Select City') {
-                            finalTextToBeDisplayed =
-                                "Country: $selectedCountry\nState: $selectedState\nCity: $selectedCity";
-                          }
-                          //
-                        }),
-                    // Text(
-                    //   finalTextToBeDisplayed,
-                    //   style: const TextStyle(fontSize: 22),
-                    // ),
-                  ],
-                )
-                );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        'Country',
+        style: CustomTheme.textField_Headertext_Style,
+        textScaleFactor: 1.0,
+      ),
+      !isDataLoaded
+          ? Center(child: CircularProgressIndicator())
+          : DropdownButtonFormField<Country>(
+              isDense: true,
+              value: selectedCountry,
+              items: countryModel.countries
+                  .map((Country items) => DropdownMenuItem(
+                      value: items, child: Text(items.name.toString())))
+                  .toList(),
+              onChanged: (newValue) async {
+                //int index = countries.indexOf(newValue);
+                if (newValue != null) {
+                  selectedCountry = newValue;
+                  selectedState = null;
+                  selectedCity = null;
+                  cId = newValue.id!;
+                  EditAccountScreen.of(context)?.countryId = cId;
+                }
+                await getStates(cId);
+              }),
+      const SizedBox(
+        height: 20,
+      ),
+      Text(
+        'State',
+        style: CustomTheme.textField_Headertext_Style,
+        textScaleFactor: 1.0,
+      ),
+      DropdownButtonFormField<state?>(
+          isDense: true,
+          value: selectedState,
+          items: stateModel.states
+              .map((state items) => DropdownMenuItem(
+                  value: items, child: Text(items.name.toString())))
+              .toList(),
+          onChanged: (newValue) async {
+            //int index = states.indexOf(newValue);
+            if (newValue != null) {
+              selectedState = newValue;
+              selectedCity = null;
+              sId = newValue.id!;
+              EditAccountScreen.of(context)?.stateId = sId;
+            }
+            await getCities(sId);
+          }),
+      const SizedBox(
+        height: 20,
+      ),
+      Text(
+        'City',
+        style: CustomTheme.textField_Headertext_Style,
+        textScaleFactor: 1.0,
+      ),
+      DropdownButtonFormField<City>(
+          isDense: true,
+          value: selectedCity,
+          items: cityModel.cities
+              .map((City items) => DropdownMenuItem(
+                  value: items, child: Text(items.name.toString())))
+              .toList(),
+          onChanged: (newValue) {
+            if (newValue != null) {
+              selectedCity = newValue;
+              citId = newValue.id!;
+              EditAccountScreen.of(context)?.cityId = citId;
+            }
+          }),
+    ]);
   }
 }

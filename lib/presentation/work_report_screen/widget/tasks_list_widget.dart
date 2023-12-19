@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/work_report_screen/model/checkPoint_model.dart';
 import 'package:sgt/utils/const.dart';
 
 class TasksListWidget extends StatefulWidget {
-  const TasksListWidget({super.key});
+  List<CheckPointTask>? checkPointTask ;
+  TasksListWidget({super.key,this.checkPointTask});
 
   @override
   State<TasksListWidget> createState() => _TasksListWidgetState();
@@ -34,13 +36,14 @@ class _TasksListWidgetState extends State<TasksListWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 30 * tasksData.length.toDouble(),
+      // height: 30 * tasksData.length.toDouble(),
+      height: 30 * widget.checkPointTask!.length.toDouble(),
       padding: EdgeInsets.symmetric(
         vertical: 10,
       ),
       child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),
-          itemCount: tasksData.length,
+          itemCount: widget.checkPointTask!.length,
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.only(bottom: 11),
@@ -49,7 +52,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    tasksData[index],
+                    widget.checkPointTask![index].checkpointTasks.toString(),
                     style: TextStyle(fontSize: 13),
                   ),
                   Checkbox(

@@ -63,7 +63,11 @@ class _CircularProfileState extends State<CircularProfile> {
               future: getPropertyGuardListAPI(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
+                  return Center(
+                      child: Container(
+                          height: 60,
+                          width: 60,
+                          child: CircularProgressIndicator()));
                 } else {
                   return ListView.builder(
                       physics: BouncingScrollPhysics(),
@@ -76,25 +80,29 @@ class _CircularProfileState extends State<CircularProfile> {
                           children: [
                             InkWell(
                               onTap: () {
-                                screenNavigator(context, ChattingScreen(index: index));
+                                screenNavigator(
+                                    context, ChattingScreen(index: index));
                               },
-                              child:CustomCircularImage.getCircularImage(
+                              child: CustomCircularImage.getCircularImage(
                                   snapshot.data!.imageBaseUrl.toString(),
-                                  snapshot.data!.teams!.data![index].avatar.toString(),
+                                  snapshot.data!.teams!.data![index].avatar
+                                      .toString(),
                                   // dummyData[index].profileUrl,
                                   // dummyData[index].isOnline,
                                   // true,
-                                  snapshot.data!.teams!.data![index].apiToken !=null ? true :   
-                                  false,
+                                  snapshot.data!.teams!.data![index].apiToken !=
+                                          null
+                                      ? true
+                                      : false,
                                   30,
                                   4,
-                                  43
-                                  ),
+                                  43),
                             ),
                             SizedBox(
                               width: 70,
                               child: Text(
-                                snapshot.data!.teams!.data![index].firstName.toString(),
+                                snapshot.data!.teams!.data![index].firstName
+                                    .toString(),
                                 softWrap: true,
                                 textAlign: TextAlign.center,
                               ),

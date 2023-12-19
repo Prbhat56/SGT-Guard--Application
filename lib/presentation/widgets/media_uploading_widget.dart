@@ -25,7 +25,10 @@ class MediaUploadingWidget extends StatelessWidget {
             height: 60,
             width: 60,
             alignment: Alignment.center,
-            child: Image.file(File(imageFileList[index].path))),
+            child: Image.file(
+              File(imageFileList[index].path),
+              fit: BoxFit.fill,
+            )),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,

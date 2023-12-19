@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 import '../../../../helper/navigator_function.dart';
 import '../../../../theme/custom_theme.dart';
 import '../../../map_screen/map_screen.dart';
@@ -29,7 +31,7 @@ class EmergencyLocationWidget extends StatelessWidget {
               SizedBox(width: 135),
               InkWell(
                 onTap: () {
-                  screenNavigator(context, EditLocationScreen());
+                  //screenNavigator(context, EditLocationScreen());
                 },
                 child: Text(
                   'Edit Location',
@@ -45,7 +47,19 @@ class EmergencyLocationWidget extends StatelessWidget {
           const SizedBox(
             height: 18,
           ),
-          Container(height: 150, child: MapScreen()),
+          Container(
+            height: 200,
+            child: GoogleMap(
+                zoomGesturesEnabled: false,
+                onCameraMove: (position) {
+                  EmergencyReportScreen.of(context)!.latValue =
+                      position.target.latitude.toString();
+                  EmergencyReportScreen.of(context)!.longValue =
+                      position.target.longitude.toString();
+                },
+                initialCameraPosition: CameraPosition(
+                    target: LatLng(22.572645, 88.363892), zoom: 14)),
+          ),
         ],
       ),
     );

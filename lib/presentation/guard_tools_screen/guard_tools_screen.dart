@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/presentation/time_sheet_screen/upcoming_screen.dart';
 import 'package:sgt/utils/const.dart';
 import '../map_screen/active_map_screen.dart';
 import '../qr_screen/scanning_screen.dart';
-import '../time_sheet_screen/time_sheet_screen.dart';
 import '../time_sheet_screen/missed_shift_screen.dart';
 import '../work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 import '../work_report_screen/general_report_screen.dart';
@@ -141,7 +141,7 @@ class GuardToolScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const TimeSheetScreen();
+                        return UpcomingThimeSheet(); //TimeSheetScreen();
                       }));
                     },
                     child: Container(
@@ -243,7 +243,7 @@ class GuardToolScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const GeneralReportScreen();
+                        return GeneralReportScreen();
                       }));
                     },
                     child: Container(

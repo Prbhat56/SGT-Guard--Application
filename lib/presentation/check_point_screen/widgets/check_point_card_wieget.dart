@@ -1,26 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
+import 'package:sgt/service/constant/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
+import 'package:http/http.dart' as http;
+
 
 //card data class
-class CardDetails {
-  final IconData icon;
-  final String data;
-  CardDetails({
-    required this.icon,
-    required this.data,
-  });
+// class CardDetails {
+//   final IconData icon;
+//   final String data;
+//   CardDetails({
+//     required this.icon,
+//     required this.data,
+//   });
+// }
+
+// //list of card data
+// List<CardDetails> data = [
+//   CardDetails(icon: Icons.schedule_outlined, data: '6 Hours Duty'),
+//   CardDetails(icon: Icons.edit_note_outlined, data: '13 Checkpoints'),
+//   CardDetails(icon: Icons.person_outlined, data: 'Surveillance')
+// ];
+
+class CheckPointCardsWidget extends StatefulWidget {
+  int? propertyId;
+  CheckPointCardsWidget({super.key,this.propertyId});
+
+  @override
+  State<CheckPointCardsWidget> createState() => _CheckPointCardsWidgetState();
+}
+Property ? property=Property() ;
+class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
+  Future<CheckPointPropertyWise> getCheckpointsList(property_id) async {
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  Map<String, String> myHeader = <String, String>{
+    "Authorization": "Bearer ${prefs.getString('token')}",
+  };
+  Map<String,String> myJsonBody = {'property_id': property_id.toString()};
+  String apiUrl = baseUrl + apiRoutes['checkpointListPropertyWise']!;
+  final response =
+      await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
+  if (response.statusCode == 201) {
+    print("object");
+    final CheckPointPropertyWise responseModel =
+        checkPointPropertyWiseFromJson(response.body);
+        property = responseModel.property;
+    return responseModel;
+  } else {
+    return CheckPointPropertyWise(
+      status: response.statusCode,
+    );
+  }
 }
 
-//list of card data
-List<CardDetails> data = [
-  CardDetails(icon: Icons.schedule_outlined, data: '6 Hours Duty'),
-  CardDetails(icon: Icons.edit_note_outlined, data: '13 Checkpoints'),
-  CardDetails(icon: Icons.person_outlined, data: 'Surveillance')
-];
+@override void initState() {
+    super.initState();
+    getCheckpointsList(widget.propertyId);
+  } 
 
-class CheckPointCardsWidget extends StatelessWidget {
-  const CheckPointCardsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +99,16 @@ class CheckPointCardsWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Rivi Properties',
+                  // 'Rivi Properties',
+                  property!.propertyName.toString(),
                   style: CustomTheme.blackTextStyle(15),
                 ),
                 SizedBox(
                   height: 3,
                 ),
                 Text(
-                  '1517 South Centelella',
+                  // '1517 South Centelella',
+                  property!.location.toString(),
                   style: CustomTheme.greyTextStyle(10),
                 ),
                 SizedBox(
@@ -80,7 +122,7 @@ class CheckPointCardsWidget extends StatelessWidget {
                       style: CustomTheme.blueTextStyle(8, FontWeight.w500),
                     ),
                     Text(
-                      ' 2 Hrs 30 Min 23 Secs',
+                      ' 2 Hrs 30 Min 23 Secs', // api response pending
                       style: CustomTheme.blackTextStyle(8),
                     ),
                   ],
@@ -91,35 +133,35 @@ class CheckPointCardsWidget extends StatelessWidget {
           SizedBox(
             width: 45,
           ),
-          Container(
-            height: 52,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: data
-                    .map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              e.icon,
-                              color: Colors.grey,
-                              size: 13,
-                            ),
-                            SizedBox(
-                              width: 2,
-                            ),
-                            Text(
-                              e.data,
-                              style: CustomTheme.blackTextStyle(10),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList()),
-          )
+          // Container(
+          //   height: 52,
+          //   child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: data
+          //           .map(
+          //             (e) => Padding(
+          //               padding: const EdgeInsets.symmetric(vertical: 2),
+          //               child: Row(
+          //                 mainAxisSize: MainAxisSize.min,
+          //                 children: [
+          //                   Icon(
+          //                     e.icon,
+          //                     color: Colors.grey,
+          //                     size: 13,
+          //                   ),
+          //                   SizedBox(
+          //                     width: 2,
+          //                   ),
+          //                   Text(
+          //                     e.data,
+          //                     style: CustomTheme.blackTextStyle(10),
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //           )
+          //           .toList()),
+          // )
         ],
       ),
     );

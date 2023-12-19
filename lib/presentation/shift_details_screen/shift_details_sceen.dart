@@ -192,7 +192,7 @@ class ShiftDetailsScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const ClockInScreen();
+                        return ClockInScreen();
                       }));
                     })
               ],

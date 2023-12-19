@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
 import '../../../../theme/custom_theme.dart';
 import '../../../widgets/custom_circular_image_widget.dart';
 
-class RecentReportCardWidget extends StatelessWidget {
-  const RecentReportCardWidget({super.key});
-  final imageUrl =
-      'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg';
+class RecentReportCardWidget extends StatefulWidget {
+  List<ReportResponse>? myData;
+  RecentReportCardWidget({super.key, this.myData});
 
+  @override
+  State<RecentReportCardWidget> createState() => _RecentReportCardWidgetState();
+}
+
+class _RecentReportCardWidgetState extends State<RecentReportCardWidget> {
+  // final imageUrl =
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,7 +26,7 @@ class RecentReportCardWidget extends StatelessWidget {
         Container(
           height: 120,
           child: ListView.builder(
-              itemCount: 3,
+              itemCount: widget.myData!.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return Container(
@@ -32,12 +38,17 @@ class RecentReportCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(children: [
                     CustomCircularImage.getCircularImage(
-                        '',imageUrl, false, 20, 0, 0),
+                        '',
+                        widget.myData![index].images,
+                        false,
+                        20,
+                        0,
+                        0),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
-                      'Maintenance\nReport 12',
+                      widget.myData![index].reportType.toString(),
                       textAlign: TextAlign.center,
                       style: CustomTheme.blueTextStyle(10, FontWeight.w400),
                     ),

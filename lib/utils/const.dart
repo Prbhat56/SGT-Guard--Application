@@ -9,3 +9,8 @@ Color blueColor = Color(0xFF0072FF);
 Color black = Colors.black;
 Color white = Colors.white;
 Color grey = const Color(0xFFE4E4E4);
+
+extension Capitalized on String {
+  String capitalized() =>
+      this.substring(0, 1).toUpperCase() + this.substring(1).toLowerCase();
+}

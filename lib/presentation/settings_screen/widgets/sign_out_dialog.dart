@@ -11,7 +11,7 @@ import '../../../utils/const.dart';
 
 class SignOutDialog extends StatelessWidget {
   const SignOutDialog({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -57,8 +57,9 @@ class SignOutDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Center(
-                    child:TextButton(
-                      onPressed: () { Navigator.of(context, rootNavigator: true).pop(context);
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(context);
                       },
                       child: Text(
                         'No',
@@ -90,8 +91,9 @@ class SignOutDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Center(
-                    child:TextButton(
-                      onPressed: () { _handlesignOut(context);
+                    child: TextButton(
+                      onPressed: () {
+                        _handlesignOut(context);
                       },
                       child: Text(
                         'Yes',
@@ -109,18 +111,18 @@ class SignOutDialog extends StatelessWidget {
     );
   }
 
-   void _handlesignOut(context){
-      var apiService = ApiCallMethodsService();
-      apiService.post(apiRoutes['logout']!, '').then((value) {
-        apiService.updateUserDetails('');
-        var commonService = CommonService();
-        Map<String, dynamic> jsonMap = json.decode(value);
-        commonService.openSnackBar(jsonMap['message'],context);
-        // commonService.clearLocalStorage();
-        commonService.logDataClear();
-         screenNavigator(context,SignInScreen());
-      }).onError((error, stackTrace) {
-        print(error);
-      });
+  void _handlesignOut(context) {
+    var apiService = ApiCallMethodsService();
+    apiService.post(apiRoutes['logout']!, '').then((value) {
+      apiService.updateUserDetails('');
+      var commonService = CommonService();
+      //Map<String, dynamic> jsonMap = json.decode(value);
+      //commonService.openSnackBar(jsonMap['message'],context);
+      // commonService.clearLocalStorage();
+      commonService.logDataClear();
+      screenNavigator(context, SignInScreen());
+    }).onError((error, stackTrace) {
+      print(error);
+    });
   }
 }

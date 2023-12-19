@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'check_point_card_wieget.dart';
 
-class CurveDesignWidget extends StatelessWidget {
-  const CurveDesignWidget({super.key});
+class CurveDesignWidget extends StatefulWidget {
+  int? propertyId;
+  CurveDesignWidget({super.key,this.propertyId });
 
+  @override
+  State<CurveDesignWidget> createState() => _CurveDesignWidgetState();
+}
+
+class _CurveDesignWidgetState extends State<CurveDesignWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +32,9 @@ class CurveDesignWidget extends StatelessWidget {
             top: 260,
             left: 16,
             right: 16,
-            child: CheckPointCardsWidget(),
+            child: CheckPointCardsWidget(
+              propertyId:widget.propertyId
+            ),
           ),
         ],
       ),

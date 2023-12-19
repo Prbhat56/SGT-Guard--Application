@@ -13,7 +13,8 @@ class ReportSubmitSuccess extends StatefulWidget {
 class _ReportSubmitSuccessState extends State<ReportSubmitSuccess> {
   @override
   void initState() {
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
+      Navigator.pop(context);
       Navigator.pop(context);
     });
 

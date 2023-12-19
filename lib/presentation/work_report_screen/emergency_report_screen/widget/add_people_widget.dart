@@ -27,7 +27,7 @@ class AddPeopleWidget extends StatelessWidget {
           height: 10,
         ),
         Container(
-          height: 195 * number.toDouble(),
+          height: 175 * number.toDouble(),
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               itemCount: number,
@@ -37,11 +37,12 @@ class AddPeopleWidget extends StatelessWidget {
                   children: [
                     CustomUnderlineTextFieldWidget(
                       textfieldTitle: 'Name',
-                      hintText: 'Something here',
+                      hintText: 'Name',
                     ),
                     CustomUnderlineTextFieldWidget(
                       textfieldTitle: 'Phone Number',
-                      hintText: 'Something here',
+                      hintText: 'Phone Number',
+                      keyboardType: TextInputType.number,
                     ),
                   ],
                 );

@@ -40,19 +40,19 @@ class UserDetails {
     String? guardPosition;
     String? gender;
     DateTime? dateOfBirth;
-    dynamic contactCode;
+    String? contactCode;
     String? contactNumber;
     String? street;
     int? city;
     int? state;
     int? country;
-    int? zipCode;
+    dynamic zipCode;
     String? latitude;
     String? longitude;
     String? emailAddress;
     String? password;
     String? apiToken;
-    dynamic otp;
+    int? otp;
     String? backSideIdCard;
     String? frontSideIdCard;
     DateTime? createdAt;
@@ -102,58 +102,69 @@ class UserDetails {
 
         factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
               id: json["id"],
-              guardUserId:json["guard_user_id"],
-              propertyOwnerId: json["property_owner_id"],
-              avatar:json["avatar"],
-              isAssign:json["is_assign"],
-              firstName:json["first_name"],
-              lastName: json["last_name"],
-              guardPosition:json["guard_position"],
-              gender:json["gender"],
-              dateOfBirth:json["date_of_birth"],
-              contactCode: json["contact_code"],
-              contactNumber: json["contact_number"],
-              street: json["street"],
-              city: json["city"],
-              state: json["state"],
-              country: json["country"],
-              zipCode: json["zip_code"],
-              latitude: json["latitude"],
-              longitude:json["longitude"],
-              emailAddress: json["email_address"],
-              cityText: json["city_text"],
-              stateText: json["state_text"],
-              countryText: json["country_text"],
-              status: json["status"],
-              createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-              updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        guardUserId: json["guard_user_id"],
+        propertyOwnerId: json["property_owner_id"],
+        avatar: json["avatar"],
+        status: json["status"],
+        isAssign: json["is_assign"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        guardPosition: json["guard_position"],
+        gender: json["gender"],
+        dateOfBirth: json["date_of_birth"] == null ? null : DateTime.parse(json["date_of_birth"]),
+        contactCode: json["contact_code"],
+        contactNumber: json["contact_number"],
+        street: json["street"],
+        city: json["city"],
+        state: json["state"],
+        country: json["country"],
+        zipCode: json["zip_code"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        emailAddress: json["email_address"],
+        password: json["password"],
+        apiToken: json["api_token"],
+        otp: json["otp"],
+        backSideIdCard: json["back_side_id_card"],
+        frontSideIdCard: json["front_side_id_card"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        cityText: json["city_text"],
+        stateText: json["state_text"],
+        countryText: json["country_text"],
             );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "guard_user_id":guardUserId,
-        "property_owner_id":propertyOwnerId,
-        "avatar":avatar,
-        "is_assign":isAssign,
-        "first_name":firstName,
-        "last_name":lastName,
-        "guard_position":guardPosition,
-        "gender":gender,
-        "date_of_birth":dateOfBirth,
-        "contact_code":contactCode,
-        "contact_number":contactNumber,
-        "street":street,
+        "guard_user_id": guardUserId,
+        "property_owner_id": propertyOwnerId,
+        "avatar": avatar,
+        "status": status,
+        "is_assign": isAssign,
+        "first_name": firstName,
+        "last_name": lastName,
+        "guard_position": guardPosition,
+        "gender": gender,
+        "date_of_birth": "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}",
+        "contact_code": contactCode,
+        "contact_number": contactNumber,
+        "street": street,
         "city": city,
         "state": state,
         "country": country,
-        "zip_code":zipCode,
-        "city_text":cityText,
-        "state_text":stateText,
-        "country_text":countryText,
-        "longitude": longitude,
+        "zip_code": zipCode,
         "latitude": latitude,
-        "status": status,
+        "longitude": longitude,
+        "email_address": emailAddress,
+        "password": password,
+        "api_token": apiToken,
+        "otp": otp,
+        "back_side_id_card": backSideIdCard,
+        "front_side_id_card": frontSideIdCard,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "city_text": cityText,
+        "state_text": stateText,
+        "country_text": countryText,
       };
 }

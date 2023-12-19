@@ -10,7 +10,8 @@ import '../time_sheet_screen/check_point_map_screen.dart';
 import 'widgets/check_points_widget.dart';
 
 class CheckPointScreen extends StatefulWidget {
-  const CheckPointScreen({super.key});
+  int? propertyId;
+  CheckPointScreen({super.key,this.propertyId});
 
   @override
   State<CheckPointScreen> createState() => _CheckPointScreenState();
@@ -32,8 +33,7 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
                 child: SvgPicture.asset('assets/clock.svg')),
             IconButton(
                 onPressed: () {
-                  BlocProvider.of<ToggleSwitchCubit>(context)
-                      .changingToggleSwitch();
+                  BlocProvider.of<ToggleSwitchCubit>(context).changingToggleSwitch();
                 },
                 icon: Icon(
                   Icons.map,
@@ -46,8 +46,11 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
           child: Column(
             children: [
               context.watch<ToggleSwitchCubit>().state.isSwitched
-                  ? CheckPointMapScreen()
-                  : CheckPointWidget(),
+                  ? CheckPointMapScreen(
+                  )
+                  : CheckPointWidget(
+                    propertyId:widget.propertyId
+                  ),
             ],
           ),
         ),

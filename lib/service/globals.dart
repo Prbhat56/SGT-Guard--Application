@@ -1,4 +1,3 @@
 library globals;
 
-
 var userDetail;

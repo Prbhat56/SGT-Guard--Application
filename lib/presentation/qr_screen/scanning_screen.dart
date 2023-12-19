@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -41,8 +42,17 @@ class _ScanningScreenState extends State<ScanningScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print("result =========> ${result?.code.toString()}");
+    // String? jsonString = result?.code.toString();
+    // Map<String, dynamic> jsonData = jsonDecode(jsonString!);
+    // int shiftId = jsonData['shift_details']['shift_id'];
+    // print('Shift ID: $shiftId');
+    // var qrData = jsonEncode(result!.code.toString());
+    // print("qrData =========> ${qrData}");
     return result != null
-        ? ClockInScreen() //if the qr has data then it will show clock in screen
+        ? ClockInScreen(
+            qrData:result?.code
+        ) //if the qr has data then it will show clock in screen
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(

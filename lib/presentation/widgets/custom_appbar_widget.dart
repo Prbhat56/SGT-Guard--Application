@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../utils/const.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +20,7 @@ class CustomAppBarWidget extends StatelessWidget
           color: primaryColor,
         ),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.of(context).pop();
         },
       ),
       centerTitle: true,
