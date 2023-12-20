@@ -121,7 +121,7 @@ class LeaveDatum {
   String? subject;
   String? status;
   String? reasonOfLeave;
-  dynamic rejectOfReason;
+  String? rejectOfReason;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -155,7 +155,7 @@ class LeaveDatum {
             json["leave_to"] == null ? null : DateTime.parse(json["leave_to"]),
         subject: json["subject"],
         status: json["status"],
-        reasonOfLeave: json["reason_of_leave"],
+        reasonOfLeave: json["reason_of_leave"] == null ? null : "",
         rejectOfReason: json["reject_of_reason"],
         createdAt: json["created_at"] == null
             ? null

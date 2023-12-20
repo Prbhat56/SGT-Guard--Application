@@ -92,8 +92,6 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                         child: CachedNetworkImage(
                                             imageUrl: '' + '/' + '',
                                             fit: BoxFit.fill,
-                                            // width: 60,
-                                            // height: 60,
                                             placeholder: (context, url) =>
                                                 const CircularProgressIndicator(
                                                   strokeCap: StrokeCap.round,
@@ -143,8 +141,8 @@ class _YourReportScreenState extends State<YourReportScreen> {
         //   future: getShiftList(),
         //   builder: (context, snapshot) {
         //     if (!snapshot.hasData) {
-        //       return SizedBox(
-        //         height: MediaQuery.of(context).size.height / 1.3,
+        //           return SizedBox(
+        //             height: MediaQuery.of(context).size.height / 1.3,
         //         child: Center(
         //           child: CircularProgressIndicator(),
         //         ),

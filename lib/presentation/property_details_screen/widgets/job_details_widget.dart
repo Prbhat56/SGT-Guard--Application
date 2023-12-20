@@ -3,7 +3,6 @@ import 'package:sgt/presentation/property_details_screen/model/propertyDetail_mo
 import 'package:sgt/theme/custom_theme.dart';
 import '../../widgets/custom_text_widget.dart';
 
-
 class JobDetailsModel {
   JobDetailsModel({
     required this.title,
@@ -13,13 +12,6 @@ class JobDetailsModel {
   final String titleValue;
 }
 
-
-class JobDetailsWidget extends StatelessWidget {
-  String? name = '';
-  String? position = '';
-  String? time = '';
-  JobDetailsWidget({super.key, this.name, this.position, this.time});
-
 List<JobDetailsModel> jobData = [
   JobDetailsModel(title: 'Guard Name:', titleValue: 'Matheus Paolo'),
   JobDetailsModel(title: 'Position:', titleValue: 'Superviser'),
@@ -27,29 +19,19 @@ List<JobDetailsModel> jobData = [
 ];
 
 class JobDetailsWidget extends StatefulWidget {
-  JobDetailsWidget({super.key,required this.jobDetails});
+  JobDetailsWidget({super.key, required this.jobDetails});
   JobDetailsClass? jobDetails;
 
   @override
   State<JobDetailsWidget> createState() => _JobDetailsWidgetState();
 }
 
-
 class _JobDetailsWidgetState extends State<JobDetailsWidget> {
   @override
   Widget build(BuildContext context) {
-
-    List<JobDetailsModel> jobData = [
-      JobDetailsModel(title: 'Gaurd Name:', titleValue: ' ${name}'),
-      JobDetailsModel(title: 'Position:', titleValue: ' ${position}'),
-      JobDetailsModel(title: 'Shift Time:', titleValue: ' ${time}'),
-    ];
-
-
     print(widget.jobDetails?.firstName.toString());
-
     return Container(
-      height: 25 * jobData.length.toDouble(),
+      height: 30 * jobData.length.toDouble(),
       child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           itemCount: jobData.length,
@@ -58,49 +40,42 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                               Text(
-                                  'Guard Name: ',
-                                  style: CustomTheme.blackTextStyle(15)
-                                ), 
-                                Text(
-                                  widget.jobDetails!.firstName.toString()+''+widget.jobDetails!.lastName.toString(),
-                                  style: CustomTheme.blueTextStyle(15,FontWeight.w400),
-                                ),
-                    ],
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Guard Name: ', style: CustomTheme.blackTextStyle(15)),
+                    Text(
+                      widget.jobDetails!.firstName.toString() +
+                          '' +
+                          widget.jobDetails!.lastName.toString(),
+                      style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                               Text(
-                                  'Position: ',
-                                  style: CustomTheme.blackTextStyle(15)
-                                ), 
-                                Text(
-                                  widget.jobDetails!.guardPosition.toString(),
-                                  style: CustomTheme.blueTextStyle(15,FontWeight.w400),
-                                ),
-                    ],
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Position: ', style: CustomTheme.blackTextStyle(15)),
+                    Text(
+                      widget.jobDetails!.guardPosition.toString(),
+                      style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                               Text(
-                                  'Shift Time: ',
-                                  style: CustomTheme.blackTextStyle(15)
-                                ), 
-                                Text(
-                                  widget.jobDetails!.shiftTime.toString(),
-                                  style: CustomTheme.blueTextStyle(15,FontWeight.w400),
-                                ),
-                    ],
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Shift Time: ', style: CustomTheme.blackTextStyle(15)),
+                    Text(
+                      widget.jobDetails!.shiftTime.toString(),
+                      style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 20,

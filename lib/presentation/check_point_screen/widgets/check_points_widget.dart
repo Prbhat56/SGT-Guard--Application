@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/check_point_screen/widgets/check_point_model.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/curve_design_widget.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/timeline_details_widget.dart';
-import 'package:sgt/presentation/clocked_in_out_screen/clock_out_error_screen.dart';
-import 'package:sgt/presentation/check_point_screen/widgets/check_point_card_wieget.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/check_point_time_line.dart';
-import 'package:sgt/presentation/clocked_in_out_screen/clock_out_screen.dart';
-import 'package:sgt/presentation/qr_screen/chack_in_points_scanning_screen.dart';
 import 'package:sgt/presentation/qr_screen/check_out_points_scanning_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 
@@ -50,7 +45,6 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
                 buttonTitle: 'Clock Out',
                 onBtnPress: () {
                   // screenNavigator(context, ClockOutErrorScreen());
-                  // screenNavigator(context,());
                   screenNavigator(context, CheckPointOutScanningScreen());
                   // screenNavigator(context, ClockOutScreen());
                 }),

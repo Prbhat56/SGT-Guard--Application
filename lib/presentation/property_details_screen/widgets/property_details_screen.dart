@@ -5,31 +5,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/check_points_list.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/job_details_widget.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/map_card_widget.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/property_description_widget.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/property_details_widget.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/shift_cards.dart';
+import 'package:sgt/presentation/qr_screen/scanning_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../cubit/timer_on/timer_on_cubit.dart';
-import '../qr_screen/scanning_screen.dart';
-import '../widgets/custom_text_widget.dart';
-import 'widgets/job_details_widget.dart';
-import 'widgets/map_card_widget.dart';
-import 'widgets/property_description_widget.dart';
-import 'widgets/property_details_widget.dart';
 import 'package:http/http.dart' as http;
 
 class PropertyDetailsScreen extends StatefulWidget {
   InactiveDatum? activeData = InactiveDatum();
   String? imageBaseUrl;
+  String? propertyImageBaseUrl;
   int? propertyId;
   PropertyDetailsScreen(
-      {super.key, this.activeData, this.imageBaseUrl, this.propertyId});
+      {super.key,
+      this.activeData,
+      this.imageBaseUrl,
+      this.propertyId,
+      this.propertyImageBaseUrl});
 
   @override
   State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
@@ -146,7 +151,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                           context,
                                           CheckPointListsScreen(
                                             propertyId: snapshot.data!.data!.id,
-                                            checkPoint: widget.activeData!.checkPoints,
+                                            checkPoint:
+                                                widget.activeData!.checkPoints,
                                             imageBaseUrl: widget.imageBaseUrl,
                                           ));
                                     },
@@ -244,9 +250,16 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               TextFieldHeaderWidget(title: 'Upcoming Shifts'),
                               const SizedBox(height: 10),
                               // ShiftCards(shifts: widget.activeData!.shifts), //shift cards widget
-                              ShiftCards(
-                                shifts: snapshot.data!.data!.shifts
-                                ), //shift cards widget
+                              snapshot.data!.data!.shifts!.length != 0
+                                  ? ShiftCards(
+                                      shifts: snapshot.data!.data!.shifts)
+                                  : Text(
+                                      'No Upcoming Shift Available',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                               SizedBox(height: 20),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,13 +267,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   TextFieldHeaderWidget(title: 'Job Details'),
                                   const SizedBox(height: 10),
                                   JobDetailsWidget(
-                                    jobDetails:snapshot.data!.data?.jobDetails
-                                  ), //widgets to show job details
+                                      jobDetails: snapshot.data!.data
+                                          ?.jobDetails), //widgets to show job details
                                   //const SizedBox(height: 25),
                                   TextFieldHeaderWidget(title: 'Description'),
                                   const SizedBox(height: 10),
                                   PropertyDescriptionWidget(
-                                    imageBaseUrl: snapshot.data!.propertyImageBaseUrl,
+                                    imageBaseUrl: widget.propertyImageBaseUrl,
                                     activeData: widget.activeData,
                                   ), //widget to show property details
                                   const SizedBox(height: 25),

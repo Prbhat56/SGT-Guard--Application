@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
-import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/property_details_screen.dart';
 import 'package:sgt/utils/const.dart';
 import '../../property_details_screen/inactive_property_details_screen.dart';
 import '../../widgets/custom_circular_image_widget.dart';
@@ -11,11 +11,12 @@ class JobsTile extends StatefulWidget {
   InactiveDatum? inActiveData = InactiveDatum();
   String? imageBaseUrl;
   int? propertyId;
-  JobsTile(
-      {super.key,
-      required this.isActive,
-      this.inActiveData,
-      this.imageBaseUrl,});
+  JobsTile({
+    super.key,
+    required this.isActive,
+    this.inActiveData,
+    this.imageBaseUrl,
+  });
 
   @override
   State<JobsTile> createState() => _JobsTileState();

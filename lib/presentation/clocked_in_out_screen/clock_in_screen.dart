@@ -32,14 +32,12 @@ String? qrData;
 
 Future<ClockInModal> getCheckpointsTaskList(shift_id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
   Map<String, String> myHeader = <String, String>{
     "Authorization": "Bearer ${prefs.getString('token')}",
   };
   Map<String, dynamic> myJsonBody = {'shift_id': shift_id.toString()};
   String apiUrl = baseUrl + apiRoutes['clockIn']!;
-  final response =
-      await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
+  final response = await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
   print(response.body.toString());
   var data = jsonDecode(response.body.toString());
   print(data);
@@ -75,17 +73,17 @@ class _ClockInScreenState extends State<ClockInScreen> {
       child: Scaffold(
         appBar: CustomAppBarWidget(appbarTitle: 'Clocked In'),
         body: FutureBuilder(
-                future: getCheckpointsTaskList(shiftId),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                        child: Container(
-                            height: 60,
-                            width: 60,
-                            child: CircularProgressIndicator()));
-                  } else {
-                    return Center(
-          child: Column(children: [
+            future: getCheckpointsTaskList(shiftId),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: Container(
+                      height: 60,
+                      width: 60,
+                  child: CircularProgressIndicator()));
+              } else {
+                return Center(
+            child: Column(children: [
             const SizedBox(height: 25),
             SvgPicture.asset('assets/green_tick.svg'),
             const SizedBox(height: 10),

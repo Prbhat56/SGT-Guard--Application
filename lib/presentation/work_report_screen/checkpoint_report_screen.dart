@@ -86,6 +86,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     String? jsonString = widget.checkPointqrData;
     Map<String, dynamic> jsonData = jsonDecode(jsonString!);
     int checkpointId = jsonData['checkpoint_details']['checkpoint_id'];
+    String checkPointName = jsonData['checkpoint_details']['checkpoint_name'];
     print('CheckPoint ID: $checkpointId');
     var cubit = context.watch<ReportTypeCubit>().state;
     print(cubit.isparkingReport);
@@ -93,7 +94,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
         appBar: CustomAppBarWidget(
-          appbarTitle: 'Building Hallway 1',
+          appbarTitle: checkPointName,
         ),
         backgroundColor: white,
         body: SingleChildScrollView(

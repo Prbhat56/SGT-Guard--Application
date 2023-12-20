@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_out_modal.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/modal/clockin_modal.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
 
-class TimeDetailsModel {
-  final String title;
-  final String titleValue;
-  TimeDetailsModel({
-    required this.title,
-    required this.titleValue,
-  });
-}
+// class TimeDetailsModel {
+//   final String title;
+//   final String titleValue;
+//   TimeDetailsModel({
+//     required this.title,
+//     required this.titleValue,
+//   });
+// }
 
-List<TimeDetailsModel> timeData = [
-  TimeDetailsModel(
-      title: 'Day:',
-      titleValue: ' Monday, October 24'), // missing in api response
-  TimeDetailsModel(
-      title: 'Shift Time:',
-      titleValue: '10:00 AM - 04:00 PM') //missing in apiResponse
-];
+// List<TimeDetailsModel> timeData = [
+//   TimeDetailsModel(
+//       title: 'Day:',
+//       titleValue: ' Monday, October 24'), // missing in api response
+//   TimeDetailsModel(
+//       title: 'Shift Time:',
+//       titleValue: '10:00 AM - 04:00 PM') //missing in apiResponse
+// ];
 
 class TimeDetailsWidget extends StatefulWidget {
   CurrentShift? currentShiftData;
   TimeDetailsWidget(
-      {super.key, required this.isClockOutScreen, this.currentShiftData});
+      {super.key, required this.isClockOutScreen, this.currentShiftData, });
   final bool isClockOutScreen;
 
   @override
@@ -49,7 +50,7 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
-                      widget.currentShiftData!.date.toString(),
+                      widget.currentShiftData!.shiftDate.toString(),
                       style: CustomTheme.blueTextStyle(13, FontWeight.w400),
                     ),
                   ],
@@ -63,7 +64,7 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
-                      widget.currentShiftData!.checkInTime.toString(),
+                      widget.currentShiftData!.shiftTime.toString(),
                       style: CustomTheme.blueTextStyle(13, FontWeight.w400),
                     ),
                   ],
@@ -94,11 +95,11 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Day:',
+                      'Day: ',
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
-                      widget.currentShiftData!.date.toString(),
+                      widget.currentShiftData!.shiftDate.toString(),
                       style: CustomTheme.blueTextStyle(13, FontWeight.w400),
                     ),
                   ],
@@ -108,11 +109,11 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Shift Time:',
+                      'Shift Time: ',
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
-                      widget.currentShiftData!.checkInTime.toString(),
+                      widget.currentShiftData!.shiftTime.toString(),
                       style: CustomTheme.blueTextStyle(13, FontWeight.w400),
                     ),
                   ],

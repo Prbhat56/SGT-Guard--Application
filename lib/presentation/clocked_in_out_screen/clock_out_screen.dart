@@ -85,78 +85,78 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                         style: TextStyle(fontSize: 15, color: primaryColor),
                       ),
                       const SizedBox(height: 40),
-                      //not getting api data of details on clock out.
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     gradient: LinearGradient(
-                      //       colors: [primaryColor, seconderyColor],
-                      //       begin: Alignment.topCenter,
-                      //       end: Alignment.bottomCenter,
-                      //     ),
-                      //     borderRadius: BorderRadius.circular(10),
-                      //   ),
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(2),
-                      //     child: Container(
-                      //       width: 300.w,
-                      //       decoration: CustomTheme.clockInCardStyle,
-                      //       child: Column(
-                      //           mainAxisSize: MainAxisSize.min,
-                      //           children: [
-                      //             const SizedBox(height: 16),
-                      //             CustomCircularImage.getCircularImage(
-                      //                 '', imageUrl, false, 30, 0, 0),
-                      //             const SizedBox(
-                      //               height: 10,
-                      //             ),
-                      //             Text('Matheus Paolo',
-                      //                 style: CustomTheme.blackTextStyle(17)),
-                      //             const SizedBox(
-                      //               height: 2,
-                      //             ),
-                      //             const Text(
-                      //               'Greylock Security',
-                      //               style: TextStyle(
-                      //                   fontSize: 13, color: Colors.grey),
-                      //             ),
-                      //             const SizedBox(height: 28),
-                      //             Text(
-                      //               'Property',
-                      //               style: CustomTheme.blueTextStyle(
-                      //                   15, FontWeight.w400),
-                      //             ),
-                      //             const SizedBox(height: 6),
-                      //             Text('Rivi Properties',
-                      //                 style: CustomTheme.blackTextStyle(15)),
-                      //             const SizedBox(height: 6),
-                      //             const Text(
-                      //               'Guard Post Duties',
-                      //               style: TextStyle(
-                      //                   fontSize: 15, color: Colors.grey),
-                      //             ),
-                      //             const SizedBox(height: 15),
-                      //             Center(
-                      //                 child: TimeDetailsWidget(
-                      //                     isClockOutScreen: true)),
-                      //             const SizedBox(height: 6),
-                      //             Center(
-                      //                 child: CheckPointCountWidget(
-                      //               completedCheckPoint: '13',
-                      //               remainningCheckPoint: '0',
-                      //             )),
-                      //             const SizedBox(height: 15),
-                      //             Padding(
-                      //               padding: const EdgeInsets.symmetric(
-                      //                   horizontal: 30.0),
-                      //               child: Divider(color: primaryColor),
-                      //             ),
-                      //             const SizedBox(height: 20),
-                      //             Center(child: TotalTimeWidget()),
-                      //             const SizedBox(height: 20),
-                      //           ]),
-                      //     ),
-                      //   ),
-                      // ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [primaryColor, seconderyColor],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: Container(
+                            width: 300.w,
+                            decoration: CustomTheme.clockInCardStyle,
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 16),
+                                  CustomCircularImage.getCircularImage(
+                                      snapshot.data!.imageBaseUrl.toString(), snapshot.data!.jobDetails!.avatar.toString(), false, 30, 0, 0),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(snapshot.data!.jobDetails!.firstName.toString()+''+
+                                  snapshot.data!.jobDetails!.lastName.toString(),
+                                      style: CustomTheme.blackTextStyle(17)),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  const Text(
+                                    'Greylock Security',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey),
+                                  ),
+                                  const SizedBox(height: 28),
+                                  Text(
+                                    'Property',
+                                    style: CustomTheme.blueTextStyle(
+                                        15, FontWeight.w400),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(snapshot.data!.property!.propertyName.toString(),
+                                      style: CustomTheme.blackTextStyle(15)),
+                                  const SizedBox(height: 6),
+                                  const Text(
+                                    'Guard Post Duties',
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  // Center(
+                                  //     child: TimeDetailsWidget(
+                                  //         isClockOutScreen: true)),
+                                  // const SizedBox(height: 6),
+                                  // Center(
+                                  //     child: CheckPointCountWidget(
+                                  //   completedCheckPoint: '13',
+                                  //   remainningCheckPoint: '0',
+                                  // )),
+                                  const SizedBox(height: 15),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30.0),
+                                    child: Divider(color: primaryColor),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Center(child: TotalTimeWidget()),
+                                  const SizedBox(height: 20),
+                                ]),
+                          ),
+                        ),
+                      ),
                       const SizedBox(
                         height: 105,
                       ),

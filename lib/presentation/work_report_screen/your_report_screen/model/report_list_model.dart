@@ -85,18 +85,18 @@ class ReportResponse {
   String? emergencyDate;
   String? emergencyTime;
   String? emergencyDetails;
-  dynamic images;
-  dynamic videos;
+  List<String>? images;
+  String? videos;
   String? latitude;
   String? longitude;
   String? actionTaken;
-  dynamic policeReport;
+  String? policeReport;
   String? officerName;
   String? officerDesignation;
-  String? peopleInvolvedName;
-  String? peopleInvolvedPhone;
-  String? witnessesName;
-  String? witnessesPhone;
+  List<String>? peopleInvolvedName;
+  List<String>? peopleInvolvedPhone;
+  List<String>? witnessesName;
+  List<String>? witnessesPhone;
 
   ReportResponse({
     this.id,
@@ -136,28 +136,47 @@ class ReportResponse {
         guardId: json["guard_id"],
         reportType: json["report_type"],
         subject: json["subject"],
-        notes: json["notes"],
-        vehicleManufacturer: json["vehicle_manufacturer"],
-        model: json["model"],
-        color: json["color"],
-        licenseNumber: json["license_number"],
-        state: json["state"],
-        towed: json["towed"],
-        emergencyDate: json["emergency_date"] == null ? null : "",
-        emergencyTime: json["emergency_time"],
-        emergencyDetails: json["emergency_details"],
-        images: json["images"],
-        videos: json["videos"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-        actionTaken: json["action_taken"],
-        policeReport: json["police_report"],
-        officerName: json["officer_name"],
-        officerDesignation: json["officer_designation"],
-        peopleInvolvedName: json["people_involved_name"],
-        peopleInvolvedPhone: json["people_involved_phone"],
-        witnessesName: json["witnesses_name"],
-        witnessesPhone: json["witnesses_phone"],
+        notes: json["notes"] == null ? "" : json["notes"],
+        vehicleManufacturer: json["vehicle_manufacturer"] == null
+            ? ""
+            : json["vehicle_manufacturer"],
+        model: json["model"] == null ? "" : json["model"],
+        color: json["color"] == null ? "" : json["color"],
+        licenseNumber:
+            json["license_number"] == null ? "" : json["license_number"],
+        state: json["state"] == null ? "" : json["state"],
+        towed: json["towed"] == null ? "" : json["towed"],
+        emergencyDate:
+            json["emergency_date"] == null ? "" : json["emergency_date"],
+        emergencyTime:
+            json["emergency_time"] == null ? "" : json["emergency_time"],
+        emergencyDetails:
+            json["emergency_details"] == null ? "" : json["emergency_details"],
+        images: json["images"] == null
+            ? []
+            : List<String>.from(json["images"]!.map((x) => x)),
+        videos: json["videos"] == null ? "" : json["videos"],
+        latitude: json["latitude"] == null ? "" : json["latitude"],
+        longitude: json["longitude"] == null ? "" : json["longitude"],
+        actionTaken: json["action_taken"] == null ? "" : json["action_taken"],
+        policeReport:
+            json["police_report"] == null ? "" : json["police_report"],
+        officerName: json["officer_name"] == null ? "" : json["officer_name"],
+        officerDesignation: json["officer_designation"] == null
+            ? ""
+            : json["officer_designation"],
+        peopleInvolvedName: json["people_involved_name"] == null
+            ? []
+            : List<String>.from(json["people_involved_name"]!.map((x) => x)),
+        peopleInvolvedPhone: json["people_involved_phone"] == null
+            ? []
+            : List<String>.from(json["people_involved_phone"]!.map((x) => x)),
+        witnessesName: json["witnesses_name"] == null
+            ? []
+            : List<String>.from(json["witnesses_name"]!.map((x) => x)),
+        witnessesPhone: json["witnesses_phone"] == null
+            ? []
+            : List<String>.from(json["witnesses_phone"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -177,7 +196,8 @@ class ReportResponse {
         "emergency_date": emergencyDate,
         "emergency_time": emergencyTime,
         "emergency_details": emergencyDetails,
-        "images": images,
+        "images":
+            images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
         "videos": videos,
         "latitude": latitude,
         "longitude": longitude,
@@ -185,9 +205,17 @@ class ReportResponse {
         "police_report": policeReport,
         "officer_name": officerName,
         "officer_designation": officerDesignation,
-        "people_involved_name": peopleInvolvedName,
-        "people_involved_phone": peopleInvolvedPhone,
-        "witnesses_name": witnessesName,
-        "witnesses_phone": witnessesPhone,
+        "people_involved_name": peopleInvolvedName == null
+            ? []
+            : List<dynamic>.from(peopleInvolvedName!.map((x) => x)),
+        "people_involved_phone": peopleInvolvedPhone == null
+            ? []
+            : List<dynamic>.from(peopleInvolvedPhone!.map((x) => x)),
+        "witnesses_name": witnessesName == null
+            ? []
+            : List<dynamic>.from(witnessesName!.map((x) => x)),
+        "witnesses_phone": witnessesPhone == null
+            ? []
+            : List<dynamic>.from(witnessesPhone!.map((x) => x)),
       };
 }

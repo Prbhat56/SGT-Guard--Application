@@ -55,6 +55,18 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   List<String> _dropdownItems = <String>['Yes', 'No'];
   String? towedValue = 'Yes';
 
+  List<TextEditingController> _peopleNameController = [TextEditingController()];
+  List<TextEditingController> _peoplePhoneController = [
+    TextEditingController()
+  ];
+
+  List<TextEditingController> _witnessNameController = [
+    TextEditingController()
+  ];
+  List<TextEditingController> _witnessPhoneController = [
+    TextEditingController()
+  ];
+
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
   List imageNames = [];
@@ -109,6 +121,46 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     request.fields['latitude'] = latValue.toString();
     request.fields['longitude'] = longValue.toString();
     request.fields['emergency_details'] = _detailsController.text.toString();
+
+    List<String> peopleNameList = [];
+    List<String> peoplePhoneList = [];
+    String peoplesNames = '';
+    String peoplesPhone = '';
+
+    for (TextEditingController controller in _peopleNameController) {
+      peopleNameList.add(controller.text);
+    }
+    peoplesNames = peopleNameList.join(', ');
+    print(peoplesNames);
+
+    for (TextEditingController controller in _peoplePhoneController) {
+      peoplePhoneList.add(controller.text);
+    }
+    peoplesPhone = peoplePhoneList.join(', ');
+    print(peoplesPhone);
+
+    request.fields['people_involved_name[]'] = peoplesNames;
+    request.fields['people_involved_phone[]'] = peoplesPhone;
+
+    List<String> witnessNameList = [];
+    List<String> witnessPhoneList = [];
+    String witnessNames = '';
+    String witnessPhone = '';
+
+    for (TextEditingController controller in _witnessNameController) {
+      witnessNameList.add(controller.text);
+    }
+    witnessNames = witnessNameList.join(', ');
+    print(witnessNames);
+
+    for (TextEditingController controller in _witnessPhoneController) {
+      witnessPhoneList.add(controller.text);
+    }
+    witnessPhone = witnessPhoneList.join(', ');
+    print(witnessPhone);
+
+    request.fields['witnesses_name[]'] = witnessNames;
+    request.fields['witnesses_phone[]'] = witnessPhone;
     request.fields['action_taken'] = _actionController.text.toString();
     request.fields['officer_name'] = _officerController.text.toString();
     request.fields['officer_designation'] = _officeController.text.toString();
@@ -192,6 +244,20 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     _actionController.dispose();
     _officerController.dispose();
     _officeController.dispose();
+
+    for (TextEditingController controller in _peopleNameController) {
+      controller.dispose();
+    }
+    for (TextEditingController controller in _peoplePhoneController) {
+      controller.dispose();
+    }
+
+    for (TextEditingController controller in _witnessNameController) {
+      controller.dispose();
+    }
+    for (TextEditingController controller in _witnessPhoneController) {
+      controller.dispose();
+    }
 
     propertyName = "";
     propertyId = "";
@@ -311,19 +377,24 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 AddPeopleWidget(
                   title: 'People Involved',
                   number: context.watch<AddpeopleCubit>().state.peopleNo,
-                  ontap: () {
+                  onCallback: () async {
                     context.read<AddpeopleCubit>().addPeople();
                   },
+                  peopleName: _peopleNameController[0],
+                  peoplePhone: _peoplePhoneController[0],
                 ),
+
                 const SizedBox(
                   height: 10,
                 ),
                 AddPeopleWidget(
                   title: 'Witnesss',
                   number: context.watch<AddwitnessCubit>().state.witness,
-                  ontap: () {
+                  onCallback: () async {
                     context.read<AddwitnessCubit>().addwitness();
                   },
+                  peopleName: _witnessNameController[0],
+                  peoplePhone: _witnessPhoneController[0],
                 ),
                 CustomTextField(
                   controller: _actionController,

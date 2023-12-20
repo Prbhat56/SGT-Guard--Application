@@ -249,14 +249,14 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                           children: [
                             TextFieldHeaderWidget(title: 'Job Details'),
                             const SizedBox(height: 10),
-                            JobDetailsWidget(
-                                name:
-                                    '${detailsData.assignGuard!.first.details!.firstName.toString()} ${detailsData.assignGuard!.first.details!.lastName.toString()}',
-                                position: detailsData
-                                    .assignGuard!.first.details!.guardPosition
-                                    .toString(),
-                                time:
-                                    '${detailsData.shifts!.first.clockIn.toString()}-${detailsData.shifts!.first.clockOut.toString()}'), //widgets to show job details
+                            // JobDetailsWidget(
+                            //     name:
+                            //         '${detailsData.assignGuard!.first.details!.firstName.toString()} ${detailsData.assignGuard!.first.details!.lastName.toString()}',
+                            //     position: detailsData
+                            //         .assignGuard!.first.details!.guardPosition
+                            //         .toString(),
+                            //     time:
+                            //         '${detailsData.shifts!.first.clockIn.toString()}-${detailsData.shifts!.first.clockOut.toString()}'), //widgets to show job details
                           ],
                         ),
                       ],
@@ -279,17 +279,63 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                       children: [
                         TextFieldHeaderWidget(title: 'Description'),
                         const SizedBox(height: 10),
-                        Text(
-                          detailsData.propertyDescription.toString(),
-                          maxLines:
-                              context.watch<ShowmoreCubit>().state.showmore
-                                  ? 1000
-                                  : 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
+                        // Text(
+                        //   detailsData.propertyDescription.toString(),
+                        //   maxLines:
+                        //       context.watch<ShowmoreCubit>().state.showmore
+                        //           ? 1000
+                        //           : 3,
+                        //   overflow: TextOverflow.ellipsis,
+                        //   style: TextStyle(
+                        //     fontSize: 15,
+                        //   ),
+                        // ),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  child: Text(
+                                    detailsData.propertyDescription.toString(),
+                                    maxLines: context
+                                            .watch<ShowmoreCubit>()
+                                            .state
+                                            .showmore
+                                        ? 1000
+                                        : 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                context.watch<ShowmoreCubit>().state.showmore
+                                    ? Container()
+                                    : InkWell(
+                                        onTap: () {
+                                          context
+                                              .read<ShowmoreCubit>()
+                                              .showMore();
+                                          print(context
+                                              .read<ShowmoreCubit>()
+                                              .state
+                                              .showmore);
+                                        },
+                                        child: Text(
+                                          'more',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: primaryColor),
+                                        ),
+                                      )
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),

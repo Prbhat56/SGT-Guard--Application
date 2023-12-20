@@ -9,7 +9,7 @@ import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import '../../qr_screen/chack_in_points_scanning_screen.dart';
+import '../../qr_screen/check_in_points_scanning_screen.dart';
 
 class TimeLineDetailsWidget extends StatefulWidget {
   int? propertyId;
@@ -98,7 +98,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                     Text(
                                       // 'Building Hallway 1',
                                       checkpointList[index]
-                                          .propertyName
+                                          .checkpointName
                                           .toString(),
                                       style: CustomTheme.blueTextStyle(
                                           13, FontWeight.w400),

@@ -49,7 +49,9 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
   @override
   Widget build(BuildContext context) {
     return result != null
-        ? CheckpointReportScreen()
+        ? CheckpointReportScreen(
+          checkPointqrData:result?.code
+        )
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(

@@ -82,7 +82,11 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
                     mapType: MapType.normal,
                     zoomControlsEnabled: false,
                     initialCameraPosition: CameraPosition(
-                        target: LatLng(22.572645, 88.363892), zoom: 14),
+                        target: LatLng(
+                          double.parse(activeDatum[0].latitude.toString()),
+                          double.parse(activeDatum[0].longitude.toString()),
+                        ),
+                        zoom: 14),
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
@@ -95,7 +99,7 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 3,
+                        itemCount: activeDatum.length,
                         itemBuilder: (context, index) {
                           var myData = activeDatum[index];
                           return Container(

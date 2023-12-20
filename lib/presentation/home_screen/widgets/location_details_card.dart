@@ -5,11 +5,11 @@ import 'package:sgt/presentation/home_screen/model/GuardHome.dart';
 import 'package:sgt/presentation/jobs_screen/jobs_screen.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/job_details_widget.dart';
+import 'package:sgt/presentation/property_details_screen/widgets/property_details_screen.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/const.dart';
-import '../../property_details_screen/property_details_screen.dart';
 import 'location_details_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,7 +40,7 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
   //   }
   // }
 
-Future<DutyListModel> getJobsList() async {
+  Future<DutyListModel> getJobsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -66,7 +66,6 @@ Future<DutyListModel> getJobsList() async {
           imageBaseUrl: '');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,93 +99,97 @@ Future<DutyListModel> getJobsList() async {
                       itemBuilder: (context, index) {
                         return new GestureDetector(
                           onTap: () {
-                            screenNavigator(context, PropertyDetailsScreen(
-                              // propertyId : snapshot.data!.jobs!.data![index].id,
-                              propertyId : snapshot.data!.activeData![index].id,
-                              imageBaseUrl: snapshot.data!.imageBaseUrl,
-                              activeData: snapshot.data?.activeData![index],
-                            ));
+                            screenNavigator(
+                                context,
+                                PropertyDetailsScreen(
+                                  // propertyId : snapshot.data!.jobs!.data![index].id,
+                                  propertyId:
+                                      snapshot.data!.activeData![index].id,
+                                  imageBaseUrl: snapshot.data!.imageBaseUrl,
+                                  propertyImageBaseUrl : snapshot.data!.propertyImageBaseUrl,
+                                  activeData: snapshot.data?.activeData![index],
+                                ));
                           },
-                          child :Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 204,
-                                decoration: CustomTheme.locationCardStyle(
-
-                                    snapshot.data!.propertyImageBaseUrl
-                                        .toString(),
-                                    snapshot.data!.jobs!.data![index]
-                                        .propertyAvatars![0].propertyAvatar
-                                        .toString()),
-
-                                    snapshot.data!.propertyImageBaseUrl.toString(),
-                                    snapshot.data!.activeData![index].propertyAvatars![0].propertyAvatar.toString()),
-                                    // snapshot.data!.jobs!.data![index].propertyAvatars![0].propertyAvatar.toString()),
-
-                                // (locationData[index].imageUrl),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    // snapshot.data!.jobs!.data![index].propertyName.toString(),
-                                    snapshot.data!.activeData![index].propertyName.toString(),
-                                    // locationData[index].title,
-                                    style: TextStyle(fontSize: 17),
-                                  ),
-                                  Text(
-                                    locationData[index].duty,
-                                    style: TextStyle(
-                                        fontSize: 17, color: primaryColor),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: primaryColor,
-                                    size: 15,
-                                  ),
-                                  Text(
-                                    snapshot
-                                        // .data!.jobs!.data![index].propertyName
-                                        .data!.activeData![index].propertyName
-                                        .toString(),
-                                    // locationData[index].subtitle,
-                                    style: TextStyle(
-                                        fontSize: 13, color: Colors.grey),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  // locationData[index].address,
-                                  snapshot.data!.activeData![index].location
-                                  // snapshot.data!.jobs!.data![index].location
-                                      .toString(),
-                                  style: TextStyle(fontSize: 13, color: black),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 204,
+                                  decoration: CustomTheme.locationCardStyle(
+                                      snapshot.data!.propertyImageBaseUrl
+                                          .toString(),
+                                      snapshot.data!.activeData![index]
+                                          .propertyAvatars![0].propertyAvatar
+                                          .toString()),
+                                  // snapshot.data!.jobs!.data![index].propertyAvatars![0].propertyAvatar.toString()),
+                                  // (locationData[index].imageUrl),
                                 ),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      // snapshot.data!.jobs!.data![index].propertyName.toString(),
+                                      snapshot
+                                          .data!.activeData![index].propertyName
+                                          .toString(),
+                                      // locationData[index].title,
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    Text(
+                                      locationData[index].duty,
+                                      style: TextStyle(
+                                          fontSize: 17, color: primaryColor),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: primaryColor,
+                                      size: 15,
+                                    ),
+                                    Text(
+                                      snapshot
+                                          // .data!.jobs!.data![index].propertyName
+                                          .data!
+                                          .activeData![index]
+                                          .propertyName
+                                          .toString(),
+                                      // locationData[index].subtitle,
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    // locationData[index].address,
+                                    snapshot.data!.activeData![index].location
+                                        // snapshot.data!.jobs!.data![index].location
+                                        .toString(),
+                                    style:
+                                        TextStyle(fontSize: 13, color: black),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
                         );
                       }),
                 );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 import '../clocked_in_out_screen/clock_in_screen.dart';
 
@@ -39,6 +40,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
       controller!.resumeCamera();
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {

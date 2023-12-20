@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../../theme/custom_theme.dart';
 import '../../../widgets/custom_underline_textfield_widget.dart';
-import '../../cubit/addpeople/addpeople_cubit.dart';
 
 class AddPeopleWidget extends StatelessWidget {
-  const AddPeopleWidget(
-      {super.key,
-      required this.ontap,
-      required this.title,
-      required this.number});
-  final VoidCallback ontap;
+  final VoidFutureCallBack onCallback;
   final String title;
   final int number;
+  final TextEditingController peopleName;
+  final TextEditingController peoplePhone;
+  AddPeopleWidget({
+    super.key,
+    required this.onCallback,
+    required this.title,
+    required this.number,
+    required this.peopleName,
+    required this.peoplePhone,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,18 +43,20 @@ class AddPeopleWidget extends StatelessWidget {
                     CustomUnderlineTextFieldWidget(
                       textfieldTitle: 'Name',
                       hintText: 'Name',
+                      controller: peopleName,
                     ),
                     CustomUnderlineTextFieldWidget(
                       textfieldTitle: 'Phone Number',
                       hintText: 'Phone Number',
                       keyboardType: TextInputType.number,
+                      controller: peoplePhone,
                     ),
                   ],
                 );
               }),
         ),
-        InkWell(
-          onTap: ontap,
+        GestureDetector(
+          onTap: onCallback,
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 10),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

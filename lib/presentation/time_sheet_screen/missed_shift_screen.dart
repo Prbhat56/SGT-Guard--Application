@@ -6,6 +6,7 @@ import 'package:sgt/presentation/time_sheet_screen/model/missed_shift_model.dart
 import 'package:sgt/presentation/time_sheet_screen/widget/missed_shift_details.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/time_sheet_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,7 +89,16 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 5),
                             dense: false,
-                            leading: Container(
+                            leading: CustomCircularImage.getCircularImage(
+                                snapshot.data!.propertyImageBaseUrl.toString(),
+                                snapshot.data!.data![index].propertyAvatars!
+                                    .first.propertyAvatar
+                                    .toString(),
+                                false,
+                                30,
+                                0,
+                                0),
+                            /*Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
@@ -123,7 +133,7 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                 radius: 30,
                                 backgroundColor: seconderyColor,
                               ),
-                            ),
+                            ),*/
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               //mainAxisSize: MainAxisSize.min,

@@ -7,11 +7,17 @@ import '../../../utils/const.dart';
 import '../cubit/showmore/showmore_cubit.dart';
 import 'property_media_preview_screen.dart';
 
-class PropertyDescriptionWidget extends StatelessWidget {
+class PropertyDescriptionWidget extends StatefulWidget {
   InactiveDatum? activeData = InactiveDatum();
   String? imageBaseUrl;
-  PropertyDescriptionWidget({super.key, this.activeData, this.imageBaseUrl});
+  String? propertyImageBaseUrl;
+  PropertyDescriptionWidget({super.key, this.activeData, this.imageBaseUrl, this.propertyImageBaseUrl });
 
+  @override
+  State<PropertyDescriptionWidget> createState() => _PropertyDescriptionWidgetState();
+}
+
+class _PropertyDescriptionWidgetState extends State<PropertyDescriptionWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +29,7 @@ class PropertyDescriptionWidget extends StatelessWidget {
             Container(
               width: 300,
               child: Text(
-                activeData!.propertyDescription.toString(),
+                widget.activeData!.propertyDescription.toString(),
                 maxLines:
                     context.watch<ShowmoreCubit>().state.showmore ? 1000 : 3,
                 overflow: TextOverflow.ellipsis,
@@ -48,8 +54,8 @@ class PropertyDescriptionWidget extends StatelessWidget {
         ),
         context.watch<ShowmoreCubit>().state.showmore
             ? PropertyImagesWidget(
-                avatars: activeData!.propertyAvatars,
-                imageBaseUrl: imageBaseUrl,
+                avatars: widget.activeData!.propertyAvatars,
+                imageBaseUrl: widget.propertyImageBaseUrl,
               )
             : Container(),
       ],

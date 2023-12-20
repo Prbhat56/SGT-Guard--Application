@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sgt/presentation/guard_tools_screen/widgets/leave_rejection_popup.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,7 +134,7 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                                     width: 5,
                                   ),
                                   Text(
-                                    '${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveFrom.toString()))}-${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveTo.toString()))}',
+                                    '${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveFrom.toString()))} - ${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveTo.toString()))}',
                                     style: TextStyle(
                                         fontSize: 13, color: Colors.grey),
                                   )
@@ -170,30 +171,45 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         )*/
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 14),
-                                decoration: BoxDecoration(
-                                    color: leave.status.toString() == "1"
-                                        ? primaryColor
-                                        : leave.status.toString() == "0"
-                                            ? white
-                                            : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return LeaveRejectInfo(
+                                          name: '',
+                                          date: '',
+                                          time: '',
+                                          reason:
+                                              leave.rejectOfReason.toString(),
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 14),
+                                  decoration: BoxDecoration(
+                                      color: leave.status.toString() == "1"
+                                          ? primaryColor
+                                          : leave.status.toString() == "0"
+                                              ? white
+                                              : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: leave.status.toString() == "0"
+                                              ? primaryColor
+                                              : Colors.transparent)),
+                                  child: Text(
+                                    leave.status.toString() == "1"
+                                        ? "Approved"
+                                        : "Waiting For Approval",
+                                    style: TextStyle(
                                         color: leave.status.toString() == "0"
                                             ? primaryColor
-                                            : Colors.transparent)),
-                                child: Text(
-                                  leave.status.toString() == "1"
-                                      ? "Approved"
-                                      : "Waiting For Approval",
-                                  style: TextStyle(
-                                      color: leave.status.toString() == "0"
-                                          ? primaryColor
-                                          : white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600),
+                                            : white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                               )
                             ],

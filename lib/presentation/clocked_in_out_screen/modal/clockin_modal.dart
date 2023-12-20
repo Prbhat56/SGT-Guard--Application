@@ -48,47 +48,55 @@ class CurrentShift {
     int? propertyOwnerId;
     int? guardId;
     int? propertyId;
+    String? shiftId;
     DateTime? date;
     DateTime? checkInTime;
     DateTime? updatedAt;
     DateTime? createdAt;
     int? id;
     String? shiftTime;
+    String? shiftDate;
 
     CurrentShift({
         this.propertyOwnerId,
         this.guardId,
         this.propertyId,
+        this.shiftId,
         this.date,
         this.checkInTime,
         this.updatedAt,
         this.createdAt,
         this.id,
         this.shiftTime,
+        this.shiftDate,
     });
 
     factory CurrentShift.fromJson(Map<String, dynamic> json) => CurrentShift(
         propertyOwnerId: json["property_owner_id"],
         guardId: json["guard_id"],
         propertyId: json["property_id"],
+        shiftId: json["shift_id"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
         checkInTime: json["check_in_time"] == null ? null : DateTime.parse(json["check_in_time"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         id: json["id"],
         shiftTime: json["shift_time"],
+        shiftDate: json["shift_date"],
     );
 
     Map<String, dynamic> toJson() => {
         "property_owner_id": propertyOwnerId,
         "guard_id": guardId,
         "property_id": propertyId,
+        "shift_id": shiftId,
         "date": "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
         "check_in_time": checkInTime?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "created_at": createdAt?.toIso8601String(),
         "id": id,
         "shift_time": shiftTime,
+        "shift_date": shiftDate,
     };
 }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/timesheet_details.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/utils/const.dart';

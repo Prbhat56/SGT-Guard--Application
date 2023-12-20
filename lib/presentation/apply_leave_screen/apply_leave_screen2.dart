@@ -59,7 +59,7 @@ class ApplyLeaveScreen2 extends StatelessWidget {
                           controller: _missingDayText,
                           decoration: InputDecoration(
                             fillColor: primaryColor,
-                            hintText: '7',
+                            hintText: 'Enter Missing Shifts',
                             hintStyle: TextStyle(color: Colors.black26),
                             contentPadding: EdgeInsets.only(
                               left: 10,

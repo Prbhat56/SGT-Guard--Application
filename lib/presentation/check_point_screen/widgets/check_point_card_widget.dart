@@ -119,7 +119,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                   children: [
                     Text(
                       'Remaining Shift Time:',
-                      style: CustomTheme.blueTextStyle(8, FontWeight.w500),
+                      style: CustomTheme.blueTextStyle(8,FontWeight.w500),
                     ),
                     Text(
                       ' 2 Hrs 30 Min 23 Secs', // api response pending

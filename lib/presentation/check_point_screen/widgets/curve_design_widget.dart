@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'check_point_card_wieget.dart';
+import 'check_point_card_widget.dart';
 
 class CurveDesignWidget extends StatefulWidget {
   int? propertyId;
