@@ -360,9 +360,9 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
 
   void passwordChanged(email,newPassword,reEnterPassword,context) 
     async{  
-  print(email);
-  print(newPassword);
-  print(reEnterPassword);
+  // print(email);
+  // print(newPassword);
+  // print(reEnterPassword);
       var map = new Map<String,dynamic>();
       map['email']= email;
       map['password']=newPassword;

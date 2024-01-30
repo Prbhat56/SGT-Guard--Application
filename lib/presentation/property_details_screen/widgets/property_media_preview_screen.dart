@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
+import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
+
 import '../../../utils/const.dart';
 import 'property_preview_widget.dart';
 

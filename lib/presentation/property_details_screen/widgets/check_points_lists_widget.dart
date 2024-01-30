@@ -1,24 +1,34 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/property_details_screen/model/checkPointsList_model.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
-class CheckPointListsWidget extends StatelessWidget {
-  const CheckPointListsWidget({
-    Key? key,
-    required this.title,
-    required this.imageUrl,
-    // required this.iscompleted,
-    required this.checkpointNo,
-    required this.date,
-  }) : super(key: key);
-  final String title;
-  final String imageUrl;
-  // final String iscompleted;
-  final String date;
-  final int checkpointNo;
+class CheckPointListsWidget extends StatefulWidget {
+   CheckPointListsWidget({super.key,
+    this.title,
+    this.imageUrl,
+    // this.iscompleted,
+    this.imageBaseUrl,
+    this.checkpointNo,
+    this.date,
+    required this.time, 
+  });
+   String? title;
+   String? imageUrl;
+   String? imageBaseUrl;
+  // String iscompleted;
+   String? date;
+   String time;
+   int? checkpointNo;
+
+  @override
+  State<CheckPointListsWidget> createState() => _CheckPointListsWidgetState();
+}
+
+class _CheckPointListsWidgetState extends State<CheckPointListsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,7 +36,7 @@ class CheckPointListsWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomCircularImage.getCircularImage('',imageUrl, false, 35, 0, 0),
+            CustomCircularImage.getCircularImage(widget.imageBaseUrl.toString(),widget.imageUrl.toString(), false, 35, 0, 0),
             const SizedBox(
               width: 10,
             ),
@@ -34,33 +44,48 @@ class CheckPointListsWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
-                  style: CustomTheme.blackTextStyle(15),
+                  widget.title.toString(),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500)
+                  // style: CustomTheme.blackTextStyle(15),
                 ),
                 Text(
-                  date,
-                  style: CustomTheme.blackTextStyle(13),
+                  widget.time.toString(),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal)
+                  // style: CustomTheme.blackTextStyle(15),
+                ),
+                Text(
+                  widget.date.toString(),
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 10,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      // Text(iscompleted,
-                      //     style:
-                      //         CustomTheme.blueTextStyle(10, FontWeight.w400)),
-                      VerticalDivider(
-                        color: primaryColor,
-                      ),
-                      // Text("$checkpointNo Checkpoints",
-                      //     style:
-                      //         CustomTheme.blueTextStyle(10, FontWeight.w400)),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   height: 10,
+                //   alignment: Alignment.center,
+                //   child: Row(
+                //     children: [
+                //       Text(iscompleted,
+                //           style:
+                //               CustomTheme.blueTextStyle(10, FontWeight.w400)),
+                //       VerticalDivider(
+                //         color: primaryColor,
+                //       ),
+                //       Text("$checkpointNo Checkpoints",
+                //           style:
+                //               CustomTheme.blueTextStyle(10, FontWeight.w400)),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ],

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/check_point_screen/widgets/timeline_details_widget.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/timesheet_details.dart';
-import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
 import '../../../utils/const.dart';
 import '../../widgets/custom_circular_image_widget.dart';
 
@@ -40,7 +38,7 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
             ),
           )
         : ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             itemCount: widget.upcomingData.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -49,7 +47,6 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                   children: [
                     InkWell(
                       onTap: () {
-                        print(widget.upcomingData[index].id.toString());
                         screenNavigator(
                             context,
                             TimeSheetDetailsWidet(
@@ -103,7 +100,7 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                                   height: 10,
                                 ),
                                 Text(
-                                  '${widget.upcomingData[index].shifts!.first.clockIn}-${widget.upcomingData[index].shifts!.first.clockOut}',
+                                  '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockIn.toString()} - ${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockOut.toString()}',
                                   style: const TextStyle(
                                       fontSize: 11, color: Colors.grey),
                                 ),
@@ -112,12 +109,8 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                           ),
                           Text(
                             getDifference(
-                                    widget.upcomingData[index].shifts!.first
-                                        .clockIn
-                                        .toString(),
-                                    widget.upcomingData[index].shifts!.first
-                                        .clockOut
-                                        .toString())
+                                    '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockIn}',
+                                    '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockOut}')
                                 .toString(),
                             style: TextStyle(fontSize: 11, color: primaryColor),
                           ),

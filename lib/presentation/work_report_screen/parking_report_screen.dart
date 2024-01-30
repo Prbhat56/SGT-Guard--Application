@@ -277,7 +277,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   ),
                   CustomTextField(
                     controller: _titleController,
-                    textfieldTitle: 'Title',
+                    textfieldTitle: 'Title \*',
                     hintText: 'Enter Title',
                     isFilled: false,
                   ),
@@ -399,6 +399,9 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                       if (_propertyNameController.text.isEmpty) {
                         CommonService().openSnackBar(
                             'Please enter Property name', context);
+                      } else if (_titleController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter title', context);
                       } else {
                         uploadImage();
                       }

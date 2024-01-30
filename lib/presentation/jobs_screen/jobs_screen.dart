@@ -36,15 +36,13 @@ class _JobsScreenState extends State<JobsScreen> with TickerProviderStateMixin {
     };
     String apiUrl = baseUrl + apiRoutes['dutyList']!;
     final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
-    var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 201) {
       final DutyListModel responseModel = dutyModelFromJson(response.body);
       activeDatum = responseModel.activeData ?? [];
-      print('Active: $activeDatum');
+      // print('Active: $activeDatum');
       inActiveDatum = responseModel.inactiveData ?? [];
-      print('InActive: $inActiveDatum');
-      imgBaseUrl = responseModel.imageBaseUrl ?? '';
+      // print('InActive: $inActiveDatum');
+      imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
       return responseModel;
     } else {
       return DutyListModel(
@@ -113,10 +111,12 @@ class _JobsScreenState extends State<JobsScreen> with TickerProviderStateMixin {
                       ActiveJobsTab(
                         activeData: activeDatum,
                         imageBaseUrl: imgBaseUrl,
+                        propertyImageBaseUrl:snapshot.data!.propertyImageBaseUrl,
                       ),
                       InactiveJobsTab(
                         inActiveData: inActiveDatum,
                         imageBaseUrl: imgBaseUrl,
+                        propertyImageBaseUrl:snapshot.data!.propertyImageBaseUrl,
                       ),
                     ],
                   ),

@@ -8,10 +8,12 @@ import 'package:sgt/presentation/jobs_screen/widgets/job_tiles.dart';
 class InactiveJobsTab extends StatefulWidget {
   List<InactiveDatum> inActiveData = [];
   String imageBaseUrl;
+  String? propertyImageBaseUrl;
   InactiveJobsTab({
     Key? key,
     required this.inActiveData,
-    required this.imageBaseUrl,
+    required this.imageBaseUrl, 
+    this.propertyImageBaseUrl,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class _InactiveJobsTabState extends State<InactiveJobsTab> {
                     isActive: false,
                     inActiveData: widget.inActiveData[index],
                     imageBaseUrl: widget.imageBaseUrl,
+                    propertyImageBaseUrl:widget.propertyImageBaseUrl,
                   ),
                   Divider(
                     color: Colors.grey,

@@ -12,7 +12,7 @@ class ClockOutModal {
     String? message;
     Property? property;
     JobDetails? jobDetails;
-    CurrentShiftClockOut? currentShift;
+    CurrentShift? currentShift;
     String? imageBaseUrl;
     int? status;
 
@@ -29,7 +29,7 @@ class ClockOutModal {
         message: json["message"],
         property: json["property"] == null ? null : Property.fromJson(json["property"]),
         jobDetails: json["job_details"] == null ? null : JobDetails.fromJson(json["job_details"]),
-        currentShift: json["current_shift"] == null ? null : CurrentShiftClockOut.fromJson(json["current_shift"]),
+        currentShift: json["current_shift"] == null ? null : CurrentShift.fromJson(json["current_shift"]),
         imageBaseUrl: json["image_base_url"],
         status: json["status"],
     );
@@ -44,7 +44,7 @@ class ClockOutModal {
     };
 }
 
-class CurrentShiftClockOut {
+class CurrentShift {
     int? id;
     int? propertyOwnerId;
     int? guardId;
@@ -58,7 +58,7 @@ class CurrentShiftClockOut {
     String? timePeriod;
     String? dateText;
 
-    CurrentShiftClockOut({
+    CurrentShift({
         this.id,
         this.propertyOwnerId,
         this.guardId,
@@ -73,7 +73,7 @@ class CurrentShiftClockOut {
         this.dateText,
     });
 
-    factory CurrentShiftClockOut.fromJson(Map<String, dynamic> json) => CurrentShiftClockOut(
+    factory CurrentShift.fromJson(Map<String, dynamic> json) => CurrentShift(
         id: json["id"],
         propertyOwnerId: json["property_owner_id"],
         guardId: json["guard_id"],
@@ -135,6 +135,8 @@ class JobDetails {
     DateTime? updatedAt;
     String? shiftTime;
     String? shiftDay;
+    int? comletedCheckpoint;
+    int? remaningCheckpoint;
 
     JobDetails({
         this.id,
@@ -167,6 +169,8 @@ class JobDetails {
         this.updatedAt,
         this.shiftTime,
         this.shiftDay,
+        this.comletedCheckpoint,
+        this.remaningCheckpoint,
     });
 
     factory JobDetails.fromJson(Map<String, dynamic> json) => JobDetails(
@@ -200,6 +204,8 @@ class JobDetails {
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         shiftTime: json["shift_time"],
         shiftDay: json["shift_day"],
+        comletedCheckpoint: json["comleted_checkpoint"],
+        remaningCheckpoint: json["remaning_checkpoint"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -233,6 +239,8 @@ class JobDetails {
         "updated_at": updatedAt?.toIso8601String(),
         "shift_time": shiftTime,
         "shift_day": shiftDay,
+        "comleted_checkpoint": comletedCheckpoint,
+        "remaning_checkpoint": remaningCheckpoint,
     };
 }
 

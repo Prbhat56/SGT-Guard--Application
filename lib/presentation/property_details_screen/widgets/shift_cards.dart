@@ -24,8 +24,9 @@ import '../../shift_details_screen/upcoming_shift_details_screen.dart';
 
 class ShiftCards extends StatefulWidget {
   List<Shift>? shifts;
+  String? imageBaseUrl;
   ShiftCards({super.key, 
-  required this.shifts
+  required this.shifts,this.imageBaseUrl
   });
 
   @override
@@ -46,7 +47,8 @@ class _ShiftCardsState extends State<ShiftCards> {
               return InkWell(
                 onTap: () {
                   screenNavigator(context, UpcomingShiftDetailsScreen(
-                    shifts: widget.shifts![index]
+                    shifts: widget.shifts![index],
+                    imageBaseUrl:widget.imageBaseUrl
                   ));
                 },
                 child: Container(
@@ -62,19 +64,15 @@ class _ShiftCardsState extends State<ShiftCards> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.shifts![index].createdAt!.toLocal().toString(),
+                        widget.shifts![index].dateText.toString(),
+                        // widget.shifts![index].clockIn.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: primaryColor, fontWeight: FontWeight.bold),
                       ),
-                      // const SizedBox(
-                      //   height: 5,
-                      // ),
-                      // Text(
-                      //   shifts![index].id.toString(),
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(color: primaryColor),
-                      // ),
+                      const SizedBox(
+                        height: 5,
+                      ),
                     ],
                   ),
                 ),

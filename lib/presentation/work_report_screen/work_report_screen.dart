@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
-import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
-import 'package:sgt/presentation/work_report_screen/maintenance_report_screen.dart';
-import 'package:sgt/presentation/work_report_screen/parking_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_general_report.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_maintenance_report.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_parking_report.dart';
 import '../../helper/navigator_function.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
@@ -46,7 +47,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  screenNavigator(context, GeneralReportScreen());
+                  screenNavigator(
+                      context,
+                      StaticGeneralReportScreen(
+                          propId: widget.propertyId,
+                          propName: widget.propertyName));
                   context.read<ReportTypeCubit>().clickGreport();
                 },
                 child: Container(
@@ -71,7 +76,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  screenNavigator(context, MaintenanceReportScreen());
+                  screenNavigator(
+                      context,
+                      StaticMaintenanceReportScreen(
+                          propId: widget.propertyId,
+                          propName: widget.propertyName));
                   context.read<ReportTypeCubit>().clickMreport();
                 },
                 child: Container(
@@ -96,7 +105,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  screenNavigator(context, ParkingReportScreen());
+                  screenNavigator(
+                      context,
+                      StaticParkingReportScreen(
+                          propId: widget.propertyId,
+                          propName: widget.propertyName));
 
                   context.read<ReportTypeCubit>().clickPreport();
                 },
@@ -122,7 +135,11 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
               ),
               InkWell(
                 onTap: () {
-                  screenNavigator(context, EmergencyReportScreen());
+                  screenNavigator(
+                      context,
+                      StaticEmergencyReportScreen(
+                          propId: widget.propertyId,
+                          propName: widget.propertyName));
 
                   context.read<ReportTypeCubit>().clickEreport();
                 },

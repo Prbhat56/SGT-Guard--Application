@@ -10,7 +10,9 @@ import '../clocked_in_out_screen/clock_in_screen.dart';
 import '../widgets/custom_appbar_widget.dart';
 
 class CheckPointScanningScreen extends StatefulWidget {
-  const CheckPointScanningScreen({super.key});
+  String? propId;
+  String? shiftId;
+  CheckPointScanningScreen({super.key,this.propId,this.shiftId});
 
   @override
   State<CheckPointScanningScreen> createState() =>
@@ -50,7 +52,8 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
   Widget build(BuildContext context) {
     return result != null
         ? CheckpointReportScreen(
-          checkPointqrData:result?.code
+          checkPointqrData:result?.code,
+          propId:widget.propId,shiftId:widget.shiftId
         )
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -73,7 +76,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Scan QR code\n to clock in!',
+                      'Scan QR code\n to CheckPoint TaskList !',
                       textScaleFactor: 1.0,
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 17, color: Colors.grey),

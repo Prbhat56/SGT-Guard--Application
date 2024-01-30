@@ -9,7 +9,8 @@ import '../../utils/const.dart';
 
 class UpcomingShiftDetailsScreen extends StatefulWidget {
   Shift shifts;
-  UpcomingShiftDetailsScreen({super.key, required this.shifts});
+  String? imageBaseUrl;
+  UpcomingShiftDetailsScreen({super.key, required this.shifts, this.imageBaseUrl});
 
   @override
   State<UpcomingShiftDetailsScreen> createState() => _UpcomingShiftDetailsScreenState();
@@ -83,8 +84,7 @@ class _UpcomingShiftDetailsScreenState extends State<UpcomingShiftDetailsScreen>
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: CustomCircularImage.getCircularImage(
-                       'https://sgt-inhouse.myclientdemo.us/uploads/guard/',widget.shifts.guardDetails!.avatar.toString(),
-                      // 'https://sgt-inhouse.myclientdemo.us/uploads/guard/','10112231701458348.png',
+                       widget.imageBaseUrl.toString(),widget.shifts.guardDetails!.avatar.toString(),
                         false,
                         20,
                         0,

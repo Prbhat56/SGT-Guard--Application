@@ -10,12 +10,14 @@ class JobsTile extends StatefulWidget {
   final bool isActive;
   InactiveDatum? inActiveData = InactiveDatum();
   String? imageBaseUrl;
+  String? propertyImageBaseUrl;
   int? propertyId;
   JobsTile({
     super.key,
     required this.isActive,
     this.inActiveData,
-    this.imageBaseUrl,
+    this.imageBaseUrl, 
+    this.propertyImageBaseUrl,
   });
 
   @override
@@ -32,7 +34,7 @@ class _JobsTileState extends State<JobsTile> {
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () {
-            print(widget.inActiveData!.propertyName.toString());
+            // print(widget.inActiveData!.propertyName.toString());
             isActive
                 ? screenNavigator(
                     context,
@@ -40,18 +42,18 @@ class _JobsTileState extends State<JobsTile> {
                       imageBaseUrl: widget.imageBaseUrl,
                       activeData: widget.inActiveData,
                       propertyId: widget.inActiveData!.id,
+                      propertyImageBaseUrl: widget.propertyImageBaseUrl,
                     ))
                 : screenNavigator(
                     context,
                     InActivePropertyDetailsScreen(
-                      imageBaseUrl: widget.imageBaseUrl,
-                      inActiveData: widget.inActiveData,
+                      propertyId: widget.inActiveData!.id,
                     ));
           },
           child: Row(
             children: [
               CustomCircularImage.getlgCircularImage(
-                  widget.imageBaseUrl ?? "",
+                  widget.propertyImageBaseUrl ?? "",
                   widget.inActiveData!.propertyAvatars!.first.propertyAvatar
                       .toString(),
                   isActive),

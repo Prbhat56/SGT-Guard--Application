@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_out_modal.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/widget/clock_out_total_time_widget.dart';
-import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -14,9 +13,11 @@ import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 import '../home.dart';
-import '../shift_details_screen/widgets/time_details_widget.dart';
 import 'widget/check_point_count_widget.dart';
 import 'package:http/http.dart' as http;
+
+// import 'package:geolocator/geolocator.dart';
+
 
 class ClockOutScreen extends StatefulWidget {
   String? clockOutQrData;
@@ -28,7 +29,6 @@ class ClockOutScreen extends StatefulWidget {
 
 Future<ClockOutModal> getClockOutData(shift_id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
   Map<String, String> myHeader = <String, String>{
     "Authorization": "Bearer ${prefs.getString('token')}",
   };
@@ -36,16 +36,20 @@ Future<ClockOutModal> getClockOutData(shift_id) async {
   String apiUrl = baseUrl + apiRoutes['clockOut']!;
   final response =
       await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
-  print(response.body.toString());
-  var data = jsonDecode(response.body.toString());
-  print(data);
   if (response.statusCode == 200) {
+    prefs.remove('shiftId');
+    prefs.remove('propertyId');
     final ClockOutModal responseModel = clockOutModalFromJson(response.body);
     return responseModel;
   } else {
-    return ClockOutModal(
-      status: response.statusCode,
-    );
+    if (response.statusCode == 400) {
+      final ClockOutModal responseModel = clockOutModalFromJson(response.body);
+      return responseModel;
+    }
+    else {
+      final ClockOutModal responseModel = clockOutModalFromJson(response.body);
+      return responseModel;
+    }
   }
 }
 
@@ -55,7 +59,7 @@ final imageUrl =
 class _ClockOutScreenState extends State<ClockOutScreen> {
   @override
   Widget build(BuildContext context) {
-    print("widget.clockOutQrData =====> ${widget}");
+    print("widget.clockOutQrData =====> ${widget.clockOutQrData}");
     String? jsonString = widget.clockOutQrData;
     Map<String, dynamic> jsonData = jsonDecode(jsonString!);
     int shiftId = jsonData['shift_details']['shift_id'];
@@ -63,7 +67,7 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-          appBar: CustomAppBarWidget(appbarTitle: 'Clocked Out'),
+          // appBar: CustomAppBarWidget(appbarTitle: 'Clocked Out'),
           body: FutureBuilder(
               future: getClockOutData(shiftId),
               builder: (context, snapshot) {
@@ -74,13 +78,37 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                           width: 60,
                           child: CircularProgressIndicator()));
                 } else {
+                  if (snapshot.data!.status == 400) {
+                    return Center(
+                        child: Container(
+                      height: 200,
+                      width: 200,
+                      child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ 
+                      Text(
+                        snapshot.data!.message!.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15, color: primaryColor),
+                      ),
+                      SizedBox(height: 20), // Add spacing if needed
+                      CustomButtonWidget(
+                        buttonTitle: 'Home',
+                        onBtnPress: () {
+                          screenNavigator(context, Home());
+                        },
+                      ),
+                      ]
+                    )));
+                  } else {
                   return Center(
                     child: Column(children: [
                       const SizedBox(height: 25),
                       SvgPicture.asset('assets/green_tick.svg'),
                       const SizedBox(height: 10),
                       Text(
-                        'You are currently clocked\n out from shift!',
+                        // 'You are currently clocked\n out from shift!'
+                        snapshot.data!.message.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: primaryColor),
                       ),
@@ -139,11 +167,11 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                                   //     child: TimeDetailsWidget(
                                   //         isClockOutScreen: true)),
                                   // const SizedBox(height: 6),
-                                  // Center(
-                                  //     child: CheckPointCountWidget(
-                                  //   completedCheckPoint: '13',
-                                  //   remainningCheckPoint: '0',
-                                  // )),
+                                  Center(
+                                      child: CheckPointCountWidget(
+                                    completedCheckPoint: snapshot.data!.jobDetails!.comletedCheckpoint.toString(),
+                                    remainningCheckPoint: snapshot.data!.jobDetails!.remaningCheckpoint.toString(),
+                                  )),
                                   const SizedBox(height: 15),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -151,7 +179,9 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                                     child: Divider(color: primaryColor),
                                   ),
                                   const SizedBox(height: 20),
-                                  Center(child: TotalTimeWidget()),
+                                  Center(child: TotalTimeWidget(
+                                    totalTime:snapshot.data!.currentShift!.timePeriod
+                                  )),
                                   const SizedBox(height: 20),
                                 ]),
                           ),
@@ -167,6 +197,7 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                           }),
                     ]),
                   );
+                  }
                 }
               })),
     );

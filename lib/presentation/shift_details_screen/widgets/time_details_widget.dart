@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_out_modal.dart';
-import 'package:sgt/presentation/clocked_in_out_screen/modal/clockin_modal.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_in_modal.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
 

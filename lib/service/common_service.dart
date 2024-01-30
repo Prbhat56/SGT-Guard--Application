@@ -16,8 +16,9 @@ class CommonService {
     await prefs.setString('token', userToken);
   }
 
-  setTempUserEmailAndPassword(String email, String password) async {
+  setTempUserEmailAndPassword(String id, String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', password);
   }
@@ -62,5 +63,10 @@ class CommonService {
       BuildContext context, FocusNode current, FocusNode nextFocus) {
     current.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  setProperty_owner_id(String userToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('property_owner_id', userToken);
   }
 }

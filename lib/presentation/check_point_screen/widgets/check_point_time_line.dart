@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/utils/const.dart';
 
-class CheckPointTimeLineWidget extends StatelessWidget {
-  const CheckPointTimeLineWidget({super.key});
+class CheckPointTimeLineWidget extends StatefulWidget {
+List<Checkpoint>? checkPointLength;
+CheckPointTimeLineWidget({super.key, this.checkPointLength});
 
+  @override
+  State<CheckPointTimeLineWidget> createState() => _CheckPointTimeLineWidgetState();
+}
+
+class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
+  
+  
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 83 * 6,
+      height: 83 * widget.checkPointLength!.length.toDouble(),
       width: 30,
       child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),
-          itemCount: 6,
+          itemCount: widget.checkPointLength!.length,
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -47,7 +57,7 @@ class CheckPointTimeLineWidget extends StatelessWidget {
                             color: seconderyColor,
                             borderRadius: BorderRadius.circular(50)),
                       ),
-                index == 5
+                index == widget.checkPointLength!.length-1
                     ? Container()
                     : Container(
                         height: 60,

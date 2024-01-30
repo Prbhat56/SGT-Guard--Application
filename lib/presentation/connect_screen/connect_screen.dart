@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
+import 'package:sgt/service/socket_home.dart';
 import '../../utils/const.dart';
 import '../widgets/main_appbar_widget.dart';
 import 'widgets/chattile_widget.dart';
@@ -79,12 +81,17 @@ class _ConnectScreenState extends State<ConnectScreen> {
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500),
                             ),
-                            Text(
-                              'Mark All As Read',
-                              style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400),
+                            GestureDetector(
+                              onTap: () {
+                                screenNavigator(context, SocketHome());
+                              },
+                              child: Text(
+                                'Mark All As Read',
+                                style: TextStyle(
+                                    color: primaryColor,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400),
+                              ),
                             ),
                           ],
                         ),

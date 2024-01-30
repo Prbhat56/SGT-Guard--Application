@@ -27,7 +27,7 @@ List<CustomIconsDataModel> customIconsData = customIconsData = [
       iconUrl: 'assets/map.svg',
       title: 'Checkpoints',
       widget: CheckPointListsScreen(
-        checkPoint: [],
+        // checkPoint: [],
         imageBaseUrl: '',
       )),
   CustomIconsDataModel(

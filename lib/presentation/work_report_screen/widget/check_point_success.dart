@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
 
 class CheckPointCompleteSuccess extends StatefulWidget {
@@ -14,7 +16,9 @@ class _CheckPointCompleteSuccessState extends State<CheckPointCompleteSuccess> {
   @override
   void initState() {
     Timer(Duration(seconds: 2), () {
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      screenNavigator(
+      context, CheckPointScreen());
     });
 
     super.initState();
@@ -42,7 +46,7 @@ class _CheckPointCompleteSuccessState extends State<CheckPointCompleteSuccess> {
           SizedBox(
             height: 20,
           ),
-          Text('Report has been sent\n successfully!',
+          Text('Task Updated\n successfully!',
               textAlign: TextAlign.center,
               style: CustomTheme.blackTextStyle(17))
         ],

@@ -12,7 +12,6 @@ class GuardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userD = jsonDecode(userDetail);
-    print(userD['image_base_url']+'/'+userD['user_details']['front_side_id_card']);
     return Container(
       // height: 196,
       // decoration: BoxDecoration(

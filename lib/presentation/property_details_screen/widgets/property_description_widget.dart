@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
+import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
+
 import 'package:sgt/presentation/property_details_screen/widgets/show_property_images_widget.dart';
 import '../../../utils/const.dart';
 import '../cubit/showmore/showmore_cubit.dart';
 import 'property_media_preview_screen.dart';
 
 class PropertyDescriptionWidget extends StatefulWidget {
-  InactiveDatum? activeData = InactiveDatum();
-  String? imageBaseUrl;
+  List<PropertyAvatar>? propvatars;
   String? propertyImageBaseUrl;
-  PropertyDescriptionWidget({super.key, this.activeData, this.imageBaseUrl, this.propertyImageBaseUrl });
+  String? propDesc;
+  PropertyDescriptionWidget(
+      {super.key, this.propvatars, this.propertyImageBaseUrl, this.propDesc});
 
   @override
-  State<PropertyDescriptionWidget> createState() => _PropertyDescriptionWidgetState();
+  State<PropertyDescriptionWidget> createState() =>
+      _PropertyDescriptionWidgetState();
 }
 
 class _PropertyDescriptionWidgetState extends State<PropertyDescriptionWidget> {
@@ -29,7 +32,7 @@ class _PropertyDescriptionWidgetState extends State<PropertyDescriptionWidget> {
             Container(
               width: 300,
               child: Text(
-                widget.activeData!.propertyDescription.toString(),
+                widget.propDesc.toString(),
                 maxLines:
                     context.watch<ShowmoreCubit>().state.showmore ? 1000 : 3,
                 overflow: TextOverflow.ellipsis,
@@ -43,7 +46,6 @@ class _PropertyDescriptionWidgetState extends State<PropertyDescriptionWidget> {
                 : InkWell(
                     onTap: () {
                       context.read<ShowmoreCubit>().showMore();
-                      print(context.read<ShowmoreCubit>().state.showmore);
                     },
                     child: Text(
                       'more',
@@ -54,7 +56,7 @@ class _PropertyDescriptionWidgetState extends State<PropertyDescriptionWidget> {
         ),
         context.watch<ShowmoreCubit>().state.showmore
             ? PropertyImagesWidget(
-                avatars: widget.activeData!.propertyAvatars,
+                avatars: widget.propvatars ?? [],
                 imageBaseUrl: widget.propertyImageBaseUrl,
               )
             : Container(),

@@ -1,21 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
-import 'package:sgt/service/constant/constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../utils/const.dart';
 import '../../widgets/custom_circular_image_widget.dart';
 import 'property_data_widget.dart';
-import 'package:http/http.dart' as http;
 
 class PropertyDetailsWidget extends StatefulWidget {
-  InactiveDatum? activeData = InactiveDatum();
+  Data? detailsData = Data();
   String? imageBaseUrl;
-  int? propertyId;
+  String? checkPoint;
   PropertyDetailsWidget(
-      {super.key, this.activeData, this.imageBaseUrl, this.propertyId});
+      {super.key, this.detailsData, this.imageBaseUrl, this.checkPoint});
 
   @override
   State<PropertyDetailsWidget> createState() => _PropertyDetailsWidgetState();
@@ -39,7 +35,8 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: CustomCircularImage.getCircularImage(
                         widget.imageBaseUrl.toString(),
-                        widget.activeData!.propertyAvatars!.first.propertyAvatar.toString(),
+                        // '${widget.detailsData!.propertyAvatars!.isEmpty ? null : widget.detailsData!.propertyAvatars!.first.propertyAvatar}',
+                        '${widget.detailsData!.propertyAvatars!.first.propertyAvatar}',
                         false,
                         42,
                         0,
@@ -52,7 +49,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.activeData!.propertyName.toString(),
+                            widget.detailsData!.propertyName.toString(),
                             style: TextStyle(
                                 fontSize: 25, fontWeight: FontWeight.bold),
                           ),
@@ -60,8 +57,12 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                             height: 6,
                           ),
                           Text(
-                            widget.activeData!.location.toString(),
-                            style: TextStyle(fontSize: 13, color: Colors.grey),
+                            widget.detailsData!.location.toString(),
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey,
+                                overflow: TextOverflow.ellipsis),
                           ),
                           SizedBox(
                             height: 6,
@@ -76,12 +77,17 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text(
-                                widget.activeData!.shifts!.last.clockIn
-                                        .toString() +
-                                    '~' +
-                                    widget.activeData!.shifts!.last.clockOut
-                                        .toString(),
+                              widget.detailsData!.shifts!.isEmpty ?
+                               Text(
+                                ' No Shift Available ',
+                                style: TextStyle(
+                                  color: black,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                              :  Text(
+                                ' ${widget.detailsData!.shifts!.isEmpty ? '' : widget.detailsData!.shifts!.last.clockIn.toString()} ~ ${widget.detailsData!.shifts!.isEmpty ? '' : widget.detailsData!.shifts!.last.clockOut.toString()}',
                                 style: TextStyle(
                                   color: black,
                                   fontSize: 11,
@@ -103,22 +109,13 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                     PropertyDataWidget(
                         title: 'Guards',
-                        number: widget.activeData!.assignStaff.toString()),
+                        number: widget.detailsData!.assignStaff.toString()),
                     PropertyDataWidget(
-                        title: 'Points',
-                        number:
-                            widget.activeData!.checkPoints!.length.toString()),
+                        title: 'Points', number: widget.detailsData!.checkpointCount.toString()),
                     PropertyDataWidget(
                         title: 'Sqft',
-                        number: widget.activeData!.area.toString())
-                  ]
-
-                      /*propertyData
-                      //showing property data by map over the data list
-                      .map((e) =>
-                          PropertyDataWidget(title: e.title, number: e.number))
-                      .toList(),*/
-                      ),
+                        number: widget.detailsData!.area.toString())
+                  ]),
                 ),
               ),
               SizedBox(height: 20),

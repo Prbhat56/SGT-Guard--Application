@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -9,7 +11,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  final Map<String, Marker> _markers = {};
+  //final Map<String, Marker> _markers = {};
   // Future<void> _onMapCreated(GoogleMapController controller) async {
   // final googleOffices = await locations.getGoogleOffices();
   // setState(() {
@@ -27,7 +29,30 @@ class _MapScreenState extends State<MapScreen> {
   //   });
   // }
 
-  LatLng currentlocation = const LatLng(22.572645, 88.363892);
+  LatLng? _currentPosition;
+  Future<LatLng?> getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+    // await Geolocator.getCurrentPosition(
+    //         desiredAccuracy: LocationAccuracy.high,
+    //         forceAndroidLocationManager: true)
+        // .then((Position position) {
+          print(position);
+      _currentPosition = LatLng(position.latitude, position.longitude);
+      print(_currentPosition);
+    // });
+    setState(() {
+      _currentPosition;
+    });
+    return _currentPosition;
+  }
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +60,7 @@ class _MapScreenState extends State<MapScreen> {
         child: GoogleMap(
             zoomGesturesEnabled: false,
             initialCameraPosition:
-                CameraPosition(target: currentlocation, zoom: 14)),
+                CameraPosition(target: _currentPosition!, zoom: 14)),
       ),
     );
   }

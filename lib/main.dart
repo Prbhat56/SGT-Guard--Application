@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/account_screen/account_screen.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
@@ -12,6 +11,7 @@ import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/i
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/password_checker/password_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
+import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pressed_cubit.dart';
 import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
@@ -27,6 +27,7 @@ import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
+// import 'package:workmanager/workmanager.dart';
 import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'presentation/authentication_screen/cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
@@ -36,11 +37,28 @@ import 'presentation/property_details_screen/cubit/showmore/showmore_cubit.dart'
 import 'presentation/work_report_screen/cubit/addwitness/addwitness_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-void main() {
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Workmanager().initialize(callBackDispatcher, isInDebugMode: true);
   runApp(const MyApp());
   configLoading();
+  initOneSignalState();
 }
+/*
+@pragma('vm:entry-point')
+void callBackDispatcher() {
+  Workmanager().executeTask((taskName, inputData) {
+    switch (taskName) {
+      case "get_current_location":
+        print("Native called background task: $taskName");
+        break;
+      default:
+    }
+    return Future.value(true);
+  });
+}*/
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -95,6 +113,58 @@ void configLoading() {
     ..dismissOnTap = false;
 }
 
+Future<void> initOneSignalState() async {
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+  OneSignal.initialize("17f18f43-3ba6-4058-af3b-8ffb75932a8f");
+  OneSignal.Notifications.requestPermission(true);
+
+  OneSignal.User.pushSubscription.addObserver((state) {
+    print(OneSignal.User.pushSubscription.optedIn);
+    print(OneSignal.User.pushSubscription.id);
+    print(OneSignal.User.pushSubscription.token);
+    print(state.current.jsonRepresentation());
+  });
+
+  OneSignal.Notifications.addPermissionObserver((state) {
+    print("Has permission " + state.toString());
+  });
+
+  OneSignal.Notifications.addClickListener((event) {
+    print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');
+  });
+
+  OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+    print(
+        'NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
+
+    /// Display Notification, preventDefault to not display
+    event.preventDefault();
+
+    /// Do async work
+
+    /// notification.display() to display after preventing default
+    event.notification.display();
+  });
+
+  OneSignal.InAppMessages.addClickListener((event) {
+    print(
+        "In App Message Clicked: \n${event.result.jsonRepresentation().replaceAll("\\n", "\n")}");
+  });
+  OneSignal.InAppMessages.addWillDisplayListener((event) {
+    print("ON WILL DISPLAY IN APP MESSAGE ${event.message.messageId}");
+  });
+  OneSignal.InAppMessages.addDidDisplayListener((event) {
+    print("ON DID DISPLAY IN APP MESSAGE ${event.message.messageId}");
+  });
+  OneSignal.InAppMessages.addWillDismissListener((event) {
+    print("ON WILL DISMISS IN APP MESSAGE ${event.message.messageId}");
+  });
+  OneSignal.InAppMessages.addDidDismissListener((event) {
+    print("ON DID DISMISS IN APP MESSAGE ${event.message.messageId}");
+  });
+}
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -134,7 +204,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void startTimer() {
     Timer(const Duration(seconds: 1), () async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(prefs.getString('welcome'));
       if (prefs.getString('welcome') != null) {
         if (prefs.getString('token') != null) {
           LocationPermission permission;
@@ -147,20 +216,37 @@ class _SplashScreenState extends State<SplashScreen> {
           } else {
             if (permission == LocationPermission.always ||
                 permission == LocationPermission.whileInUse) {
-              var map = new Map<String, dynamic>();
-              map['email'] = prefs.getString('email');
-              map['password'] = prefs.getString('password');
-              var apiService = ApiCallMethodsService();
-              apiService.post(apiRoutes['login']!, map).then((value) async {
-                apiService.updateUserDetails(value);
-                Map<String, dynamic> jsonMap = json.decode(value);
-                String token = jsonMap['token'];
-                var commonService = CommonService();
-                commonService.setUserToken(token);
-              }).onError((error, stackTrace) {
-                print(error);
-              });
-              screenNavigator(context, Home());
+              if (prefs.getString('shiftId') != null) {
+                var map = new Map<String, dynamic>();
+                map['email'] = prefs.getString('email');
+                map['password'] = prefs.getString('password');
+                var apiService = ApiCallMethodsService();
+                apiService.post(apiRoutes['login']!, map).then((value) async {
+                  apiService.updateUserDetails(value);
+                  Map<String, dynamic> jsonMap = json.decode(value);
+                  String token = jsonMap['token'];
+                  var commonService = CommonService();
+                  commonService.setUserToken(token);
+                }).onError((error, stackTrace) {
+                  print(error);
+                });
+                screenNavigator(context, CheckPointScreen());
+              } else {
+                var map = new Map<String, dynamic>();
+                map['email'] = prefs.getString('email');
+                map['password'] = prefs.getString('password');
+                var apiService = ApiCallMethodsService();
+                apiService.post(apiRoutes['login']!, map).then((value) async {
+                  apiService.updateUserDetails(value);
+                  Map<String, dynamic> jsonMap = json.decode(value);
+                  String token = jsonMap['token'];
+                  var commonService = CommonService();
+                  commonService.setUserToken(token);
+                }).onError((error, stackTrace) {
+                  print(error);
+                });
+                screenNavigator(context, Home());
+              }
             }
           }
         } else {

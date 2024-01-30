@@ -29,7 +29,7 @@ class _AccountScreenState extends State<AccountScreen> {
     var data = jsonDecode(response.body.toString());
 
     if (response.statusCode == 200) {
-      print('api call qqqq');
+      // print('api call qqqq');
       return GuardDetails.fromJson(data);
     } else {
       throw Exception('Failed to load guard');
@@ -104,7 +104,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   child: CachedNetworkImage(
                                       imageUrl: (snapshot.data!.imageBaseUrl
                                               .toString() +
-                                          '/' +
+                                          '' +
                                           snapshot.data!.userDetails!.avatar
                                               .toString()),
                                       fit: BoxFit.fill,

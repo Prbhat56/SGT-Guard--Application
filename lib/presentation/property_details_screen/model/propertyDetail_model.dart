@@ -10,23 +10,27 @@ String propertyDetailsModelToJson(PropertyDetailsModel data) => json.encode(data
 
 class PropertyDetailsModel {
     Data? data;
+    String? imageBaseUrl;
     String? propertyImageBaseUrl;
     int? status;
 
     PropertyDetailsModel({
         this.data,
+        this.imageBaseUrl,
         this.propertyImageBaseUrl,
         this.status,
     });
 
     factory PropertyDetailsModel.fromJson(Map<String, dynamic> json) => PropertyDetailsModel(
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        imageBaseUrl: json["image_base_url"],
         propertyImageBaseUrl: json["property_image_base_url"],
         status: json["status"],
     );
 
     Map<String, dynamic> toJson() => {
         "data": data?.toJson(),
+        "image_base_url": imageBaseUrl,
         "property_image_base_url": propertyImageBaseUrl,
         "status": status,
     };
@@ -51,7 +55,8 @@ class Data {
     DateTime? createdAt;
     DateTime? updatedAt;
     List<AssignGuard>? assignGuard;
-    JobDetailsClass? jobDetails;
+    int? checkpointCount;
+    JobDetails? jobDetails;
     List<Shift>? shifts;
     String? countryText;
     String? stateText;
@@ -77,6 +82,7 @@ class Data {
         this.createdAt,
         this.updatedAt,
         this.assignGuard,
+        this.checkpointCount,
         this.jobDetails,
         this.shifts,
         this.countryText,
@@ -104,7 +110,8 @@ class Data {
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         assignGuard: json["assign_guard"] == null ? [] : List<AssignGuard>.from(json["assign_guard"]!.map((x) => AssignGuard.fromJson(x))),
-        jobDetails: json["job_details"] == null ? null : JobDetailsClass.fromJson(json["job_details"]),
+        checkpointCount: json["checkpoint_count"],
+        jobDetails: json["job_details"] == null ? null : JobDetails.fromJson(json["job_details"]),
         shifts: json["shifts"] == null ? [] : List<Shift>.from(json["shifts"]!.map((x) => Shift.fromJson(x))),
         countryText: json["country_text"],
         stateText: json["state_text"],
@@ -131,6 +138,7 @@ class Data {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "assign_guard": assignGuard == null ? [] : List<dynamic>.from(assignGuard!.map((x) => x.toJson())),
+        "checkpoint_count": checkpointCount,
         "job_details": jobDetails?.toJson(),
         "shifts": shifts == null ? [] : List<dynamic>.from(shifts!.map((x) => x.toJson())),
         "country_text": countryText,
@@ -228,14 +236,14 @@ class Details {
     };
 }
 
-class JobDetailsClass {
+class JobDetails {
     String? firstName;
     String? lastName;
     String? guardPosition;
     String? avatar;
     String? shiftTime;
 
-    JobDetailsClass({
+    JobDetails({
         this.firstName,
         this.lastName,
         this.guardPosition,
@@ -243,7 +251,7 @@ class JobDetailsClass {
         this.shiftTime,
     });
 
-    factory JobDetailsClass.fromJson(Map<String, dynamic> json) => JobDetailsClass(
+    factory JobDetails.fromJson(Map<String, dynamic> json) => JobDetails(
         firstName: json["first_name"],
         lastName: json["last_name"],
         guardPosition: json["guard_position"],
@@ -312,7 +320,7 @@ class Shift {
     DateTime? updatedAt;
     DateTime? date;
     String? dateText;
-    JobDetailsClass? guardDetails;
+    JobDetails? guardDetails;
     String? shiftTime;
     String? propertyName;
 
@@ -353,7 +361,7 @@ class Shift {
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
         dateText: json["date_text"],
-        guardDetails: json["guard_details"] == null ? null : JobDetailsClass.fromJson(json["guard_details"]),
+        guardDetails: json["guard_details"] == null ? null : JobDetails.fromJson(json["guard_details"]),
         shiftTime: json["shift_time"],
         propertyName: json["property_name"],
     );

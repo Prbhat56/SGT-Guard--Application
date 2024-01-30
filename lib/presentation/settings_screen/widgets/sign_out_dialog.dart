@@ -120,6 +120,7 @@ class SignOutDialog extends StatelessWidget {
       //commonService.openSnackBar(jsonMap['message'],context);
       // commonService.clearLocalStorage();
       commonService.logDataClear();
+      commonService.clearLocalStorage();
       screenNavigator(context, SignInScreen());
     }).onError((error, stackTrace) {
       print(error);

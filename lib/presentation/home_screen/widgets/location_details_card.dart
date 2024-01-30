@@ -21,25 +21,6 @@ class LocationDetailsCard extends StatefulWidget {
 }
 
 class _LocationDetailsCardState extends State<LocationDetailsCard> {
-  // Future<GuardHome> getPropertyGuardListAPI() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   Map<String, String> myHeader = <String, String>{
-  //     "Authorization": "Bearer ${prefs.getString('token')}",
-  //   };
-  //   print(myHeader);
-
-  //   String apiUrl = baseUrl + apiRoutes['homePage']!;
-  //   final response = await http.post(Uri.parse(apiUrl), headers: myHeader);
-  //   print("response $response");
-  //   var data = jsonDecode(response.body.toString());
-
-  //   if (response.statusCode == 201) {
-  //     return GuardHome.fromJson(data);
-  //   } else {
-  //     return GuardHome.fromJson(data);
-  //   }
-  // }
-
   Future<DutyListModel> getJobsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
@@ -47,15 +28,15 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
     };
     String apiUrl = baseUrl + apiRoutes['dutyList']!;
     final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
-    print(response.body.toString());
-    var data = jsonDecode(response.body.toString());
-    print(data);
+    // print(response.body.toString());
+    // var data = jsonDecode(response.body.toString());
+    // print(data);
     if (response.statusCode == 201) {
       final DutyListModel responseModel = dutyModelFromJson(response.body);
       activeDatum = responseModel.activeData ?? [];
-      print('Active: $activeDatum');
+      // print('Active: $activeDatum');
       inActiveDatum = responseModel.inactiveData ?? [];
-      print('InActive: $inActiveDatum');
+      // print('InActive: $inActiveDatum');
       imgBaseUrl = responseModel.imageBaseUrl ?? '';
       return responseModel;
     } else {
@@ -71,42 +52,33 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-      child: InkWell(
-        // onTap: () {
-        //   screenNavigator(context, PropertyDetailsScreen(
-        //             // imageBaseUrl: ,
-        //             // activeData: ,
-        //   ));
-        // },
-        child: FutureBuilder(
-            future: getJobsList(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                    child: Container(
-                        height: 60,
-                        width: 60,
-                        child: CircularProgressIndicator()));
-              } else {
-                return Container(
-                  // height: 290 * locationData.length.toDouble(),
-                  height: 290 * snapshot.data!.activeData!.length.toDouble(),
-                  // height: 290 * snapshot.data!.jobs!.data!.length.toDouble(),
-                  child: ListView.builder(
+      child: FutureBuilder(
+          future: getJobsList(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: Container(
+                      height: 60,
+                      width: 60,
+                      child: CircularProgressIndicator()));
+            } else {
+              return Column(
+                children: [
+                  ListView.builder(
                       itemCount: snapshot.data!.activeData!.length,
-                      // itemCount: snapshot.data!.jobs!.data!.length,
                       physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return new GestureDetector(
+                        return GestureDetector(
                           onTap: () {
                             screenNavigator(
                                 context,
                                 PropertyDetailsScreen(
-                                  // propertyId : snapshot.data!.jobs!.data![index].id,
                                   propertyId:
                                       snapshot.data!.activeData![index].id,
                                   imageBaseUrl: snapshot.data!.imageBaseUrl,
-                                  propertyImageBaseUrl : snapshot.data!.propertyImageBaseUrl,
+                                  propertyImageBaseUrl:
+                                      snapshot.data!.propertyImageBaseUrl,
                                   activeData: snapshot.data?.activeData![index],
                                 ));
                           },
@@ -122,7 +94,7 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
                                       snapshot.data!.propertyImageBaseUrl
                                           .toString(),
                                       snapshot.data!.activeData![index]
-                                          .propertyAvatars![0].propertyAvatar
+                                          .propertyAvatars!.first.propertyAvatar
                                           .toString()),
                                   // snapshot.data!.jobs!.data![index].propertyAvatars![0].propertyAvatar.toString()),
                                   // (locationData[index].imageUrl),
@@ -136,8 +108,7 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
                                   children: [
                                     Text(
                                       // snapshot.data!.jobs!.data![index].propertyName.toString(),
-                                      snapshot
-                                          .data!.activeData![index].propertyName
+                                      snapshot.data!.activeData![index].propertyName
                                           .toString(),
                                       // locationData[index].title,
                                       style: TextStyle(fontSize: 17),
@@ -191,11 +162,11 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
                             ),
                           ),
                         );
-                      }),
-                );
-              }
-            }),
-      ),
+                      })
+                ],
+              );
+            }
+          }),
     );
   }
 }

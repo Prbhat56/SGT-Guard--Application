@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
 import '../../../../theme/custom_theme.dart';
-import '../../widget/edit_location.dart';
 
 class EmergencyLocationWidget extends StatefulWidget {
   const EmergencyLocationWidget({
@@ -20,7 +20,7 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
   LatLng? _currentPosition;
   Future<LatLng?> locateUser() async {
     await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best,
+            desiredAccuracy: LocationAccuracy.high,
             forceAndroidLocationManager: true)
         .then((Position position) {
       _currentPosition = LatLng(position.latitude, position.longitude);
@@ -86,6 +86,11 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                           EmergencyReportScreen.of(context)!.latValue =
                               position.target.latitude.toString();
                           EmergencyReportScreen.of(context)!.longValue =
+                              position.target.longitude.toString();
+
+                          StaticEmergencyReportScreen.of(context)!.latValue =
+                              position.target.latitude.toString();
+                          StaticEmergencyReportScreen.of(context)!.longValue =
                               position.target.longitude.toString();
                         },
                         initialCameraPosition: CameraPosition(

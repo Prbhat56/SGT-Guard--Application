@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/property_details_screen/cubit/showmore/showmore_cubit.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/job_details_widget.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/map_card_widget.dart';
-import 'package:sgt/presentation/property_details_screen/widgets/property_description_widget.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timesheet_details_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
@@ -33,8 +29,6 @@ TimeSheetData detailsData = TimeSheetData();
 String imgBaseUrl = '';
 
 class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
-  //LatLng currentlocation = const LatLng(22.572645, 88.363892);
-
   Future<TimeSheetDetailsModel> getTimeSheetList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
@@ -42,13 +36,10 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
     };
     String apiUrl = baseUrl + 'guard/duty-details/${widget.propId}';
     final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
-    var data = jsonDecode(response.body.toString());
-    print(data);
     if (response.statusCode == 201) {
       final TimeSheetDetailsModel responseModel =
           timeSheetDetailsModelFromJson(response.body);
       detailsData = responseModel.data!;
-      print('Upcoming: $detailsData');
 
       imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
       return responseModel;
@@ -78,7 +69,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   Center(
                     child: Container(
@@ -140,7 +131,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                                 SizedBox(
                                   width: 120,
                                   child: Text(
-                                    'Shift Time: ${detailsData.shifts!.first.clockIn.toString()}-${detailsData.shifts!.first.clockOut.toString()}',
+                                    'Shift Time: ${detailsData.shifts!.isEmpty ? null : detailsData.shifts!.first.clockIn.toString()} - ${detailsData.shifts!.isEmpty ? null : detailsData.shifts!.first.clockOut.toString()}',
                                     maxLines: 2,
                                     style: TextStyle(
                                         fontSize: 15,
@@ -185,7 +176,9 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                       children: [
                         TextFieldHeaderWidget(title: 'Clock In Time:'),
                         TextFieldHeaderWidget(
-                            title: detailsData.shifts!.first.clockIn.toString())
+                            title: detailsData.shifts!.isEmpty
+                                ? ''
+                                : detailsData.shifts!.first.clockIn.toString())
                       ],
                     ),
                   ),
@@ -197,8 +190,9 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                       children: [
                         TextFieldHeaderWidget(title: 'Clock Out Time:'),
                         TextFieldHeaderWidget(
-                            title:
-                                detailsData.shifts!.first.clockOut.toString())
+                            title: detailsData.shifts!.isEmpty
+                                ? ''
+                                : detailsData.shifts!.first.clockOut.toString())
                       ],
                     ),
                   ),
@@ -240,7 +234,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
+                        vertical: 20, horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -249,14 +243,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                           children: [
                             TextFieldHeaderWidget(title: 'Job Details'),
                             const SizedBox(height: 10),
-                            // JobDetailsWidget(
-                            //     name:
-                            //         '${detailsData.assignGuard!.first.details!.firstName.toString()} ${detailsData.assignGuard!.first.details!.lastName.toString()}',
-                            //     position: detailsData
-                            //         .assignGuard!.first.details!.guardPosition
-                            //         .toString(),
-                            //     time:
-                            //         '${detailsData.shifts!.first.clockIn.toString()}-${detailsData.shifts!.first.clockOut.toString()}'), //widgets to show job details
+                            JobDetailsWidget(jobDetails: detailsData.jobDetails)
                           ],
                         ),
                       ],
@@ -297,8 +284,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
+                                  width: 300,
                                   child: Text(
                                     detailsData.propertyDescription.toString(),
                                     maxLines: context

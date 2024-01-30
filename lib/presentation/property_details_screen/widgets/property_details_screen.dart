@@ -20,6 +20,7 @@ import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -40,58 +41,58 @@ class PropertyDetailsScreen extends StatefulWidget {
   State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
 }
 
-Future<PropertyDetailsModel> getJobsList(property_id) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  Map<String, String> myHeader = <String, String>{
-    "Authorization": "Bearer ${prefs.getString('token')}",
-  };
-  String apiUrl = baseUrl + apiRoutes['dutyDetails']! + property_id.toString();
-  final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
-  print(response.body.toString());
-  var data = jsonDecode(response.body.toString());
-  print(data);
-  if (response.statusCode == 201) {
-    final PropertyDetailsModel responseModel =
-        propertyDetailsModelFromJson(response.body);
-    return responseModel;
-  } else {
-    return PropertyDetailsModel(
-      status: response.statusCode,
-    );
-  }
-}
+Data? detailsData = Data();
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
-  LatLng currentlocation = const LatLng(22.572645, 88.363892);
+  Future<PropertyDetailsModel> getJobsList(property_id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, String> myHeader = <String, String>{
+      "Authorization": "Bearer ${prefs.getString('token')}",
+    };
+    String apiUrl =
+        baseUrl + apiRoutes['dutyDetails']! + property_id.toString();
+    final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+    // var data = jsonDecode(response.body.toString());
+    // print(data);
+    if (response.statusCode == 201) {
+      final PropertyDetailsModel responseModel =
+          propertyDetailsModelFromJson(response.body);
+      detailsData = responseModel.data;
+      return responseModel;
+    } else {
+      return PropertyDetailsModel(
+        status: response.statusCode,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("property id ===> ${widget.propertyId}");
-    print("activeData  ===> ${widget.activeData}");
-
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
         appBar: CustomAppBarWidget(appbarTitle: 'Property Detail'),
-        body: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: FutureBuilder(
+        body: FutureBuilder(
                 future: getJobsList(widget.propertyId),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(
-                        child: Container(
-                            height: 60,
-                            width: 60,
-                            child: CircularProgressIndicator()));
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.3,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   } else {
-                    return Column(
+                    return SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         PropertyDetailsWidget(
                           imageBaseUrl: snapshot.data!.propertyImageBaseUrl,
-                          activeData: widget.activeData,
-                          propertyId: widget.propertyId,
+                          detailsData: detailsData,
+                          checkPoint:widget.activeData!.checkPoints!.length.toString(),
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -112,7 +113,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   InkWell(
                                     onTap: () {
                                       screenNavigator(
-                                          context, ScanningScreen());
+                                          context, ScanningScreen(propertyId:snapshot.data!.data!.id));
                                     },
                                     child: Container(
                                       height: 32,
@@ -150,9 +151,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       screenNavigator(
                                           context,
                                           CheckPointListsScreen(
-                                            propertyId: snapshot.data!.data!.id,
-                                            checkPoint:
-                                                widget.activeData!.checkPoints,
+                                            propertyId:widget.propertyId,
                                             imageBaseUrl: widget.imageBaseUrl,
                                           ));
                                     },
@@ -190,7 +189,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   InkWell(
                                     onTap: () {
                                       screenNavigator(
-                                          context, WorkReportScreen());
+                                          context,
+                                          WorkReportScreen(
+                                            propertyId: snapshot.data!.data!.id
+                                                .toString(),
+                                            propertyName: snapshot
+                                                .data!.data!.propertyName,
+                                          ));
                                     },
                                     child: Container(
                                       height: 32,
@@ -250,15 +255,14 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               TextFieldHeaderWidget(title: 'Upcoming Shifts'),
                               const SizedBox(height: 10),
                               // ShiftCards(shifts: widget.activeData!.shifts), //shift cards widget
-                              snapshot.data!.data!.shifts!.length != 0
-                                  ? ShiftCards(
-                                      shifts: snapshot.data!.data!.shifts)
+                              detailsData!.shifts!.length != 0
+                                  ? ShiftCards(shifts: detailsData!.shifts, imageBaseUrl:snapshot.data!.imageBaseUrl)
                                   : Text(
                                       'No Upcoming Shift Available',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: black,
-                                          fontWeight: FontWeight.bold),
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.normal),
                                     ),
                               SizedBox(height: 20),
                               Column(
@@ -266,15 +270,69 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                 children: [
                                   TextFieldHeaderWidget(title: 'Job Details'),
                                   const SizedBox(height: 10),
-                                  JobDetailsWidget(
-                                      jobDetails: snapshot.data!.data
-                                          ?.jobDetails), //widgets to show job details
-                                  //const SizedBox(height: 25),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Guard Name: ',
+                                              style: CustomTheme.blackTextStyle(
+                                                  15)),
+                                          Text(
+                                            '${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.firstName.toString()} ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.lastName.toString()}',
+                                            style: CustomTheme.blueTextStyle(
+                                                15, FontWeight.w400),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Position: ',
+                                              style: CustomTheme.blackTextStyle(
+                                                  15)),
+                                          Text(
+                                            ' ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.guardPosition.toString()}',
+                                            style: CustomTheme.blueTextStyle(
+                                                15, FontWeight.w400),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Shift Time: ',
+                                              style: CustomTheme.blackTextStyle(
+                                                  15)),
+                                          Text(
+                                            ' ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.shiftTime.toString()}',
+                                            style: CustomTheme.blueTextStyle(
+                                                15, FontWeight.w400),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  ), //widgets to show job details
                                   TextFieldHeaderWidget(title: 'Description'),
                                   const SizedBox(height: 10),
                                   PropertyDescriptionWidget(
-                                    imageBaseUrl: widget.propertyImageBaseUrl,
-                                    activeData: widget.activeData,
+                                    propertyImageBaseUrl:snapshot.data!.propertyImageBaseUrl,
+                                    propDesc: detailsData!.propertyDescription,
+                                    propvatars: detailsData!.propertyAvatars,
                                   ), //widget to show property details
                                   const SizedBox(height: 25),
                                   TextFieldHeaderWidget(title: 'Location'),
@@ -286,11 +344,12 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   const SizedBox(height: 20),
                                   MapCardWidget(
                                     currentlocation: LatLng(
-                                        double.parse(widget.activeData!.latitude
+                                        double.parse(snapshot
+                                                .data!.data!.latitude
                                                 .toString())
                                             .toDouble(),
-                                        double.parse(widget
-                                                .activeData!.longitude
+                                        double.parse(snapshot
+                                                .data!.data!.longitude
                                                 .toString())
                                             .toDouble()),
                                   ), //showing map card
@@ -309,18 +368,20 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                     .read<TimerOnCubit>()
                                                     .turnOnTimer();
                                             screenNavigator(
-                                                context, ScanningScreen());
+                                                context, ScanningScreen(propertyId:snapshot.data!.data!.id));
                                           })),
+                                  const SizedBox(height: 30),
                                 ],
                               ),
                             ],
                           ),
                         ),
                       ],
+                    ),
                     );
                   }
-                })),
-      ),
-    );
+                })
+                ),
+      );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
 
 import '../../../../theme/custom_theme.dart';
 
@@ -41,7 +42,9 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                   TextFormField(
                     controller: dateinput,
                     decoration: InputDecoration(
-                      hintText: '00/00/00',
+                      hintText: DateFormat('yyyy-MM-dd')
+                          .format(DateTime.now())
+                          .toString(),
                       hintStyle: TextStyle(color: CustomTheme.primaryColor),
                       focusColor: CustomTheme.primaryColor,
                     ),
@@ -66,6 +69,8 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                         setState(() {
                           dateinput.text = formattedDate;
                           EmergencyReportScreen.of(context)!.dateValue =
+                              formattedDate;
+                          StaticEmergencyReportScreen.of(context)!.dateValue =
                               formattedDate;
                         });
                       } else {
@@ -96,7 +101,7 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                   TextFormField(
                     controller: timeinput,
                     decoration: InputDecoration(
-                      hintText: '00:00',
+                      hintText: DateFormat('HH:mm:ss').format(DateTime.now()),
                       hintStyle: TextStyle(color: CustomTheme.primaryColor),
                       focusColor: CustomTheme.primaryColor,
                     ),
@@ -106,6 +111,13 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                       TimeOfDay? pickedTime = await showTimePicker(
                         initialTime: TimeOfDay.now(),
                         context: context,
+                        builder: (context, child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context)
+                                .copyWith(alwaysUse24HourFormat: false),
+                            child: child ?? Container(),
+                          );
+                        },
                       );
 
                       if (pickedTime != null) {
@@ -117,15 +129,17 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                         // String formattedTime =
                         //     DateFormat('HH:mm:ss').format(parsedTime);
                         // print(formattedTime); //output 14:59:00
-
+                        //var pickTimes = pickedTime.format12Hour(context);
                         var dt = DateFormat("h:mm a")
                             .parse(pickedTime.format(context));
-                        var formattedTime = DateFormat('HH:mm:ss').format(dt);
+                        var formattedTime = DateFormat.Hms().format(dt);
 
                         setState(() {
                           timeinput.text = formattedTime;
                           EmergencyReportScreen.of(context)!.timeValue =
-                              formattedTime; //set the value of text field.
+                              formattedTime;
+                          StaticEmergencyReportScreen.of(context)!.timeValue =
+                              formattedTime;    //set the value of text field.
                         });
                       } else {
                         print("Time is not selected");

@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/home_screen/model/GuardHome.dart';
-import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
-import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../connect_screen/widgets/chatting_screen.dart';
@@ -40,13 +38,9 @@ class _CircularProfileState extends State<CircularProfile> {
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
     };
-    print(myHeader);
-
     String apiUrl = baseUrl + apiRoutes['homePage']!;
     final response = await http.post(Uri.parse(apiUrl), headers: myHeader);
-
     var data = jsonDecode(response.body.toString());
-
     if (response.statusCode == 200) {
       return GuardHome.fromJson(data);
     } else {
@@ -80,20 +74,13 @@ class _CircularProfileState extends State<CircularProfile> {
                           children: [
                             InkWell(
                               onTap: () {
-                                screenNavigator(
-                                    context, ChattingScreen(index: index));
+                                screenNavigator(context, ChattingScreen(index: index));
                               },
                               child: CustomCircularImage.getCircularImage(
                                   snapshot.data!.imageBaseUrl.toString(),
-                                  snapshot.data!.teams!.data![index].avatar
-                                      .toString(),
-                                  // dummyData[index].profileUrl,
-                                  // dummyData[index].isOnline,
-                                  // true,
-                                  snapshot.data!.teams!.data![index].apiToken !=
-                                          null
-                                      ? true
-                                      : false,
+                                  snapshot.data!.teams!.data![index].avatar.toString(),
+                                  snapshot.data!.teams!.data![index].apiToken != null
+                                  ? true : false,
                                   30,
                                   4,
                                   43),
@@ -101,8 +88,7 @@ class _CircularProfileState extends State<CircularProfile> {
                             SizedBox(
                               width: 70,
                               child: Text(
-                                snapshot.data!.teams!.data![index].firstName
-                                    .toString(),
+                                snapshot.data!.teams!.data![index].firstName.toString(),
                                 softWrap: true,
                                 textAlign: TextAlign.center,
                               ),

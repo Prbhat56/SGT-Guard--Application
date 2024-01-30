@@ -1,5 +1,8 @@
-const String baseUrl = 'https://sgt-inhouse.myclientdemo.us/api/'; //STAGE_URL
+// const String baseUrl = 'https://sgt-inhouse.myclientdemo.us/api/'; //STAGE_URL
+//  const String baseUrl = 'https://appdeveloperpro.online/api/'; //NEW PRODUCTION URL
 // const String baseUrl = 'https://sgtsuperadmin.oohap.com/api/'; //PRODUCTION_URL
+// const String baseImageUrl = 'https://sgt-inhouse.myclientdemo.us'; //Image_URL
+const String baseUrl = 'https://arrowtrack-solutions.com/api/';
 
 Map<String, String> apiRoutes = {
   "login": "guard/login",
@@ -21,9 +24,11 @@ Map<String, String> apiRoutes = {
   "privacyPolicy": "guard/privacy-policy",
   "termsCondition": "guard/privacy-policy",
   "homePage": "guard/home",
-  "checkpointListPropertyWise": "guard/checkpoint-list",
+  "checkpointListPropertyWise": "guard/checkpoint-list-without-shift-id",
+  "checkpointListShiftWise": "guard/checkpoint-list",
   "checkpointDetails": "guard/checkpoint-details",
   "checkpointTaskList": "guard/checkpoint-task-list",
+  "checkpointTaskUpdate": "guard/checkpoint-task-update",
   "dutyList": "guard/duty-list",
   "dutyDetails": "guard/duty-details/",
   "timeSheet": "guard/timesheet",
@@ -35,6 +40,7 @@ Map<String, String> apiRoutes = {
   "emergencyReport": "guard/emergency-report-submit",
   "myReport": "guard/report-list-filtered",
   "todaysActivePropertyList": "guard/todays-active-property",
-  "clockIn":"guard/clock-in",
-  "clockOut":"guard/clock-out",
+  "clockIn": "guard/clock-in",
+  "clockOut": "guard/clock-out",
+  "notification":"guard/notifications"
 };

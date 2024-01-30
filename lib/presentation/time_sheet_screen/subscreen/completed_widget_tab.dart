@@ -38,7 +38,7 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
             ),
           )
         : ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             itemCount: widget.completedData.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -47,7 +47,9 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                   children: [
                     InkWell(
                       onTap: () {
-                        screenNavigator(context, TimeSheetDetailsWidet(
+                        screenNavigator(
+                            context,
+                            TimeSheetDetailsWidet(
                               propId: widget.completedData[index].id.toString(),
                               propName: widget.completedData[index].propertyName
                                   .toString(),
@@ -98,7 +100,8 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                                   height: 10,
                                 ),
                                 Text(
-                                  '${widget.completedData[index].shifts!.first.clockIn}-${widget.completedData[index].shifts!.first.clockOut}',
+                                  //'${widget.completedData[index].shifts!.first.clockIn} - ${widget.completedData[index].shifts!.first.clockOut}',
+                                  '${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockIn.toString()} - ${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockOut.toString()}',
                                   style: const TextStyle(
                                       fontSize: 11, color: Colors.grey),
                                 ),
@@ -107,12 +110,8 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                           ),
                           Text(
                             getDifference(
-                                    widget.completedData[index].shifts!.first
-                                        .clockIn
-                                        .toString(),
-                                    widget.completedData[index].shifts!.first
-                                        .clockOut
-                                        .toString())
+                                    '${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockIn}',
+                                    '${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockOut}')
                                 .toString(),
                             style: TextStyle(fontSize: 11, color: primaryColor),
                           ),
@@ -125,6 +124,7 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                   ],
                 ),
               );
+           
             });
   }
 }

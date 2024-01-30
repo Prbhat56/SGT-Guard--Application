@@ -18,7 +18,7 @@ class CustomCircularImage {
         CircleAvatar(
           radius: radius,
           backgroundColor: grey,
-          backgroundImage: NetworkImage(baseUrl + '/' + imageUrl),
+          backgroundImage: NetworkImage(baseUrl + '' + imageUrl),
         ),
         Positioned(
           bottom: bottom,
@@ -42,7 +42,7 @@ class CustomCircularImage {
         CircleAvatar(
           radius: 35,
           backgroundColor: grey,
-          backgroundImage: NetworkImage(baseUrl + '/' + imageUrl),
+          backgroundImage: NetworkImage(baseUrl + imageUrl),
         ),
         isActive
             ? Positioned(

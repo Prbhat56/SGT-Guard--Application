@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,9 +21,6 @@ import '../../widgets/custom_textfield_widget.dart';
 import '../../widgets/custom_underline_textfield_widget.dart';
 import '../../widgets/dotted_choose_file_widget.dart';
 import '../../widgets/media_uploading_widget.dart';
-import '../cubit/addpeople/addpeople_cubit.dart';
-import '../cubit/addwitness/addwitness_cubit.dart';
-import 'widget/add_people_widget.dart';
 import 'widget/emergency_date_time_widget.dart';
 import 'widget/emergency_location_widget.dart';
 import 'package:http/http.dart' as http;
@@ -55,17 +53,17 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   List<String> _dropdownItems = <String>['Yes', 'No'];
   String? towedValue = 'Yes';
 
-  List<TextEditingController> _peopleNameController = [TextEditingController()];
-  List<TextEditingController> _peoplePhoneController = [
-    TextEditingController()
-  ];
+  // List<TextEditingController> _peopleNameController = [TextEditingController()];
+  // List<TextEditingController> _peoplePhoneController = [
+  //   TextEditingController()
+  // ];
 
-  List<TextEditingController> _witnessNameController = [
-    TextEditingController()
-  ];
-  List<TextEditingController> _witnessPhoneController = [
-    TextEditingController()
-  ];
+  // List<TextEditingController> _witnessNameController = [
+  //   TextEditingController()
+  // ];
+  // List<TextEditingController> _witnessPhoneController = [
+  //   TextEditingController()
+  // ];
 
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
@@ -103,6 +101,74 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     }
   }
 
+  var nameTEC1 = <int, TextEditingController>{};
+  var mobileTEC1 = <int, TextEditingController>{};
+  var item1 = <int, Widget>{};
+
+  var nameTEC2 = <int, TextEditingController>{};
+  var mobileTEC2 = <int, TextEditingController>{};
+  var item2 = <int, Widget>{};
+
+  newMethod(
+    BuildContext context,
+    int index,
+  ) {
+    var nameController = TextEditingController();
+    var mobileController = TextEditingController();
+    nameTEC1.addAll({index: nameController});
+    mobileTEC1.addAll({index: mobileController});
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            CustomUnderlineTextFieldWidget(
+              textfieldTitle: 'Name',
+              hintText: 'Name',
+              controller: nameController,
+            ),
+            CustomUnderlineTextFieldWidget(
+              textfieldTitle: 'Phone Number',
+              hintText: 'Phone Number',
+              keyboardType: TextInputType.number,
+              controller: mobileController,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  newWitnessMethod(
+    BuildContext context,
+    int index,
+  ) {
+    var nameController = TextEditingController();
+    var mobileController = TextEditingController();
+    nameTEC2.addAll({index: nameController});
+    mobileTEC2.addAll({index: mobileController});
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            CustomUnderlineTextFieldWidget(
+              textfieldTitle: 'Name',
+              hintText: 'Name',
+              controller: nameController,
+            ),
+            CustomUnderlineTextFieldWidget(
+              textfieldTitle: 'Phone Number',
+              hintText: 'Phone Number',
+              keyboardType: TextInputType.number,
+              controller: mobileController,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Future<void> uploadImage() async {
     showDialog(
         context: context,
@@ -116,8 +182,17 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
     request.fields['property_id'] = propertyId.toString();
     request.fields['title'] = _titleController.text.toString();
-    request.fields['emergency_date'] = dateValue.toString();
-    request.fields['emergency_time'] = timeValue.toString();
+
+    dateValue != ''
+        ? request.fields['emergency_date'] = dateValue.toString()
+        : request.fields['emergency_date'] =
+            DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+
+    timeValue != ''
+        ? request.fields['emergency_time'] = timeValue.toString()
+        : request.fields['emergency_time'] =
+            DateFormat('HH:mm:ss').format(DateTime.now()).toString();
+
     request.fields['latitude'] = latValue.toString();
     request.fields['longitude'] = longValue.toString();
     request.fields['emergency_details'] = _detailsController.text.toString();
@@ -127,17 +202,14 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     String peoplesNames = '';
     String peoplesPhone = '';
 
-    for (TextEditingController controller in _peopleNameController) {
-      peopleNameList.add(controller.text);
+    for (int a = 0; a < item1.length; a++) {
+      var name = nameTEC1[a]?.value.text;
+      var mobile = mobileTEC1[a]?.value.text;
+      peopleNameList.add(name.toString());
+      peoplePhoneList.add(mobile.toString());
     }
     peoplesNames = peopleNameList.join(', ');
-    print(peoplesNames);
-
-    for (TextEditingController controller in _peoplePhoneController) {
-      peoplePhoneList.add(controller.text);
-    }
     peoplesPhone = peoplePhoneList.join(', ');
-    print(peoplesPhone);
 
     request.fields['people_involved_name[]'] = peoplesNames;
     request.fields['people_involved_phone[]'] = peoplesPhone;
@@ -147,20 +219,18 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     String witnessNames = '';
     String witnessPhone = '';
 
-    for (TextEditingController controller in _witnessNameController) {
-      witnessNameList.add(controller.text);
+    for (int a = 0; a < item2.length; a++) {
+      var name = nameTEC2[a]?.value.text;
+      var mobile = mobileTEC2[a]?.value.text;
+      witnessNameList.add(name.toString());
+      witnessPhoneList.add(mobile.toString());
     }
     witnessNames = witnessNameList.join(', ');
-    print(witnessNames);
-
-    for (TextEditingController controller in _witnessPhoneController) {
-      witnessPhoneList.add(controller.text);
-    }
     witnessPhone = witnessPhoneList.join(', ');
-    print(witnessPhone);
 
     request.fields['witnesses_name[]'] = witnessNames;
     request.fields['witnesses_phone[]'] = witnessPhone;
+
     request.fields['action_taken'] = _actionController.text.toString();
     request.fields['officer_name'] = _officerController.text.toString();
     request.fields['officer_designation'] = _officeController.text.toString();
@@ -205,6 +275,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   void initState() {
     super.initState();
     getTasks();
+    item1.addAll({0: newMethod(context, 0)});
+    item2.addAll({0: newWitnessMethod(context, 0)});
   }
 
   Future<TodayActiveModel> getTasks() async {
@@ -244,20 +316,6 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     _actionController.dispose();
     _officerController.dispose();
     _officeController.dispose();
-
-    for (TextEditingController controller in _peopleNameController) {
-      controller.dispose();
-    }
-    for (TextEditingController controller in _peoplePhoneController) {
-      controller.dispose();
-    }
-
-    for (TextEditingController controller in _witnessNameController) {
-      controller.dispose();
-    }
-    for (TextEditingController controller in _witnessPhoneController) {
-      controller.dispose();
-    }
 
     propertyName = "";
     propertyId = "";
@@ -355,7 +413,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 CustomTextField(
                   controller: _titleController,
-                  textfieldTitle: 'Title',
+                  textfieldTitle: 'Title \*',
                   hintText: 'Enter Title',
                   isFilled: false,
                 ),
@@ -374,27 +432,99 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                AddPeopleWidget(
-                  title: 'People Involved',
-                  number: context.watch<AddpeopleCubit>().state.peopleNo,
-                  onCallback: () async {
-                    context.read<AddpeopleCubit>().addPeople();
-                  },
-                  peopleName: _peopleNameController[0],
-                  peoplePhone: _peoplePhoneController[0],
+                Text(
+                  'People Involved',
+                  style: CustomTheme.textField_Headertext_Style,
+                  textScaleFactor: 1.0,
                 ),
-
+                SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: item1.length,
+                        itemBuilder: (context, index) {
+                          return item1.values.elementAt(index);
+                        }),
+                    GestureDetector(
+                      onTap: () {
+                        item1.addAll({
+                          item1.keys.last + 1:
+                              newMethod(context, item1.keys.last + 1)
+                        });
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: CustomTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          'Add peoples +',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 10,
                 ),
-                AddPeopleWidget(
-                  title: 'Witnesss',
-                  number: context.watch<AddwitnessCubit>().state.witness,
-                  onCallback: () async {
-                    context.read<AddwitnessCubit>().addwitness();
-                  },
-                  peopleName: _witnessNameController[0],
-                  peoplePhone: _witnessPhoneController[0],
+                Text(
+                  'Witnesss',
+                  style: CustomTheme.textField_Headertext_Style,
+                  textScaleFactor: 1.0,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: item2.length,
+                        itemBuilder: (context, index) {
+                          return item2.values.elementAt(index);
+                        }),
+                    GestureDetector(
+                      onTap: () {
+                        item2.addAll({
+                          item2.keys.last + 1:
+                              newWitnessMethod(context, item2.keys.last + 1)
+                        });
+                        setState(() {});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: CustomTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          'Add peoples +',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 CustomTextField(
                   controller: _actionController,
@@ -503,6 +633,9 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                             if (_propertyNameController.text.isEmpty) {
                               CommonService().openSnackBar(
                                   'Please enter Property name', context);
+                            } else if (_titleController.text.isEmpty) {
+                              CommonService()
+                                  .openSnackBar('Please enter title', context);
                             } else {
                               uploadImage();
                             }

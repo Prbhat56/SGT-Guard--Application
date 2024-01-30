@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/missed_shift_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/missed_shift_details.dart';
-import 'package:sgt/presentation/time_sheet_screen/widget/time_sheet_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -67,222 +65,111 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                   ),
                 );
               } else {
-                return ListView.builder(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.data!.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        //mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            onTap: () {
-                              screenNavigator(
-                                  context,
-                                  MissedShiftDetailsScreen(
-                                    details: snapshot.data!.data![index],
-                                    imageBaseUrl:
-                                        snapshot.data!.propertyImageBaseUrl,
-                                  ));
-                            },
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            dense: false,
-                            leading: CustomCircularImage.getCircularImage(
-                                snapshot.data!.propertyImageBaseUrl.toString(),
-                                snapshot.data!.data![index].propertyAvatars!
-                                    .first.propertyAvatar
-                                    .toString(),
-                                false,
-                                30,
-                                0,
-                                0),
-                            /*Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: CircleAvatar(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: CachedNetworkImage(
-                                      imageUrl: snapshot
-                                              .data!.propertyImageBaseUrl
-                                              .toString() +
-                                          '/' +
-                                          snapshot
-                                              .data!
-                                              .data![index]
-                                              .propertyAvatars!
-                                              .first
-                                              .propertyAvatar
-                                              .toString(),
-                                      fit: BoxFit.fill,
-                                      // width: 60,
-                                      // height: 60,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(
-                                            strokeCap: StrokeCap.round,
-                                          ),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                            'assets/sgt_logo.jpg',
-                                            fit: BoxFit.fill,
-                                          )),
-                                ),
-                                radius: 30,
-                                backgroundColor: seconderyColor,
-                              ),
-                            ),*/
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              //mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  snapshot.data!.data![index].propertyName
-                                      .toString(),
-                                  maxLines: 1,
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      overflow: TextOverflow.ellipsis),
-                                ),
-                                SizedBox(
-                                  height: 12,
-                                ),
-                                Text(
-                                  DateFormat.MMMMEEEEd().format(DateTime.parse(
-                                      snapshot
-                                          .data!.data![index].shift!.shiftDate
-                                          .toString())),
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                  '${snapshot.data!.data![index].shift!.clockIn.toString()}-${snapshot.data!.data![index].shift!.clockOut.toString()}'),
-                            ),
-                            trailing: Column(
-                              children: [
-                                Text(
-                                  getDifference(
-                                          snapshot
-                                              .data!.data![index].shift!.clockIn
-                                              .toString(),
-                                          snapshot.data!.data![index].shift!
-                                              .clockOut
-                                              .toString())
-                                      .toString(),
-                                ),
-                                const SizedBox(
-                                  height: 18,
-                                ),
-                                Container(
-                                  height: 20,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Center(
-                                    child: Text(
-                                      'Missed',
+                return Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              ListTile(
+                                onTap: () {
+                                  screenNavigator(
+                                      context,
+                                      MissedShiftDetailsScreen(
+                                        details: shiftDatum[index],
+                                        imageBaseUrl: imgBaseUrl,
+                                      ));
+                                },
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                dense: false,
+                                leading: CustomCircularImage.getCircularImage(
+                                    imgBaseUrl.toString(),
+                                    shiftDatum[index]
+                                        .propertyAvatars!
+                                        .first
+                                        .propertyAvatar
+                                        .toString(),
+                                    false,
+                                    30,
+                                    0,
+                                    0),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      shiftDatum[index].propertyName.toString(),
+                                      maxLines: 1,
                                       style: const TextStyle(
-                                          color: Colors.white, fontSize: 12),
+                                          fontSize: 18,
+                                          overflow: TextOverflow.ellipsis),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    });
-              }
-            }))
-        /* SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dummytimeSheetData.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          onTap: () {
-                            screenNavigator(
-                                context, MissedShiftDetailsScreen());
-                          },
-                          contentPadding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 10, bottom: 0),
-                          dense: false,
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: grey,
-                            backgroundImage: NetworkImage(
-                              dummytimeSheetData[index].imageUrl,
-                            ),
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                dummytimeSheetData[index].title,
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                              Text(
-                                dummytimeSheetData[index].date,
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(dummytimeSheetData[index].time),
-                          ),
-                          trailing: Column(
-                            children: [
-                              Text(dummytimeSheetData[index].shiftTime),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                height: 20,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Center(
-                                  child: Text(
-                                    'Missed',
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      //shiftDatum[index].shift!.shiftDate.toString(),
+                                      shiftDatum[index].shift == null
+                                          ? ''
+                                          : '${DateFormat.MMMMEEEEd().format(DateTime.parse(shiftDatum[index].shift!.shiftDate.toString()))}',
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
+                                  ],
                                 ),
-                              )
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Text(
+                                      '${shiftDatum[index].shift == null ? '' : shiftDatum[index].shift!.clockIn.toString()} - ${shiftDatum[index].shift == null ? '' : shiftDatum[index].shift!.clockOut.toString()}'),
+                                ),
+                                trailing: Column(
+                                  children: [
+                                    Text(
+                                      getDifference(
+                                              shiftDatum[index].shift == null
+                                                  ? ''
+                                                  : shiftDatum[index]
+                                                      .shift!
+                                                      .clockIn
+                                                      .toString(),
+                                              shiftDatum[index].shift == null
+                                                  ? ''
+                                                  : shiftDatum[index]
+                                                      .shift!
+                                                      .clockOut
+                                                      .toString())
+                                          .toString(),
+                                    ),
+                                    const SizedBox(
+                                      height: 18,
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Center(
+                                        child: Text(
+                                          'Missed',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 80),
-                          child: Divider(
-                            color: Colors.grey,
-                          ),
-                        )
-                      ],
-                    );
-                  }),
-            ),
-          ],
-        ),
-      ),*/
-        );
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Divider(
+                              color: primaryColor,
+                            ),
+                        itemCount: shiftDatum.length));
+              }
+            })));
   }
 }

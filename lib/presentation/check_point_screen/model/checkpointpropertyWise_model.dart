@@ -1,42 +1,46 @@
 // To parse this JSON data, do
 //
-//     final checkPointPropertyWise = checkPointPropertyWiseFromJson(jsonString);
+//     final checkPointPropertyShiftWise = checkPointPropertyShiftWiseFromJson(jsonString);
 
 import 'dart:convert';
 
-CheckPointPropertyWise checkPointPropertyWiseFromJson(String str) => CheckPointPropertyWise.fromJson(json.decode(str));
+CheckPointPropertyShiftWise checkPointPropertyShiftWiseFromJson(String str) => CheckPointPropertyShiftWise.fromJson(json.decode(str));
 
-String checkPointPropertyWiseToJson(CheckPointPropertyWise data) => json.encode(data.toJson());
+String checkPointPropertyShiftWiseToJson(CheckPointPropertyShiftWise data) => json.encode(data.toJson());
 
-class CheckPointPropertyWise {
+class CheckPointPropertyShiftWise {
     Property? property;
     List<Checkpoint>? checkpoints;
     String? imageBaseUrl;
     String? propertyImageBaseUrl;
     int? status;
+    String? message;
 
-    CheckPointPropertyWise({
+    CheckPointPropertyShiftWise({
         this.property,
         this.checkpoints,
         this.imageBaseUrl,
         this.propertyImageBaseUrl,
-        this.status,
+        this.status, 
+        this.message,
     });
 
-    factory CheckPointPropertyWise.fromJson(Map<String, dynamic> json) => CheckPointPropertyWise(
+    factory CheckPointPropertyShiftWise.fromJson(Map<String, dynamic> json) => CheckPointPropertyShiftWise(
         property: json["property"] == null ? null : Property.fromJson(json["property"]),
-        checkpoints: json["checkpoints"] == null ? [] : List<Checkpoint>.from(json["checkpoints"]!.map((x) => Checkpoint.fromJson(x))),
+        checkpoints: json["checkpoints"] == null ? null : List<Checkpoint>.from(json["checkpoints"]!.map((x) => Checkpoint.fromJson(x))),
         imageBaseUrl: json["image_base_url"],
         propertyImageBaseUrl: json["property_image_base_url"],
         status: json["status"],
+        message: json["message"] == null ? '' : json["message"],
     );
 
     Map<String, dynamic> toJson() => {
         "property": property?.toJson(),
-        "checkpoints": checkpoints == null ? [] : List<dynamic>.from(checkpoints!.map((x) => x.toJson())),
+        "checkpoints": checkpoints == null ? null : List<dynamic>.from(checkpoints!.map((x) => x.toJson())),
         "image_base_url": imageBaseUrl,
         "property_image_base_url": propertyImageBaseUrl,
         "status": status,
+        "message":message,
     };
 }
 
@@ -52,7 +56,9 @@ class Checkpoint {
     String? checkpointQrCode;
     DateTime? createdAt;
     DateTime? updatedAt;
-    // List<dynamic>? history;
+    String? status;
+    dynamic visitAt;
+    String? checkInTime;
     List<CheckPointAvatar>? checkPointAvatar;
 
     Checkpoint({
@@ -67,7 +73,9 @@ class Checkpoint {
         this.checkpointQrCode,
         this.createdAt,
         this.updatedAt,
-        // this.history,
+        this.status,
+        this.visitAt,
+        this.checkInTime,
         this.checkPointAvatar,
     });
 
@@ -83,8 +91,10 @@ class Checkpoint {
         checkpointQrCode: json["checkpoint_qr_code"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        // history: json["history"] == null ? [] : List<dynamic>.from(json["history"]!.map((x) => x)),
-        checkPointAvatar: json["check_point_avatar"] == null ? [] : List<CheckPointAvatar>.from(json["check_point_avatar"]!.map((x) => x)),
+        status: json["status"],
+        visitAt: json["visit_at"],
+        checkInTime: json["check_in_time"],
+        checkPointAvatar: json["check_point_avatar"] == [] ? [] : List<CheckPointAvatar>.from(json["check_point_avatar"]!.map((x) => CheckPointAvatar.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -99,8 +109,50 @@ class Checkpoint {
         "checkpoint_qr_code": checkpointQrCode,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        // "history": history == null ? [] : List<dynamic>.from(history!.map((x) => x)),
-        "check_point_avatar": checkPointAvatar == null ? [] : List<CheckPointAvatar>.from(checkPointAvatar!.map((x) => x)),
+        "status": status,
+        "visit_at": visitAt,
+        "check_in_time": checkInTime,
+        "check_point_avatar": checkPointAvatar == [] ? null : List<dynamic>.from(checkPointAvatar!.map((x) => x.toJson())),
+    };
+}
+
+class CheckPointAvatar {
+    int? id;
+    int? propertyOwnerId;
+    int? propertyId;
+    int? checkpointId;
+    String? checkpointAvatars;
+    DateTime? createdAt;
+    DateTime? updatedAt;
+
+    CheckPointAvatar({
+        this.id,
+        this.propertyOwnerId,
+        this.propertyId,
+        this.checkpointId,
+        this.checkpointAvatars,
+        this.createdAt,
+        this.updatedAt,
+    });
+
+    factory CheckPointAvatar.fromJson(Map<String, dynamic> json) => CheckPointAvatar(
+        id: json["id"],
+        propertyOwnerId: json["property_owner_id"],
+        propertyId: json["property_id"],
+        checkpointId: json["checkpoint_id"],
+        checkpointAvatars: json["checkpoint_avatars"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "property_owner_id": propertyOwnerId,
+        "property_id": propertyId,
+        "checkpoint_id": checkpointId,
+        "checkpoint_avatars": checkpointAvatars,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
     };
 }
 
@@ -126,6 +178,7 @@ class Property {
     String? countryText;
     String? stateText;
     String? cityText;
+    GuardDetails? guardDetails;
     List<PropertyAvatar>? propertyAvatars;
 
     Property({
@@ -150,6 +203,7 @@ class Property {
         this.countryText,
         this.stateText,
         this.cityText,
+        this.guardDetails,
         this.propertyAvatars,
     });
 
@@ -175,7 +229,8 @@ class Property {
         countryText: json["country_text"],
         stateText: json["state_text"],
         cityText: json["city_text"],
-        propertyAvatars: json["property_avatars"] == null ? [] : List<PropertyAvatar>.from(json["property_avatars"]!.map((x) => PropertyAvatar.fromJson(x))),
+        guardDetails: json["guard_details"] == null ? null : GuardDetails.fromJson(json["guard_details"]),
+        propertyAvatars: json["property_avatars"] == null ? null : List<PropertyAvatar>.from(json["property_avatars"]!.map((x) => PropertyAvatar.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -200,7 +255,36 @@ class Property {
         "country_text": countryText,
         "state_text": stateText,
         "city_text": cityText,
-        "property_avatars": propertyAvatars == null ? [] : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
+        "guard_details": guardDetails?.toJson(),
+        "property_avatars": propertyAvatars == null ? null : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
+    };
+}
+
+class GuardDetails {
+    int? id;
+    String? firstName;
+    String? lastName;
+    String? guardPosition;
+
+    GuardDetails({
+        this.id,
+        this.firstName,
+        this.lastName,
+        this.guardPosition,
+    });
+
+    factory GuardDetails.fromJson(Map<String, dynamic> json) => GuardDetails(
+        id: json["id"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        guardPosition: json["guard_position"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "first_name": firstName,
+        "last_name": lastName,
+        "guard_position": guardPosition,
     };
 }
 
@@ -302,37 +386,4 @@ class Shift {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
     };
-}
-
-class CheckPointAvatar {
-  int? id;
-  int? propertyOwnerId;
-  int? propertyId;
-  int? checkpointId;
-  String? checkpointAvatars;
-
-  CheckPointAvatar({
-    this.id,
-    this.propertyOwnerId,
-    this.propertyId,
-    this.checkpointId,
-    this.checkpointAvatars,
-  });
-
-  factory CheckPointAvatar.fromJson(Map<String, dynamic> json) =>
-      CheckPointAvatar(
-        id: json["id"],
-        propertyOwnerId: json["property_owner_id"],
-        propertyId: json["property_id"],
-        checkpointId: json["checkpoint_id"],
-        checkpointAvatars: json["checkpoint_avatars"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "property_owner_id": propertyOwnerId,
-        "property_id": propertyId,
-        "checkpoint_id": checkpointId,
-        "checkpoint_avatars": checkpointAvatars,
-      };
 }

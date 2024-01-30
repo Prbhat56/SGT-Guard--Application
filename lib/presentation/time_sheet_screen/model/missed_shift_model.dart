@@ -15,29 +15,28 @@ class MissedShiftModel {
   String? propertyImageBaseUrl;
   int? status;
 
-  MissedShiftModel({
-    this.data,
-    this.propertyImageBaseUrl,
-    this.status,
-  });
+  MissedShiftModel({this.data, this.propertyImageBaseUrl, this.status});
 
-  factory MissedShiftModel.fromJson(Map<String, dynamic> json) =>
-      MissedShiftModel(
-        data: json["data"] == null
-            ? []
-            : List<MissedDatum>.from(
-                json["data"]!.map((x) => MissedDatum.fromJson(x))),
-        propertyImageBaseUrl: json["property_image_base_url"],
-        status: json["status"],
-      );
+  MissedShiftModel.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = <MissedDatum>[];
+      json['data'].forEach((v) {
+        data!.add(new MissedDatum.fromJson(v));
+      });
+    }
+    propertyImageBaseUrl = json['property_image_base_url'];
+    status = json['status'];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-        "property_image_base_url": propertyImageBaseUrl,
-        "status": status,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    data['property_image_base_url'] = this.propertyImageBaseUrl;
+    data['status'] = this.status;
+    return data;
+  }
 }
 
 class MissedDatum {
@@ -57,101 +56,80 @@ class MissedDatum {
   String? latitude;
   String? status;
   Shift? shift;
-  List<PropertyAvatarElement>? propertyAvatars;
+  List<PropertyAvatars>? propertyAvatars = [];
 
-  MissedDatum({
-    this.id,
-    this.propertyOwnerId,
-    this.propertyName,
-    this.type,
-    this.assignStaff,
-    this.area,
-    this.country,
-    this.state,
-    this.city,
-    this.postCode,
-    this.propertyDescription,
-    this.location,
-    this.longitude,
-    this.latitude,
-    this.status,
-    this.shift,
-    this.propertyAvatars,
-  });
+  MissedDatum(
+      {this.id,
+      this.propertyOwnerId,
+      this.propertyName,
+      this.type,
+      this.assignStaff,
+      this.area,
+      this.country,
+      this.state,
+      this.city,
+      this.postCode,
+      this.propertyDescription,
+      this.location,
+      this.longitude,
+      this.latitude,
+      this.status,
+      this.shift,
+      this.propertyAvatars});
 
-  factory MissedDatum.fromJson(Map<String, dynamic> json) => MissedDatum(
-        id: json["id"],
-        propertyOwnerId: json["property_owner_id"],
-        propertyName: json["property_name"],
-        type: json["type"],
-        assignStaff: json["assign_staff"],
-        area: json["area"],
-        country: json["country"],
-        state: json["state"],
-        city: json["city"],
-        postCode: json["post_code"],
-        propertyDescription: json["property_description"],
-        location: json["location"],
-        longitude: json["longitude"],
-        latitude: json["latitude"],
-        status: json["status"],
-        shift: json["shift"] == null ? null : Shift.fromJson(json["shift"]),
-        propertyAvatars: json["property_avatars"] == null
-            ? []
-            : List<PropertyAvatarElement>.from(json["property_avatars"]!
-                .map((x) => PropertyAvatarElement.fromJson(x))),
-      );
+  MissedDatum.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    propertyOwnerId = json['property_owner_id'];
+    propertyName = json['property_name'];
+    type = json['type'];
+    assignStaff = json['assign_staff'];
+    area = json['area'];
+    country = json['country'];
+    state = json['state'];
+    city = json['city'];
+    postCode = json['post_code'];
+    propertyDescription = json['property_description'];
+    location = json['location'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
+    status = json['status'];
+    shift = json['shift'] != null ? new Shift.fromJson(json['shift']) : null;
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "property_owner_id": propertyOwnerId,
-        "property_name": propertyName,
-        "type": type,
-        "assign_staff": assignStaff,
-        "area": area,
-        "country": country,
-        "state": state,
-        "city": city,
-        "post_code": postCode,
-        "property_description": propertyDescription,
-        "location": location,
-        "longitude": longitude,
-        "latitude": latitude,
-        "status": status,
-        "shift": shift?.toJson(),
-        "property_avatars": propertyAvatars == null
-            ? []
-            : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
-      };
-}
+    if (json['property_avatars'] != null) {
+      propertyAvatars = <PropertyAvatars>[];
+      json['property_avatars'].forEach((v) {
+        propertyAvatars!.add(new PropertyAvatars.fromJson(v));
+      });
+    }
+  }
 
-class PropertyAvatarElement {
-  int? id;
-  int? propertyOwnerId;
-  int? propertyId;
-  String? propertyAvatar;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['property_owner_id'] = this.propertyOwnerId;
+    data['property_name'] = this.propertyName;
+    data['type'] = this.type;
+    data['assign_staff'] = this.assignStaff;
+    data['area'] = this.area;
+    data['country'] = this.country;
+    data['state'] = this.state;
+    data['city'] = this.city;
+    data['post_code'] = this.postCode;
+    data['property_description'] = this.propertyDescription;
+    data['location'] = this.location;
+    data['longitude'] = this.longitude;
+    data['latitude'] = this.latitude;
+    data['status'] = this.status;
 
-  PropertyAvatarElement({
-    this.id,
-    this.propertyOwnerId,
-    this.propertyId,
-    this.propertyAvatar,
-  });
-
-  factory PropertyAvatarElement.fromJson(Map<String, dynamic> json) =>
-      PropertyAvatarElement(
-        id: json["id"],
-        propertyOwnerId: json["property_owner_id"],
-        propertyId: json["property_id"],
-        propertyAvatar: json["property_avatar"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "property_owner_id": propertyOwnerId,
-        "property_id": propertyId,
-        "property_avatar": propertyAvatar,
-      };
+    if (this.shift != null) {
+      data['shift'] = this.shift!.toJson();
+    }
+    if (this.propertyAvatars != null) {
+      data['property_avatars'] =
+          this.propertyAvatars!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
 class Shift {
@@ -183,33 +161,65 @@ class Shift {
     this.shiftDate,
   });
 
-  factory Shift.fromJson(Map<String, dynamic> json) => Shift(
-        id: json["id"],
-        propertyOwnerId: json["property_owner_id"],
-        propertyId: json["property_id"],
-        name: json["name"],
-        clockIn: json["clock_in"],
-        clockInDesc: json["clock_in_desc"],
-        clockOut: json["clock_out"],
-        clockOutDesc: json["clock_out_desc"],
-        qrCodeIn: json["qr_code_in"],
-        qrCodeOut: json["qr_code_out"],
-        status: json["status"],
-        shiftDate: json["shift_date"] == null ? "" : json["shift_date"],
-      );
+  Shift.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    propertyOwnerId = json['property_owner_id'];
+    propertyId = json['property_id'];
+    name = json['name'];
+    clockIn = json['clock_in'];
+    clockInDesc = json['clock_in_desc'];
+    clockOut = json['clock_out'];
+    clockOutDesc = json['clock_out_desc'];
+    qrCodeIn = json['qr_code_in'];
+    qrCodeOut = json['qr_code_out'];
+    status = json['status'];
+    shiftDate = json["shift_date"] == null ? "" : json["shift_date"];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "property_owner_id": propertyOwnerId,
-        "property_id": propertyId,
-        "name": name,
-        "clock_in": clockIn,
-        "clock_in_desc": clockInDesc,
-        "clock_out": clockOut,
-        "clock_out_desc": clockOutDesc,
-        "qr_code_in": qrCodeIn,
-        "qr_code_out": qrCodeOut,
-        "status": status,
-        "shift_date": shiftDate,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['property_owner_id'] = this.propertyOwnerId;
+    data['property_id'] = this.propertyId;
+    data['name'] = this.name;
+    data['clock_in'] = this.clockIn;
+    data['clock_in_desc'] = this.clockInDesc;
+    data['clock_out'] = this.clockOut;
+    data['clock_out_desc'] = this.clockOutDesc;
+    data['qr_code_in'] = this.qrCodeIn;
+    data['qr_code_out'] = this.qrCodeOut;
+    data['status'] = this.status;
+    data['shift_date'] = this.shiftDate;
+    return data;
+  }
+}
+
+class PropertyAvatars {
+  int? id;
+  int? propertyOwnerId;
+  int? propertyId;
+  String? propertyAvatar;
+
+  PropertyAvatars({
+    this.id,
+    this.propertyOwnerId,
+    this.propertyId,
+    this.propertyAvatar,
+  });
+
+  PropertyAvatars.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    propertyOwnerId = json['property_owner_id'];
+    propertyId = json['property_id'];
+    propertyAvatar = json['property_avatar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['property_owner_id'] = this.propertyOwnerId;
+    data['property_id'] = this.propertyId;
+    data['property_avatar'] = this.propertyAvatar;
+    return data;
+  }
 }

@@ -48,7 +48,7 @@ class CurrentShift {
     int? propertyOwnerId;
     int? guardId;
     int? propertyId;
-    String? shiftId;
+    int? shiftId;
     DateTime? date;
     DateTime? checkInTime;
     DateTime? updatedAt;
@@ -56,6 +56,7 @@ class CurrentShift {
     int? id;
     String? shiftTime;
     String? shiftDate;
+    dynamic checkOutTime;
 
     CurrentShift({
         this.propertyOwnerId,
@@ -69,6 +70,7 @@ class CurrentShift {
         this.id,
         this.shiftTime,
         this.shiftDate,
+        this.checkOutTime,
     });
 
     factory CurrentShift.fromJson(Map<String, dynamic> json) => CurrentShift(
@@ -83,6 +85,7 @@ class CurrentShift {
         id: json["id"],
         shiftTime: json["shift_time"],
         shiftDate: json["shift_date"],
+        checkOutTime: json["check_out_time"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -97,6 +100,7 @@ class CurrentShift {
         "id": id,
         "shift_time": shiftTime,
         "shift_date": shiftDate,
+        "check_out_time": checkOutTime,
     };
 }
 
@@ -124,6 +128,7 @@ class JobDetails {
     String? emailAddress;
     String? password;
     String? apiToken;
+    String? oneSignal;
     dynamic otp;
     String? backSideIdCard;
     String? frontSideIdCard;
@@ -155,6 +160,7 @@ class JobDetails {
         this.emailAddress,
         this.password,
         this.apiToken,
+        this.oneSignal,
         this.otp,
         this.backSideIdCard,
         this.frontSideIdCard,
@@ -187,6 +193,7 @@ class JobDetails {
         emailAddress: json["email_address"],
         password: json["password"],
         apiToken: json["api_token"],
+        oneSignal: json["one_signal"],
         otp: json["otp"],
         backSideIdCard: json["back_side_id_card"],
         frontSideIdCard: json["front_side_id_card"],
@@ -219,6 +226,7 @@ class JobDetails {
         "email_address": emailAddress,
         "password": password,
         "api_token": apiToken,
+        "one_signal": oneSignal,
         "otp": otp,
         "back_side_id_card": backSideIdCard,
         "front_side_id_card": frontSideIdCard,

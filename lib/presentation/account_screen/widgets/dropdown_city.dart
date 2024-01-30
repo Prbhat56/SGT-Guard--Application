@@ -20,7 +20,6 @@ Future<CityModel> getCityList() async {
   Map<String, String> myHeader = <String, String>{
     "Authorization": "Bearer ${prefs.getString('token')}",
   };
-  print(myHeader);
 
   String apiUrl = baseUrl + apiRoutes['city']!;
   var map = new Map<String, dynamic>(); 
@@ -50,7 +49,6 @@ class _dropDownCityState extends State<dropDownCity> {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               } else {
-                print(snapshot.data!.cities);
                 return ListView.builder(
                     physics: BouncingScrollPhysics(),
                     // itemCount: dummyData.length,
@@ -73,7 +71,6 @@ class _dropDownCityState extends State<dropDownCity> {
                             },
                            items: <String>[snapshot.data!.cities.toString()]
                                 .map<DropdownMenuItem<String>>((String value) {
-                                  // print("value ==> $value");
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),

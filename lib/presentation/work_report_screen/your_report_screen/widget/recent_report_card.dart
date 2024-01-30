@@ -39,7 +39,7 @@ class _RecentReportCardWidgetState extends State<RecentReportCardWidget> {
                   child: Column(children: [
                     CustomCircularImage.getCircularImage(
                         '',
-                        widget.myData![index].images!.first.toString(),
+                        '',
                         false,
                         20,
                         0,

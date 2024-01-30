@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -19,6 +22,7 @@ import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart'
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:http/http.dart';
+import 'package:uuid/uuid.dart';
 import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -30,6 +34,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  String? _deviceId;
+  var uuid = Uuid();
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
@@ -38,6 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
+    initPlatformState();
   }
 
   @override
@@ -47,16 +54,29 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
+  Future<void> initPlatformState() async {
+    String? deviceId;
+    try {
+      if (Platform.isIOS) {
+        deviceId = await PlatformDeviceId.getDeviceId;
+      } else if (Platform.isAndroid) {
+        var uiid = await PlatformDeviceId.getDeviceId;
+        deviceId = uuid.v5(Uuid.NAMESPACE_URL, uiid).toUpperCase();
+      }
+    } on PlatformException {
+      deviceId = 'Failed to get deviceId.';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _deviceId = deviceId;
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
   var commonService = CommonService();
   @override
   Widget build(BuildContext context) {
-    //   var myObj = {
-    //   "name": "kaham",
-    //   "last": "das"
-    // };
-    // print(myObj);
-    // print(myObj['name']);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -220,9 +240,16 @@ class _SignInScreenState extends State<SignInScreen> {
           return Center(child: CircularProgressIndicator());
         }));
 
+    print("deviceId->$_deviceId");
+
     try {
       String apiUrl = baseUrl + apiRoutes['login']!;
-      Map<String, dynamic> myJsonBody = {'email': email, 'password': password};
+      Map<String, dynamic> myJsonBody = {
+        'email': email,
+        'password': password,
+        'one_signal': _deviceId.toString()
+      };
+      print(myJsonBody.toString());
       Response response = await post(Uri.parse(apiUrl), body: myJsonBody);
       var data = jsonDecode(response.body.toString());
       print(data);
@@ -232,7 +259,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
       if (response.statusCode == 200) {
         commonService.setUserToken(data['token'].toString());
-        commonService.setTempUserEmailAndPassword(email, password);
+        commonService.setProperty_owner_id(
+            data['user_details']['property_owner_id'].toString());
+        commonService.setTempUserEmailAndPassword(
+            "${data['user_details']['id'].toString()}", email, password);
+        print("${data['user_details']['id'].toString()}");
         commonService.openSnackBar(data['message'], context);
 
         LocationPermission permission;

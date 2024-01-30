@@ -14,58 +14,35 @@ class ReportListModel {
   List<ReportResponse>? response;
   Count? count;
   int? status;
+  String? imageBaseUrl;
 
-  ReportListModel({
-    this.response,
-    this.count,
-    this.status,
-  });
+  ReportListModel({this.response, this.count, this.status, this.imageBaseUrl});
 
-  factory ReportListModel.fromJson(Map<String, dynamic> json) =>
-      ReportListModel(
-        response: json["response"] == null
-            ? []
-            : List<ReportResponse>.from(
-                json["response"]!.map((x) => ReportResponse.fromJson(x))),
-        count: json["count"] == null ? null : Count.fromJson(json["count"]),
-        status: json["status"],
-      );
+  ReportListModel.fromJson(Map<String, dynamic> json) {
+    if (json['response'] != null) {
+      response = <ReportResponse>[];
+      json['response'].forEach((v) {
+        response!.add(new ReportResponse.fromJson(v));
+      });
+    }
+    count = json['count'] != null ? new Count.fromJson(json['count']) : null;
+    imageBaseUrl =
+    json["image_base_url"];
+    status = json['status'];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "response": response == null
-            ? []
-            : List<dynamic>.from(response!.map((x) => x.toJson())),
-        "count": count?.toJson(),
-        "status": status,
-      };
-}
-
-class Count {
-  int? general;
-  int? maintenance;
-  int? parking;
-  int? emergency;
-
-  Count({
-    this.general,
-    this.maintenance,
-    this.parking,
-    this.emergency,
-  });
-
-  factory Count.fromJson(Map<String, dynamic> json) => Count(
-        general: json["general"],
-        maintenance: json["maintenance"],
-        parking: json["parking"],
-        emergency: json["emergency"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "general": general,
-        "maintenance": maintenance,
-        "parking": parking,
-        "emergency": emergency,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.response != null) {
+      data['response'] = this.response!.map((v) => v.toJson()).toList();
+    }
+    if (this.count != null) {
+      data['count'] = this.count!.toJson();
+    }
+    data['image_base_url'] = this.imageBaseUrl;
+    data['status'] = this.status;
+    return data;
+  }
 }
 
 class ReportResponse {
@@ -85,18 +62,16 @@ class ReportResponse {
   String? emergencyDate;
   String? emergencyTime;
   String? emergencyDetails;
-  List<String>? images;
-  String? videos;
+  List<String>? images = [];
   String? latitude;
   String? longitude;
   String? actionTaken;
-  String? policeReport;
   String? officerName;
   String? officerDesignation;
-  List<String>? peopleInvolvedName;
-  List<String>? peopleInvolvedPhone;
-  List<String>? witnessesName;
-  List<String>? witnessesPhone;
+  // String? peopleInvolvedName;
+  // String? peopleInvolvedPhone;
+  // String? witnessesName;
+  // String? witnessesPhone;
 
   ReportResponse({
     this.id,
@@ -116,106 +91,114 @@ class ReportResponse {
     this.emergencyTime,
     this.emergencyDetails,
     this.images,
-    this.videos,
     this.latitude,
     this.longitude,
     this.actionTaken,
-    this.policeReport,
     this.officerName,
     this.officerDesignation,
-    this.peopleInvolvedName,
-    this.peopleInvolvedPhone,
-    this.witnessesName,
-    this.witnessesPhone,
+    // this.peopleInvolvedName,
+    // this.peopleInvolvedPhone,
+    // this.witnessesName,
+    // this.witnessesPhone,
   });
 
-  factory ReportResponse.fromJson(Map<String, dynamic> json) => ReportResponse(
-        id: json["id"],
-        propertyOwnerId: json["property_owner_id"],
-        propertyId: json["property_id"],
-        guardId: json["guard_id"],
-        reportType: json["report_type"],
-        subject: json["subject"],
-        notes: json["notes"] == null ? "" : json["notes"],
-        vehicleManufacturer: json["vehicle_manufacturer"] == null
-            ? ""
-            : json["vehicle_manufacturer"],
-        model: json["model"] == null ? "" : json["model"],
-        color: json["color"] == null ? "" : json["color"],
-        licenseNumber:
-            json["license_number"] == null ? "" : json["license_number"],
-        state: json["state"] == null ? "" : json["state"],
-        towed: json["towed"] == null ? "" : json["towed"],
-        emergencyDate:
-            json["emergency_date"] == null ? "" : json["emergency_date"],
-        emergencyTime:
-            json["emergency_time"] == null ? "" : json["emergency_time"],
-        emergencyDetails:
-            json["emergency_details"] == null ? "" : json["emergency_details"],
-        images: json["images"] == null
-            ? []
-            : List<String>.from(json["images"]!.map((x) => x)),
-        videos: json["videos"] == null ? "" : json["videos"],
-        latitude: json["latitude"] == null ? "" : json["latitude"],
-        longitude: json["longitude"] == null ? "" : json["longitude"],
-        actionTaken: json["action_taken"] == null ? "" : json["action_taken"],
-        policeReport:
-            json["police_report"] == null ? "" : json["police_report"],
-        officerName: json["officer_name"] == null ? "" : json["officer_name"],
-        officerDesignation: json["officer_designation"] == null
-            ? ""
-            : json["officer_designation"],
-        peopleInvolvedName: json["people_involved_name"] == null
-            ? []
-            : List<String>.from(json["people_involved_name"]!.map((x) => x)),
-        peopleInvolvedPhone: json["people_involved_phone"] == null
-            ? []
-            : List<String>.from(json["people_involved_phone"]!.map((x) => x)),
-        witnessesName: json["witnesses_name"] == null
-            ? []
-            : List<String>.from(json["witnesses_name"]!.map((x) => x)),
-        witnessesPhone: json["witnesses_phone"] == null
-            ? []
-            : List<String>.from(json["witnesses_phone"]!.map((x) => x)),
-      );
+  ReportResponse.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    propertyOwnerId = json['property_owner_id'];
+    propertyId = json['property_id'];
+    guardId = json['guard_id'];
+    reportType = json["report_type"] == null ? "" : json["report_type"];
+    subject = json["subject"] == null ? "" : json["subject"];
+    notes = json["notes"] == null ? "" : json["notes"];
+    vehicleManufacturer = json['vehicle_manufacturer'] == null
+        ? ""
+        : json["vehicle_manufacturer"];
+    model = json['model'] == null ? "" : json["model"];
+    color = json['color'] == null ? "" : json["color"];
+    licenseNumber =
+        json['license_number'] == null ? "" : json["license_number"];
+    state = json['state'] == null ? "" : json["state"];
+    towed = json['towed'] == null ? "" : json["towed"];
+    emergencyDate =
+        json["emergency_date"] == null ? "" : json["emergency_date"];
+    emergencyTime =
+        json["emergency_time"] == null ? "" : json["emergency_time"];
+    emergencyDetails =
+        json['emergency_details'] == null ? "" : json["emergency_details"];
+    images = json["images"] == null
+        ? []
+        : List<String>.from(json["images"]!.map((x) => x));
+    latitude = json["latitude"] == null ? "" : json["latitude"];
+    longitude = json["longitude"] == null ? "" : json["longitude"];
+    actionTaken = json['action_taken'] == null ? "" : json["action_taken"];
+    officerName = json['officer_name'] == null ? "" : json["officer_name"];
+    officerDesignation =
+        json['officer_designation'] == null ? "" : json["officer_designation"];
+    // peopleInvolvedName = json['people_involved_name'] == null
+    //     ? ""
+    //     : json["people_involved_name"];
+    // peopleInvolvedPhone = json['people_involved_phone'] == null
+    //     ? ""
+    //     : json["people_involved_phone"];
+    // witnessesName =
+    //     json['witnesses_name'] == null ? "" : json["witnesses_name"];
+    // witnessesPhone =
+    //     json['witnesses_phone'] == null ? "" : json["witnesses_phone"];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "property_owner_id": propertyOwnerId,
-        "property_id": propertyId,
-        "guard_id": guardId,
-        "report_type": reportType,
-        "subject": subject,
-        "notes": notes,
-        "vehicle_manufacturer": vehicleManufacturer,
-        "model": model,
-        "color": color,
-        "license_number": licenseNumber,
-        "state": state,
-        "towed": towed,
-        "emergency_date": emergencyDate,
-        "emergency_time": emergencyTime,
-        "emergency_details": emergencyDetails,
-        "images":
-            images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
-        "videos": videos,
-        "latitude": latitude,
-        "longitude": longitude,
-        "action_taken": actionTaken,
-        "police_report": policeReport,
-        "officer_name": officerName,
-        "officer_designation": officerDesignation,
-        "people_involved_name": peopleInvolvedName == null
-            ? []
-            : List<dynamic>.from(peopleInvolvedName!.map((x) => x)),
-        "people_involved_phone": peopleInvolvedPhone == null
-            ? []
-            : List<dynamic>.from(peopleInvolvedPhone!.map((x) => x)),
-        "witnesses_name": witnessesName == null
-            ? []
-            : List<dynamic>.from(witnessesName!.map((x) => x)),
-        "witnesses_phone": witnessesPhone == null
-            ? []
-            : List<dynamic>.from(witnessesPhone!.map((x) => x)),
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['property_owner_id'] = this.propertyOwnerId;
+    data['property_id'] = this.propertyId;
+    data['guard_id'] = this.guardId;
+    data['report_type'] = this.reportType;
+    data['subject'] = this.subject;
+    data['notes'] = this.notes;
+    data['vehicle_manufacturer'] = this.vehicleManufacturer;
+    data['model'] = this.model;
+    data['color'] = this.color;
+    data['license_number'] = this.licenseNumber;
+    data['state'] = this.state;
+    data['towed'] = this.towed;
+    data['emergency_date'] = this.emergencyDate;
+    data['emergency_time'] = this.emergencyTime;
+    data['emergency_details'] = this.emergencyDetails;
+    data['images'] = this.images;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['action_taken'] = this.actionTaken;
+    data['officer_name'] = this.officerName;
+    data['officer_designation'] = this.officerDesignation;
+    // data['people_involved_name'] = this.peopleInvolvedName;
+    // data['people_involved_phone'] = this.peopleInvolvedPhone;
+    // data['witnesses_name'] = this.witnessesName;
+    // data['witnesses_phone'] = this.witnessesPhone;
+    return data;
+  }
+}
+
+class Count {
+  int? general;
+  int? maintenance;
+  int? parking;
+  int? emergency;
+
+  Count({this.general, this.maintenance, this.parking, this.emergency});
+
+  Count.fromJson(Map<String, dynamic> json) {
+    general = json['general'];
+    maintenance = json['maintenance'];
+    parking = json['parking'];
+    emergency = json['emergency'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['general'] = this.general;
+    data['maintenance'] = this.maintenance;
+    data['parking'] = this.parking;
+    data['emergency'] = this.emergency;
+    return data;
+  }
 }

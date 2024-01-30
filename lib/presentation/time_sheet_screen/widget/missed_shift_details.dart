@@ -4,10 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/missed_shift_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
-import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
 import '../../property_details_screen/widgets/map_card_widget.dart';
-import '../../property_details_screen/widgets/shift_cards.dart';
 import '../../widgets/custom_text_widget.dart';
 
 class MissedShiftDetailsScreen extends StatefulWidget {
@@ -21,8 +19,6 @@ class MissedShiftDetailsScreen extends StatefulWidget {
 }
 
 class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
-  LatLng currentlocation = const LatLng(22.572645, 88.363892);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,10 +76,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                                       fontSize: 12, color: Colors.red),
                                 ),
                                 Text(
-                                  widget.details!.shift!.clockIn.toString() +
-                                      '~' +
-                                      widget.details!.shift!.clockOut
-                                          .toString(),
+                                  '${widget.details!.shift == null ? '' : widget.details!.shift!.clockIn.toString()} ~ ${widget.details!.shift == null ? '' : widget.details!.shift!.clockOut.toString()}',
                                   style: TextStyle(fontSize: 12, color: black),
                                 ),
                               ],
@@ -121,11 +114,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
-                              DateFormat('yyyy-MM-dd')
-                                  .format(DateTime.parse(widget
-                                      .details!.shift!.shiftDate!
-                                      .toString()))
-                                  .toString(),
+                              '${widget.details!.shift == null ? '' : DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.details!.shift!.shiftDate!.toString())).toString()}',
                               style: TextStyle(
                                   color: primaryColor,
                                   fontWeight: FontWeight.bold),
@@ -134,7 +123,9 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                              widget.details!.shift!.clockIn.toString(),
+                              widget.details!.shift == null
+                                  ? ''
+                                  : widget.details!.shift!.clockIn.toString(),
                               style: TextStyle(color: primaryColor),
                             ),
                           ],
