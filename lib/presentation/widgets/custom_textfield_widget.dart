@@ -3,20 +3,22 @@ import '../../theme/custom_theme.dart';
 
 // ignore: must_be_immutable
 class CustomTextField extends StatelessWidget {
-  CustomTextField({
-    super.key,
-    required this.textfieldTitle,
-    required this.hintText,
-    required this.isFilled,
-    this.maxLines = 1,
-    this.isSearching = false,
-  });
+  CustomTextField(
+      {super.key,
+      required this.textfieldTitle,
+      required this.hintText,
+      required this.isFilled,
+      this.maxLines = 1,
+      this.isSearching = false,
+      this.keyboardType = TextInputType.text,
+      this.controller});
   final String textfieldTitle;
   final String hintText;
   TextEditingController? controller;
   final bool isFilled;
   int? maxLines;
   bool? isSearching;
+  TextInputType? keyboardType;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,6 +37,7 @@ class CustomTextField extends StatelessWidget {
           TextFormField(
             controller: controller,
             maxLines: maxLines,
+            keyboardType: keyboardType,
             decoration: CustomTheme.textfieldDecoration(
                 hintText, isFilled, isSearching!),
           ),

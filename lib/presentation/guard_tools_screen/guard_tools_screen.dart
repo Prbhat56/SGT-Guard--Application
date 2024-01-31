@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/presentation/time_sheet_screen/upcoming_screen.dart';
 import 'package:sgt/utils/const.dart';
 import '../map_screen/active_map_screen.dart';
 import '../qr_screen/scanning_screen.dart';
-import '../time_sheet_screen/time_sheet_screen.dart';
 import '../time_sheet_screen/missed_shift_screen.dart';
 import '../work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 import '../work_report_screen/general_report_screen.dart';
@@ -24,7 +24,7 @@ class GuardToolScreen extends StatelessWidget {
             child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 40.0, right: 10),
+              padding: const EdgeInsets.only(top: 5.0, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -69,40 +69,40 @@ class GuardToolScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, top: 30, right: 20),
               child: Column(
                 children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const ScanningScreen();
-                      }));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/qr.svg',
-                            width: 17,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            'Scan Checkpoint',
-                            style: TextStyle(fontSize: 17, color: primaryColor),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     Navigator.push(context,
+                  //         MaterialPageRoute(builder: (context) {
+                  //       return const ScanningScreen();
+                  //     }));
+                  //   },
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //         color: seconderyMediumColor,
+                  //         borderRadius: BorderRadius.circular(10)),
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                  //     child: Row(
+                  //       crossAxisAlignment: CrossAxisAlignment.center,
+                  //       children: [
+                  //         SvgPicture.asset(
+                  //           'assets/qr.svg',
+                  //           width: 17,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 15,
+                  //         ),
+                  //         Text(
+                  //           'Scan Checkpoint',
+                  //           style: TextStyle(fontSize: 17, color: primaryColor),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -141,7 +141,7 @@ class GuardToolScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const TimeSheetScreen();
+                        return UpcomingThimeSheet(); //TimeSheetScreen();
                       }));
                     },
                     child: Container(
@@ -243,7 +243,7 @@ class GuardToolScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const GeneralReportScreen();
+                        return GeneralReportScreen();
                       }));
                     },
                     child: Container(

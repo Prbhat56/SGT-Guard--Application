@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -19,11 +22,9 @@ import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart'
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'package:geolocator/geolocator.dart';
-
-
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -33,6 +34,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  String? _deviceId;
+  var uuid = Uuid();
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
@@ -41,6 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
+    initPlatformState();
   }
 
   @override
@@ -50,15 +54,29 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
+  Future<void> initPlatformState() async {
+    String? deviceId;
+    try {
+      if (Platform.isIOS) {
+        deviceId = await PlatformDeviceId.getDeviceId;
+      } else if (Platform.isAndroid) {
+        var uiid = await PlatformDeviceId.getDeviceId;
+        deviceId = uuid.v5(Uuid.NAMESPACE_URL, uiid).toUpperCase();
+      }
+    } on PlatformException {
+      deviceId = 'Failed to get deviceId.';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _deviceId = deviceId;
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
+  var commonService = CommonService();
   @override
   Widget build(BuildContext context) {
-  //   var myObj = {
-  //   "name": "kaham",
-  //   "last": "das"
-  // };
-  // print(myObj);
-  // print(myObj['name']);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -101,6 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     textfieldTitle: 'Email',
                     hintText: 'Enter Email',
                     controller: _emailController,
+                    autoCorrect: false,
                     onChanged: (value) {
                       // print(value);
                       context.read<EmailCheckerCubit>().checkEmail(value);
@@ -117,6 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     textfieldTitle: 'Password',
                     hintText: 'Enter Password',
                     controller: _passwordController,
+                    autoCorrect: false,
                     obscureText: context.watch<ObscureCubit>().state.isObscure,
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -174,7 +194,16 @@ class _SignInScreenState extends State<SignInScreen> {
                               .issigninValid,
                           buttonTitle: 'Sign In',
                           onBtnPress: () {
-                            handle_SignIn(_emailController.text.toString(),_passwordController.text.toString());
+                            if (_emailController.text.isEmpty) {
+                              commonService.openSnackBar(
+                                  'Please enter registered email', context);
+                            } else if (_passwordController.text.isEmpty) {
+                              commonService.openSnackBar(
+                                  'Please enter password', context);
+                            } else {
+                              handle_SignIn(_emailController.text.toString(),
+                                  _passwordController.text.toString());
+                            }
                             // screenNavigator(context, Home());
                           })
                       : CustomButtonWidget(
@@ -183,7 +212,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               .state
                               .issigninValid,
                           buttonTitle: 'Sign In',
-                          onBtnPress: () {}),
+                          onBtnPress: () {
+                            if (_emailController.text.isEmpty) {
+                              commonService.openSnackBar(
+                                  'Please enter registered email', context);
+                            } else if (_passwordController.text.isEmpty) {
+                              commonService.openSnackBar(
+                                  'Please enter password', context);
+                            }
+                          }),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -196,38 +233,100 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
+  void handle_SignIn(String email, String password) async {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return Center(child: CircularProgressIndicator());
+        }));
 
-void handle_SignIn(String email,String password)
-   async{  
-      var map = new Map<String,dynamic>();
-      map['email']= email;
-      map['password']=password;
+    print("deviceId->$_deviceId");
+
+    try {
+      String apiUrl = baseUrl + apiRoutes['login']!;
+      Map<String, dynamic> myJsonBody = {
+        'email': email,
+        'password': password,
+        'one_signal': _deviceId.toString()
+      };
+      print(myJsonBody.toString());
+      Response response = await post(Uri.parse(apiUrl), body: myJsonBody);
+      var data = jsonDecode(response.body.toString());
+      print(data);
+
       var apiService = ApiCallMethodsService();
-      apiService.post(apiRoutes['login']!,map).then((value) async {
-        apiService.updateUserDetails(value);
-        Map<String, dynamic> jsonMap = json.decode(value);
-        // Map<String, dynamic> userDetails = jsonMap['user_details'];
-        String token = jsonMap['token'];
-        var commonService = CommonService();
-        commonService.setUserToken(token);
-        commonService.setTempUserEmailAndPassword(email,password);
-        commonService.openSnackBar(jsonMap['message'],context);
-        // apiService.updateUserDetails(userDetails);
-        // screenNavigator(context, Home());
-         LocationPermission permission;
-         permission = await Geolocator.checkPermission();
+      apiService.updateUserDetails(data);
+
+      if (response.statusCode == 200) {
+        commonService.setUserToken(data['token'].toString());
+        commonService.setProperty_owner_id(
+            data['user_details']['property_owner_id'].toString());
+        commonService.setTempUserEmailAndPassword(
+            "${data['user_details']['id'].toString()}", email, password);
+        print("${data['user_details']['id'].toString()}");
+        commonService.openSnackBar(data['message'], context);
+
+        LocationPermission permission;
+        permission = await Geolocator.checkPermission();
         if (permission == LocationPermission.denied) {
-              screenNavigator(context, ShareLocationScreen());
+          Navigator.of(context).pop();
+          screenNavigator(context, ShareLocationScreen());
           if (permission == LocationPermission.deniedForever) {
             return Future.error('Location Not Available');
           }
         } else {
-          if(permission== LocationPermission.always || permission== LocationPermission.whileInUse){
-              screenNavigator(context,Home());
+          if (permission == LocationPermission.always ||
+              permission == LocationPermission.whileInUse) {
+            Navigator.of(context).pop();
+            screenNavigator(context, Home());
           }
         }
-      }).onError((error, stackTrace) {
-        print(error);
-      });
-   }
+      } else if (response.statusCode == 400) {
+        Navigator.of(context).pop();
+        commonService.openSnackBar(data['message'] ?? data['error'], context);
+      } else {
+        Navigator.of(context).pop();
+        commonService.openSnackBar(data['message'] ?? data['error'], context);
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      commonService.openSnackBar(e.toString(), context);
+    }
+
+    /*var map = new Map<String, dynamic>();
+    map['email'] = email;
+    map['password'] = password;
+    var apiService = ApiCallMethodsService();
+    apiService.post(apiRoutes['login']!, map).then((value) async {
+      apiService.updateUserDetails(value);
+      Map<String, dynamic> jsonMap = json.decode(value);
+      // Map<String, dynamic> userDetails = jsonMap['user_details'];
+      String token = jsonMap['token'];
+
+      commonService.setUserToken(token);
+      commonService.setTempUserEmailAndPassword(email, password);
+      commonService.openSnackBar(jsonMap['message'], context);
+      // apiService.updateUserDetails(userDetails);
+      // screenNavigator(context, Home());
+      LocationPermission permission;
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        Navigator.of(context).pop();
+        screenNavigator(context, ShareLocationScreen());
+        if (permission == LocationPermission.deniedForever) {
+          return Future.error('Location Not Available');
+        }
+      } else {
+        if (permission == LocationPermission.always ||
+            permission == LocationPermission.whileInUse) {
+          Navigator.of(context).pop();
+          screenNavigator(context, Home());
+        }
+      }
+    }).onError((error, stackTrace) {
+      Navigator.of(context).pop();
+      print(error);
+    });
+    */
+  }
 }

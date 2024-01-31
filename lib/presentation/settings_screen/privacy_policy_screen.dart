@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sgt/presentation/check_point_screen/widgets/check_point_card_wieget.dart';
+import 'package:sgt/presentation/check_point_screen/widgets/check_point_card_widget.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/constant/constant.dart';

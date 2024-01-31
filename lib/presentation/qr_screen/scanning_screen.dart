@@ -1,14 +1,17 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 import '../clocked_in_out_screen/clock_in_screen.dart';
 
 class ScanningScreen extends StatefulWidget {
-  const ScanningScreen({super.key});
+  int? propertyId;
+  ScanningScreen({super.key,this.propertyId});
 
   @override
   State<ScanningScreen> createState() => _ScanningScreenState();
@@ -39,10 +42,22 @@ class _ScanningScreenState extends State<ScanningScreen> {
     }
   }
 
+
+  shiftIdRetrive(result) async {
+    print("widget.qrData =====> ${result?.code}");
+    String? jsonString = result?.code.toString();
+    Map<String, dynamic> jsonData = jsonDecode(jsonString!);
+    int shiftId = jsonData['shift_details']['shift_id'];
+    print('Shift ID: $shiftId');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('shiftId', shiftId.toString());
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return result != null
-        ? ClockInScreen() //if the qr has data then it will show clock in screen
+        ? ClockInScreen(propId:widget.propertyId) //if the qr has data then it will show clock in screen
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
@@ -101,6 +116,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
       HapticFeedback.vibrate();
       setState(() {
         result = scanData;
+        shiftIdRetrive(result);
       });
     });
     this.controller!.pauseCamera();

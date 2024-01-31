@@ -38,6 +38,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     _reenteredpasswordController = TextEditingController();
     _newpasswordController = TextEditingController();
     _oldpasswordController = TextEditingController();
+    // userDetails();
     super.initState();
   }
 
@@ -48,6 +49,36 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     _oldpasswordController.dispose();
     super.dispose();
   }
+
+  // Future<void> applyLeavePolicy() async {
+  //   try {
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     String apiUrl = baseUrl +
+  //         apiRoutes['leavePolicy']! +
+  //         '?property_owner_id=${prefs.getString('property_owner_id')}';
+
+  //     Map<String, String> headerData = {
+  //       'Authorization': 'Bearer ${prefs.getString('token')}'
+  //     };
+  //     var response = await http.get(Uri.parse(apiUrl), headers: headerData);
+
+  //     var responseModel = jsonDecode(response.body);
+
+  //     if (response.statusCode == 201) {
+  //       setState(() {
+  //         leaveTerms = responseModel['data']['policies'];
+  //       });
+  //       return responseModel;
+  //     } else {
+  //       return responseModel;
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //     throw Exception(e.toString());
+  //   }
+  // }
+
+
 
   @override
   Widget build(BuildContext context) {

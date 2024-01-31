@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
-class TotalTimeWidget extends StatelessWidget {
-  const TotalTimeWidget({super.key});
+class TotalTimeWidget extends StatefulWidget {
+  String? totalTime;
+  TotalTimeWidget({super.key, this.totalTime});
 
+  @override
+  State<TotalTimeWidget> createState() => _TotalTimeWidgetState();
+}
+
+class _TotalTimeWidgetState extends State<TotalTimeWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -16,38 +22,37 @@ class TotalTimeWidget extends StatelessWidget {
           width: 15,
         ),
         Text(
-          '6',
+          widget.totalTime.toString(),
           style: TextStyle(
-            color: primaryColor,
-            fontSize: 15,
+              color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500
           ),
         ),
         SizedBox(
           width: 5,
         ),
-        Text(
-          'Hours',
-          style: TextStyle(
-              color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
-        ),
-        SizedBox(
-          width: 15,
-        ),
-        Text(
-          '12',
-          style: TextStyle(
-            color: primaryColor,
-            fontSize: 15,
-          ),
-        ),
-        SizedBox(
-          width: 5,
-        ),
-        Text(
-          'Minutes',
-          style: TextStyle(
-              color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
-        ),
+        // Text(
+        //   'Hours',
+        //   style: TextStyle(
+        //       color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
+        // ),
+        // SizedBox(
+        //   width: 15,
+        // ),
+        // Text(
+        //   '12',
+        //   style: TextStyle(
+        //     color: primaryColor,
+        //     fontSize: 15,
+        //   ),
+        // ),
+        // SizedBox(
+        //   width: 5,
+        // ),
+        // Text(
+        //   'Minutes',
+        //   style: TextStyle(
+        //       color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
+        // ),
       ],
     );
   }

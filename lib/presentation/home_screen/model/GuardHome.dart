@@ -263,12 +263,14 @@ class GuardHome {
   Teams? teams;
   Jobs? jobs;
   String? imageBaseUrl;
+  String? propertyImageBaseUrl;
   int? status;
 
   GuardHome({
     this.teams,
     this.jobs,
     this.imageBaseUrl,
+    this.propertyImageBaseUrl,
     this.status,
   });
 
@@ -281,6 +283,7 @@ class GuardHome {
         teams: json["teams"] == null ? null : Teams.fromJson(json["teams"]),
         jobs: json["jobs"] == null ? null : Jobs.fromJson(json["jobs"]),
         imageBaseUrl: json["image_base_url"],
+        propertyImageBaseUrl:json["property_image_base_url"],
         status: json["status"],
       );
 
@@ -288,6 +291,7 @@ class GuardHome {
         "teams": teams?.toJson(),
         "jobs": jobs?.toJson(),
         "image_base_url": imageBaseUrl,
+        "property_image_base_url":propertyImageBaseUrl,
         "status": status,
       };
 }
@@ -604,6 +608,12 @@ class TeamsDatum {
   String? firstName;
   String? lastName;
   String? apiToken;
+  String? guardPosition;
+  String? street;
+  String? cityText;
+  String? stateText;
+  String? countryText;
+
 
   TeamsDatum({
     this.id,
@@ -612,6 +622,11 @@ class TeamsDatum {
     this.firstName,
     this.lastName,
     this.apiToken,
+    this.guardPosition,
+    this.street,
+    this.cityText,
+    this.stateText,
+    this.countryText,
   });
 
   factory TeamsDatum.fromRawJson(String str) =>
@@ -626,6 +641,11 @@ class TeamsDatum {
         firstName: json["first_name"],
         lastName: json["last_name"],
         apiToken: json["api_token"],
+        guardPosition: json["guard_position"],
+        street: json["street"],
+        cityText: json["city_text"],
+        stateText: json["state_text"],
+        countryText: json["country_text"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -635,5 +655,10 @@ class TeamsDatum {
         "first_name": firstName,
         "last_name": lastName,
         "api_token": apiToken,
+        "guard_position":guardPosition,
+        "street":street,
+        "city_text":cityText,
+        "state_text":stateText,
+        "country_text":countryText,
       };
 }

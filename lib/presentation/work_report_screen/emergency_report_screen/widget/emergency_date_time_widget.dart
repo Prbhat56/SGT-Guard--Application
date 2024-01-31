@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
 
 import '../../../../theme/custom_theme.dart';
 
@@ -40,7 +42,9 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                   TextFormField(
                     controller: dateinput,
                     decoration: InputDecoration(
-                      hintText: '00/00/00',
+                      hintText: DateFormat('yyyy-MM-dd')
+                          .format(DateTime.now())
+                          .toString(),
                       hintStyle: TextStyle(color: CustomTheme.primaryColor),
                       focusColor: CustomTheme.primaryColor,
                     ),
@@ -50,8 +54,7 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(
-                              2000), //DateTime.now() - not to allow to choose before today.
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101));
 
                       if (pickedDate != null) {
@@ -65,6 +68,10 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
 
                         setState(() {
                           dateinput.text = formattedDate;
+                          EmergencyReportScreen.of(context)!.dateValue =
+                              formattedDate;
+                          StaticEmergencyReportScreen.of(context)!.dateValue =
+                              formattedDate;
                         });
                       } else {
                         print("Date is not selected");
@@ -94,7 +101,7 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                   TextFormField(
                     controller: timeinput,
                     decoration: InputDecoration(
-                      hintText: '00:00',
+                      hintText: DateFormat('HH:mm:ss').format(DateTime.now()),
                       hintStyle: TextStyle(color: CustomTheme.primaryColor),
                       focusColor: CustomTheme.primaryColor,
                     ),
@@ -104,22 +111,35 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                       TimeOfDay? pickedTime = await showTimePicker(
                         initialTime: TimeOfDay.now(),
                         context: context,
+                        builder: (context, child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context)
+                                .copyWith(alwaysUse24HourFormat: false),
+                            child: child ?? Container(),
+                          );
+                        },
                       );
 
                       if (pickedTime != null) {
                         print(pickedTime.format(context));
-                        DateTime parsedTime = DateFormat.jm()
-                            .parse(pickedTime.format(context).toString());
-                        //converting to DateTime so that we can further format on different pattern.
-                        print(parsedTime); //output 1970-01-01 22:53:00.000
-                        String formattedTime =
-                            DateFormat('HH:mm:ss').format(parsedTime);
-                        print(formattedTime); //output 14:59:00
-                        //DateFormat() is from intl package, you can format the time on any pattern you need.
+                        // DateTime parsedTime = DateFormat.jm()
+                        //     .parse(pickedTime.format(context).toString());
+                        // //converting to DateTime so that we can further format on different pattern.
+                        // print(parsedTime); //output 1970-01-01 22:53:00.000
+                        // String formattedTime =
+                        //     DateFormat('HH:mm:ss').format(parsedTime);
+                        // print(formattedTime); //output 14:59:00
+                        //var pickTimes = pickedTime.format12Hour(context);
+                        var dt = DateFormat("h:mm a")
+                            .parse(pickedTime.format(context));
+                        var formattedTime = DateFormat.Hms().format(dt);
 
                         setState(() {
-                          timeinput.text =
-                              formattedTime; //set the value of text field.
+                          timeinput.text = formattedTime;
+                          EmergencyReportScreen.of(context)!.timeValue =
+                              formattedTime;
+                          StaticEmergencyReportScreen.of(context)!.timeValue =
+                              formattedTime;    //set the value of text field.
                         });
                       } else {
                         print("Time is not selected");

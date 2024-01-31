@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
 import '../../../../theme/custom_theme.dart';
 import '../../../widgets/custom_underline_textfield_widget.dart';
-import '../../cubit/addpeople/addpeople_cubit.dart';
 
-class AddPeopleWidget extends StatelessWidget {
-  const AddPeopleWidget(
-      {super.key,
-      required this.ontap,
-      required this.title,
-      required this.number});
-  final VoidCallback ontap;
+/*
+class AddPeopleWidget extends StatefulWidget {
+  final VoidFutureCallBack onCallback;
   final String title;
   final int number;
+  final List<TextEditingController> peopleName;
+  final List<TextEditingController> peoplePhone;
+  AddPeopleWidget({
+    super.key,
+    required this.onCallback,
+    required this.title,
+    required this.number,
+    required this.peopleName,
+    required this.peoplePhone,
+  });
+
+  @override
+  State<AddPeopleWidget> createState() => _AddPeopleWidgetState();
+}
+
+class _AddPeopleWidgetState extends State<AddPeopleWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          widget.title,
           style: CustomTheme.blackTextStyle(17),
           textScaleFactor: 1.0,
         ),
@@ -27,28 +40,31 @@ class AddPeopleWidget extends StatelessWidget {
           height: 10,
         ),
         Container(
-          height: 195 * number.toDouble(),
+          height: 175 * widget.number.toDouble(),
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
-              itemCount: number,
+              itemCount: widget.number,
               itemBuilder: (context, index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomUnderlineTextFieldWidget(
                       textfieldTitle: 'Name',
-                      hintText: 'Something here',
+                      hintText: 'Name',
+                      controller: widget.peopleName[index],
                     ),
                     CustomUnderlineTextFieldWidget(
                       textfieldTitle: 'Phone Number',
-                      hintText: 'Something here',
+                      hintText: 'Phone Number',
+                      keyboardType: TextInputType.number,
+                      controller: widget.peoplePhone[index],
                     ),
                   ],
                 );
               }),
         ),
-        InkWell(
-          onTap: ontap,
+        GestureDetector(
+          onTap: widget.onCallback,
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 10),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -66,4 +82,4 @@ class AddPeopleWidget extends StatelessWidget {
       ],
     );
   }
-}
+}*/

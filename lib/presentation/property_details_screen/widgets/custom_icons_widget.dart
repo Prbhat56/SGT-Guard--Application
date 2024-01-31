@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/check_points_list.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import '../../../helper/navigator_function.dart';
@@ -19,26 +20,34 @@ class CustomIconsDataModel {
 }
 
 //data list of customicon
-List<CustomIconsDataModel> customIconsData = [
+List<CustomIconsDataModel> customIconsData = customIconsData = [
   CustomIconsDataModel(
       iconUrl: 'assets/qr1.svg', title: 'Scan QR', widget: ScanningScreen()),
   CustomIconsDataModel(
       iconUrl: 'assets/map.svg',
       title: 'Checkpoints',
-      widget: CheckPointListsScreen()),
-  CustomIconsDataModel(iconUrl: 'assets/plus.svg', title: 'Report',widget: WorkReportScreen()),
+      widget: CheckPointListsScreen(
+        // checkPoint: [],
+        imageBaseUrl: '',
+      )),
+  CustomIconsDataModel(
+      iconUrl: 'assets/plus.svg', title: 'Report', widget: WorkReportScreen()),
 ];
 
 //custom-icon widget
 class CustomIconWidget extends StatelessWidget {
-  const CustomIconWidget(
+  CustomIconWidget(
       {super.key,
       required this.iconUrl,
       required this.title,
-      required this.widget});
+      required this.widget,
+      this.checkpoint,
+      this.imgUrl});
   final String iconUrl;
   final String title;
   final Widget widget;
+  List<CheckPoint>? checkpoint;
+  final String? imgUrl;
   @override
   Widget build(BuildContext context) {
     return Column(

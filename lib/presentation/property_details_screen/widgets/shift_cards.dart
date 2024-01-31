@@ -1,30 +1,39 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
+// import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
+import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
 
 import '../../../utils/const.dart';
 import '../../shift_details_screen/upcoming_shift_details_screen.dart';
 
-class ShiftCardModel {
-  final String shiftdate;
-  final String shifttime;
-  ShiftCardModel({
-    required this.shiftdate,
-    required this.shifttime,
+// class ShiftCardModel {
+//   final String shiftdate;
+//   final String shifttime;
+//   ShiftCardModel({
+//     required this.shiftdate,
+//     required this.shifttime,
+//   });
+// }
+
+// List<ShiftCardModel> shiftCardsData = [
+//   ShiftCardModel(shiftdate: '6/20/22', shifttime: '07:30 AM'),
+//   ShiftCardModel(shiftdate: '7/08/22', shifttime: '09:30 AM'),
+//   ShiftCardModel(shiftdate: '9/14/22', shifttime: '10:30 AM'),
+// ];
+
+class ShiftCards extends StatefulWidget {
+  List<Shift>? shifts;
+  String? imageBaseUrl;
+  ShiftCards({super.key, 
+  required this.shifts,this.imageBaseUrl
   });
+
+  @override
+  State<ShiftCards> createState() => _ShiftCardsState();
 }
 
-List<ShiftCardModel> shiftCardsData = [
-  ShiftCardModel(shiftdate: '6/20/22', shifttime: '07:30 AM'),
-  ShiftCardModel(shiftdate: '7/08/22', shifttime: '09:30 AM'),
-  ShiftCardModel(shiftdate: '9/14/22', shifttime: '10:30 AM'),
-];
-
-class ShiftCards extends StatelessWidget {
-  const ShiftCards({
-    super.key,
-  });
-
+class _ShiftCardsState extends State<ShiftCards> {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -33,11 +42,14 @@ class ShiftCards extends StatelessWidget {
         height: 50,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: shiftCardsData.length,
+            itemCount: widget.shifts!.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  screenNavigator(context, UpcomingShiftDetailsScreen());
+                  screenNavigator(context, UpcomingShiftDetailsScreen(
+                    shifts: widget.shifts![index],
+                    imageBaseUrl:widget.imageBaseUrl
+                  ));
                 },
                 child: Container(
                   height: 48,
@@ -52,16 +64,14 @@ class ShiftCards extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        shiftCardsData[index].shiftdate,
+                        widget.shifts![index].dateText.toString(),
+                        // widget.shifts![index].clockIn.toString(),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: primaryColor, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
                         height: 5,
-                      ),
-                      Text(
-                        shiftCardsData[index].shifttime,
-                        style: TextStyle(color: primaryColor),
                       ),
                     ],
                   ),

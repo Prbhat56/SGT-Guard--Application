@@ -1,7 +1,18 @@
-import 'package:flutter/material.dart';
 
+
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sgt/presentation/guard_tools_screen/widgets/leave_rejection_popup.dart';
+import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/constant/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/const.dart';
 import 'leave_data_model.dart';
+import 'package:http/http.dart' as http;
 
 class LeaveStatusScreen extends StatefulWidget {
   const LeaveStatusScreen({super.key});
@@ -11,146 +22,355 @@ class LeaveStatusScreen extends StatefulWidget {
 }
 
 class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
+  int current_page = 1;
+  late int last_page = 0;
+  List<LeaveDatum> leaveDatum = [];
+
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  Future<bool> getLeaveList() async {
+    EasyLoading.show();
+    if (current_page < last_page) {
+      refreshController.loadNoData();
+      return true;
+    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, String> myHeader = <String, String>{
+      "Authorization": "Bearer ${prefs.getString('token')}",
+    };
+    String apiUrl = baseUrl + 'guard/leave-applications?page=$current_page';
+    print(apiUrl);
+
+    final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+
+    if (response.statusCode == 200) {
+      final LeaveListModel responseModel = leaveModelFromJson(response.body);
+
+      //leaveDatum = responseModel.response!.data ?? [];
+      leaveDatum.addAll(responseModel.response!.data!);
+
+      current_page = responseModel.response!.currentPage ?? 0;
+
+      current_page++;
+      print(current_page.toString());
+      last_page = responseModel.response!.lastPage ?? 0;
+      print('Last page: ${last_page}');
+      EasyLoading.dismiss();
+      setState(() {});
+      return true;
+    } else {
+      EasyLoading.dismiss();
+      return false;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLeaveList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 3,
-          backgroundColor: white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          centerTitle: true,
-          title: Text('Leave Status',
-              style: TextStyle(fontWeight: FontWeight.w400, color: black)),
-        ),
-        backgroundColor: white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                // color: Colors.amber,
-                height: 90 * leaveData.length.toDouble(),
-                child: ListView.builder(
-                    itemCount: leaveData.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          //  Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => const PropertyDetailsScreen()))
-                        },
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Row(
+    return Scaffold(
+        appBar: CustomAppBarWidget(appbarTitle: 'Leave Status'),
+        body: SmartRefresher(
+          controller: refreshController,
+          enablePullUp: true,
+          enablePullDown: false,
+          onLoading: () async {
+            final result = await getLeaveList();
+            if (result) {
+              if (current_page <= last_page) {
+                refreshController.loadComplete();
+              } else {
+                refreshController.loadNoData();
+              }
+            } else {
+              refreshController.loadFailed();
+            }
+          },
+          child: ListView.builder(
+              itemCount: leaveDatum.length,
+              itemBuilder: (context, index) {
+                final leave = leaveDatum[index];
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(
+                              'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                leave.subject.toString(),
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage:
-                                        NetworkImage(leaveData[index].imageUrl),
+                                  Icon(
+                                    Icons.calendar_month_outlined,
+                                    color: primaryColor,
+                                    size: 15,
                                   ),
-                                  const SizedBox(
-                                    width: 20,
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 4.0),
-                                        child: Text(
-                                          'Subject',
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_month_outlined,
-                                            color: primaryColor,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            leaveData[index].date,
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 14),
-                                        decoration: BoxDecoration(
-                                            color: leaveData[index].status ==
-                                                    "Approved"
-                                                ? primaryColor
-                                                : leaveData[index].status ==
-                                                        "Waiting For Approval"
-                                                    ? white
-                                                    : Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            border: Border.all(
-                                                color: leaveData[index]
-                                                            .status ==
-                                                        "Waiting For Approval"
-                                                    ? primaryColor
-                                                    : Colors.transparent)),
-                                        child: Text(
-                                          leaveData[index].status,
-                                          style: TextStyle(
-                                              color: leaveData[index].status ==
-                                                      "Waiting For Approval"
-                                                  ? primaryColor
-                                                  : white,
-                                              fontSize: 8),
-                                        ),
-                                      )
-                                    ],
+                                  Text(
+                                    '${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveFrom.toString()))} - ${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveTo.toString()))}',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey),
                                   )
                                 ],
                               ),
-                            ),
-                            Divider(
-                              color: Colors.grey,
-                              height: 0,
-                            )
-                          ],
-                        ),
-                      );
-                    }),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              /*Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 14),
+                                          decoration: BoxDecoration(
+                                              color: leaveData[index].status ==
+                                                      "Approved"
+                                                  ? primaryColor
+                                                  : leaveData[index].status ==
+                                                          "Waiting For Approval"
+                                                      ? white
+                                                      : Colors.red,
+                                              borderRadius: BorderRadius.circular(16),
+                                              border: Border.all(
+                                                  color: leaveData[index].status ==
+                                                          "Waiting For Approval"
+                                                      ? primaryColor
+                                                      : Colors.transparent)),
+                                          child: Text(
+                                            leaveData[index].status,
+                                            style: TextStyle(
+                                                color: leaveData[index].status ==
+                                                        "Waiting For Approval"
+                                                    ? primaryColor
+                                                    : white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        )*/
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return LeaveRejectInfo(
+                                          name: '',
+                                          date: '',
+                                          time: '',
+                                          reason:
+                                              leave.rejectOfReason.toString(),
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 14),
+                                  decoration: BoxDecoration(
+                                      color: leave.status.toString() == "1"
+                                          ? primaryColor
+                                          : leave.status.toString() == "0"
+                                              ? white
+                                              : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: leave.status.toString() == "0"
+                                              ? primaryColor
+                                              : Colors.transparent)),
+                                  child: Text(
+                                    leave.status.toString() == "1"
+                                        ? "Approved"
+                                        : "Waiting For Approval",
+                                    style: TextStyle(
+                                        color: leave.status.toString() == "0"
+                                            ? primaryColor
+                                            : white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 0,
+                    )
+                  ],
+                );
+              }),
+        )
+        /*FutureBuilder(
+        future: getLeaveList(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            );
+          } else {
+            return SmartRefresher(
+              controller: refreshController,
+              enablePullUp: true,
+              enablePullDown: false,
+              onLoading: () async {
+                final result = await getLeaveList();
+                if (result) {
+                  refreshController.loadComplete();
+                } else {
+                  refreshController.loadFailed();
+                }
+              },
+              child: ListView.builder(
+                  itemCount: leaveDatum.length,
+                  itemBuilder: (context, index) {
+                    final leave = leaveDatum[index];
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(
+                                  'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    leave.subject.toString(),
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_month_outlined,
+                                        color: primaryColor,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        '${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveFrom.toString()))}-${DateFormat('MMM d, yyyy').format(DateTime.parse(leave.leaveTo.toString()))}',
+                                        style: TextStyle(
+                                            fontSize: 13, color: Colors.grey),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  /*Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 14),
+                                          decoration: BoxDecoration(
+                                              color: leaveData[index].status ==
+                                                      "Approved"
+                                                  ? primaryColor
+                                                  : leaveData[index].status ==
+                                                          "Waiting For Approval"
+                                                      ? white
+                                                      : Colors.red,
+                                              borderRadius: BorderRadius.circular(16),
+                                              border: Border.all(
+                                                  color: leaveData[index].status ==
+                                                          "Waiting For Approval"
+                                                      ? primaryColor
+                                                      : Colors.transparent)),
+                                          child: Text(
+                                            leaveData[index].status,
+                                            style: TextStyle(
+                                                color: leaveData[index].status ==
+                                                        "Waiting For Approval"
+                                                    ? primaryColor
+                                                    : white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        )*/
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 14),
+                                    decoration: BoxDecoration(
+                                        color: leave.status.toString() == "1"
+                                            ? primaryColor
+                                            : leave.status.toString() == "0"
+                                                ? white
+                                                : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                            color:
+                                                leave.status.toString() == "0"
+                                                    ? primaryColor
+                                                    : Colors.transparent)),
+                                    child: Text(
+                                      leave.status.toString() == "1"
+                                          ? "Approved"
+                                          : "Waiting For Approval",
+                                      style: TextStyle(
+                                          color: leave.status.toString() == "0"
+                                              ? primaryColor
+                                              : white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          height: 0,
+                        )
+                      ],
+                    );
+                  }),
+            );
+          }
+        },
+      ),*/
+        );
   }
 }

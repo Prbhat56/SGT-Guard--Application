@@ -1,13 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
+
 import '../../../utils/const.dart';
-import '../../connect_screen/widgets/video_preview.dart';
 import 'property_preview_widget.dart';
 
 class PropertyMediaPreviewScreen extends StatefulWidget {
-  const PropertyMediaPreviewScreen({
-    super.key,
-  });
+  List<PropertyAvatar>? avatars;
+  String? imageBaseUrl;
+  PropertyMediaPreviewScreen(
+      {super.key, required this.avatars, this.imageBaseUrl});
 
   @override
   State<PropertyMediaPreviewScreen> createState() =>
@@ -18,12 +20,12 @@ class _PropertyMediaPreviewScreenState
     extends State<PropertyMediaPreviewScreen> {
   final controller = CarouselController();
   int activeIndex = 0;
-  List data = [
-    'https://images.pexels.com/photos/2957862/pexels-photo-2957862.jpeg?auto=compress&cs=tinysrgb&w=1600',
-    'https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=1600',
-    'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1600',
-    'https://player.vimeo.com/external/494276333.hd.mp4?s=84d07ae9c2fbddd1c8fd69a3d7db473be198c478&profile_id=174&oauth2_token_id=57447761'
-  ];
+  // List data = [
+  //   'https://images.pexels.com/photos/2957862/pexels-photo-2957862.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  //   'https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  //   'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  //   'https://player.vimeo.com/external/494276333.hd.mp4?s=84d07ae9c2fbddd1c8fd69a3d7db473be198c478&profile_id=174&oauth2_token_id=57447761'
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class _PropertyMediaPreviewScreenState
           children: [
             CarouselSlider.builder(
               carouselController: controller,
-              itemCount: data.length,
+              itemCount: widget.avatars!.length,
               itemBuilder: (context, index, realIndex) {
                 return Stack(
                   children: [
@@ -64,7 +66,10 @@ class _PropertyMediaPreviewScreenState
                         ? Center(child: PropertyVideoPreviewWidget())
                         : Center(
                             child: Image.network(
-                              data[index],
+                              widget.imageBaseUrl.toString() +
+                                  '/' +
+                                  widget.avatars![index].propertyAvatar
+                                      .toString(),
                               height: MediaQuery.of(context).size.height,
                               width: MediaQuery.of(context).size.width,
                               fit: BoxFit.cover,
@@ -74,7 +79,7 @@ class _PropertyMediaPreviewScreenState
                         top: 20,
                         right: 20,
                         child: Text(
-                          "${index + 1}/${data.length}",
+                          "${index + 1}/${widget.avatars!.length}",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,

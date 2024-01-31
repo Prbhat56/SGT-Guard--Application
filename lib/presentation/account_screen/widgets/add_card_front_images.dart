@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,15 +6,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
 import 'package:sgt/presentation/widgets/dotted_choose_file_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
-import 'package:sgt/service/globals.dart';
 import 'package:http/http.dart' as http;
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-var userD = jsonDecode(userDetail);
-
 class AddFrontCardImage extends StatefulWidget {
-  const AddFrontCardImage({super.key});
+  String baseUrl;
+  String imgUrl;
+  AddFrontCardImage({super.key, required this.baseUrl, required this.imgUrl});
 
   @override
   State<AddFrontCardImage> createState() => _AddFrontCardImageState();
@@ -36,7 +34,8 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
         uploadImage();
       });
     } else {
-      print('Something went wrong');
+      var snackBar = SnackBar(content: Text('Something went wrong'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -51,7 +50,8 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
         uploadImage();
       });
     } else {
-      print('Something went wrong');
+      var snackBar = SnackBar(content: Text('Something went wrong'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -97,7 +97,7 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
 
   @override
   Widget build(BuildContext context) {
-    return (userD['user_details']['front_side_id_card'] != null
+    return (widget.imgUrl != ""
         ? Edit_Image(context)
         : image != null
             ? Pick_Image(context)
@@ -119,23 +119,25 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
                       });
                 },
                 child: DottedChooseFileWidget(
-                    title: 'Upload\n Front side of the Card', height: 30),
+                    title: 'Upload\n Front side of the Card', height: 60),
               ));
   }
 
   Stack Edit_Image(BuildContext context) {
     return Stack(children: [
       Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width * .4,
+          height: 180,
+          width: MediaQuery.of(context).size.width * .9,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey)),
           child: image != null
               ? Image.file(
                   File(image!.path).absolute,
                   fit: BoxFit.fill,
-                  width: 140,
-                  height: 140,
+                  height: 180,
+                  width: MediaQuery.of(context).size.width * .9,
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
                       'assets/sgt_logo.jpg',
@@ -143,20 +145,21 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
                     );
                   },
                 )
-              : CachedNetworkImage(
-                  imageUrl: userD['image_base_url'] +
-                      '/' +
-                      userD['user_details']['front_side_id_card'],
-                  fit: BoxFit.fill,
-                  placeholder: (context, url) => Center(
-                        child: const CircularProgressIndicator(
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                  errorWidget: (context, url, error) => Image.asset(
-                        'assets/sgt_logo.jpg',
-                        fit: BoxFit.fill,
-                      ))),
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                      imageUrl: widget.baseUrl + '/' + widget.imgUrl,
+                      fit: BoxFit.fill,
+                      placeholder: (context, url) => Center(
+                            child: const CircularProgressIndicator(
+                              strokeCap: StrokeCap.round,
+                            ),
+                          ),
+                      errorWidget: (context, url, error) => Image.asset(
+                            'assets/sgt_logo.jpg',
+                            fit: BoxFit.fill,
+                          )),
+                )),
       Positioned(
         bottom: 0,
         right: 0,
@@ -199,15 +202,17 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
   Stack Pick_Image(BuildContext context) {
     return Stack(children: [
       Container(
-        height: 100,
-        width: MediaQuery.of(context).size.width * .4,
+        height: 180,
+        width: MediaQuery.of(context).size.width * .9,
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey)),
         child: Image.file(
           File(image!.path).absolute,
           fit: BoxFit.fill,
-          width: 140,
-          height: 140,
+          height: 180,
+          width: MediaQuery.of(context).size.width * .9,
           errorBuilder: (context, error, stackTrace) {
             return Image.asset(
               'assets/sgt_logo.jpg',

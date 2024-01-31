@@ -13,7 +13,9 @@ class ApplyLeaveSuccess extends StatefulWidget {
 class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
   @override
   void initState() {
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
+      Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pop(context);
     });
 

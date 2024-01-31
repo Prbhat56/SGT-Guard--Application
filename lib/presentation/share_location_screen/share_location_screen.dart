@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/home.dart';
 import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import '../../utils/const.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,61 +22,74 @@ class ShareLocationScreen extends StatefulWidget {
 }
 
 class _ShareLocationScreenState extends State<ShareLocationScreen> {
-
+  var commonService = CommonService();
   @override
- void initState() {
+  void initState() {
     super.initState();
- }
-
-  
+  }
 
   Future<Position> _determinePosition(context) async {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return Center(child: CircularProgressIndicator());
+        }));
+
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if(permission== LocationPermission.always || permission== LocationPermission.whileInUse){
-        Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          // print("position ====> $position");
-          var map = new Map<String,dynamic>();
-          map['latitude']= position.latitude.toString();
-          map['longitude']=position.longitude.toString();
-          var apiService = ApiCallMethodsService();
-          apiService.post(apiRoutes['profileUpdate']!,map).then((value) {
-            apiService.updateUserDetails(value);
-            screenNavigator(context,Home());
-          }).onError((error, stackTrace) {
-            print(error);
-          });
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        // print("position ====> $position");
+        var map = new Map<String, dynamic>();
+        map['latitude'] = position.latitude.toString();
+        map['longitude'] = position.longitude.toString();
+        var apiService = ApiCallMethodsService();
+        apiService.post(apiRoutes['profileUpdate']!, map).then((value) {
+          Navigator.of(context).pop();
+          apiService.updateUserDetails(value);
+          screenNavigator(context, Home());
+        }).onError((error, stackTrace) {
+          Navigator.of(context).pop();
+          print(error);
+          commonService.openSnackBar(error.toString(), context);
+        });
       }
       if (permission == LocationPermission.deniedForever) {
+        commonService.openSnackBar('Location Not Available', context);
         return Future.error('Location Not Available');
       }
     } else {
-      if(permission== LocationPermission.always || permission== LocationPermission.whileInUse){
-        Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          print("position ====> $position");
-          var map = new Map<String,dynamic>();
-          map['latitude']= position.latitude.toString();
-          map['longitude']=position.longitude.toString();
-          var apiService = ApiCallMethodsService();
-          apiService.post(apiRoutes['profileUpdate']!,map).then((value) {
-            apiService.updateUserDetails(value);
-            screenNavigator(context,Home());
-          }).onError((error, stackTrace) {
-            print(error);
-          });
-      }
-      else{
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        print("position ====> $position");
+        var map = new Map<String, dynamic>();
+        map['latitude'] = position.latitude.toString();
+        map['longitude'] = position.longitude.toString();
+        var apiService = ApiCallMethodsService();
+        apiService.post(apiRoutes['profileUpdate']!, map).then((value) {
+          Navigator.of(context).pop();
+          apiService.updateUserDetails(value);
+          screenNavigator(context, Home());
+        }).onError((error, stackTrace) {
+          print(error);
+          commonService.openSnackBar(error.toString(), context);
+          Navigator.of(context).pop();
+        });
+      } else {
         throw Exception('Error');
       }
     }
-  return await Geolocator.getCurrentPosition();
-}
+    return await Geolocator.getCurrentPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
-    
     // print(userDetail.runtimeType);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -113,10 +127,9 @@ class _ShareLocationScreenState extends State<ShareLocationScreen> {
                   ),
                   Center(
                     child: CupertinoButton(
-                        
                         disabledColor: seconderyColor,
                         padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 5),
+                            horizontal: 50, vertical: 5),
                         color: primaryColor,
                         child: ListTile(
                           leading: Icon(
@@ -129,7 +142,7 @@ class _ShareLocationScreenState extends State<ShareLocationScreen> {
                           ),
                         ),
                         onPressed: () {
-                            // screenNavigator(context,Home());
+                          // screenNavigator(context,Home());
                           _determinePosition(context);
                           // Navigator.push(context,
                           //     MaterialPageRoute(builder: (context) {

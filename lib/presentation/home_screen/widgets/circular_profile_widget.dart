@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/home_screen/model/GuardHome.dart';
-import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
-import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../connect_screen/widgets/chatting_screen.dart';
@@ -40,13 +38,9 @@ class _CircularProfileState extends State<CircularProfile> {
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
     };
-    print(myHeader);
-
     String apiUrl = baseUrl + apiRoutes['homePage']!;
     final response = await http.post(Uri.parse(apiUrl), headers: myHeader);
-
     var data = jsonDecode(response.body.toString());
-
     if (response.statusCode == 200) {
       return GuardHome.fromJson(data);
     } else {
@@ -63,7 +57,11 @@ class _CircularProfileState extends State<CircularProfile> {
               future: getPropertyGuardListAPI(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
+                  return Center(
+                      child: Container(
+                          height: 60,
+                          width: 60,
+                          child: CircularProgressIndicator()));
                 } else {
                   return ListView.builder(
                       physics: BouncingScrollPhysics(),
@@ -71,7 +69,6 @@ class _CircularProfileState extends State<CircularProfile> {
                       // itemCount: dummyData.length,
                       itemCount: snapshot.data!.teams!.data!.length,
                       itemBuilder: (context, index) {
-                        print(snapshot.data?.imageBaseUrl);
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -79,16 +76,14 @@ class _CircularProfileState extends State<CircularProfile> {
                               onTap: () {
                                 screenNavigator(context, ChattingScreen(index: index));
                               },
-                              child:CustomCircularImage.getCircularImage(
+                              child: CustomCircularImage.getCircularImage(
                                   snapshot.data!.imageBaseUrl.toString(),
                                   snapshot.data!.teams!.data![index].avatar.toString(),
-                                  // dummyData[index].profileUrl,
-                                  // dummyData[index].isOnline,
-                                  true,
+                                  snapshot.data!.teams!.data![index].apiToken != null
+                                  ? true : false,
                                   30,
                                   4,
-                                  43
-                                  ),
+                                  43),
                             ),
                             SizedBox(
                               width: 70,

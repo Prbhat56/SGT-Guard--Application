@@ -1,26 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
+
 import 'package:sgt/presentation/property_details_screen/widgets/show_property_images_widget.dart';
 import '../../../utils/const.dart';
 import '../cubit/showmore/showmore_cubit.dart';
 import 'property_media_preview_screen.dart';
 
-class PropertyDescriptionWidget extends StatelessWidget {
-  const PropertyDescriptionWidget({super.key});
+class PropertyDescriptionWidget extends StatefulWidget {
+  List<PropertyAvatar>? propvatars;
+  String? propertyImageBaseUrl;
+  String? propDesc;
+  PropertyDescriptionWidget(
+      {super.key, this.propvatars, this.propertyImageBaseUrl, this.propDesc});
 
+  @override
+  State<PropertyDescriptionWidget> createState() =>
+      _PropertyDescriptionWidgetState();
+}
+
+class _PropertyDescriptionWidgetState extends State<PropertyDescriptionWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
               width: 300,
               child: Text(
-                'Lorem ipsum dolor sit amet, duo habemus fuisset epicuri ei. No sit tempor populo prodesset, ad cum dicta repudiare. Ex eos probo maluisset, invidunt deseruisse consectetuer id vel, convenire ',
+                widget.propDesc.toString(),
                 maxLines:
                     context.watch<ShowmoreCubit>().state.showmore ? 1000 : 3,
                 overflow: TextOverflow.ellipsis,
@@ -34,7 +46,6 @@ class PropertyDescriptionWidget extends StatelessWidget {
                 : InkWell(
                     onTap: () {
                       context.read<ShowmoreCubit>().showMore();
-                      print(context.read<ShowmoreCubit>().state.showmore);
                     },
                     child: Text(
                       'more',
@@ -44,7 +55,10 @@ class PropertyDescriptionWidget extends StatelessWidget {
           ],
         ),
         context.watch<ShowmoreCubit>().state.showmore
-            ? PropertyImagesWidget()
+            ? PropertyImagesWidget(
+                avatars: widget.propvatars ?? [],
+                imageBaseUrl: widget.propertyImageBaseUrl,
+              )
             : Container(),
       ],
     );

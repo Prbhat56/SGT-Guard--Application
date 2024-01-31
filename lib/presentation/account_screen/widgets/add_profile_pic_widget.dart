@@ -1,20 +1,18 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/service/constant/constant.dart';
-import 'package:sgt/service/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../theme/custom_theme.dart';
 import '../../widgets/custom_bottom_model_sheet.dart';
 import 'add_profilepic_icon.dart';
 import 'package:http/http.dart' as http;
 
-var userD = jsonDecode(userDetail);
-
 class AddProfilePicWidget extends StatefulWidget {
-  const AddProfilePicWidget({super.key});
+  String baseUrl;
+  String imgUrl;
+  AddProfilePicWidget({super.key, required this.baseUrl, required this.imgUrl});
 
   @override
   State<AddProfilePicWidget> createState() => _AddProfilePicWidgetState();
@@ -35,7 +33,8 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
         uploadImage();
       });
     } else {
-      print('Something went wrong');
+      var snackBar = SnackBar(content: Text('Something went wrong'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -50,7 +49,8 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
         uploadImage();
       });
     } else {
-      print('Something went wrong');
+      var snackBar = SnackBar(content: Text('Something went wrong'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -117,22 +117,20 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
                 ),
                 radius: 70,
                 backgroundColor: CustomTheme.grey,
-                //backgroundImage: FileImage(File(image!.path).absolute),
               )
             : CircleAvatar(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(70),
                   child: CachedNetworkImage(
-                      imageUrl: userD['image_base_url'] +
-                          '/' +
-                          userD['user_details']['avatar'],
+                      imageUrl: widget.baseUrl +
+                              '/' +
+                              widget.imgUrl,
                       fit: BoxFit.fill,
                       width: 140,
                       height: 140,
-                      placeholder: (context, url) => Center(
-                            child: const CircularProgressIndicator(
-                              strokeCap: StrokeCap.round,
-                            ),
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(
+                            strokeCap: StrokeCap.round,
                           ),
                       errorWidget: (context, url, error) => Image.asset(
                             'assets/sgt_logo.jpg',
@@ -140,7 +138,7 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
                           )),
                 ),
                 radius: 70,
-                backgroundColor: CustomTheme.grey,
+                backgroundColor: Colors.transparent,
               ),
         Positioned(
           top: 100,
