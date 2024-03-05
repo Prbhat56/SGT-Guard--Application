@@ -82,7 +82,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
 
       phone_code_Controller = TextEditingController(
           text: (_guardDetails.userDetails?.contactCode != null
-              ? _guardDetails.userDetails?.contactCode.toString()
+              ? "+${_guardDetails.userDetails?.contactCode.toString()}"
               : ''));
 
       contact_number_Controller = TextEditingController(
@@ -463,7 +463,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Front Side Id Card',
+                              'Guard ID card',
                               style: CustomTheme.textField_Headertext_Style,
                               textScaleFactor: 1.0,
                             ),
@@ -479,7 +479,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                               height: 18,
                             ),
                             Text(
-                              'Back Side Id Card',
+                              'Weapon Permit',
                               style: CustomTheme.textField_Headertext_Style,
                               textScaleFactor: 1.0,
                             ),

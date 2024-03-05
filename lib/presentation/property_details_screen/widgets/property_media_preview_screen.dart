@@ -66,13 +66,11 @@ class _PropertyMediaPreviewScreenState
                         ? Center(child: PropertyVideoPreviewWidget())
                         : Center(
                             child: Image.network(
-                              widget.imageBaseUrl.toString() +
-                                  '/' +
-                                  widget.avatars![index].propertyAvatar
+                              widget.imageBaseUrl.toString() +''+ widget.avatars![index].propertyAvatar
                                       .toString(),
                               height: MediaQuery.of(context).size.height,
                               width: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                             ),
                           ),
                     Positioned(

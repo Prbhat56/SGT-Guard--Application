@@ -1,11 +1,16 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:platform_device_id/platform_device_id.dart';
+import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -62,6 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
       } else if (Platform.isAndroid) {
         var uiid = await PlatformDeviceId.getDeviceId;
         deviceId = uuid.v5(Uuid.NAMESPACE_URL, uiid).toUpperCase();
+        print("======================> ${deviceId}");
       }
     } on PlatformException {
       deviceId = 'Failed to get deviceId.';
@@ -80,6 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 28.w),
@@ -119,6 +126,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     textfieldTitle: 'Email',
                     hintText: 'Enter Email',
                     controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
                     autoCorrect: false,
                     onChanged: (value) {
                       // print(value);
@@ -195,16 +203,18 @@ class _SignInScreenState extends State<SignInScreen> {
                           buttonTitle: 'Sign In',
                           onBtnPress: () {
                             if (_emailController.text.isEmpty) {
-                              commonService.openSnackBar(
-                                  'Please enter registered email', context);
+                              // commonService.openSnackBar(
+                              //     'Please enter registered email', context);
+                              EasyLoading.showInfo(
+                                  'Please enter registered email');
                             } else if (_passwordController.text.isEmpty) {
-                              commonService.openSnackBar(
-                                  'Please enter password', context);
+                              // commonService.openSnackBar(
+                              //     'Please enter password', context);
+                              EasyLoading.showInfo('Please enter password');
                             } else {
                               handle_SignIn(_emailController.text.toString(),
                                   _passwordController.text.toString());
                             }
-                            // screenNavigator(context, Home());
                           })
                       : CustomButtonWidget(
                           isValid: context
@@ -214,11 +224,14 @@ class _SignInScreenState extends State<SignInScreen> {
                           buttonTitle: 'Sign In',
                           onBtnPress: () {
                             if (_emailController.text.isEmpty) {
-                              commonService.openSnackBar(
-                                  'Please enter registered email', context);
+                              // commonService.openSnackBar(
+                              //     'Please enter registered email', context);
+                              EasyLoading.showInfo(
+                                  'Please enter registered email');
                             } else if (_passwordController.text.isEmpty) {
-                              commonService.openSnackBar(
-                                  'Please enter password', context);
+                              // commonService.openSnackBar(
+                              //     'Please enter password', context);
+                              EasyLoading.showInfo('Please enter password');
                             }
                           }),
                   SizedBox(
@@ -234,11 +247,12 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void handle_SignIn(String email, String password) async {
-    showDialog(
-        context: context,
-        builder: ((context) {
-          return Center(child: CircularProgressIndicator());
-        }));
+    // showDialog(
+    //     context: context,
+    //     builder: ((context) {
+    //       return Center(child: CircularProgressIndicator());
+    //     }));
+    EasyLoading.show();
 
     print("deviceId->$_deviceId");
 
@@ -258,39 +272,99 @@ class _SignInScreenState extends State<SignInScreen> {
       apiService.updateUserDetails(data);
 
       if (response.statusCode == 200) {
+        String userDetails = jsonEncode(GuardDetails.fromJson(data));
+        commonService.setUserProfile(userDetails);
         commonService.setUserToken(data['token'].toString());
         commonService.setProperty_owner_id(
             data['user_details']['property_owner_id'].toString());
         commonService.setTempUserEmailAndPassword(
             "${data['user_details']['id'].toString()}", email, password);
         print("${data['user_details']['id'].toString()}");
-        commonService.openSnackBar(data['message'], context);
+
+        commonService.setTempUserImageAndName(
+            "${data['user_details']['first_name'].toString()} ${data['user_details']['last_name'].toString()}",
+            "${data['image_base_url'].toString()}${data['user_details']['avatar'].toString()}");
+        //commonService.openSnackBar(data['message'], context);
+        EasyLoading.showSuccess(data['message'],
+            duration: Duration(seconds: 2));
 
         LocationPermission permission;
         permission = await Geolocator.checkPermission();
         if (permission == LocationPermission.denied) {
-          Navigator.of(context).pop();
-          screenNavigator(context, ShareLocationScreen());
+          FirebaseHelper.signUp(email: email, password: password)
+              .then((result) {
+            if (result == null) {
+              FirebaseHelper.signIn(email: email, password: password)
+                  .then((result) async {
+                if (result == null) {
+                  if (await FirebaseHelper.userExists()) {
+                    EasyLoading.dismiss();
+                    screenNavigator(context, ShareLocationScreen());
+                  } else {
+                    await FirebaseHelper.createPropertyOwner().then((value) {
+                      EasyLoading.dismiss();
+                      screenNavigator(context, ShareLocationScreen());
+                    });
+                  }
+                } else {
+                  //commonService.openSnackBar(result, context);
+                  EasyLoading.showInfo(result);
+                }
+              });
+            } else {
+              //commonService.openSnackBar(result, context);
+              EasyLoading.showInfo(result);
+            }
+            EasyLoading.dismiss();
+          });
+
           if (permission == LocationPermission.deniedForever) {
             return Future.error('Location Not Available');
           }
         } else {
           if (permission == LocationPermission.always ||
               permission == LocationPermission.whileInUse) {
-            Navigator.of(context).pop();
-            screenNavigator(context, Home());
+            FirebaseHelper.signUp(email: email, password: password)
+                .then((result) {
+              if (result == null) {
+                FirebaseHelper.signIn(email: email, password: password)
+                    .then((result) async {
+                  if (result == null) {
+                    if (await FirebaseHelper.userExists()) {
+                      EasyLoading.dismiss();
+                      screenNavigator(context, Home());
+                    } else {
+                      await FirebaseHelper.createPropertyOwner().then((value) {
+                        EasyLoading.dismiss();
+                        screenNavigator(context, Home());
+                      });
+                    }
+                  } else {
+                    //commonService.openSnackBar(result, context);
+                    EasyLoading.showInfo(result);
+                  }
+                });
+              } else {
+                //commonService.openSnackBar(result, context);
+                EasyLoading.showInfo(result);
+              }
+              EasyLoading.dismiss();
+            });
           }
         }
       } else if (response.statusCode == 400) {
-        Navigator.of(context).pop();
-        commonService.openSnackBar(data['message'] ?? data['error'], context);
+        EasyLoading.dismiss();
+        //commonService.openSnackBar(data['message'] ?? data['error'], context);
+        EasyLoading.showInfo(data['message'] ?? data['error']);
       } else {
-        Navigator.of(context).pop();
-        commonService.openSnackBar(data['message'] ?? data['error'], context);
+        EasyLoading.dismiss();
+        //commonService.openSnackBar(data['message'] ?? data['error'], context);
+        EasyLoading.showInfo(data['message'] ?? data['error']);
       }
     } catch (e) {
-      Navigator.of(context).pop();
-      commonService.openSnackBar(e.toString(), context);
+      EasyLoading.dismiss();
+      //commonService.openSnackBar(e.toString(), context);
+      EasyLoading.showError(e.toString());
     }
 
     /*var map = new Map<String, dynamic>();

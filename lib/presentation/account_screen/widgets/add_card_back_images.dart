@@ -119,7 +119,7 @@ class _AddBackCardImageState extends State<AddBackCardImage> {
                       });
                 },
                 child: DottedChooseFileWidget(
-                    title: 'Upload\n Back side of the Card', height: 60),
+                    title: 'Upload\n Weapon Permit', height: 60),
               ));
   }
 

@@ -30,12 +30,14 @@ class PropertyDataWidget extends StatelessWidget {
               number,
               style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
+                fontSize: 15
               ),
             ),
             Text(
               title,
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w500,
+                fontSize: 13),
             )
           ],
         ),

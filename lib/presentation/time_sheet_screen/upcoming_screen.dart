@@ -93,11 +93,11 @@ class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
                               onTap: () {
                                 screenNavigator(
                                     context,
-                                    TimeSheetDetailsWidet(
+                                    TimeSheetDetailsWidget(
+                                      shiftDate:upcomingData[index].shifts!.first.date.toString(),
+                                      shiftId: upcomingData[index].shifts!.first.id.toString(),
                                       propId: upcomingData[index].id.toString(),
-                                      propName: upcomingData[index]
-                                          .propertyName
-                                          .toString(),
+                                      propName: upcomingData[index].propertyName.toString(),
                                     ));
                               },
                               child: Padding(
@@ -160,22 +160,22 @@ class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
                                       ],
                                     ),
                                   ),
-                                  Text(
-                                    getDifference(
-                                            upcomingData[index]
-                                                .shifts!
-                                                .first
-                                                .clockIn
-                                                .toString(),
-                                            upcomingData[index]
-                                                .shifts!
-                                                .first
-                                                .clockOut
-                                                .toString())
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: 11, color: primaryColor),
-                                  ),
+                                  // Text(
+                                  //   getDifference(
+                                  //           upcomingData[index]
+                                  //               .shifts!
+                                  //               .first
+                                  //               .clockIn
+                                  //               .toString(),
+                                  //           upcomingData[index]
+                                  //               .shifts!
+                                  //               .first
+                                  //               .clockOut
+                                  //               .toString())
+                                  //       .toString(),
+                                  //   style: TextStyle(
+                                  //       fontSize: 11, color: primaryColor),
+                                  // ),
                                 ]),
                               ),
                             ),

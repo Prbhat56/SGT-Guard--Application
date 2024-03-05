@@ -7,22 +7,23 @@ import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
 class CheckPointListsWidget extends StatefulWidget {
-   CheckPointListsWidget({super.key,
+  CheckPointListsWidget({
+    super.key,
     this.title,
     this.imageUrl,
     // this.iscompleted,
     this.imageBaseUrl,
     this.checkpointNo,
     this.date,
-    required this.time, 
+    required this.time,
   });
-   String? title;
-   String? imageUrl;
-   String? imageBaseUrl;
+  String? title;
+  String? imageUrl;
+  String? imageBaseUrl;
   // String iscompleted;
-   String? date;
-   String time;
-   int? checkpointNo;
+  String? date;
+  String time;
+  int? checkpointNo;
 
   @override
   State<CheckPointListsWidget> createState() => _CheckPointListsWidgetState();
@@ -31,38 +32,49 @@ class CheckPointListsWidget extends StatefulWidget {
 class _CheckPointListsWidgetState extends State<CheckPointListsWidget> {
   @override
   Widget build(BuildContext context) {
+    print("=============> ${widget.imageUrl}");
     return Column(
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomCircularImage.getCircularImage(widget.imageBaseUrl.toString(),widget.imageUrl.toString(), false, 35, 0, 0),
+            widget.imageUrl == ''
+                ? CircleAvatar(
+                    radius: 35,
+                    backgroundColor: grey,
+                    backgroundImage: AssetImage('assets/sgt_logo.jpg'),
+                  )
+                : CustomCircularImage.getCircularImage(
+                    widget.imageBaseUrl.toString(),
+                    widget.imageUrl.toString(),
+                    false,
+                    35,
+                    0,
+                    0),
             const SizedBox(
               width: 10,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.title.toString(),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500)
-                  // style: CustomTheme.blackTextStyle(15),
-                ),
-                Text(
-                  widget.time.toString(),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal)
-                  // style: CustomTheme.blackTextStyle(15),
-                ),
+                Text(widget.title.toString(),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500)
+                    // style: CustomTheme.blackTextStyle(15),
+                    ),
+                Text(widget.time.toString(),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.normal)
+                    // style: CustomTheme.blackTextStyle(15),
+                    ),
                 Text(
                   widget.date.toString(),
                   style: TextStyle(
-                      color: Colors.blueAccent,
+                      color: CustomTheme.primaryColor,
                       fontSize: 13,
                       fontWeight: FontWeight.normal),
                 ),

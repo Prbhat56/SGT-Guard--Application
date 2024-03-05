@@ -32,7 +32,7 @@ class ShiftDetailsScreen extends StatelessWidget {
             TextButton(
               onPressed: () {},
               child: Text(
-                'Cencel',
+                'Cancel',
                 style: TextStyle(color: Colors.grey, fontSize: 17),
               ),
             ),

@@ -119,7 +119,7 @@ class _AddFrontCardImageState extends State<AddFrontCardImage> {
                       });
                 },
                 child: DottedChooseFileWidget(
-                    title: 'Upload\n Front side of the Card', height: 60),
+                    title: 'Upload\n Guard ID card', height: 60),
               ));
   }
 

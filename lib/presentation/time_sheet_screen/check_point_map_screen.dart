@@ -49,7 +49,7 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
       for (var i = 0; i < checkpoint.length; i++) {
         markers.add(Marker(
           markerId: MarkerId(checkpoint[i].id.toString()),
-          infoWindow: InfoWindow(title: checkpoint[i].propertyName),
+          infoWindow: InfoWindow(title: checkpoint[i].checkpointName),
           position: LatLng(
             double.parse(checkpoint[i].latitude.toString()),
             double.parse(checkpoint[i].longitude.toString()),
@@ -86,6 +86,7 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
                     return Stack(
                       children: [
                         GoogleMap(
+                          padding: EdgeInsets.only(bottom: 150, left: 15),
                           mapType: MapType.normal,
                           zoomControlsEnabled: true,
                           initialCameraPosition: CameraPosition(
@@ -146,8 +147,7 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
                                         padding: const EdgeInsets.only(
                                             left: 15.0, top: 10),
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: 5,

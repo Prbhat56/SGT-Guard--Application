@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ import '../widgets/custom_appbar_widget.dart';
 class CheckPointScanningScreen extends StatefulWidget {
   String? propId;
   String? shiftId;
-  CheckPointScanningScreen({super.key,this.propId,this.shiftId});
+  String? checkpointId;
+  String? checkpointHistoryId;
+  CheckPointScanningScreen({super.key,this.propId,this.shiftId,this.checkpointId,this.checkpointHistoryId});
 
   @override
   State<CheckPointScanningScreen> createState() =>
@@ -48,14 +51,18 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return result != null
         ? CheckpointReportScreen(
           checkPointqrData:result?.code,
-          propId:widget.propId,shiftId:widget.shiftId
+          propId:widget.propId,shiftId:widget.shiftId,
+          checkPointId:widget.checkpointId,
+          checkpointHistoryId:widget.checkpointHistoryId,
         )
-        : MediaQuery(
+        :
+         MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
               appBar: CustomAppBarWidget(appbarTitle: 'QR Scan'),
@@ -76,10 +83,10 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Scan QR code\n to CheckPoint TaskList !',
+                      'Scan QR code to view\n checkpoint details',
                       textScaleFactor: 1.0,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17, color: Colors.grey),
+                      style: TextStyle(fontSize: 17, color: Colors.grey,fontWeight: FontWeight.w400),
                     ),
                   ),
                   SizedBox(height: 88),
@@ -88,6 +95,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
               ),
             ),
           );
+  
   }
 
   Widget buildQrView(BuildContext context) => QRView(

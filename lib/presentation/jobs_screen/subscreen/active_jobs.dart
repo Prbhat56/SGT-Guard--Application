@@ -23,10 +23,31 @@ class _ActiveJobsTabState extends State<ActiveJobsTab> {
     return widget.activeData.isEmpty
         ? SizedBox(
             child: Center(
-              child: Text(
+              child:  Text(
                 'No Active Jobs Found',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     Container(
+              //       width: 120,
+              //       child: Image.asset(
+              //         'assets/no_active_properties.png',
+              //         fit: BoxFit.contain,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: 24,
+              //     ),
+              //     Text(
+              //       'No Active Properties',
+              //       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 17,color:Colors.grey.withOpacity(0.6)),
+              //     ),
+              //   ],
+              // ),
             ),
           )
         : ListView.builder(

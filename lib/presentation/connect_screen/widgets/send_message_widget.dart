@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
 import 'package:sgt/presentation/connect_screen/widgets/custom_shape.dart';
 import 'package:sgt/utils/const.dart';
 
 class SentMessageScreen extends StatelessWidget {
-  final String message;
+  final ChatMessages message;
   const SentMessageScreen({
     Key? key,
     required this.message,
@@ -29,7 +30,7 @@ class SentMessageScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  message,
+                  message.message,
                   style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ),

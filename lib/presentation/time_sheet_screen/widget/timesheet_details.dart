@@ -15,32 +15,57 @@ import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class TimeSheetDetailsWidet extends StatefulWidget {
+class TimeSheetDetailsWidget extends StatefulWidget {
   String propId = '';
   String propName = '';
-  TimeSheetDetailsWidet(
-      {super.key, required this.propId, required this.propName});
+  String shiftId = '';
+  String shiftDate = '';
+  TimeSheetDetailsWidget(
+      {super.key, required this.propId, required this.propName,required this.shiftId,required this.shiftDate});
 
   @override
-  State<TimeSheetDetailsWidet> createState() => _TimeSheetDetailsWidetState();
+  State<TimeSheetDetailsWidget> createState() => _TimeSheetDetailsWidgetState();
 }
 
 TimeSheetData detailsData = TimeSheetData();
 String imgBaseUrl = '';
 
-class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
-  Future<TimeSheetDetailsModel> getTimeSheetList() async {
+class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
+
+  // Future<TimeSheetDetailsModel> getTimeSheetList() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   Map<String, String> myHeader = <String, String>{
+  //     "Authorization": "Bearer ${prefs.getString('token')}",
+  //   };
+  //   String apiUrl = baseUrl + 'guard/duty-details/${widget.propId}';
+  //   final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+  //   if (response.statusCode == 201) {
+  //     final TimeSheetDetailsModel responseModel =
+  //         timeSheetDetailsModelFromJson(response.body);
+  //     detailsData = responseModel.data!;
+  //     imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
+  //     return responseModel;
+  //   } else {
+  //     return TimeSheetDetailsModel();
+  //   }
+  // }
+
+   Future<TimeSheetDetailsModel> getTimeSheetList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
     };
-    String apiUrl = baseUrl + 'guard/duty-details/${widget.propId}';
-    final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+     Map<String, String> myJsonBody = {
+        'property_id': widget.propId,
+        'shift_id': widget.shiftId,
+        'shift_date':widget.shiftDate,
+      };
+    String apiUrl = baseUrl + 'guard/timesheet-details';
+    final response = await http.post(Uri.parse(apiUrl), headers: myHeader,body: myJsonBody);
     if (response.statusCode == 201) {
       final TimeSheetDetailsModel responseModel =
           timeSheetDetailsModelFromJson(response.body);
       detailsData = responseModel.data!;
-
       imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
       return responseModel;
     } else {
@@ -50,6 +75,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: CustomAppBarWidget(appbarTitle: widget.propName),
       body: FutureBuilder(
@@ -88,7 +114,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                               borderRadius: BorderRadius.circular(50),
                               child: CachedNetworkImage(
                                   imageUrl: (imgBaseUrl.toString() +
-                                      '/' +
+                                      '' +
                                       detailsData
                                           .propertyAvatars!.first.propertyAvatar
                                           .toString()),
@@ -131,7 +157,8 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                                 SizedBox(
                                   width: 120,
                                   child: Text(
-                                    'Shift Time: ${detailsData.shifts!.isEmpty ? null : detailsData.shifts!.first.clockIn.toString()} - ${detailsData.shifts!.isEmpty ? null : detailsData.shifts!.first.clockOut.toString()}',
+                                    // 'Shift Time: ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockIn.toString()} - ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockOut.toString()}',
+                                  'Shift Time:  ${detailsData.jobDetails!.shiftTime.toString()}',
                                     maxLines: 2,
                                     style: TextStyle(
                                         fontSize: 15,
@@ -153,7 +180,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextFieldHeaderWidget(title: 'Completed Checkpoints:'),
-                        TextFieldHeaderWidget(title: '5')
+                        TextFieldHeaderWidget(title: detailsData.jobDetails!.completedCheckpoint.toString())
                       ],
                     ),
                   ),
@@ -164,7 +191,7 @@ class _TimeSheetDetailsWidetState extends State<TimeSheetDetailsWidet> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextFieldHeaderWidget(title: 'Missed Checkpoints:'),
-                        TextFieldHeaderWidget(title: '5')
+                        TextFieldHeaderWidget(title: detailsData.jobDetails!.remainingCheckpoint.toString())
                       ],
                     ),
                   ),

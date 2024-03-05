@@ -3,8 +3,12 @@ import 'dart:async';
 
 import 'package:carp_background_location/carp_background_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sgt/presentation/home.dart';
+import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/service/socket_home.dart';
+import 'package:sgt/theme/custom_theme.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:websocket_universal/websocket_universal.dart';
@@ -21,7 +25,6 @@ import '../settings_screen/cubit/toggle_switch/toggleswitch_cubit.dart';
 import '../time_sheet_screen/check_point_map_screen.dart';
 import 'widgets/check_points_widget.dart';
 import 'package:http/http.dart' as http;
-
 
 class CheckPointScreen extends StatefulWidget {
   CheckPointScreen({super.key});
@@ -57,7 +60,6 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
       // print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ===> ${checks}");
       return responseModel;
     } else {
-      print("*****************************");
       return CheckPointPropertyShiftWise(
         // checkpoint: [],
         status: response.statusCode,
@@ -93,7 +95,7 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
                 // Navigator.of(context).pop();
               },
             ),
-            centerTitle: true,
+            // centerTitle: true,
             title: Text(
               "Checkpoints",
               textScaleFactor: 1.0,
@@ -103,9 +105,24 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
             actions: [
               InkWell(
                   onTap: () {
+                    // screenNavigator(context, ClockInScreen());
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: CustomTheme.primaryColor,
+                    size: 30,
+                  )
+                  // SvgPicture.asset('assets/clock.svg')
+                  ),
+              SizedBox(
+                width: 12,
+              ),
+              InkWell(
+                  onTap: () {
                     screenNavigator(context, ClockInScreen());
                   },
-                  child: SvgPicture.asset('assets/clock.svg')),
+                  child: SvgPicture.asset('assets/clock.svg')
+                  ),
               IconButton(
                   onPressed: () {
                     BlocProvider.of<ToggleSwitchCubit>(context)
@@ -137,70 +154,85 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
           //   ],
           // ),
           backgroundColor: white,
-          body: 
-            // checkpoint!.length == 0
-            //   ? SizedBox(
-            //       child: Center(
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             Text(
-            //               'No CheckPoints Found',
-            //               style: TextStyle(fontWeight: FontWeight.bold),
-            //             ),
-            //             SizedBox(height: 20),
-            //             CustomButtonWidget(
-            //                 buttonTitle: 'Clock Out',
-            //                 onBtnPress: () {
-            //                   screenNavigator(
-            //                       context, CheckPointOutScanningScreen());
-            //                 })
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            //   : 
+          body:
+              // checkpoint!.length == 0
+              //   ? SizedBox(
+              //       child: Center(
+              //         child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             Text(
+              //               'No CheckPoints Found',
+              //               style: TextStyle(fontWeight: FontWeight.bold),
+              //             ),
+              //             SizedBox(height: 20),
+              //             CustomButtonWidget(
+              //                 buttonTitle: 'Clock Out',
+              //                 onBtnPress: () {
+              //                   screenNavigator(
+              //                       context, CheckPointOutScanningScreen());
+              //                 })
+              //           ],
+              //         ),
+              //       ),
+              //     )
+              //   :
               FutureBuilder(
-                  future: getCheckpointsList(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                          child: Container(
-                              height: 60,
-                              width: 60,
-                              child: CircularProgressIndicator()));
-                    } else {
-                      if (snapshot.data!.status != 201) {
-                        return Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "You are not assigned with this property",
-                            // snapshot.data!.message.toString(),
-                            style: TextStyle(color: Colors.red,fontSize: 16),
-                          ),
-                        );
-                      } else {
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              context
-                                      .watch<ToggleSwitchCubit>()
-                                      .state
-                                      .isSwitched
-                                  ? CheckPointMapScreen()
-                                  : CheckPointWidget(
-                                      property: property,
-                                      propertyImageBaseUrl:snapshot.data!.propertyImageBaseUrl,
-                                      checkpoint: checkpoint),
-                            ],
-                          ),
-                        );
-                      }
-                    }
-                  },
-                )),
+            future: getCheckpointsList(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                    child: Container(
+                        height: 60,
+                        width: 60,
+                        child: CircularProgressIndicator()));
+              } else {
+                if (snapshot.data!.status != 201) {
+                  return Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Something Went Wrong! Please Try Again to ClockIn",
+                          // snapshot.data!.message.toString(),
+                          style: TextStyle(color: Colors.red, fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: 12.dg,
+                        ),
+                        Container(
+                          width: 180,
+                          child: CustomButtonWidget(
+                              buttonTitle: 'Home',
+                              onBtnPress: () {
+                                screenNavigator(context, Home());
+                              }),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        context.watch<ToggleSwitchCubit>().state.isSwitched
+                            ? CheckPointMapScreen()
+                            : CheckPointWidget(
+                                property: property,
+                                propertyImageBaseUrl:
+                                    snapshot.data!.propertyImageBaseUrl,
+                                checkpoint: checkpoint),
+                      ],
+                    ),
+                  );
+                }
+              }
+            },
+          )),
     );
   }
 }

@@ -88,6 +88,7 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
                     child: Stack(
                       children: [
                         GoogleMap(
+                          padding: EdgeInsets.only(bottom: 150, left: 15),
                           mapType: MapType.normal,
                           zoomControlsEnabled: true,
                           initialCameraPosition: CameraPosition(
@@ -102,6 +103,7 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
                             _controller.complete(controller);
                           },
                           markers: Set<Marker>.of(markers),
+                          myLocationEnabled: true,
                         ),
                         Positioned(
                           bottom: 20,
@@ -136,7 +138,7 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
                                         width: 90,
                                         child: Image.network(
                                           fit: BoxFit.fill,
-                                          '${imgBaseUrl}/${myData.propertyAvatars!.first.propertyAvatar.toString()}',
+                                          '${imgBaseUrl}${myData.propertyAvatars!.first.propertyAvatar.toString()}',
                                           errorBuilder:
                                               (context, error, stackTrace) {
                                             return Image.asset(
@@ -162,7 +164,7 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 5,
+                                              height: 2,
                                             ),
                                             Text(
                                               'Check-in by ${myData.shifts!.first.clockIn.toString()}',

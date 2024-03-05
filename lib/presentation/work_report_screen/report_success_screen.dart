@@ -41,7 +41,7 @@ class _ReportSuccessScreenState extends State<ReportSuccessScreen> {
                 Center(
                   child: Icon(
                     Icons.check_circle,
-                    color: greenColor,
+                    color: const Color.fromRGBO(76, 217, 100, 1),
                     size: 60,
                   ),
                 ),

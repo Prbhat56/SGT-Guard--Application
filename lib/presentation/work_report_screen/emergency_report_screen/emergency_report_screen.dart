@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
@@ -5,10 +7,13 @@ import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/time_sheet_screen/model/assigned_propertieslist_modal.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/today_active_model.dart';
+import 'package:sgt/presentation/widgets/custom_textfield_report_widget.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/widget/report_submit_success.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/propertieslist_picker.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/task_picker.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -45,6 +50,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   String? longValue = '';
   TextEditingController _detailsController = TextEditingController();
   TextEditingController _actionController = TextEditingController();
+  TextEditingController _policeReportController = TextEditingController();
   TextEditingController _officerController = TextEditingController();
   TextEditingController _officeController = TextEditingController();
   String? propertyName;
@@ -122,12 +128,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
       children: [
         Column(
           children: [
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Name',
               hintText: 'Name',
               controller: nameController,
             ),
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Phone Number',
               hintText: 'Phone Number',
               keyboardType: TextInputType.number,
@@ -152,12 +158,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
       children: [
         Column(
           children: [
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Name',
               hintText: 'Name',
               controller: nameController,
             ),
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Phone Number',
               hintText: 'Phone Number',
               keyboardType: TextInputType.number,
@@ -232,6 +238,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     request.fields['witnesses_phone[]'] = witnessPhone;
 
     request.fields['action_taken'] = _actionController.text.toString();
+    request.fields['police_report'] = _policeReportController.text.toString();
     request.fields['officer_name'] = _officerController.text.toString();
     request.fields['officer_designation'] = _officeController.text.toString();
 
@@ -268,7 +275,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     }
   }
 
-  List<TodaysDatum> reportDatum = [];
+  // List<TodaysDatum> reportDatum = [];
+  List<AssignedDatum> reportDatum = [];
   String? imageBaseUrl;
 
   @override
@@ -279,33 +287,62 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     item2.addAll({0: newWitnessMethod(context, 0)});
   }
 
-  Future<TodayActiveModel> getTasks() async {
+  Future<AssignedPropertiesListModal> getTasks() async {
     try {
       EasyLoading.show();
-      String apiUrl = baseUrl + apiRoutes['todaysActivePropertyList']!;
+      String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Map<String, String> myHeader = <String, String>{
         "Authorization": "Bearer ${prefs.getString('token')}",
       };
       var response = await http.get(Uri.parse(apiUrl), headers: myHeader);
       if (response.statusCode == 201) {
-        final TodayActiveModel responseModel =
-            todayModelFromJson(response.body);
+        final AssignedPropertiesListModal responseModel =
+            assignedPropertiesListModalFromJson(response.body);
         reportDatum = responseModel.data ?? [];
         print('Reports: $reportDatum');
-        imageBaseUrl = responseModel.imageBaseUrl;
+        imageBaseUrl = responseModel.propertyImageBaseUrl;
         EasyLoading.dismiss();
         return responseModel;
       } else {
         EasyLoading.dismiss();
-        return TodayActiveModel(
-            data: [], imageBaseUrl: '', status: response.statusCode);
+        return AssignedPropertiesListModal(
+            data: [], propertyImageBaseUrl: '', status: response.statusCode);
       }
     } catch (e) {
       EasyLoading.dismiss();
+      log('Exception: ${e.toString()}');
       throw Exception(e.toString());
     }
   }
+
+  // Future<TodayActiveModel> getTasks() async {
+  //   try {
+  //     EasyLoading.show();
+  //     String apiUrl = baseUrl + apiRoutes['todaysActivePropertyList']!;
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     Map<String, String> myHeader = <String, String>{
+  //       "Authorization": "Bearer ${prefs.getString('token')}",
+  //     };
+  //     var response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+  //     if (response.statusCode == 201) {
+  //       final TodayActiveModel responseModel =
+  //           todayModelFromJson(response.body);
+  //       reportDatum = responseModel.data ?? [];
+  //       print('Reports: $reportDatum');
+  //       imageBaseUrl = responseModel.imageBaseUrl;
+  //       EasyLoading.dismiss();
+  //       return responseModel;
+  //     } else {
+  //       EasyLoading.dismiss();
+  //       return TodayActiveModel(
+  //           data: [], imageBaseUrl: '', status: response.statusCode);
+  //     }
+  //   } catch (e) {
+  //     EasyLoading.dismiss();
+  //     throw Exception(e.toString());
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -314,6 +351,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     _titleController.dispose();
     _detailsController.dispose();
     _actionController.dispose();
+    _policeReportController.dispose();
     _officerController.dispose();
     _officeController.dispose();
 
@@ -341,11 +379,22 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Property Name \*',
-                      style: CustomTheme.textField_Headertext_Style,
-                      textScaleFactor: 1.0,
-                    ),
+                    RichText(
+                        text: TextSpan(
+                            text: 'Property Name',
+                            style: CustomTheme.textField_Headertext_Style,
+                            children: [
+                          TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ))
+                        ])),
+                    // Text(
+                    //   'Property Name \*',
+                    //   style: CustomTheme.textField_Headertext_Style,
+                    //   textScaleFactor: 1.0,
+                    // ),
                     SizedBox(
                       height: 10,
                     ),
@@ -375,7 +424,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                                 borderSide:
                                     BorderSide(color: seconderyMediumColor)),
                             fillColor: seconderyMediumColor,
-                            hintText: 'Enter Property Name',
+                            hintText: 'Select Assigned Property',
                             hintStyle: TextStyle(
                               color: Colors.grey,
                             ),
@@ -397,7 +446,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   ],
                 ),
                 propertyClicked
-                    ? CustomListPicker(
+                    ? PropertiesListPicker(
                         onCallback: (() {
                           setState(() {
                             propertyClicked = !propertyClicked;
@@ -407,17 +456,40 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                         reportDatum: reportDatum,
                         imageBaseUrl: imageBaseUrl,
                       )
+                    // CustomListPicker(
+                    //     onCallback: (() {
+                    //       setState(() {
+                    //         propertyClicked = !propertyClicked;
+                    //         _propertyNameController.text = propertyName ?? "";
+                    //       });
+                    //     }),
+                    //     reportDatum: reportDatum,
+                    //     imageBaseUrl: imageBaseUrl,
+                    //   )
                     : Container(),
                 SizedBox(
                   height: 30,
                 ),
                 CustomTextField(
                   controller: _titleController,
-                  textfieldTitle: 'Title \*',
+                  textfieldTitle: 'Title',
                   hintText: 'Enter Title',
                   isFilled: false,
                 ),
-
+                RichText(
+                    text: TextSpan(
+                        text: 'Emergency Date & Time',
+                        style: CustomTheme.textField_Headertext_Style,
+                        children: [
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ))
+                    ])),
+                SizedBox(
+                  height: 10,
+                ),
                 EmergencyDateTimeWidget(), //taking date and time using this widget
 
                 EmergencyLocationWidget(), //taking location widget
@@ -425,7 +497,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 CustomTextField(
                   controller: _detailsController,
                   textfieldTitle: 'Emergency Details',
-                  hintText: 'Enter details',
+                  hintText: 'Something here',
                   isFilled: false,
                   maxLines: 5,
                 ),
@@ -434,7 +506,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 Text(
                   'People Involved',
-                  style: CustomTheme.textField_Headertext_Style,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: CustomTheme.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  // CustomTheme.textField_Headertext_Style,
                   textScaleFactor: 1.0,
                 ),
                 SizedBox(
@@ -481,7 +558,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 Text(
                   'Witnesss',
-                  style: CustomTheme.textField_Headertext_Style,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: CustomTheme.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  // CustomTheme.textField_Headertext_Style,
                   textScaleFactor: 1.0,
                 ),
                 const SizedBox(
@@ -528,20 +610,25 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 CustomTextField(
                   controller: _actionController,
-                  textfieldTitle: 'Action Taker',
-                  hintText: 'Enter details',
+                  textfieldTitle: 'Action Taken',
+                  hintText: 'Something here',
                   isFilled: false,
                   maxLines: 5,
                 ),
-                CustomUnderlineTextFieldWidget(
+                CustomReportTextField(
+                  controller: _policeReportController,
+                  textfieldTitle: 'Police Report#',
+                  hintText: 'Police report number',
+                ),
+                CustomReportTextField(
                   controller: _officerController,
                   textfieldTitle: 'Officer Name#',
                   hintText: 'Officer Name',
                 ),
 
-                CustomUnderlineTextFieldWidget(
+                CustomReportTextField(
                   controller: _officeController,
-                  textfieldTitle: 'Office#',
+                  textfieldTitle: 'Officer#',
                   hintText: 'Officer Designation',
                 ),
 
@@ -549,6 +636,9 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   'Towed',
                   style: CustomTheme.textField_Headertext_Style,
                   textScaleFactor: 1.0,
+                ),
+                SizedBox(
+                  height: 5,
                 ),
                 DropdownButtonFormField<String>(
                   value: towedValue,
@@ -594,11 +684,22 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                Text(
-                  'Upload Record Sample',
-                  style: CustomTheme.blueTextStyle(17, FontWeight.w500),
-                  textScaleFactor: 1.0,
-                ),
+                RichText(
+                    text: TextSpan(
+                        text: 'Upload Record Sample',
+                        style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                        children: [
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ))
+                    ])),
+                // Text(
+                //   'Upload Record Sample',
+                //   style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                //   textScaleFactor: 1.0,
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -622,7 +723,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     },
                     child: DottedChooseFileWidget(
                       title: 'Choose a file',
-                      height: 50,
+                      height: 15,
                     )),
                 Center(
                   child: Container(
@@ -632,10 +733,25 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           onBtnPress: () {
                             if (_propertyNameController.text.isEmpty) {
                               CommonService().openSnackBar(
-                                  'Please enter Property name', context);
+                                  'Please Select Property', context);
                             } else if (_titleController.text.isEmpty) {
                               CommonService()
                                   .openSnackBar('Please enter title', context);
+                            } else if (_actionController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter action taken', context);
+                            } else if (_policeReportController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter Police report number', context);
+                            } else if (_officerController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter Officer name', context);
+                            } else if (_officeController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter officer designation', context);
+                            } else if (imageFileList!.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please upload Record Sample', context);
                             } else {
                               uploadImage();
                             }

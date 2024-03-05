@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/property_details_screen.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 import '../../property_details_screen/inactive_property_details_screen.dart';
 import '../../widgets/custom_circular_image_widget.dart';
@@ -96,14 +97,27 @@ class _JobsTileState extends State<JobsTile> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 22.0, top: 6, right: 20),
-                      child: Text(
-                        widget.inActiveData!.propertyDescription!.toString(),
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Color.fromARGB(255, 75, 75, 75),
-                            overflow: TextOverflow.ellipsis),
+                      padding: EdgeInsets.only(left:18,top: 6, right: 20),
+                      child: Row(
+                        children: [
+                          Text("${widget.inActiveData!.shifts!.length.toString()} Shifts",
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 75, 75, 75),
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          SizedBox(width: 12,),
+                          Text("Shift Start- ${widget.inActiveData!.latestShiftClockIn!.toString()}",
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color:CustomTheme.primaryColor,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ],
                       ),
                     ),
                   ],

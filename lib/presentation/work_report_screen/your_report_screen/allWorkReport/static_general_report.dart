@@ -149,11 +149,22 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Property Name \*',
-                    style: CustomTheme.textField_Headertext_Style,
-                    textScaleFactor: 1.0,
-                  ),
+                  RichText(
+                      text: TextSpan(
+                          text: 'Property Name',
+                          style: CustomTheme.textField_Headertext_Style,
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+                  // Text(
+                  //   'Property Name \*',
+                  //   style: CustomTheme.textField_Headertext_Style,
+                  //   textScaleFactor: 1.0,
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
@@ -200,13 +211,13 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
               ),
               CustomTextField(
                 controller: _titleController,
-                textfieldTitle: 'Title \*',
+                textfieldTitle: 'Title',
                 hintText: 'Enter Title',
                 isFilled: false,
               ),
               CustomTextField(
                 controller: _notesController,
-                textfieldTitle: 'Notes \*',
+                textfieldTitle: 'Notes ',
                 hintText: 'Enter Note Here',
                 isFilled: false,
                 maxLines: 5,
@@ -236,8 +247,19 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                           }),
                     )
                   : Container(),
-              Text('Upload Record Sample',
-                  style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
+               RichText(
+                      text: TextSpan(
+                          text: 'Upload Record Sample',
+                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+              // Text('Upload Record Sample',
+              //     style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
               const SizedBox(
                 height: 20,
               ),
@@ -261,7 +283,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                   },
                   child: DottedChooseFileWidget(
                     title: 'Choose a file',
-                    height: 50,
+                    height: 15,
                   )),
               imageFileList!.isNotEmpty
                   ? Container()
@@ -282,6 +304,9 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                         } else if (_notesController.text.isEmpty) {
                           CommonService()
                               .openSnackBar('Please enter notes', context);
+                        } else if (imageFileList!.isEmpty) {
+                            CommonService()
+                              .openSnackBar('Please upload Record Sample', context);
                         } else {
                           uploadImage();
                         }

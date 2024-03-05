@@ -116,11 +116,14 @@ class _ClockInScreenState extends State<ClockInScreen> {
                         const SizedBox(height: 25),
                         SvgPicture.asset('assets/green_tick.svg'),
                         const SizedBox(height: 10),
-                        Text(
-                          // 'You are currently clocked in\n and ready to go!',
-                          snapshot.data!.message.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15, color: primaryColor),
+                        Container(
+                          width: 210,
+                          child: Text(
+                            // 'You are currently clocked in\n and ready to go!',
+                            snapshot.data!.message.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15, color: primaryColor),
+                          ),
                         ),
                         const SizedBox(height: 40),
                         Container(
@@ -156,15 +159,15 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                         // 'Matheus Paolo',
                                         snapshot.data!.jobDetails!.firstName
                                                 .toString() +
-                                            '' +
+                                            ' ' +
                                             snapshot.data!.jobDetails!.lastName
                                                 .toString(),
                                         style: CustomTheme.blackTextStyle(17)),
                                     const SizedBox(
                                       height: 2,
                                     ),
-                                    const Text(
-                                      'Greylock Security',
+                                    Text(
+                                      snapshot.data!.jobDetails!.guardPosition.toString(),
                                       style: TextStyle(
                                           fontSize: 13, color: Colors.grey),
                                     ),
@@ -211,7 +214,8 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                               color: white, fontSize: 17),
                                         ),
                                         onPressed: () {
-                                          screenNavigator(context, CheckPointScreen());
+                                          screenNavigator(
+                                              context, CheckPointScreen());
                                           // propertyId: snapshot.data!.property!.id,
                                           // shiftId: widget.shiftId));
                                         }),

@@ -38,10 +38,10 @@ class CustomErrorWidget {
           Icon(
             Icons.error_outline,
             color: Colors.red,
-            size: 17,
+            size: 12,
           ),
           Text(
-            ' Wrong password',
+            ' Enter Valid password',
             style: TextStyle(color: Colors.red, fontSize: 13),
           ),
         ],

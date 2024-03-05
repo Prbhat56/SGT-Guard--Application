@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -77,7 +76,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
       child: Scaffold(
           appBar: CustomAppBarWidget(appbarTitle: 'Apply Leave'),
           backgroundColor: Colors.white,
@@ -186,9 +185,9 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                     'Term & Conditions',
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
-                        fontSize: 17,
-                        color: Colors.black,
-                      ),
+                          fontSize: 17,
+                          color: CustomTheme.primaryColor,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   SizedBox(
@@ -228,30 +227,42 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                               );
                             }),
                       ),*/
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 8, right: 6),
-                          height: 3,
-                          width: 3,
-                          color: black,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Text(
-                            (leaveTerms == '' ? 'No Leave Policy' : leaveTerms),
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black,
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    decoration: BoxDecoration(
+                        // color: AppColors.white,
+                        border: Border.all(width: 1, color: CustomTheme.grey),
+                        borderRadius:BorderRadius.all(Radius.elliptical(5, 5))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 8, right: 6),
+                            height: 3,
+                            width: 3,
+                            color: black,
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Text(
+                                (leaveTerms == ''
+                                    ? 'No Leave Policy'
+                                    : leaveTerms),
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -296,6 +307,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                                 : screenNavigator(
                                     context,
                                     ApplyLeaveScreen2(
+                                      difference:dt2.difference(dt1).inDays.toString(),
                                       fromDate: fromDate,
                                       toDate: toDate,
                                     ));

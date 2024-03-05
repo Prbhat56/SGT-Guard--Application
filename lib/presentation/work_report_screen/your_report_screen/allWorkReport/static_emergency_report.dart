@@ -7,6 +7,7 @@ import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import 'package:sgt/presentation/widgets/custom_textfield_report_widget.dart';
 import 'package:sgt/presentation/widgets/custom_textfield_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import 'package:sgt/presentation/widgets/dotted_choose_file_widget.dart';
@@ -50,6 +51,7 @@ class _StaticEmergencyReportScreenState
   String? longValue = '';
   TextEditingController _detailsController = TextEditingController();
   TextEditingController _actionController = TextEditingController();
+  TextEditingController _policeReportController = TextEditingController();
   TextEditingController _officerController = TextEditingController();
   TextEditingController _officeController = TextEditingController();
 
@@ -113,12 +115,12 @@ class _StaticEmergencyReportScreenState
       children: [
         Column(
           children: [
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Name',
               hintText: 'Name',
               controller: nameController,
             ),
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Phone Number',
               hintText: 'Phone Number',
               keyboardType: TextInputType.number,
@@ -143,12 +145,12 @@ class _StaticEmergencyReportScreenState
       children: [
         Column(
           children: [
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Name',
               hintText: 'Name',
               controller: nameController,
             ),
-            CustomUnderlineTextFieldWidget(
+            CustomReportTextField(
               textfieldTitle: 'Phone Number',
               hintText: 'Phone Number',
               keyboardType: TextInputType.number,
@@ -224,6 +226,7 @@ class _StaticEmergencyReportScreenState
     request.fields['witnesses_name[]'] = witnessNames;
     request.fields['witnesses_phone[]'] = witnessPhone;
     request.fields['action_taken'] = _actionController.text.toString();
+    request.fields['police_report'] = _policeReportController.text.toString();
     request.fields['officer_name'] = _officerController.text.toString();
     request.fields['officer_designation'] = _officeController.text.toString();
 
@@ -275,6 +278,7 @@ class _StaticEmergencyReportScreenState
     _titleController.dispose();
     _detailsController.dispose();
     _actionController.dispose();
+    _policeReportController.dispose();
     _officerController.dispose();
     _officeController.dispose();
   }
@@ -299,11 +303,22 @@ class _StaticEmergencyReportScreenState
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Property Name \*',
-                      style: CustomTheme.textField_Headertext_Style,
-                      textScaleFactor: 1.0,
-                    ),
+                    RichText(
+                      text: TextSpan(
+                          text: 'Property Name',
+                          style: CustomTheme.textField_Headertext_Style,
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+                    // Text(
+                    //   'Property Name \*',
+                    //   style: CustomTheme.textField_Headertext_Style,
+                    //   textScaleFactor: 1.0,
+                    // ),
                     SizedBox(
                       height: 10,
                     ),
@@ -352,11 +367,24 @@ class _StaticEmergencyReportScreenState
                 ),
                 CustomTextField(
                   controller: _titleController,
-                  textfieldTitle: 'Title \*',
+                  textfieldTitle: 'Title',
                   hintText: 'Enter Title',
                   isFilled: false,
                 ),
-
+                RichText(
+                    text: TextSpan(
+                        text: 'Emergency Date & Time',
+                        style: CustomTheme.textField_Headertext_Style,
+                        children: [
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ))
+                    ])),
+                SizedBox(
+                  height: 10,
+                ),
                 EmergencyDateTimeWidget(), //taking date and time using this widget
 
                 EmergencyLocationWidget(), //taking location widget
@@ -467,20 +495,25 @@ class _StaticEmergencyReportScreenState
                 ),
                 CustomTextField(
                   controller: _actionController,
-                  textfieldTitle: 'Action Taker',
-                  hintText: 'Enter details',
+                  textfieldTitle: 'Action Taken',
+                  hintText: 'Something here',
                   isFilled: false,
                   maxLines: 5,
                 ),
-                CustomUnderlineTextFieldWidget(
+                 CustomReportTextField(
+                  controller: _policeReportController,
+                  textfieldTitle: 'Police Report#',
+                  hintText: 'Police report number',
+                ),
+               CustomReportTextField(
                   controller: _officerController,
                   textfieldTitle: 'Officer Name#',
                   hintText: 'Officer Name',
                 ),
 
-                CustomUnderlineTextFieldWidget(
+                CustomReportTextField(
                   controller: _officeController,
-                  textfieldTitle: 'Office#',
+                  textfieldTitle: 'Officer#',
                   hintText: 'Officer Designation',
                 ),
 
@@ -489,6 +522,9 @@ class _StaticEmergencyReportScreenState
                   style: CustomTheme.textField_Headertext_Style,
                   textScaleFactor: 1.0,
                 ),
+                SizedBox(
+                    height: 5,
+                  ),
                 DropdownButtonFormField<String>(
                   value: towedValue,
                   isExpanded: true,
@@ -533,11 +569,22 @@ class _StaticEmergencyReportScreenState
                 const SizedBox(
                   height: 18,
                 ),
-                Text(
-                  'Upload Record Sample',
-                  style: CustomTheme.blueTextStyle(17, FontWeight.w500),
-                  textScaleFactor: 1.0,
-                ),
+                 RichText(
+                      text: TextSpan(
+                          text: 'Upload Record Sample',
+                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+                // Text(
+                //   'Upload Record Sample',
+                //   style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                //   textScaleFactor: 1.0,
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -561,7 +608,7 @@ class _StaticEmergencyReportScreenState
                     },
                     child: DottedChooseFileWidget(
                       title: 'Choose a file',
-                      height: 50,
+                      height: 15,
                     )),
                 Center(
                   child: Container(
@@ -569,12 +616,30 @@ class _StaticEmergencyReportScreenState
                       child: CustomButtonWidget(
                           buttonTitle: 'Send',
                           onBtnPress: () {
-                            if (_propertyNameController.text.isEmpty) {
+                           if (_propertyNameController.text.isEmpty) {
                               CommonService().openSnackBar(
-                                  'Please enter Property name', context);
+                                  'Please Select Property', context);
                             } else if (_titleController.text.isEmpty) {
                               CommonService()
                                   .openSnackBar('Please enter title', context);
+                            } else if (_detailsController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter emergency details', context);
+                            } else if (_actionController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter action taken', context);
+                            } else if (_policeReportController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter Police report number', context);
+                            } else if (_officerController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter Officer name', context);
+                            } else if (_officeController.text.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please enter officer designation', context);
+                            } else if (imageFileList!.isEmpty) {
+                              CommonService().openSnackBar(
+                                  'Please upload Record Sample', context);
                             } else {
                               uploadImage();
                             }

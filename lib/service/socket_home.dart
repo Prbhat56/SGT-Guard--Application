@@ -75,23 +75,23 @@ class _SocketHomeState extends State<SocketHome> {
   void connectToSocket() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
 
+//ws://appdeveloperpro.online:8090
     textSocketHandler = IWebSocketHandler<String, String>.createClient(
-      // "ws://appdeveloperpro.online:8090",
       "ws://arrowtrack-solutions.com:8090",
       textSocketProcessor,
       connectionOptions: connectionOptions,
     );
 
     /// 2. Listen to webSocket messages:
-    // textSocketHandler.incomingMessagesStream.listen((inMsg) {
-    //   print('> webSocket  got text message from server: "$inMsg" '
-    //       '[ping: ${textSocketHandler.pingDelayMs}]');
-    //   textMsg = "$inMsg";
-    // });
-    textSocketHandler.outgoingMessagesStream.listen((inMsg) {
-      print('> webSocket sent text message to server: "$inMsg" '
-          '[ping: ${textSocketHandler.pingDelayMs}]');
+    textSocketHandler.incomingMessagesStream.listen((inMsg) {
+      // print('> webSocket  got text message from server: "$inMsg" '
+      //     '[ping: ${textSocketHandler.pingDelayMs}]');
       textMsg = "$inMsg";
+    });
+    textSocketHandler.outgoingMessagesStream.listen((inMsg) {
+      // print('> webSocket sent text message to server: "$inMsg" '
+      //     '[ping: ${textSocketHandler.pingDelayMs}]');
+      //textMsg = "$inMsg";
     });
   }
 
@@ -123,7 +123,7 @@ class _SocketHomeState extends State<SocketHome> {
       "longitude": "${_lastLocation!.longitude.toString()}",
       "type": "guard",
       "user_email": "${prefs.getString("email")}",
-      "background_task": 1
+      "isBackground": true
     };
     final String encodedData = json.encode(myData);
 

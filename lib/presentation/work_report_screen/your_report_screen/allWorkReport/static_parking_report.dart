@@ -168,11 +168,22 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Property Name \*',
-                        style: CustomTheme.textField_Headertext_Style,
-                        textScaleFactor: 1.0,
-                      ),
+                      // Text(
+                      //   'Property Name \*',
+                      //   style: CustomTheme.textField_Headertext_Style,
+                      //   textScaleFactor: 1.0,
+                      // ),
+                      RichText(
+                          text: TextSpan(
+                              text: 'Property Name',
+                              style: CustomTheme.textField_Headertext_Style,
+                              children: [
+                            TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ))
+                          ])),
                       SizedBox(
                         height: 10,
                       ),
@@ -220,7 +231,7 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                   ),
                   CustomTextField(
                     controller: _titleController,
-                    textfieldTitle: 'Title \*',
+                    textfieldTitle: 'Title',
                     hintText: 'Enter Title',
                     isFilled: false,
                   ),
@@ -258,6 +269,9 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                     'Towed',
                     style: CustomTheme.textField_Headertext_Style,
                     textScaleFactor: 1.0,
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   DropdownButtonFormField<String>(
                     value: towedValue,
@@ -300,8 +314,19 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                               }),
                         )
                       : Container(),
-                  Text('Upload Record Sample',
-                      style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
+                       RichText(
+                      text: TextSpan(
+                          text: 'Upload Record Sample',
+                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+                  // Text('Upload Record Sample',
+                  //     style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
                   const SizedBox(
                     height: 20,
                   ),
@@ -325,7 +350,7 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                     },
                     child: DottedChooseFileWidget(
                       title: 'Choose a file',
-                      height: 50,
+                      height: 15,
                     ),
                   ),
                 ],
@@ -340,12 +365,30 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                     buttonTitle: 'Send',
                     onBtnPress: () {
                       if (_propertyNameController.text.isEmpty) {
-                        CommonService().openSnackBar(
-                            'Please enter Property name', context);
+                        CommonService()
+                            .openSnackBar('Please Select Property', context);
                       } else if (_titleController.text.isEmpty) {
-                          CommonService()
-                              .openSnackBar('Please enter title', context);
-                        } else {
+                        CommonService()
+                            .openSnackBar('Please enter title', context);
+                      } else if (_vehicleTypeController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter manufacturer', context);
+                      } else if (_modelController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter model', context);
+                      } else if (_colorController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter color', context);
+                      } else if (_lincenseController.text.isEmpty) {
+                        CommonService().openSnackBar(
+                            'Please enter licence number', context);
+                      } else if (_stateMyController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter state', context);
+                      } else if (imageFileList!.isEmpty) {
+                        CommonService().openSnackBar(
+                            'Please upload Record Sample', context);
+                      } else {
                         uploadImage();
                       }
                     }))

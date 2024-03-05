@@ -35,6 +35,26 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                 'No Complete Timesheet Found',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     Container(
+              //       width: 120,
+              //       child: Image.asset(
+              //         'assets/no_upcoming_shifts.png',
+              //         fit: BoxFit.contain,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: 24,
+              //     ),
+              //     Text(
+              //       'No Completed Shifts',
+              //       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 17,color:Colors.grey.withOpacity(0.6)),
+              //     ),
+              //   ],
+              // ),
             ),
           )
         : ListView.builder(
@@ -49,7 +69,9 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                       onTap: () {
                         screenNavigator(
                             context,
-                            TimeSheetDetailsWidet(
+                            TimeSheetDetailsWidget(
+                              shiftDate:widget.completedData[index].shifts!.first.date.toString(),
+                              shiftId:widget.completedData[index].shifts!.first.id.toString(),
                               propId: widget.completedData[index].id.toString(),
                               propName: widget.completedData[index].propertyName
                                   .toString(),
@@ -101,7 +123,7 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                                 ),
                                 Text(
                                   //'${widget.completedData[index].shifts!.first.clockIn} - ${widget.completedData[index].shifts!.first.clockOut}',
-                                  '${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockIn.toString()} - ${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockOut.toString()}',
+                                  '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockIn.toString()} - ${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockOut.toString()}',
                                   style: const TextStyle(
                                       fontSize: 11, color: Colors.grey),
                                 ),
@@ -110,8 +132,8 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                           ),
                           Text(
                             getDifference(
-                                    '${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockIn}',
-                                    '${widget.completedData[index].shifts!.isEmpty ? null : widget.completedData[index].shifts!.first.clockOut}')
+                                    '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockIn}',
+                                    '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockOut}')
                                 .toString(),
                             style: TextStyle(fontSize: 11, color: primaryColor),
                           ),

@@ -1,7 +1,9 @@
-import 'dart:convert';
+// ignore_for_file: deprecated_member_use
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
@@ -119,6 +121,8 @@ class SignOutDialog extends StatelessWidget {
       //Map<String, dynamic> jsonMap = json.decode(value);
       //commonService.openSnackBar(jsonMap['message'],context);
       // commonService.clearLocalStorage();
+      FirebaseHelper.signOut();
+      FirebaseHelper.auth = FirebaseAuth.instance;
       commonService.logDataClear();
       commonService.clearLocalStorage();
       screenNavigator(context, SignInScreen());

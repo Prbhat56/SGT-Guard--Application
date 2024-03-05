@@ -1,22 +1,21 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/password_change_success_screen.dart';
 import 'package:sgt/presentation/authentication_screen/widget/error_widgets.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
-import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import '../../utils/const.dart';
-
 
 class ChangePasswordAfterForgotScreen extends StatefulWidget {
   final String email;
@@ -27,10 +26,11 @@ class ChangePasswordAfterForgotScreen extends StatefulWidget {
       _ChangePasswordAfterForgotScreenState();
 }
 
-class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterForgotScreen> {
+class _ChangePasswordAfterForgotScreenState
+    extends State<ChangePasswordAfterForgotScreen> {
   late TextEditingController _newpasswordController;
   late TextEditingController _reenteredpasswordController;
-  
+
   bool ispasswordvalid = true;
   @override
   void initState() {
@@ -57,9 +57,9 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                height: 30.h,
-              ),
+            SizedBox(
+              height: 30.h,
+            ),
             // CustomUnderlineTextFieldWidget(
             //   bottomPadding: 7,
             //   textfieldTitle: 'New Password',
@@ -208,7 +208,7 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
             //     //   ),
             //     // ),
             //   ],
-            // ),    
+            // ),
             // Spacer(),
             // CustomButtonWidget(
             //   buttonTitle: 'Update',
@@ -242,8 +242,8 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
             // SizedBox(
             //   height: 30.h,
             // )
-          
-          CustomUnderlineTextFieldWidget(
+
+            CustomUnderlineTextFieldWidget(
               textfieldTitle: 'New Password',
               hintText: 'Enter Password',
               controller: _newpasswordController,
@@ -317,7 +317,7 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
                 width: 343.w,
                 child: CupertinoButton(
                   color: BlocProvider.of<IspasswordmarchedCubit>(context,
-                            listen: true)
+                              listen: true)
                           .state
                           .isValid
                       ? primaryColor
@@ -334,44 +334,57 @@ class _ChangePasswordAfterForgotScreenState extends State<ChangePasswordAfterFor
                     //         .state
                     //         .isValid
                     //     ?
-                        // print(widget.email);
-                        // print(_newpasswordController.text.toString());
-                        // print(_reenteredpasswordController.text.toString());
-                        passwordChanged(widget.email,_newpasswordController.text.toString(),_reenteredpasswordController.text.toString(),context);
-                        //  Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) {
-                        //         return const PasswordChangeSuccessScreen();
-                        //       },
-                        //     ),
-                        //   )
-                        // : null;
+                    // print(widget.email);
+                    // print(_newpasswordController.text.toString());
+                    // print(_reenteredpasswordController.text.toString());
+                    passwordChanged(
+                        widget.email,
+                        _newpasswordController.text.toString(),
+                        _reenteredpasswordController.text.toString(),
+                        context);
+                    //  Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) {
+                    //         return const PasswordChangeSuccessScreen();
+                    //       },
+                    //     ),
+                    //   )
+                    // : null;
                   },
                 ),
               ),
             ),
-          
           ]),
         ),
       ),
     );
   }
 
-  void passwordChanged(email,newPassword,reEnterPassword,context) 
-    async{  
-  // print(email);
-  // print(newPassword);
-  // print(reEnterPassword);
-      var map = new Map<String,dynamic>();
-      map['email']= email;
-      map['password']=newPassword;
-      map['password_confirmation']=reEnterPassword;
-      var apiService = ApiCallMethodsService();
-      apiService.post(apiRoutes['resetPassword']!, map).then((value) {
+  void passwordChanged(email, newPassword, reEnterPassword, context) async {
+    EasyLoading.show();
+
+    Map<String, dynamic> myJsonBody = {
+      'email': email,
+      'password': newPassword,
+      'password_confirmation': reEnterPassword,
+    };
+    print(myJsonBody.toString());
+
+    // var map = new Map<String,dynamic>();
+    // map['email']= email;
+    // map['password']=newPassword;
+    // map['password_confirmation']=reEnterPassword;
+    var apiService = ApiCallMethodsService();
+    apiService.post(apiRoutes['resetPassword']!, myJsonBody).then((value) {
+      EasyLoading.dismiss();
+
+      FirebaseHelper.changeMyPassword(newPassword).then((value) {
         screenNavigator(context, PasswordChangeSuccessScreen());
-      }).onError((error, stackTrace) {
-        print(error);
       });
-   }
+    }).onError((error, stackTrace) {
+      EasyLoading.dismiss();
+      print(error);
+    });
+  }
 }

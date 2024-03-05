@@ -85,10 +85,9 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
                                       });
                                 },
                                 child: CheckPointListsWidget(
-                                  title: checkpoint![index].checkpointName
-                                      .toString(),
+                                  title: checkpoint![index].checkpointName.toString(),
                                   imageBaseUrl: snapshot.data!.imageBaseUrl.toString(),
-                                  imageUrl: checkpoint![index].checkPointAvatar![0].checkpointAvatars.toString(),
+                                  imageUrl:checkpoint![index].checkPointAvatar!.isEmpty ?'' :checkpoint![index].checkPointAvatar![0].checkpointAvatars.toString(),
                                   // iscompleted: snapshot.data!.checkpoints![index].isCompleted,
                                   checkpointNo:checkpoint![index].id ?? 0,
                                   date: checkpoint![index].checkInTime.toString(),

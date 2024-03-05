@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_notification_channel/flutter_notification_channel.dart';
+import 'package:flutter_notification_channel/notification_importance.dart';
+import 'package:flutter_notification_channel/notification_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/account_screen/account_screen.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
+import 'package:sgt/presentation/authentication_screen/cubit/isMediaSelected/isMediaSelected_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/password_checker/password_checker_cubit.dart';
@@ -27,9 +31,10 @@ import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
-// import 'package:workmanager/workmanager.dart';
 import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'presentation/authentication_screen/cubit/issign_in_valid/issigninvalid_cubit.dart';
+import 'presentation/connect_screen/cubit/image_picker_cubit/image_picker_cubit.dart';
+import 'presentation/connect_screen/cubit/isSelectedMedia/isSelectedMedia_cubit.dart';
 import 'presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
 import 'presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'presentation/onboarding_screen/onboarding_screen.dart';
@@ -38,27 +43,24 @@ import 'presentation/work_report_screen/cubit/addwitness/addwitness_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
+late SharedPreferences prefs;
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Workmanager().initialize(callBackDispatcher, isInDebugMode: true);
-  runApp(const MyApp());
-  configLoading();
-  initOneSignalState();
-}
-/*
-@pragma('vm:entry-point')
-void callBackDispatcher() {
-  Workmanager().executeTask((taskName, inputData) {
-    switch (taskName) {
-      case "get_current_location":
-        print("Native called background task: $taskName");
-        break;
-      default:
-    }
-    return Future.value(true);
+  WidgetsFlutterBinding.ensureInitialized();
+
+//for setting orientation to portrait only
+  SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      .then((value) {
+    _initializeFirebase();
+    configLoading();
+    initOneSignalState();
+    runApp(const MyApp());
   });
-}*/
+  prefs = await SharedPreferences.getInstance();
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -77,8 +79,11 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => IslongpressCubit()),
               BlocProvider(create: (context) => MessagePressedCubit()),
               BlocProvider(create: (context) => IspasswordmarchedCubit()),
+              BlocProvider(create: (context) => IsMediaSelectedCubit()),
               BlocProvider(create: (context) => IslastpageCubit()),
               BlocProvider(create: (context) => IssearchingCubit()),
+              BlocProvider(create: (context) => ToggleMediaCubit()),
+              BlocProvider(create: (context) => ImagePickerCubit()),
               BlocProvider(create: (context) => AddpeopleCubit()),
               BlocProvider(create: (context) => AddImageCubit()),
               BlocProvider(create: (context) => IsValidPasswordCubit()),
@@ -111,6 +116,25 @@ void configLoading() {
     ..radius = 10.0
     ..userInteractions = false
     ..dismissOnTap = false;
+}
+
+void _initializeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  var result = await FlutterNotificationChannel.registerNotificationChannel(
+    description: 'For Showing Message Notification',
+    id: 'chats',
+    importance: NotificationImportance.IMPORTANCE_HIGH,
+    name: 'Chats',
+    visibility: NotificationVisibility.VISIBILITY_PRIVATE,
+    allowBubbles: true,
+    enableVibration: true,
+    enableSound: true,
+    showBadge: true,
+  );
+  print('\nNotification Channel Result: $result');
 }
 
 Future<void> initOneSignalState() async {

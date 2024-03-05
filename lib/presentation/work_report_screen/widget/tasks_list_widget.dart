@@ -3,9 +3,11 @@ import 'package:sgt/presentation/work_report_screen/model/checkPoint_model.dart'
 import 'package:sgt/utils/const.dart';
 
 class TasksListWidget extends StatefulWidget {
+  // final ValueChanged<String> checkPointIdList;
   List<CheckPointTask>? checkPointTask;
-  // List<bool> checkbox =[];
-  TasksListWidget({super.key, this.checkPointTask});
+  TasksListWidget({super.key, this.checkPointTask,
+  // required this.checkPointIdList
+  });
 
   @override
   State<TasksListWidget> createState() => _TasksListWidgetState();
@@ -27,7 +29,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     return Container(
       height: 50 * widget.checkPointTask!.length.toDouble(),
       child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           itemCount: widget.checkPointTask!.length,
           itemBuilder: (context, index) {
             return Container(
@@ -37,10 +39,12 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                 style: TextStyle(fontSize: 13),
               ),
               value: checkbox[index],
+              // value: widget.checkPointTask![index].status == 1 ? true : false,
               onChanged: (value) {
                 setState(
                   () {
                     checkbox[index] = value!;
+                    print("value =======================> ${value}");
                   },
                 );
                 if (checkpointsStatus

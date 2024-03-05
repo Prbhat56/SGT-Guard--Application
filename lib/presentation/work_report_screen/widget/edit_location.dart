@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,17 +9,22 @@ import 'package:google_maps_webservice/places.dart';
 import '../../../utils/const.dart';
 
 class EditLocationScreen extends StatefulWidget {
-  const EditLocationScreen({super.key});
+  LatLng? currentPosition;
+  EditLocationScreen({super.key, this.currentPosition});
 
   @override
   State<EditLocationScreen> createState() => _EditLocationScreenState();
 }
 
 class _EditLocationScreenState extends State<EditLocationScreen> {
+  // LatLng? _currentPosition;
   LatLng currentlocation = const LatLng(22.572645, 88.363892);
   late final GoogleMapController _googleMapController;
   final Set<Marker> _markers = {};
   String location = "Search Location";
+
+
+
   void _addMarker() {
     setState(() {
       _markers.add(
@@ -30,6 +36,23 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
       );
     });
   }
+
+  // Future<LatLng?> _addMarker() async {
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   _currentPosition = LatLng(position.latitude, position.longitude);
+  //   print(_currentPosition);
+  //   setState(() {
+  //     _markers.add(
+  //       Marker(
+  //         markerId: MarkerId('currentlocation'),
+  //         position: _currentPosition!,
+  //         icon: BitmapDescriptor.defaultMarker,
+  //       ),
+  //     );
+  //   });
+  //   return _currentPosition;
+  // }
 
   Future<void> _moveToNewLocation() async {
     const _newoposition = LatLng(12, 31);
@@ -49,13 +72,18 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("=====================> ${widget.currentPosition}");
+
     return Scaffold(
       body: Stack(
         children: [
           GoogleMap(
               markers: _markers,
-              initialCameraPosition:
-                  CameraPosition(target: currentlocation, zoom: 14)),
+              initialCameraPosition:CameraPosition(target: widget.currentPosition!, zoom: 14)),
+
+
+                  
+                  // CameraPosition(target: widget.currentPosition!, zoom: 14)),
           // Positioned(
           //     //search input bar
           //     top: 10,

@@ -313,18 +313,18 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                               style: CustomTheme.blackTextStyle(
                                                   15)),
                                           Text(
-                                            ' ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.shiftTime.toString()}',
+                                            '${detailsData!.jobDetails == null ? "" : detailsData!.jobDetails!.shiftTime.toString()}',
                                             style: CustomTheme.blueTextStyle(
                                                 15, FontWeight.w400),
                                           ),
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 20,
+                                        height: 25,
                                       ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
+                                      // SizedBox(
+                                      //   height: 5,
+                                      // ),
                                     ],
                                   ), //widgets to show job details
                                   TextFieldHeaderWidget(title: 'Description'),

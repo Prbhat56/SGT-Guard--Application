@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_out_modal.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/widget/clock_out_total_time_widget.dart';
+import 'package:sgt/presentation/property_details_screen/model/shift_details_modal.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -59,17 +60,14 @@ final imageUrl =
 class _ClockOutScreenState extends State<ClockOutScreen> {
   @override
   Widget build(BuildContext context) {
-    print("widget.clockOutQrData =====> ${widget.clockOutQrData}");
-    String? jsonString = widget.clockOutQrData;
-    Map<String, dynamic> jsonData = jsonDecode(jsonString!);
-    int shiftId = jsonData['shift_details']['shift_id'];
-    print('Shift ID: $shiftId');
+    final ShiftDetailsModal shiftDetails = shiftDetailsModalFromJson(widget.clockOutQrData.toString());
+    String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
           // appBar: CustomAppBarWidget(appbarTitle: 'Clocked Out'),
           body: FutureBuilder(
-              future: getClockOutData(shiftId),
+              future: getClockOutData( shiftDetails.shiftDetails!.clockOut != null ? shiftId :''),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(

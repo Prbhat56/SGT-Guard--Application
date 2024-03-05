@@ -94,6 +94,7 @@ class CustomTheme {
       unselectedLabelColor: Colors.grey,
     ),
     indicatorColor: primaryColor,
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: primaryColor),
   );
 
   static final clockInCardStyle = BoxDecoration(

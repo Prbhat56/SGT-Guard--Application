@@ -29,7 +29,6 @@ class _AccountScreenState extends State<AccountScreen> {
     var data = jsonDecode(response.body.toString());
 
     if (response.statusCode == 200) {
-      // print('api call qqqq');
       return GuardDetails.fromJson(data);
     } else {
       throw Exception('Failed to load guard');
@@ -56,7 +55,8 @@ class _AccountScreenState extends State<AccountScreen> {
           leadingWidth: 30,
           title: Text(
             'Account',
-            style: TextStyle(color: black, fontWeight: FontWeight.w400),
+            style: TextStyle(
+                color: CustomTheme.primaryColor, fontWeight: FontWeight.w700),
           ),
           actions: [
             IconButton(
@@ -104,7 +104,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   child: CachedNetworkImage(
                                       imageUrl: (snapshot.data!.imageBaseUrl
                                               .toString() +
-                                          '' +
+                                          '/' +
                                           snapshot.data!.userDetails!.avatar
                                               .toString()),
                                       fit: BoxFit.fill,
@@ -124,10 +124,21 @@ class _AccountScreenState extends State<AccountScreen> {
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
-                            Text(
-                              'Personal',
-                              style: CustomTheme.blackTextStyle(21),
+                            SizedBox(
+                              height: 10,
                             ),
+                            Divider(
+                              color: CustomTheme.grey.withOpacity(0.5),
+                              thickness: 5,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text('Personal',
+                                style: TextStyle(
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.w600,
+                                    color: black)),
                             const SizedBox(
                               height: 20,
                             ),
@@ -184,8 +195,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               .data!.userDetails!.contactCode ==
                                           null
                                       ? ''
-                                      : snapshot.data!.userDetails!.contactCode
-                                          .toString()) +
+                                      : "+${snapshot.data!.userDetails!.contactCode.toString()}") +
                                   ' ' +
                                   (snapshot.data!.userDetails!.contactNumber ==
                                           null
@@ -238,12 +248,22 @@ class _AccountScreenState extends State<AccountScreen> {
                                       .capitalized()),
                               readonly: true,
                             ),
-                            const SizedBox(
-                              height: 20,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Divider(
+                              color: CustomTheme.grey.withOpacity(0.5),
+                              thickness: 5,
+                            ),
+                            SizedBox(
+                              height: 10,
                             ),
                             Text(
                               'Address',
-                              style: CustomTheme.blackTextStyle(21),
+                              style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.w600,
+                                  color: black),
                             ),
                             const SizedBox(
                               height: 20,
@@ -311,13 +331,20 @@ class _AccountScreenState extends State<AccountScreen> {
                                           .toString(),
                               readonly: true,
                             ),
-                            const SizedBox(
-                              height: 40,
+                            SizedBox(
+                              height: 10,
                             ),
-                            Text(
-                              'Guard Cards',
-                              style: CustomTheme.blackTextStyle(21),
+                            // Divider(
+                            //   color: CustomTheme.grey.withOpacity(0.5),
+                            //   thickness: 5,
+                            // ),
+                            SizedBox(
+                              height: 10,
                             ),
+                            // Text(
+                            //   'Guard Cards',
+                            //   style: CustomTheme.blackTextStyle(21),
+                            // ),
                             const SizedBox(
                               height: 16,
                             ),
@@ -325,13 +352,16 @@ class _AccountScreenState extends State<AccountScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Front Side Id Card',
-                                    style:
-                                        CustomTheme.textField_Headertext_Style,
+                                    'Guard ID card',
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: CustomTheme.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                     textScaleFactor: 1.0,
                                   ),
                                   const SizedBox(
@@ -353,7 +383,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 imageUrl: (snapshot
                                                         .data!.imageBaseUrl
                                                         .toString() +
-                                                    '/' +
+                                                    '' +
                                                     snapshot.data!.userDetails!
                                                         .frontSideIdCard
                                                         .toString()),
@@ -374,12 +404,22 @@ class _AccountScreenState extends State<AccountScreen> {
                                               )),
                                   ),
                                   SizedBox(
-                                    height: 18,
+                                    height: 10,
+                                  ),
+                                  Divider(
+                                    color: CustomTheme.grey.withOpacity(0.5),
+                                    thickness: 5,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                   Text(
-                                    'Back Side Id Card',
-                                    style:
-                                        CustomTheme.textField_Headertext_Style,
+                                    'Weapon Permit',
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: CustomTheme.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                     textScaleFactor: 1.0,
                                   ),
                                   const SizedBox(
@@ -401,7 +441,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 imageUrl: snapshot
                                                         .data!.imageBaseUrl
                                                         .toString() +
-                                                    '/' +
+                                                    '' +
                                                     snapshot.data!.userDetails!
                                                         .backSideIdCard
                                                         .toString(),

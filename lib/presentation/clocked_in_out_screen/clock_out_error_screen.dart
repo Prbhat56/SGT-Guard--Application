@@ -10,7 +10,8 @@ import 'widget/check_point_count_widget.dart';
 import 'widget/clock_out_total_time_widget.dart';
 
 class ClockOutErrorScreen extends StatefulWidget {
-  const ClockOutErrorScreen({super.key});
+  String? clockOutQrData;
+  ClockOutErrorScreen({super.key, this.clockOutQrData});
 
   @override
   State<ClockOutErrorScreen> createState() => _ClockOutErrorScreenState();
@@ -51,15 +52,15 @@ class _ClockOutErrorScreenState extends State<ClockOutErrorScreen> {
                   SizedBox(
                     height: 80.h,
                   ),
-                  Center(child: TotalTimeWidget()),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                      child: CheckPointCountWidget(
-                    completedCheckPoint: '4',
-                    remainningCheckPoint: '3',
-                  )),
+                  // Center(child: TotalTimeWidget()),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  // Center(
+                  //     child: CheckPointCountWidget(
+                  //   completedCheckPoint: '4',
+                  //   remainningCheckPoint: '3',
+                  // )),
                   SizedBox(
                     height: 80.h,
                   ),
@@ -86,7 +87,7 @@ class _ClockOutErrorScreenState extends State<ClockOutErrorScreen> {
                       buttonTitle: 'Clock Out',
                       onBtnPress: () {
                         context.read<TimerOnCubit>().turnOffTimer();
-                        screenNavigator(context, ClockOutScreen());
+                        screenNavigator(context, ClockOutScreen(clockOutQrData:widget.clockOutQrData));
                       }),
                 ]),
           ),
