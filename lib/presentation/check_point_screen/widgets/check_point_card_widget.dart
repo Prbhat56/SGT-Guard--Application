@@ -6,7 +6,6 @@ import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
 import 'package:http/http.dart' as http;
 
-
 //card data class
 // class CardDetails {
 //   final IconData icon;
@@ -25,7 +24,7 @@ import 'package:http/http.dart' as http;
 // ];
 
 class CheckPointCardsWidget extends StatefulWidget {
-  Property ? property ;
+  Property? property;
   String? propertyImageBaseUrl;
   CheckPointCardsWidget({super.key, this.property, this.propertyImageBaseUrl});
 
@@ -34,7 +33,6 @@ class CheckPointCardsWidget extends StatefulWidget {
 }
 
 class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,17 +57,17 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
           SizedBox(
             width: 10,
           ),
-          widget.property!.propertyAvatars != null ?
-          CircleAvatar(
-            backgroundColor: grey,
-            backgroundImage:
-            NetworkImage(widget.propertyImageBaseUrl.toString()+'/'+widget.property!.propertyAvatars!.first.propertyAvatar.toString())
-          ) : 
-          CircleAvatar(
-            backgroundColor: grey,
-            backgroundImage:
-            AssetImage('assets/sgt_logo.jpg')
-          ),
+          widget.property!.propertyAvatars != null
+              ? CircleAvatar(
+                  backgroundColor: grey,
+                  backgroundImage: NetworkImage(
+                      widget.propertyImageBaseUrl.toString() +
+                          '' +
+                          widget.property!.propertyAvatars!.first.propertyAvatar
+                              .toString()))
+              : CircleAvatar(
+                  backgroundColor: grey,
+                  backgroundImage: AssetImage('assets/sgt_logo.jpg')),
           SizedBox(
             width: 10,
           ),
@@ -92,7 +90,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                   ),
                   Text(
                     // '1517 South Centelella',
-                  widget.property!.location.toString(),
+                    widget.property!.location.toString(),
                     style: CustomTheme.greyTextStyle(10),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -104,7 +102,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                     children: [
                       Text(
                         'Remaining Shift Time:',
-                        style: CustomTheme.blueTextStyle(8,FontWeight.w500),
+                        style: CustomTheme.blueTextStyle(8, FontWeight.w500),
                       ),
                       Text(
                         ' 2 Hrs 30 Min 23 Secs', // api response pending

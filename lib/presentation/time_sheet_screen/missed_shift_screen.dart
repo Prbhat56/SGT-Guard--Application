@@ -108,10 +108,11 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                       height: 10,
                                     ),
                                     Text(
-                                      //shiftDatum[index].shift!.shiftDate.toString(),
-                                      shiftDatum[index].shift == null
-                                          ? ''
-                                          : '${DateFormat.MMMMEEEEd().format(DateTime.parse(shiftDatum[index].shift!.shiftDate.toString()))}',
+                                      shiftDatum[index].lastShiftTime ==null ? '': shiftDatum[index].lastShiftTime.toString(),
+                                      // shiftDatum[index].shift == null
+                                      //     ? ''
+                                      //     :
+                                          //  '${DateFormat.MMMMEEEEd().format(DateTime.parse(shiftDatum[index].shift!.shiftDate.toString()))}'
                                       style: const TextStyle(fontSize: 15),
                                     ),
                                   ],
@@ -123,22 +124,22 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                 ),
                                 trailing: Column(
                                   children: [
-                                    Text(
-                                      getDifference(
-                                              shiftDatum[index].shift == null
-                                                  ? ''
-                                                  : shiftDatum[index]
-                                                      .shift!
-                                                      .clockIn
-                                                      .toString(),
-                                              shiftDatum[index].shift == null
-                                                  ? ''
-                                                  : shiftDatum[index]
-                                                      .shift!
-                                                      .clockOut
-                                                      .toString())
-                                          .toString(),
-                                    ),
+                                    // Text(
+                                    //   getDifference(
+                                    //           shiftDatum[index].shift == null
+                                    //               ? ''
+                                    //               : shiftDatum[index]
+                                    //                   .shift!
+                                    //                   .clockIn
+                                    //                   .toString(),
+                                    //           shiftDatum[index].shift == null
+                                    //               ? ''
+                                    //               : shiftDatum[index]
+                                    //                   .shift!
+                                    //                   .clockOut
+                                    //                   .toString())
+                                    //       .toString(),
+                                    // ),
                                     const SizedBox(
                                       height: 18,
                                     ),

@@ -70,6 +70,10 @@ class InactiveDatum {
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
+  String? latestShiftDate;
+  String? latestShiftTime;
+  String? latestShiftClockIn;
+  String? latestShiftClockOut;
   List<PropertyAvatar>? propertyAvatars;
   List<Shift>? shifts;
   List<CheckPoint>? checkPoints;
@@ -92,6 +96,10 @@ class InactiveDatum {
     this.status,
     this.createdAt,
     this.updatedAt,
+    this.latestShiftTime,
+    this.latestShiftDate,
+    this.latestShiftClockIn,
+    this.latestShiftClockOut,
     this.propertyAvatars,
     this.shifts,
     this.checkPoints,
@@ -124,6 +132,10 @@ class InactiveDatum {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        latestShiftDate:json["latest_shift_date"],
+        latestShiftTime:json["latest_shift_time"],
+        latestShiftClockIn:json["latest_shift_clock_in"],
+        latestShiftClockOut:json["latest_shift_clock_out"],
         propertyAvatars: json["property_avatars"] == null
             ? []
             : List<PropertyAvatar>.from(json["property_avatars"]!

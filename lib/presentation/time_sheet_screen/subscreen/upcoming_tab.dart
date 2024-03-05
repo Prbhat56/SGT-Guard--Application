@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/timesheet_details.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 import '../../widgets/custom_circular_image_widget.dart';
 
@@ -35,6 +36,27 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                 'No Upcoming Timesheet Found',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     Container(
+              //       width: 120,
+              //       child: Image.asset(
+              //         'assets/no_upcoming_shifts.png',
+              //         fit: BoxFit.contain,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: 24,
+              //     ),
+              //     Text(
+              //       'No Upcoming Shitfs',
+              //       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 17,color:Colors.grey.withOpacity(0.6)),
+              //     ),
+              //   ],
+              // ),
             ),
           )
         : ListView.builder(
@@ -49,7 +71,13 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                       onTap: () {
                         screenNavigator(
                             context,
-                            TimeSheetDetailsWidet(
+                            TimeSheetDetailsWidget(
+                              shiftDate: widget
+                                  .upcomingData[index].shifts!.first.date
+                                  .toString(),
+                              shiftId: widget
+                                  .upcomingData[index].shifts!.first.id
+                                  .toString(),
                               propId: widget.upcomingData[index].id.toString(),
                               propName: widget.upcomingData[index].propertyName
                                   .toString(),
@@ -107,13 +135,13 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                               ],
                             ),
                           ),
-                          Text(
-                            getDifference(
-                                    '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockIn}',
-                                    '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockOut}')
-                                .toString(),
-                            style: TextStyle(fontSize: 11, color: primaryColor),
-                          ),
+                          // Text(
+                          //   getDifference(
+                          //           '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockIn}',
+                          //           '${widget.upcomingData[index].shifts!.isEmpty ? null : widget.upcomingData[index].shifts!.first.clockOut}')
+                          //       .toString(),
+                          //   style: TextStyle(fontSize: 11, color: primaryColor),
+                          // ),
                         ]),
                       ),
                     ),

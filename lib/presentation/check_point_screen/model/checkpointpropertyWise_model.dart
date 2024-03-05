@@ -56,6 +56,7 @@ class Checkpoint {
     String? checkpointQrCode;
     DateTime? createdAt;
     DateTime? updatedAt;
+    int? checkpointHistoryId;
     String? status;
     dynamic visitAt;
     String? checkInTime;
@@ -73,6 +74,7 @@ class Checkpoint {
         this.checkpointQrCode,
         this.createdAt,
         this.updatedAt,
+        this.checkpointHistoryId,
         this.status,
         this.visitAt,
         this.checkInTime,
@@ -91,6 +93,7 @@ class Checkpoint {
         checkpointQrCode: json["checkpoint_qr_code"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        checkpointHistoryId: json["checkpoint_history_id"],
         status: json["status"],
         visitAt: json["visit_at"],
         checkInTime: json["check_in_time"],
@@ -109,6 +112,7 @@ class Checkpoint {
         "checkpoint_qr_code": checkpointQrCode,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "checkpoint_history_id":checkpointHistoryId,
         "status": status,
         "visit_at": visitAt,
         "check_in_time": checkInTime,

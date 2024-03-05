@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/widget/edit_location.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
 import '../../../../theme/custom_theme.dart';
 
@@ -18,14 +20,17 @@ class EmergencyLocationWidget extends StatefulWidget {
 
 class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
   LatLng? _currentPosition;
+  
   Future<LatLng?> locateUser() async {
-    await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high,
-            forceAndroidLocationManager: true)
-        .then((Position position) {
+    Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+    // await Geolocator.getCurrentPosition(
+    //         desiredAccuracy: LocationAccuracy.high,
+    //         forceAndroidLocationManager: true)
+    //     .then((Position position) {
       _currentPosition = LatLng(position.latitude, position.longitude);
       print(_currentPosition);
-    });
+    // });
     //setState(() {});
     return _currentPosition;
   }
@@ -62,7 +67,7 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                       SizedBox(width: 135),
                       InkWell(
                         onTap: () {
-                          //screenNavigator(context, EditLocationScreen());
+                          screenNavigator(context, EditLocationScreen(currentPosition:_currentPosition));
                         },
                         child: Text(
                           'Edit Location',
@@ -81,6 +86,7 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                   Container(
                     height: 200,
                     child: GoogleMap(
+                        myLocationEnabled: true,
                         zoomGesturesEnabled: true,
                         onCameraMove: (position) {
                           EmergencyReportScreen.of(context)!.latValue =

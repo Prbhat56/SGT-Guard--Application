@@ -11,6 +11,7 @@ import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
 import 'package:sgt/helper/validator.dart';
 import '../widgets/custom_underline_textfield_widget.dart';
@@ -18,36 +19,30 @@ import 'change_password_after_forgot.dart';
 
   bool isemailvalid = true;
   bool isValid = false;
-class VerifyOTPScreen extends StatelessWidget{
+class VerifyOTPScreen extends StatefulWidget{
   final String email;
-  const VerifyOTPScreen({super.key, required this.email});
+  VerifyOTPScreen({super.key, required this.email});
 
+  @override
+  State<VerifyOTPScreen> createState() => _VerifyOTPScreenState();
+}
 
+class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
 // class VerifyOTPScreen extends StatefulWidget {
-//   const VerifyOTPScreen({super.key, required String email});
+  TextEditingController _verificationOtpController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _verificationOtpController = TextEditingController();  }
 
-//   @override
-//   State<VerifyOTPScreen> createState() => _VerifyOTPScreenState();
-// }
-
-// class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
-//   bool isemailvalid = true;
-//   bool isValid = false;
-//   late TextEditingController _verificationOtpController;
-//   @override
-//   void initState() {
-//     super.initState();
-//     _verificationOtpController = TextEditingController();  }
-
-//   @override
-//   void dispose() {
-//     _verificationOtpController.dispose();
-//     super.dispose();
-//   }
+  @override
+  void dispose() {
+    _verificationOtpController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _verificationOtpController = TextEditingController();
     // print("email ===> $email");
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -69,14 +64,49 @@ class VerifyOTPScreen extends StatelessWidget{
             SizedBox(
               height: 30.h,
             ),
-            CustomUnderlineTextFieldWidget(
-              bottomPadding: 7,
-              textfieldTitle: 'Verification OTP',
+            Padding(
+      padding: EdgeInsets.only(bottom: 7),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Verification OTP',
+            style: CustomTheme.textField_Headertext_Style,
+            textScaleFactor: 1.0,
+          ),
+          TextField(
+            // onChanged: onChanged,
+            // focusNode: focusNode,
+            // readOnly: readonly!,
+            controller: _verificationOtpController,
+            onEditingComplete:(() {
+             FocusScope.of(context).unfocus(); 
+            }),
+            // autocorrect: true,
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
+            decoration: InputDecoration(
               hintText: 'Enter OTP',
-              controller: _verificationOtpController,
-              onChanged: (value) {
-              },
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: seconderyColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: primaryColor)),
+              hintStyle: const TextStyle(color: Colors.grey),
+              focusColor: primaryColor,
             ),
+          ),
+        ],
+      ),
+    ),
+            // CustomUnderlineTextFieldWidget(
+            //   bottomPadding: 7,
+            //   textfieldTitle: 'Verification OTP',
+            //   hintText: 'Enter OTP',
+            //   controller: _verificationOtpController,
+            //   onChanged: (value) {
+            //   },
+            // ),
 
 
             const SizedBox(
@@ -87,7 +117,7 @@ class VerifyOTPScreen extends StatelessWidget{
                     children: [
                       InkWell(
                         onTap: () {
-                          resendOtp(email,_verificationOtpController.text.toString(),context);
+                          resendOtp(widget.email,_verificationOtpController.text.toString(),context);
                         },
                         child: Text(
                           'Resend OTP',
@@ -124,7 +154,7 @@ class VerifyOTPScreen extends StatelessWidget{
                 buttonTitle: 'Verify OTP',
                 btnColor: isValid ? primaryColor : seconderyColor,
                 onBtnPress: () {
-                  verify_otp(email,_verificationOtpController.text.toString(),context);
+                  verify_otp(widget.email,_verificationOtpController.text.toString(),context);
                   // Navigator.of(context).push(
                   //   MaterialPageRoute(
                   //       builder: (context) =>
@@ -141,7 +171,6 @@ class VerifyOTPScreen extends StatelessWidget{
       ),
     );
   }
-
 
   void verify_otp(String email,String otp,context)
    async{  
@@ -186,5 +215,4 @@ class VerifyOTPScreen extends StatelessWidget{
         print(error);
       });
         }
-
 }

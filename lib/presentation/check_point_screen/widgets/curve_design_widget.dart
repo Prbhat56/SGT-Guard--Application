@@ -24,7 +24,7 @@ class _CurveDesignWidgetState extends State<CurveDesignWidget> {
         children: [
           widget.property!.propertyAvatars != null ?
           Image.network(
-            widget.propertyImageBaseUrl.toString()+'/'+widget.property!.propertyAvatars!.first.propertyAvatar.toString(),
+            widget.propertyImageBaseUrl.toString()+''+widget.property!.propertyAvatars!.first.propertyAvatar.toString(),
             fit: BoxFit.cover,
           ):Image.asset('assets/sgt_logo.png'),
 

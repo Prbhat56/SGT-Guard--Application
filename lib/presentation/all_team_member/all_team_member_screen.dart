@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chatting_screen.dart';
+import 'package:sgt/presentation/connect_screen/widgets/profile_image.dart';
+import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
-import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/custom_theme.dart';
@@ -20,6 +24,7 @@ class AllTeamMemberScreen extends StatefulWidget {
 }
 
 class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
+  List<ChatUsers> userList = [];
   Future<GuardHome> getAllGuardListAPI() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
@@ -50,11 +55,218 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child:
                   Text('Team', style: CustomTheme.textField_Headertext_Style),
             ),
-            FutureBuilder<GuardHome>(
+            Expanded(
+              child: StreamBuilder(
+                stream: FirebaseHelper.getAllUsers(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      final data = snapshot.data?.docs;
+                      userList = data
+                              ?.map((e) => ChatUsers.fromJson(
+                                  e.data() as Map<String, dynamic>))
+                              .toList() ??
+                          [];
+                      userList.removeWhere((element) =>
+                          element.id == FirebaseHelper.user.uid.toString());
+
+                      if (userList.isNotEmpty) {
+                        return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: userList.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                splashColor: Colors.transparent,
+                                onTap: () {
+                                  Navigator.of(context).push(PageRouteBuilder(
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        ChattingScreen(
+                                      user: userList[index],
+                                    ),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      return SlideTransition(
+                                        position: Tween<Offset>(
+                                                begin: const Offset(1, 0),
+                                                end: Offset.zero)
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                  ));
+                                },
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              await showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      ChatImageDialogue(
+                                                          user:
+                                                              userList[index]));
+                                            },
+                                            child: Stack(
+                                              children: [
+                                                CachedNetworkImage(
+                                                    imageUrl: userList[index]
+                                                        .profileUrl
+                                                        .toString(),
+                                                    fit: BoxFit.fill,
+                                                    width: 60.0,
+                                                    height: 60.0,
+                                                    imageBuilder: (context,
+                                                        imageProvider) {
+                                                      return CircleAvatar(
+                                                        radius: 30,
+                                                        backgroundColor: grey,
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                          userList[index]
+                                                              .profileUrl
+                                                              .toString(),
+                                                        ),
+                                                      );
+                                                    },
+                                                    placeholder: (context,
+                                                            url) =>
+                                                        const CircularProgressIndicator(
+                                                          strokeCap:
+                                                              StrokeCap.round,
+                                                        ),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        CircleAvatar(
+                                                          radius: 30,
+                                                          child: Image.asset(
+                                                            'assets/chatProfile.png',
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                        )),
+                                                userList[index].isOnline
+                                                    ? Positioned(
+                                                        top: 45,
+                                                        left: 42,
+                                                        child: Container(
+                                                          height: 15,
+                                                          width: 15,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: greenColor,
+                                                            border: Border.all(
+                                                                color: white,
+                                                                width: 2),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Positioned(
+                                                        top: 45,
+                                                        left: 42,
+                                                        child: Container(),
+                                                      )
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  userList[index]
+                                                      .name
+                                                      .toString()
+                                                      .capitalized(),
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                ),
+                                                SizedBox(
+                                                  height: 2,
+                                                ),
+                                                Text(
+                                                  userList[index]
+                                                      .location
+                                                      .toString(),
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.grey,
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
+                                                ),
+                                                SizedBox(
+                                                  height: 2,
+                                                ),
+                                                Text(
+                                                  userList[index]
+                                                      .position
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      color: Colors.grey,
+                                      height: 20,
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
+                      } else {
+                        return SizedBox(
+                          child: Center(
+                            child: Text(
+                              'No Team Found',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        );
+                      }
+                  }
+                },
+              ),
+            )
+            /*FutureBuilder<GuardHome>(
                 future: getAllGuardListAPI(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -73,8 +285,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                screenNavigator(
-                                    context, ChattingScreen(index: index));
+                                //screenNavigator(context, ChattingScreen(index: index));
                               },
                               child: Column(
                                 children: [
@@ -184,7 +395,7 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
                           }),
                     );
                   }
-                })
+                })*/
           ],
         ));
   }

@@ -4,9 +4,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/time_sheet_screen/model/assigned_propertieslist_modal.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/today_active_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/propertieslist_picker.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/task_picker.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -121,7 +123,8 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
     }
   }
 
-  List<TodaysDatum> reportDatum = [];
+  // List<TodaysDatum> reportDatum = [];
+  List<AssignedDatum> reportDatum = [];
   String? imageBaseUrl;
 
   @override
@@ -130,27 +133,58 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
     getTasks();
   }
 
-  Future<TodayActiveModel> getTasks() async {
+  // Future<TodayActiveModel> getTasks() async {
+  //   try {
+  //     EasyLoading.show();
+  //     String apiUrl = baseUrl + apiRoutes['todaysActivePropertyList']!;
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     Map<String, String> myHeader = <String, String>{
+  //       "Authorization": "Bearer ${prefs.getString('token')}",
+  //     };
+  //     var response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+  //     if (response.statusCode == 201) {
+  //       final TodayActiveModel responseModel =
+  //           todayModelFromJson(response.body);
+  //       reportDatum = responseModel.data ?? [];
+  //       print('Reports: $reportDatum');
+  //       imageBaseUrl = responseModel.imageBaseUrl;
+  //       EasyLoading.dismiss();
+  //       return responseModel;
+  //     } else {
+  //       EasyLoading.dismiss();
+  //       return TodayActiveModel(
+  //           data: [], imageBaseUrl: '', status: response.statusCode);
+  //     }
+  //   } catch (e) {
+  //     EasyLoading.dismiss();
+  //     log('Exception: ${e.toString()}');
+  //     throw Exception(e.toString());
+  //   }
+  // }
+
+
+
+   Future<AssignedPropertiesListModal> getTasks() async {
     try {
       EasyLoading.show();
-      String apiUrl = baseUrl + apiRoutes['todaysActivePropertyList']!;
+      String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Map<String, String> myHeader = <String, String>{
         "Authorization": "Bearer ${prefs.getString('token')}",
       };
       var response = await http.get(Uri.parse(apiUrl), headers: myHeader);
       if (response.statusCode == 201) {
-        final TodayActiveModel responseModel =
-            todayModelFromJson(response.body);
+        final AssignedPropertiesListModal responseModel =
+            assignedPropertiesListModalFromJson(response.body);
         reportDatum = responseModel.data ?? [];
         print('Reports: $reportDatum');
-        imageBaseUrl = responseModel.imageBaseUrl;
+        imageBaseUrl = responseModel.propertyImageBaseUrl;
         EasyLoading.dismiss();
         return responseModel;
       } else {
         EasyLoading.dismiss();
-        return TodayActiveModel(
-            data: [], imageBaseUrl: '', status: response.statusCode);
+        return AssignedPropertiesListModal(
+            data: [], propertyImageBaseUrl: '', status: response.statusCode);
       }
     } catch (e) {
       EasyLoading.dismiss();
@@ -189,11 +223,22 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Property Name \*',
-                    style: CustomTheme.textField_Headertext_Style,
-                    textScaleFactor: 1.0,
-                  ),
+                  RichText(
+                      text: TextSpan(
+                          text: 'Property Name',
+                          style: CustomTheme.textField_Headertext_Style,
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+                  // Text(
+                  //   'Property Name \*',
+                  //   style: CustomTheme.textField_Headertext_Style,
+                  //   textScaleFactor: 1.0,
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
@@ -223,7 +268,7 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                               borderSide:
                                   BorderSide(color: seconderyMediumColor)),
                           fillColor: seconderyMediumColor,
-                          hintText: 'Enter Property Name',
+                          hintText: 'Select Assigned Property',
                           hintStyle: TextStyle(
                             color: Colors.grey,
                           ),
@@ -245,8 +290,9 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                 ],
               ),
               propertyClicked
-                  ? CustomListPicker(
-                      onCallback: (() {
+                  ? 
+                  PropertiesListPicker(
+                     onCallback: (() {
                         setState(() {
                           propertyClicked = !propertyClicked;
                           _propertyNameController.text = propertyName ?? "";
@@ -254,20 +300,31 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                       }),
                       reportDatum: reportDatum,
                       imageBaseUrl: imageBaseUrl,
-                    )
+                  )
+                  
+                  // CustomListPicker(
+                  //     onCallback: (() {
+                  //       setState(() {
+                  //         propertyClicked = !propertyClicked;
+                  //         _propertyNameController.text = propertyName ?? "";
+                  //       });
+                  //     }),
+                  //     reportDatum: reportDatum,
+                  //     imageBaseUrl: imageBaseUrl,
+                  //   )
                   : Container(),
               SizedBox(
                 height: 30,
               ),
               CustomTextField(
                 controller: _titleController,
-                textfieldTitle: 'Title \*',
+                textfieldTitle: 'Title',
                 hintText: 'Enter Title',
                 isFilled: false,
               ),
               CustomTextField(
                 controller: _notesController,
-                textfieldTitle: 'Notes \*',
+                textfieldTitle: 'Notes',
                 hintText: 'Enter Note Here',
                 isFilled: false,
                 maxLines: 5,
@@ -297,8 +354,19 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                           }),
                     )
                   : Container(),
-              Text('Upload Record Sample',
-                  style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
+              RichText(
+                      text: TextSpan(
+                          text: 'Upload Record Sample',
+                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+              // Text('Upload Record Sample',
+              //     style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
               const SizedBox(
                 height: 20,
               ),
@@ -322,7 +390,7 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                   },
                   child: DottedChooseFileWidget(
                     title: 'Choose a file',
-                    height: 50,
+                    height: 15,
                   )),
               imageFileList!.isNotEmpty
                   ? Container()
@@ -336,14 +404,18 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
                       onBtnPress: () {
                         if (_propertyNameController.text.isEmpty) {
                           CommonService().openSnackBar(
-                              'Please enter Property name', context);
+                              'Please Select Property', context);
                         } else if (_titleController.text.isEmpty) {
                           CommonService()
                               .openSnackBar('Please enter title', context);
                         } else if (_notesController.text.isEmpty) {
                           CommonService()
                               .openSnackBar('Please enter notes', context);
-                        } else {
+                        } else if (imageFileList!.isEmpty) {
+                            CommonService()
+                              .openSnackBar('Please upload Record Sample', context);
+                        }
+                        else {
                           uploadImage();
                         }
                       }))

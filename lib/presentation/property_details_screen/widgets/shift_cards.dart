@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
-// import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
-
+import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 import '../../shift_details_screen/upcoming_shift_details_screen.dart';
 
@@ -34,12 +33,13 @@ class ShiftCards extends StatefulWidget {
 }
 
 class _ShiftCardsState extends State<ShiftCards> {
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Container(
-        height: 50,
+        height: 60,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: widget.shifts!.length,
@@ -56,7 +56,7 @@ class _ShiftCardsState extends State<ShiftCards> {
                   width: 122,
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
-                    color: seconderyColor,
+                    color: Colors.green.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -64,11 +64,11 @@ class _ShiftCardsState extends State<ShiftCards> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.shifts![index].dateText.toString(),
+                       "(${widget.shifts![index].date.toString()})"+''+widget.shifts![index].shiftTime.toString(),
                         // widget.shifts![index].clockIn.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: primaryColor, fontWeight: FontWeight.bold),
+                            color: primaryColor, fontWeight: FontWeight.bold, overflow: TextOverflow.fade),
                       ),
                       const SizedBox(
                         height: 5,

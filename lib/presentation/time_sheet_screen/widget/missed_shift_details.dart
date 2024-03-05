@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/missed_shift_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 import '../../property_details_screen/widgets/map_card_widget.dart';
 import '../../widgets/custom_text_widget.dart';
@@ -89,10 +90,11 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                 ),
               ),
               Divider(
-                color: primaryColor,
+                color: CustomTheme.grey.withOpacity(0.5),
+                thickness: 5,
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +116,11 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
-                              '${widget.details!.shift == null ? '' : DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.details!.shift!.shiftDate!.toString())).toString()}',
+                              '${widget.details!.lastShiftTime == null ? '' : 
+                              // DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.details!.shift!.shiftDate!.toString())
+                              // ).toString()
+                              widget.details!.lastShiftTime.toString()
+                              }',
                               style: TextStyle(
                                   color: primaryColor,
                                   fontWeight: FontWeight.bold),
@@ -133,8 +139,69 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                       ),
                     ),
                   ]),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                color: CustomTheme.grey.withOpacity(0.5),
+                thickness: 5,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              // TextFieldHeaderWidget(title: 'Job Details'),
+              // const SizedBox(height: 10),
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Row(
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         Text('Guard Name: ',
+              //             style: CustomTheme.blackTextStyle(15)),
+              //         Text(
+              //           '${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.firstName.toString()} ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.lastName.toString()}',
+              //           style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(
+              //       height: 5,
+              //     ),
+              //     Row(
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         Text('Position: ', style: CustomTheme.blackTextStyle(15)),
+              //         Text(
+              //           ' ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.guardPosition.toString()}',
+              //           style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(
+              //       height: 5,
+              //     ),
+              //     Row(
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         Text('Shift Time: ',
+              //             style: CustomTheme.blackTextStyle(15)),
+              //         Text(
+              //           '${detailsData!.jobDetails == null ? "" : detailsData!.jobDetails!.shiftTime.toString()}',
+              //           style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+              //         ),
+              //       ],
+              //     ),
+              //     SizedBox(
+              //       height: 20,
+              //     ),
+              //     SizedBox(
+              //       height: 5,
+              //     ),
+              //   ],
+              // ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 10),
               TextFieldHeaderWidget(title: 'Description'),
               const SizedBox(height: 10),
               Text(
@@ -143,7 +210,14 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                   fontSize: 15,
                 ),
               ),
-              const SizedBox(height: 25),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                color: CustomTheme.grey.withOpacity(0.5),
+                thickness: 5,
+              ),
+              const SizedBox(height: 10),
               TextFieldHeaderWidget(title: 'Location'),
               const SizedBox(height: 10),
               Text(
@@ -159,6 +233,11 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                         .toDouble()),
               ), //showing map card
               const SizedBox(height: 30),
+              Divider(
+                color: CustomTheme.grey.withOpacity(0.5),
+                thickness:12,
+              ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

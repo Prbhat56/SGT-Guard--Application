@@ -34,7 +34,7 @@ class _PropertyImagesWidgetState extends State<PropertyImagesWidget> {
                         borderRadius: BorderRadius.circular(5),
                         child: Image.network(
                           widget.imageBaseUrl.toString() +
-                              '/' +
+                              '' +
                               widget.avatars![index].propertyAvatar.toString(),
                           height: 88,
                           width: 122,
@@ -42,6 +42,7 @@ class _PropertyImagesWidgetState extends State<PropertyImagesWidget> {
                         ),
                       ),
                       //using opacity to mask the image
+                      widget.avatars!.length > 3 ?
                       Opacity(
                         opacity: 0.5,
                         child: InkWell(
@@ -61,7 +62,7 @@ class _PropertyImagesWidgetState extends State<PropertyImagesWidget> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
-                              child: Text('+${widget.avatars!.length} - 3',
+                              child: Text('+${widget.avatars!.length-3}',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 25,
@@ -69,7 +70,7 @@ class _PropertyImagesWidgetState extends State<PropertyImagesWidget> {
                             ),
                           ),
                         ),
-                      )
+                      ):Container()
                     ],
                   ),
                 )

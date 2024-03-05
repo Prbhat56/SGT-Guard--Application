@@ -81,8 +81,9 @@ class _GeneralTabState extends State<GeneralTab> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                  snapshot.data!.response!.data![index].notificationTime.toString()),
+                                    Text(snapshot.data!.response!.data![index].notificationTime.toString()+' '+'(${snapshot.data!.response!.data![index].createdAt?.day.toString()}-${snapshot.data!.response!.data![index].createdAt?.month.toString()}-${snapshot.data!.response!.data![index].createdAt?.year.toString()})'),
+                                  //   Text(
+                                  // snapshot.data!.response!.data![index].notificationTime.toString()),
                                   ],
                                 ),
                               ),

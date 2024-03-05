@@ -26,11 +26,22 @@ class CustomTextField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            textfieldTitle,
-            style: CustomTheme.textField_Headertext_Style,
-            textScaleFactor: 1.0,
-          ),
+          RichText(
+              text: TextSpan(
+                  text: textfieldTitle,
+                  style: CustomTheme.textField_Headertext_Style,
+                  children: [
+                TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ))
+              ])),
+          // Text(
+          //   textfieldTitle,
+          //   style: CustomTheme.textField_Headertext_Style,
+          //   textScaleFactor: 1.0,
+          // ),
           SizedBox(
             height: 10,
           ),

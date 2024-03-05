@@ -1,8 +1,8 @@
-// const String baseUrl = 'https://sgt-inhouse.myclientdemo.us/api/'; //STAGE_URL
+//  const String baseUrl = 'https://sgt-inhouse.myclientdemo.us/api/'; //STAGE_URL
 //  const String baseUrl = 'https://appdeveloperpro.online/api/'; //NEW PRODUCTION URL
 // const String baseUrl = 'https://sgtsuperadmin.oohap.com/api/'; //PRODUCTION_URL
 // const String baseImageUrl = 'https://sgt-inhouse.myclientdemo.us'; //Image_URL
-const String baseUrl = 'https://arrowtrack-solutions.com/api/';
+const String baseUrl = 'https://arrowtrack-solutions.com/api/'; // Latest Production URL
 
 Map<String, String> apiRoutes = {
   "login": "guard/login",
@@ -20,6 +20,7 @@ Map<String, String> apiRoutes = {
   "leavePolicy": "guard/leave-policy",
   "leaveApply": "guard/leave-apply",
   "leaveStatusList": "guard/leave-applications",
+  "leaveMissingShift":"guard/leave-apply-missing-shifts",
   "helpAndSupport": "guard/help-and-support",
   "privacyPolicy": "guard/privacy-policy",
   "termsCondition": "guard/privacy-policy",
@@ -34,6 +35,7 @@ Map<String, String> apiRoutes = {
   "timeSheet": "guard/timesheet",
   "activePropertyList": "guard/active-property-list",
   "missedShiftList": "guard/missed-shifts",
+  "assignedPropertiesList":"guard/assigned-property-list",
   "generalReport": "guard/general-report-submit",
   "maintenanceReport": "guard/maintenance-report-submit",
   "parkingReport": "guard/parking-report-submit",
@@ -42,5 +44,5 @@ Map<String, String> apiRoutes = {
   "todaysActivePropertyList": "guard/todays-active-property",
   "clockIn": "guard/clock-in",
   "clockOut": "guard/clock-out",
-  "notification":"guard/notifications"
+  "notification": "guard/notifications",
 };

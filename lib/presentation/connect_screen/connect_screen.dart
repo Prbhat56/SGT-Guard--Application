@@ -1,9 +1,11 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/connect_screen/cubit/islongpressed/islongpress_cubit.dart';
-import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
-import 'package:sgt/service/socket_home.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import '../../utils/const.dart';
 import '../widgets/main_appbar_widget.dart';
 import 'widgets/chattile_widget.dart';
@@ -16,6 +18,150 @@ class ConnectScreen extends StatefulWidget {
 }
 
 class _ConnectScreenState extends State<ConnectScreen> {
+  List<ChatUsers> userList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseHelper.getSelfInfo();
+
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (FirebaseHelper.auth.currentUser != null) {
+        if (message.toString().contains('resume')) {
+          FirebaseHelper.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          FirebaseHelper.updateActiveStatus(false);
+        }
+      }
+
+      return Future.value(message);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: MainAppBarWidget(
+        appBarTitle: 'Connect',
+      ),
+      backgroundColor: white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // SizedBox(
+          //   height: 20.0,
+          // ),
+          // Padding(
+          //   padding: EdgeInsets.only(
+          //       left: 16.w, top: 16.h, bottom: 6.h, right: 16.w),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(
+          //         'Chats',
+          //         style: TextStyle(
+          //             color: primaryColor,
+          //             fontSize: 17.sp,
+          //             fontWeight: FontWeight.w500),
+          //       ),
+          //       Text(
+          //         'Mark All As Read',
+          //         style: TextStyle(
+          //             color: primaryColor,
+          //             fontSize: 13.sp,
+          //             fontWeight: FontWeight.w400),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // Divider(
+          //   thickness: 3,
+          //   color: seconderyColor,
+          // ),
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseHelper.getAllUsers(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    final data = snapshot.data?.docs;
+                    userList = data
+                            ?.map((e) => ChatUsers.fromJson(
+                                e.data() as Map<String, dynamic>))
+                            .toList() ??
+                        [];
+                    userList.removeWhere((element) =>
+                        element.id == FirebaseHelper.user.uid.toString());
+
+                    if (userList.isNotEmpty) {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: userList.length,
+                          itemBuilder: (context, index) =>
+                              ChatTileWidget(user: userList[index]));
+                    } else {
+                      return SizedBox(
+                        child: Center(
+                          child: Text(
+                            'No Guard Found',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    }
+                }
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+/*
+class ConnectScreen extends StatefulWidget {
+  const ConnectScreen({super.key});
+
+  @override
+  State<ConnectScreen> createState() => _ConnectScreenState();
+}
+
+class _ConnectScreenState extends State<ConnectScreen> {
+  List<ChatUsers> userList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseHelper.getSelfInfo();
+
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (FirebaseHelper.auth.currentUser != null) {
+        if (message.toString().contains('resume')) {
+          FirebaseHelper.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          FirebaseHelper.updateActiveStatus(false);
+        }
+      }
+
+      return Future.value(message);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<IslongpressCubit, IslongpressState>(
@@ -24,7 +170,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
         return Scaffold(
           appBar: state.selectedChatTile.isNotEmpty
               ? AppBar(
-                  leadingWidth: 0,
+                  //leadingWidth: 50,
                   backgroundColor: white,
                   leading: IconButton(
                     icon: Icon(
@@ -49,65 +195,140 @@ class _ConnectScreenState extends State<ConnectScreen> {
                   appBarTitle: 'Connect',
                 ),
           backgroundColor: white,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                state.selectedChatTile.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 10, right: 16),
-                        child: Text(
-                          'Chats',
-                          style: TextStyle(
-                              color: primaryColor,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 10, right: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Chats',
-                              style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                screenNavigator(context, SocketHome());
-                              },
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              state.selectedChatTile.isNotEmpty
+                  ? Padding(
+                      padding: EdgeInsets.only(left: 16.w, bottom: 6.h),
+                      child: Text(
+                        'Chats',
+                        style: TextStyle(
+                            color: primaryColor,
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          left: 16.w, top: 16.h, bottom: 6.h, right: 16.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Chats',
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            'Mark All As Read',
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                    ),
+              Divider(
+                thickness: 3,
+                color: seconderyColor,
+              ),
+              Expanded(
+                child: StreamBuilder(
+                  stream: FirebaseHelper.getAllUsers(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                      case ConnectionState.none:
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        final data = snapshot.data?.docs;
+                        userList = data
+                                ?.map((e) => ChatUsers.fromJson(
+                                    e.data() as Map<String, dynamic>))
+                                .toList() ??
+                            [];
+
+                        if (userList.isNotEmpty) {
+                          return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: userList.length,
+                              itemBuilder: (context, index) => InkWell(
+                                    splashFactory: NoSplash.splashFactory,
+                                    onTap: () {
+                                      // Navigator.of(context).push(
+                                      //   PageRouteBuilder(
+                                      //     transitionDuration:
+                                      //         const Duration(milliseconds: 500),
+                                      //     pageBuilder: (context, animation,
+                                      //             secondaryAnimation) =>
+                                      //         ChattingScreen(
+                                      //       user: userList[index],
+                                      //     ),
+                                      //     transitionsBuilder: (context,
+                                      //         animation,
+                                      //         secondaryAnimation,
+                                      //         child) {
+                                      //       return SlideTransition(
+                                      //         position: Tween<Offset>(
+                                      //                 begin: const Offset(1, 0),
+                                      //                 end: Offset.zero)
+                                      //             .animate(animation),
+                                      //         child: child,
+                                      //       );
+                                      //     },
+                                      //   ),
+                                      // );
+                                    },
+                                    child: ChatTileWidget(
+                                      index: index,
+                                      color: context
+                                              .read<IslongpressCubit>()
+                                              .state
+                                              .selectedChatTile
+                                              .contains(index)
+                                          ? seconderyColor
+                                          : Colors.transparent,
+                                      cubit: BlocProvider.of(context),
+                                      user: userList[index],
+                                    ),
+                                  ));
+                        } else {
+                          return SizedBox(
+                            child: Center(
                               child: Text(
-                                'Mark All As Read',
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400),
+                                'No Connections Found',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                state.selectedChatTile.isNotEmpty
-                    ? Container()
-                    : Divider(
-                        thickness: 3,
-                        color: seconderyColor,
-                      ),
+                          );
+                        }
+                    }
+                  },
+                ),
+              )
+            ],
+          ),
+          /*SingleChildScrollView(
+            child: Column(
+              children: [
                 SizedBox(
-                  height: 90 * dummyData.length.toDouble(),
+                  height: 90 * userList.length.toDouble(),
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: dummyData.length,
+                    itemCount: userList.length,
                     itemBuilder: (context, index) => ChatTileWidget(
                       index: index,
                       color: context
@@ -118,14 +339,16 @@ class _ConnectScreenState extends State<ConnectScreen> {
                           ? seconderyColor
                           : Colors.transparent,
                       cubit: BlocProvider.of(context),
+                      user: userList[index],
                     ),
                   ),
                 )
               ],
             ),
-          ),
+          ),*/
         );
       },
     );
   }
 }
+*/

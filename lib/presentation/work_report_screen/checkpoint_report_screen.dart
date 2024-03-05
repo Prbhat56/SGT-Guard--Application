@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -12,8 +14,8 @@ import 'package:sgt/presentation/widgets/media_uploading_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/widget/check_point_success.dart';
 import 'package:sgt/presentation/work_report_screen/widget/property_image_preview_widget.dart';
-import 'package:sgt/presentation/work_report_screen/widget/report_submit_success.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 import '../widgets/dotted_choose_file_widget.dart';
@@ -26,8 +28,16 @@ class CheckpointReportScreen extends StatefulWidget {
   String? checkPointqrData;
   String? propId;
   String? shiftId;
+  String? checkPointId;
+  String? checkpointHistoryId;
+
   CheckpointReportScreen(
-      {super.key, this.checkPointqrData, this.propId, this.shiftId});
+      {super.key,
+      this.checkPointqrData,
+      this.propId,
+      this.shiftId,
+      this.checkPointId,
+      this.checkpointHistoryId,});
 
   static _CheckpointReportScreenState? of(BuildContext context) =>
       context.findAncestorStateOfType<_CheckpointReportScreenState>();
@@ -37,6 +47,8 @@ class CheckpointReportScreen extends StatefulWidget {
 }
 
 class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
+  bool? checkIdList;
+
   List<CheckPointTask> checkpointTask = [];
   TextEditingController additionalCommentsController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
@@ -76,29 +88,31 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     }
   }
 
-  Future<void> uploadImage(checkpointId,checkpointTask) async {
+  Future<void> uploadImage(checkpointId, checkpointTask) async {
     showDialog(
         context: context,
         builder: ((context) {
           return Center(child: CircularProgressIndicator());
         }));
-    // List<int> ids = checkpointTask.map<int>((json) => json['id']).toList();
-    // var checkpointsIds = ids.toString();
-    print("%^%^%^% ====> ${checkpointTask.toString().replaceAll("(", "").replaceAll(")","")}");
+    // print("%^%^%^% ====> ${checkpointTask.toString().replaceAll("(", "").replaceAll(")", "")}");
     List<String> checkpointsIds = [];
     String ids = '';
-    checkpointsIds.add(checkpointTask.toString().replaceAll("(", "").replaceAll(")",""));
+    checkpointsIds
+        .add(checkpointTask.toString().replaceAll("(", "").replaceAll(")", ""));
     ids = checkpointsIds.join(',');
     String apiUrl = baseUrl + apiRoutes['checkpointTaskUpdate']!;
     print("apiUrl ==================> ${apiUrl.toString()}");
+    print("--------------------------------${additionalCommentsController.text.toString()}");
     var request = new http.MultipartRequest('POST', Uri.parse(apiUrl));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
     request.fields['remarks'] = additionalCommentsController.text.toString();
     request.fields['task_id'] = ids.toString();
+    request.fields['checkpoint_history_id'] =
+        widget.checkpointHistoryId.toString();
     request.fields['shift_id'] = widget.shiftId.toString();
-
     request.fields['checkpoint_id'] = checkpointId.toString();
+    print("==================================== ${request.fields}");
     if (imageFileList!.length > 0) {
       for (var i = 0; i < imageFileList!.length; i++) {
         var stream = new http.ByteStream(imageFileList![i].openRead());
@@ -110,18 +124,11 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
             filename: imageFileList![i].path.split("/").last));
       }
     }
-    // final CheckPointDetailsModal responseModal = checkPointDetailsModalFromJson();
-    // print("request fields ===============> ${request.fields}");
-    // print("request files ===============> ${request.files}");
     var response = await request.send();
-    // print("response.stream =========> ${response.stream.bytesToString()}");
-    // print("response ===========> ${response.statusCode}");
-    //final respStr = await response.stream.bytesToString();
     if (response.statusCode == 200) {
       // print('=============================================> Request Submitted');
       // setState(() {
-      screenNavigator(
-      context, CheckPointCompleteSuccess());
+      screenNavigator(context, CheckPointCompleteSuccess());
       // });
       // screenNavigator(context, ReportSubmitSuccess());
     } else {
@@ -141,23 +148,18 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     Map<String, dynamic> myJsonBody = {
       'checkpoint_id': checkpoint_id.toString(),
       'shift_id': shift_id.toString(),
-      'property_id': widget.propId
+      'property_id': widget.propId,
+      'checkpoint_history_id': widget.checkpointHistoryId,
     };
-    print("===========??????????? ${myJsonBody}");
     String apiUrl = baseUrl + apiRoutes['checkpointTaskList']!;
     final response =
         await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
-    print(response.body.toString());
     var data = jsonDecode(response.body.toString());
-    print(data);
+    print("data-------> ${data}");
     if (response.statusCode == 201) {
       final CheckPointDetailsModal responseModel =
           checkPointDetailsModalFromJson(response.body);
       checkpointTask = responseModel.data!.checkPointTask!;
-      // checkpointIds = checkpointTask.map((e) => e.id);
-      print("ffffffffffff =========>  ${checkpointTask.map((e) => e.id)}");
-      // var checkpointsIds = ids.toString();
-      // print("%^%^%^% ====> ${checkpointsIds}");
       return responseModel;
     } else {
       return CheckPointDetailsModal(
@@ -174,180 +176,247 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("widget.checkPointqrData =====> ${widget.checkPointqrData}");
     String? jsonString = widget.checkPointqrData;
     Map<String, dynamic> jsonData = jsonDecode(jsonString!);
     int checkpointId = jsonData['checkpoint_details']['checkpoint_id'];
     String checkPointName = jsonData['checkpoint_details']['checkpoint_name'];
-    print('CheckPoint ID: $checkpointId');
+    print('CheckPoint ID: ${checkpointId}');
     var cubit = context.watch<ReportTypeCubit>().state;
     print(cubit.isparkingReport);
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-      child: Scaffold(
-        appBar: CustomAppBarWidget(
-          appbarTitle: checkPointName,
-        ),
-        backgroundColor: white,
-        body: SingleChildScrollView(
-            child: FutureBuilder(
-                future: getCheckpointsTaskList(checkpointId),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                        child: Container(
-                            height: 60,
-                            width: 60,
-                            child: CircularProgressIndicator()));
-                  } else {
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: PropertyImagesPreviewWidget(
-                              avatars: snapshot
-                                  .data!.data!.property!.propertyAvatars,
-                              propertyImageBaseUrl:
-                                  snapshot.data!.propertyImageBaseUrl,
-                            )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+    return widget.checkPointId != checkpointId.toString()
+        ? Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "You are Scanned Wrong CheckPoint",
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                CustomButtonWidget(
+                  buttonTitle: 'back To Checkpoints',
+                  onBtnPress: () {
+                    screenNavigator(context, CheckPointScreen());
+                  },
+                ),
+              ],
+            ),
+          )
+        : MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Scaffold(
+              appBar: CustomAppBarWidget(
+                appbarTitle: checkPointName,
+              ),
+              backgroundColor: white,
+              body: SingleChildScrollView(
+                  child: FutureBuilder(
+                      future: getCheckpointsTaskList(checkpointId),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                              child: Container(
+                                  height: 60,
+                                  width: 60,
+                                  child: CircularProgressIndicator()));
+                        } else {
+                          return Column(
                             children: [
-                              Text(
-                                'Tasks',
-                                style: TextStyle(
-                                    fontSize: 17, color: primaryColor),
+                              SizedBox(
+                                height: 30,
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              checkpointTask.length != 0
-                                  ? Container(
-                                      child: TasksListWidget(
-                                          checkPointTask: checkpointTask),
-                                    )
-                                  : Container(
-                                      child: Text(
-                                        'No Tasks Assigned',
-                                        style: TextStyle(
-                                            fontSize: 10, color: black),
-                                      ),
-                                    ),
-                              const SizedBox(
+                              Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: PropertyImagesPreviewWidget(
+                                    avatars: snapshot
+                                        .data!.data!.property!.propertyAvatars,
+                                    propertyImageBaseUrl:
+                                        snapshot.data!.propertyImageBaseUrl,
+                                  )),
+                              SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Additional comments',
-                                    style: TextStyle(
-                                        fontSize: 17, color: primaryColor),
-                                  ),
-                                  Text(
-                                    '(Optional)',
-                                    style: TextStyle(
-                                        fontSize: 10, color: primaryColor),
-                                  ),
-                                ],
-                              ),
-                              CustomTextField(
-                                controller: additionalCommentsController,
-                                textfieldTitle: '',
-                                hintText: 'Something here',
-                                isFilled: false,
-                                maxLines: 5,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              imageFileList!.isNotEmpty
-                                  ? Text(
-                                      'Media',
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Tasks',
                                       style: TextStyle(
                                           fontSize: 17, color: primaryColor),
-                                    )
-                                  : Container(),
-                              imageFileList!.isNotEmpty
-                                  ? SizedBox(
-                                      height: 110 *
-                                          imageFileList!.length.toDouble(),
-                                      child: ListView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: imageFileList!.length,
-                                          itemBuilder: (context, index) {
-                                            return MediaUploadingWidget(
-                                                imageFileList: imageFileList!,
-                                                imageNames: imageNames,
-                                                clickClose: () {
-                                                  setState(() {
-                                                    imageFileList!
-                                                        .removeAt(index);
-                                                  });
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    checkpointTask.length != 0
+                                        ? Container(
+                                            child: TasksListWidget(
+                                              checkPointTask: checkpointTask,
+                                              // checkPointIdList:(checkPointStatus) {
+                                              //   checkIdList = checkPointStatus;
+                                              // },
+                                            ),
+                                          )
+                                        : Container(
+                                            child: Text(
+                                              'No Tasks Assigned',
+                                              style: TextStyle(
+                                                  fontSize: 10, color: black),
+                                            ),
+                                          ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Additional comments',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: primaryColor),
+                                        ),
+                                        Text(
+                                          '(Optional)',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: primaryColor),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 25),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '',
+                                            style: CustomTheme
+                                                .textField_Headertext_Style,
+                                            textScaleFactor: 1.0,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextFormField(
+                                            initialValue: snapshot.data!.data!.taskRemarks,
+                                            controller:
+                                                additionalCommentsController,
+                                            maxLines: 5,
+                                            decoration:
+                                                CustomTheme.textfieldDecoration(
+                                                    'Something here',
+                                                    false,
+                                                    false),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // CustomTextField(
+                                    //   controller: additionalCommentsController,
+                                    //   textfieldTitle: '',
+                                    //   hintText: 'Something here',
+                                    //   isFilled: false,
+                                    //   maxLines: 5,
+                                    // ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    imageFileList!.isNotEmpty
+                                        ? Text(
+                                            'Media',
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: primaryColor),
+                                          )
+                                        : Container(),
+                                    imageFileList!.isNotEmpty
+                                        ? SizedBox(
+                                            height: 110 *
+                                                imageFileList!.length
+                                                    .toDouble(),
+                                            child: ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                itemCount:
+                                                    imageFileList!.length,
+                                                itemBuilder: (context, index) {
+                                                  return MediaUploadingWidget(
+                                                      imageFileList:
+                                                          imageFileList!,
+                                                      imageNames: imageNames,
+                                                      clickClose: () {
+                                                        setState(() {
+                                                          imageFileList!
+                                                              .removeAt(index);
+                                                        });
+                                                      },
+                                                      index: index);
+                                                }),
+                                          )
+                                        : Container(),
+                                    Text(
+                                      'Add Media',
+                                      style: TextStyle(
+                                          fontSize: 17, color: primaryColor),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        //showing bottom model sheet to upload image
+                                        showModalBottomSheet(
+                                            context: context,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            builder: (context) {
+                                              return CustomBottomModelSheet(
+                                                cameraClick: () {
+                                                  pickCameraImage();
                                                 },
-                                                index: index);
-                                          }),
-                                    )
-                                  : Container(),
-                              Text(
-                                'Add Media',
-                                style: TextStyle(
-                                    fontSize: 17, color: primaryColor),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  //showing bottom model sheet to upload image
-                                  showModalBottomSheet(
-                                      context: context,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      builder: (context) {
-                                        return CustomBottomModelSheet(
-                                          cameraClick: () {
-                                            pickCameraImage();
-                                          },
-                                          galleryClick: () {
-                                            pickGalleryImage();
-                                          },
-                                        );
-                                      });
-                                },
-                                child: DottedChooseFileWidget(
-                                  title: 'Choose a file',
-                                  height: 50,
+                                                galleryClick: () {
+                                                  pickGalleryImage();
+                                                },
+                                              );
+                                            });
+                                      },
+                                      child: DottedChooseFileWidget(
+                                        title: 'Choose a file',
+                                        height: 50,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                  ],
                                 ),
                               ),
+                              CustomButtonWidget(
+                                  buttonTitle: 'Send',
+                                  onBtnPress: () {
+                                    uploadImage(checkpointId,
+                                        checkpointTask.map((e) => e.id));
+                                  }),
                               const SizedBox(
                                 height: 30,
                               ),
                             ],
-                          ),
-                        ),
-                        CustomButtonWidget(
-                            buttonTitle: 'Send',
-                            onBtnPress: () {
-                              uploadImage(checkpointId,checkpointTask.map((e) => e.id));
-                            }),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                      ],
-                    );
-                  }
-                })),
-      ),
-    );
+                          );
+                        }
+                      })),
+            ),
+          );
   }
 }

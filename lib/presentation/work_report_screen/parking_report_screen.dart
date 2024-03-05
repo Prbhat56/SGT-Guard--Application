@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sgt/presentation/time_sheet_screen/model/assigned_propertieslist_modal.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/today_active_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/presentation/widgets/custom_textfield_parking_report.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/propertieslist_picker.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/task_picker.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -132,7 +137,8 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
     }
   }
 
-  List<TodaysDatum> reportDatum = [];
+  // List<TodaysDatum> reportDatum = [];
+  List<AssignedDatum> reportDatum = [];
   String? imageBaseUrl;
 
   @override
@@ -141,30 +147,59 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
     getTasks();
   }
 
-  Future<TodayActiveModel> getTasks() async {
+  // Future<TodayActiveModel> getTasks() async {
+  //   try {
+  //     EasyLoading.show();
+  //     String apiUrl = baseUrl + apiRoutes['todaysActivePropertyList']!;
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     Map<String, String> myHeader = <String, String>{
+  //       "Authorization": "Bearer ${prefs.getString('token')}",
+  //     };
+  //     var response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+  //     if (response.statusCode == 201) {
+  //       final TodayActiveModel responseModel =
+  //           todayModelFromJson(response.body);
+  //       reportDatum = responseModel.data ?? [];
+  //       print('Reports: $reportDatum');
+  //       imageBaseUrl = responseModel.imageBaseUrl;
+  //       EasyLoading.dismiss();
+  //       return responseModel;
+  //     } else {
+  //       EasyLoading.dismiss();
+  //       return TodayActiveModel(
+  //           data: [], imageBaseUrl: '', status: response.statusCode);
+  //     }
+  //   } catch (e) {
+  //     EasyLoading.dismiss();
+  //     throw Exception(e.toString());
+  //   }
+  // }
+
+  Future<AssignedPropertiesListModal> getTasks() async {
     try {
       EasyLoading.show();
-      String apiUrl = baseUrl + apiRoutes['todaysActivePropertyList']!;
+      String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Map<String, String> myHeader = <String, String>{
         "Authorization": "Bearer ${prefs.getString('token')}",
       };
       var response = await http.get(Uri.parse(apiUrl), headers: myHeader);
       if (response.statusCode == 201) {
-        final TodayActiveModel responseModel =
-            todayModelFromJson(response.body);
+        final AssignedPropertiesListModal responseModel =
+            assignedPropertiesListModalFromJson(response.body);
         reportDatum = responseModel.data ?? [];
         print('Reports: $reportDatum');
-        imageBaseUrl = responseModel.imageBaseUrl;
+        imageBaseUrl = responseModel.propertyImageBaseUrl;
         EasyLoading.dismiss();
         return responseModel;
       } else {
         EasyLoading.dismiss();
-        return TodayActiveModel(
-            data: [], imageBaseUrl: '', status: response.statusCode);
+        return AssignedPropertiesListModal(
+            data: [], propertyImageBaseUrl: '', status: response.statusCode);
       }
     } catch (e) {
       EasyLoading.dismiss();
+      log('Exception: ${e.toString()}');
       throw Exception(e.toString());
     }
   }
@@ -205,11 +240,26 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Property Name \*',
-                        style: CustomTheme.textField_Headertext_Style,
-                        textScaleFactor: 1.0,
-                      ),
+                      RichText(
+                          text: TextSpan(
+                              text: 'Property Name',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: primaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              children: [
+                            TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ))
+                          ])),
+                      // Text(
+                      //   'Property Name \*',
+                      //   style: CustomTheme.textField_Headertext_Style,
+                      //   textScaleFactor: 1.0,
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
@@ -239,7 +289,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                                   borderSide:
                                       BorderSide(color: seconderyMediumColor)),
                               fillColor: seconderyMediumColor,
-                              hintText: 'Enter Property Name',
+                              hintText: 'Select Assigned Property',
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
@@ -261,7 +311,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     ],
                   ),
                   propertyClicked
-                      ? CustomListPicker(
+                      ? PropertiesListPicker(
                           onCallback: (() {
                             setState(() {
                               propertyClicked = !propertyClicked;
@@ -271,41 +321,51 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                           reportDatum: reportDatum,
                           imageBaseUrl: imageBaseUrl,
                         )
+                      // CustomListPicker(
+                      //     onCallback: (() {
+                      //       setState(() {
+                      //         propertyClicked = !propertyClicked;
+                      //         _propertyNameController.text = propertyName ?? "";
+                      //       });
+                      //     }),
+                      //     reportDatum: reportDatum,
+                      //     imageBaseUrl: imageBaseUrl,
+                      //   )
                       : Container(),
                   SizedBox(
                     height: 30,
                   ),
-                  CustomTextField(
+                  CustomParkingTextField(
                     controller: _titleController,
-                    textfieldTitle: 'Title \*',
+                    textfieldTitle: 'Title',
                     hintText: 'Enter Title',
                     isFilled: false,
                   ),
-                  CustomTextField(
+                  CustomParkingTextField(
                     controller: _vehicleTypeController,
-                    textfieldTitle: 'Vehicle Make',
-                    hintText: 'Enter Vehicle Type',
+                    textfieldTitle: 'Manufacturer',
+                    hintText: 'Type here manufacturer',
                     isFilled: false,
                   ),
-                  CustomTextField(
+                  CustomParkingTextField(
                     controller: _modelController,
                     textfieldTitle: 'Model',
                     hintText: 'Enter Model',
                     isFilled: false,
                   ),
-                  CustomTextField(
+                  CustomParkingTextField(
                     controller: _colorController,
                     textfieldTitle: 'Color',
                     hintText: 'Enter Color',
                     isFilled: false,
                   ),
-                  CustomTextField(
+                  CustomParkingTextField(
                     controller: _lincenseController,
                     textfieldTitle: 'License Number',
                     hintText: 'Enter License Number',
                     isFilled: false,
                   ),
-                  CustomTextField(
+                  CustomParkingTextField(
                     controller: _stateMyController,
                     textfieldTitle: 'State',
                     hintText: 'Enter State',
@@ -315,6 +375,9 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     'Towed',
                     style: CustomTheme.textField_Headertext_Style,
                     textScaleFactor: 1.0,
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   DropdownButtonFormField<String>(
                     value: towedValue,
@@ -357,8 +420,19 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                               }),
                         )
                       : Container(),
-                  Text('Upload Record Sample',
-                      style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
+                  RichText(
+                      text: TextSpan(
+                          text: 'Upload Record Sample',
+                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                          children: [
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ))
+                      ])),
+                  // Text('Upload Record Sample',
+                  //     style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
                   const SizedBox(
                     height: 20,
                   ),
@@ -382,7 +456,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     },
                     child: DottedChooseFileWidget(
                       title: 'Choose a file',
-                      height: 50,
+                      height: 15,
                     ),
                   ),
                 ],
@@ -397,11 +471,29 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     buttonTitle: 'Send',
                     onBtnPress: () {
                       if (_propertyNameController.text.isEmpty) {
-                        CommonService().openSnackBar(
-                            'Please enter Property name', context);
+                        CommonService()
+                            .openSnackBar('Please Select Property', context);
                       } else if (_titleController.text.isEmpty) {
                         CommonService()
                             .openSnackBar('Please enter title', context);
+                      } else if (_vehicleTypeController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter manufacturer', context);
+                      } else if (_modelController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter model', context);
+                      } else if (_colorController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter color', context);
+                      } else if (_lincenseController.text.isEmpty) {
+                        CommonService().openSnackBar(
+                            'Please enter licence number', context);
+                      } else if (_stateMyController.text.isEmpty) {
+                        CommonService()
+                            .openSnackBar('Please enter state', context);
+                      } else if (imageFileList!.isEmpty) {
+                        CommonService().openSnackBar(
+                            'Please upload Record Sample', context);
                       } else {
                         uploadImage();
                       }

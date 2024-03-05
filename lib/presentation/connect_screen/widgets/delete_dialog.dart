@@ -18,7 +18,7 @@ class DeleteDialog extends StatelessWidget {
             height: 20,
           ),
           Text(
-            'Delete media?',
+            'Delete message?',
             style: TextStyle(fontSize: 15),
           ),
           SizedBox(
@@ -27,8 +27,9 @@ class DeleteDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
-              'Are you sure you want to delete this media?',
+              'Are you sure you want to delete this message?',
               textAlign: TextAlign.center,
+              // ignore: deprecated_member_use
               textScaleFactor: 1.0,
               style: TextStyle(fontSize: 15, color: Colors.grey),
             ),
@@ -53,7 +54,8 @@ class DeleteDialog extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Cencel',
+                      'Cancel',
+                      // ignore: deprecated_member_use
                       textScaleFactor: 1.0,
                       style: TextStyle(
                           color: CustomTheme.primaryColor, fontSize: 15),
@@ -83,6 +85,7 @@ class DeleteDialog extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'Delete',
+                      // ignore: deprecated_member_use
                       textScaleFactor: 1.0,
                       style: TextStyle(color: CustomTheme.white, fontSize: 15),
                     ),

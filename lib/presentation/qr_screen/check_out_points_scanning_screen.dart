@@ -4,21 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/clock_out_error_screen.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/clock_out_screen.dart';
+import 'package:sgt/presentation/home.dart';
+import 'package:sgt/presentation/property_details_screen/model/shift_details_modal.dart';
+import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
 import '../../utils/const.dart';
 import '../clocked_in_out_screen/clock_in_screen.dart';
 import '../widgets/custom_appbar_widget.dart';
 
 class CheckPointOutScanningScreen extends StatefulWidget {
-  const CheckPointOutScanningScreen({super.key});
+  String? checkPointsStatus;
+  CheckPointOutScanningScreen({super.key, this.checkPointsStatus});
 
   @override
   State<CheckPointOutScanningScreen> createState() =>
       _CheckPointScanningScreenState();
 }
 
-class _CheckPointScanningScreenState extends State<CheckPointOutScanningScreen> {
+class _CheckPointScanningScreenState
+    extends State<CheckPointOutScanningScreen> {
   final qrKey = GlobalKey(debugLabel: "Qr");
   QRViewController? controller;
   Barcode? result;
@@ -50,9 +56,34 @@ class _CheckPointScanningScreenState extends State<CheckPointOutScanningScreen> 
   @override
   Widget build(BuildContext context) {
     return result != null
-        ? ClockOutScreen(
-          clockOutQrData:result?.code
-        )
+        ? (widget.checkPointsStatus == "0"
+            ? (ClockOutScreen(clockOutQrData: result?.code))
+            : (
+                // shiftDetails.shiftDetails?.shiftId != null ?
+                ClockOutErrorScreen(clockOutQrData: result?.code)
+            // :
+            //           Center(
+            //               child: Container(
+            //             height: 200,
+            //             width: 200,
+            //             child: Column(
+            //                   mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //             Text(
+            //               'Scan Wrong Qr',
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(fontSize: 15, color: primaryColor),
+            //             ),
+            //             SizedBox(height: 20), // Add spacing if needed
+            //             CustomButtonWidget(
+            //               buttonTitle: 'Rescan',
+            //               onBtnPress: () {
+            //                 screenNavigator(context, CheckPointOutScanningScreen(checkPointsStatus: widget.checkPointsStatus,));
+            //               },
+            //             ),
+            //             ]
+            //           )))
+            ))
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(

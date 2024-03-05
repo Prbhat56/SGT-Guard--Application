@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sgt/presentation/property_details_screen/model/shift_details_modal.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
@@ -45,15 +46,19 @@ class _ScanningScreenState extends State<ScanningScreen> {
 
   shiftIdRetrive(result) async {
     print("widget.qrData =====> ${result?.code}");
-    String? jsonString = result?.code.toString();
-    Map<String, dynamic> jsonData = jsonDecode(jsonString!);
-    int shiftId = jsonData['shift_details']['shift_id'];
-    print('Shift ID: $shiftId');
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('shiftId', shiftId.toString());
+    final ShiftDetailsModal shiftDetails = shiftDetailsModalFromJson(result?.code);
+    String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
+    // String? jsonString = result?.code.toString();
+    // Map<String, dynamic> jsonData = jsonDecode(jsonString!);
+    // int shiftId = jsonData['shift_details']['shift_id'];
+    print('Shift ID: $shiftId');
+    // print("==============jsonString===================>   ${jsonString}");
+    // print("==============ShiftStatus===================>   ${jsonData}");
+    shiftDetails.shiftDetails!.clockOut == null ? 
+    await prefs.setString('shiftId', shiftId) : print("-------------------------------------");
   }
   
-
   @override
   Widget build(BuildContext context) {
     return result != null
@@ -70,11 +75,11 @@ class _ScanningScreenState extends State<ScanningScreen> {
                     height: 69,
                   ),
                   const Text(
-                    'Check in',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                    'Clock in',
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 14,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -82,7 +87,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                       'Scan QR code\n to clock in!',
                       textScaleFactor: 1.0,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17, color: Colors.grey),
+                      style: TextStyle(fontSize: 17, color: Colors.grey,fontWeight: FontWeight.w400),
                     ),
                   ),
                   SizedBox(height: 88),

@@ -61,6 +61,7 @@ class Data {
     String? countryText;
     String? stateText;
     String? cityText;
+    String? lastShiftTime;
     List<PropertyAvatar>? propertyAvatars;
 
     Data({
@@ -88,6 +89,7 @@ class Data {
         this.countryText,
         this.stateText,
         this.cityText,
+        this.lastShiftTime,
         this.propertyAvatars,
     });
 
@@ -116,6 +118,7 @@ class Data {
         countryText: json["country_text"],
         stateText: json["state_text"],
         cityText: json["city_text"],
+        lastShiftTime:json["last_shift_time"],
         propertyAvatars: json["property_avatars"] == null ? [] : List<PropertyAvatar>.from(json["property_avatars"]!.map((x) => PropertyAvatar.fromJson(x))),
     );
 
@@ -144,6 +147,7 @@ class Data {
         "country_text": countryText,
         "state_text": stateText,
         "city_text": cityText,
+        "last_shift_time":lastShiftTime,
         "property_avatars": propertyAvatars == null ? [] : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
     };
 }
@@ -207,6 +211,9 @@ class Details {
     String? guardPosition;
     String? shiftCheckIn;
     String? shiftCheckOut;
+    int? completedCheckpoint;
+    int? remainingCheckpoint;
+
 
     Details({
         this.id,
@@ -215,6 +222,8 @@ class Details {
         this.guardPosition,
         this.shiftCheckIn,
         this.shiftCheckOut,
+        this.completedCheckpoint,
+        this.remainingCheckpoint,
     });
 
     factory Details.fromJson(Map<String, dynamic> json) => Details(
@@ -224,6 +233,8 @@ class Details {
         guardPosition: json["guard_position"],
         shiftCheckIn: json["shift_check_in"],
         shiftCheckOut: json["shift_check_out"],
+        completedCheckpoint: json["completed_checkpoint"],
+        remainingCheckpoint: json["remaining_checkpoint"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -233,6 +244,8 @@ class Details {
         "guard_position": guardPosition,
         "shift_check_in": shiftCheckIn,
         "shift_check_out": shiftCheckOut,
+        "remaining_checkpoint" :  remainingCheckpoint,
+        "completed_checkpoint" : completedCheckpoint,
     };
 }
 
@@ -318,7 +331,7 @@ class Shift {
     String? status;
     DateTime? createdAt;
     DateTime? updatedAt;
-    DateTime? date;
+    String? date;
     String? dateText;
     JobDetails? guardDetails;
     String? shiftTime;
@@ -359,7 +372,7 @@ class Shift {
         status: json["status"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"],
         dateText: json["date_text"],
         guardDetails: json["guard_details"] == null ? null : JobDetails.fromJson(json["guard_details"]),
         shiftTime: json["shift_time"],
@@ -380,7 +393,7 @@ class Shift {
         "status": status,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "date": "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
+        "date": date,
         "date_text": dateText,
         "guard_details": guardDetails?.toJson(),
         "shift_time": shiftTime,

@@ -5,16 +5,19 @@ import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 
 class LeaveRejectInfo extends StatelessWidget {
+
   String name;
   String date;
   String time;
   String reason;
+  String statusOfLeave;
   LeaveRejectInfo(
       {super.key,
       required this.name,
       required this.date,
       required this.time,
-      required this.reason});
+      required this.reason,
+      required this.statusOfLeave,});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +30,8 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title: 'Rejected By: ',
-                titleValue: 'name',
+                title: statusOfLeave=='Rejected'? 'Rejected By: ' : 'Approved By: ',
+                titleValue: name,
                 fontsize: 15,
               ),
             ],
@@ -38,8 +41,8 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title: 'Rejected On: ',
-                titleValue: 'date',
+                title:statusOfLeave=='Rejected'?  'Rejected On: ':'Approved On: ',
+                titleValue: date,
                 fontsize: 15,
               ),
             ],
@@ -49,8 +52,8 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title: 'Rejected At: ',
-                titleValue: 'time',
+                title:statusOfLeave=='Rejected'? 'Rejected At: ':'Approved By: ',
+                titleValue: time,
                 fontsize: 15,
               ),
             ],
@@ -63,16 +66,16 @@ class LeaveRejectInfo extends StatelessWidget {
             height: 6,
           ),
           Text(
-            'Reason Of Rejection',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            statusOfLeave=='Rejected'? 'Reason Of Rejection' : 'Leave Subject',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
             textScaleFactor: 1.0,
           ),
           SizedBox(
             height: 4,
           ),
           Text(
-            reason != "null" ? reason : "No Reason",
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+            reason,
+            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14,color: CustomTheme.black.withOpacity(0.4)),
             textScaleFactor: 1.0,
           ),
           SizedBox(

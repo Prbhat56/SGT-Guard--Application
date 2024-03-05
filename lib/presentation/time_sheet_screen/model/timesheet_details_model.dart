@@ -221,6 +221,8 @@ class Details {
   String? guardPosition;
   String? shiftCheckIn;
   String? shiftCheckOut;
+  int? completedCheckpoint;
+  int? remainingCheckpoint;
 
   Details({
     this.id,
@@ -229,6 +231,8 @@ class Details {
     this.guardPosition,
     this.shiftCheckIn,
     this.shiftCheckOut,
+    this.remainingCheckpoint,
+    this.completedCheckpoint,
   });
 
   factory Details.fromJson(Map<String, dynamic> json) => Details(
@@ -238,6 +242,8 @@ class Details {
         guardPosition: json["guard_position"],
         shiftCheckIn: json["shift_check_in"],
         shiftCheckOut: json["shift_check_out"],
+        completedCheckpoint:json["completed_checkpoint"],
+        remainingCheckpoint:json["remaining_checkpoint"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -247,6 +253,8 @@ class Details {
         "guard_position": guardPosition,
         "shift_check_in": shiftCheckIn,
         "shift_check_out": shiftCheckOut,
+        "completed_checkpoint":completedCheckpoint,
+        "remaining_checkpoint":remainingCheckpoint,
       };
 }
 
@@ -256,13 +264,18 @@ class JobDetails {
   String? guardPosition;
   String? avatar;
   String? shiftTime;
+  int? completedCheckpoint;
+  int? remainingCheckpoint;
 
-  JobDetails(
-      {this.firstName,
-      this.lastName,
-      this.guardPosition,
-      this.avatar,
-      this.shiftTime});
+  JobDetails({
+    this.firstName,
+    this.lastName,
+    this.guardPosition,
+    this.avatar,
+    this.shiftTime,
+    this.completedCheckpoint,
+    this.remainingCheckpoint,
+  });
 
   JobDetails.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
@@ -270,6 +283,8 @@ class JobDetails {
     guardPosition = json['guard_position'];
     avatar = json['avatar'];
     shiftTime = json['shift_time'];
+    remainingCheckpoint = json["remaining_checkpoint"];
+    completedCheckpoint = json["completed_checkpoint"];
   }
 
   Map<String, dynamic> toJson() {
@@ -279,6 +294,8 @@ class JobDetails {
     data['guard_position'] = this.guardPosition;
     data['avatar'] = this.avatar;
     data['shift_time'] = this.shiftTime;
+    data['remaining_checkpoint'] = this.remainingCheckpoint;
+    data['completed_checkpoint'] = this.completedCheckpoint;
     return data;
   }
 }

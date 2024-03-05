@@ -56,6 +56,8 @@ class MissedDatum {
   String? latitude;
   String? status;
   Shift? shift;
+  JobDetails? jobDetails;
+  String? lastShiftTime;
   List<PropertyAvatars>? propertyAvatars = [];
 
   MissedDatum(
@@ -75,6 +77,8 @@ class MissedDatum {
       this.latitude,
       this.status,
       this.shift,
+      this.jobDetails,
+      this.lastShiftTime,
       this.propertyAvatars});
 
   MissedDatum.fromJson(Map<String, dynamic> json) {
@@ -94,7 +98,8 @@ class MissedDatum {
     latitude = json['latitude'];
     status = json['status'];
     shift = json['shift'] != null ? new Shift.fromJson(json['shift']) : null;
-
+    jobDetails: json["job_details"] == null ? null : JobDetails.fromJson(json["job_details"]);
+    lastShiftTime: json["last_shift_time"];
     if (json['property_avatars'] != null) {
       propertyAvatars = <PropertyAvatars>[];
       json['property_avatars'].forEach((v) {
@@ -131,6 +136,47 @@ class MissedDatum {
     return data;
   }
 }
+
+class JobDetails {
+    String? firstName;
+    String? lastName;
+    String? guardPosition;
+    String? avatar;
+    String? shiftTime;
+    int? completedCheckpoint;
+    int? remainingCheckpoint;
+
+    JobDetails({
+        this.firstName,
+        this.lastName,
+        this.guardPosition,
+        this.avatar,
+        this.shiftTime,
+        this.completedCheckpoint,
+        this.remainingCheckpoint,
+    });
+
+    factory JobDetails.fromJson(Map<String, dynamic> json) => JobDetails(
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        guardPosition: json["guard_position"],
+        avatar: json["avatar"],
+        shiftTime: json["shift_time"],
+        completedCheckpoint: json["completed_checkpoint"],
+        remainingCheckpoint: json["remaining_checkpoint"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "first_name": firstName,
+        "last_name": lastName,
+        "guard_position": guardPosition,
+        "avatar": avatar,
+        "shift_time": shiftTime,
+        "completed_checkpoint": completedCheckpoint,
+        "remaining_checkpoint": remainingCheckpoint,
+    };
+}
+
 
 class Shift {
   int? id;

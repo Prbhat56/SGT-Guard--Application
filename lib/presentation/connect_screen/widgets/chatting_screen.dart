@@ -1,87 +1,374 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
-import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:sgt/helper/navigator_function.dart';
-import 'package:sgt/presentation/connect_screen/widgets/chat_model.dart';
-import 'package:sgt/presentation/connect_screen/widgets/media_preview_screen.dart';
-import 'package:sgt/presentation/connect_screen/widgets/send_message_widget.dart';
-import 'package:sgt/presentation/connect_screen/widgets/share_to_connect_screen.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/connect_screen/cubit/isSelectedMedia/isSelectedMedia_cubit.dart';
+import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
+import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
+import 'package:sgt/presentation/connect_screen/widgets/chat_bottom_sheet.dart';
+import 'package:sgt/presentation/connect_screen/widgets/message_card.dart';
 import 'package:sgt/presentation/connect_screen/widgets/video_sending_screen.dart';
+import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
+import 'package:sgt/service/common_service.dart';
 import '../../../utils/const.dart';
 import '../../widgets/custom_bottom_model_sheet.dart';
-import 'image_message.dart';
-import 'image_sending_screen.dart';
-import 'received_message_widget.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
-import 'video_preview.dart';
 
 class ChattingScreen extends StatefulWidget {
-  const ChattingScreen({super.key, required this.index});
-  final int index;
+  const ChattingScreen({super.key, required this.user});
+  final ChatUsers user;
+
   @override
   State<ChattingScreen> createState() => _ChattingScreenState();
 }
 
 class _ChattingScreenState extends State<ChattingScreen> {
   final ImagePicker _picker = ImagePicker();
-  List<XFile>? imageFileList = [];
-  List imageNames = [];
-//pick image from camera
-  void pickCameraImage() async {
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-    if (photo != null) {
-      imageFileList?.add(photo);
-      imageNames.add(path.dirname(photo.path));
-      setState(() {});
-    }
-  }
-
-//pick image from gallery
-  void pickGalleryImage() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
-    if (images != null) {
-      for (var i = 0; i < images.length; i++) {
-        imageFileList?.add(images[i]);
-      }
-      imageNames.add(images[0].name);
-      setState(() {});
-    }
-  }
 
   //pick video from carmera
   void pickVideoFromCamera() async {
     final video = await _picker.pickVideo(source: ImageSource.camera);
-    print(video);
     video != null
-        ? screenNavigator(context, VideoSendingScreen(file: File(video.path)))
+        ? screenNavigator(
+            context,
+            VideoSendingScreen(
+              file: File(video.path),
+              user: widget.user,
+            ))
         : null;
   }
 
   void pickVideoFromGallery() async {
     final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
-    print(video);
     video != null
         ? Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => VideoSendingScreen(
                 file: File(video.path),
+                user: widget.user,
               ),
             ),
           )
         : null;
   }
 
-  // final ImagePicker _picker = ImagePicker();
   List selectedChatTile = [];
-  bool selectMedia = false;
+
+  List<ChatMessages> messages = [];
+
+  TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    print('reloading');
+    var commonService = CommonService();
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 1,
+            shadowColor: primaryColor,
+            backgroundColor: white,
+            leading: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: black,
+                  size: 30,
+                ),
+              ),
+            ),
+            leadingWidth: 60,
+            titleSpacing: -10,
+            title: StreamBuilder(
+                stream: FirebaseHelper.getUserInfo(widget.user),
+                builder: (context, snapshot) {
+                  final data = snapshot.data?.docs;
+
+                  final userList =
+                      data?.map((e) => ChatUsers.fromJson(e.data())).toList() ??
+                          [];
+
+                  return ListTile(
+                    leading: Stack(
+                      children: [
+                        CachedNetworkImage(
+                            imageUrl: userList.isNotEmpty
+                                ? userList.first.profileUrl
+                                : widget.user.profileUrl.toString(),
+                            fit: BoxFit.fill,
+                            width: 40,
+                            height: 40,
+                            imageBuilder: (context, imageProvider) {
+                              return CircleAvatar(
+                                radius: 20,
+                                backgroundColor: grey,
+                                backgroundImage: NetworkImage(
+                                  userList.isNotEmpty
+                                      ? userList.first.profileUrl
+                                      : widget.user.profileUrl.toString(),
+                                ),
+                              );
+                            },
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(
+                                  strokeCap: StrokeCap.round,
+                                ),
+                            errorWidget: (context, url, error) => CircleAvatar(
+                                  radius: 0,
+                                  child: Image.asset(
+                                    'assets/chatProfile.png',
+                                    fit: BoxFit.fill,
+                                  ),
+                                )),
+                        userList.isNotEmpty
+                            ? userList[0].isOnline
+                                ? Positioned(
+                                    top: 26,
+                                    left: 26,
+                                    child: Container(
+                                      height: 13,
+                                      width: 13,
+                                      decoration: BoxDecoration(
+                                        color: greenColor,
+                                        border:
+                                            Border.all(color: white, width: 2),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  )
+                                : Positioned(
+                                    top: 40,
+                                    left: 40,
+                                    child: Container(),
+                                  )
+                            : Positioned(
+                                top: 40,
+                                left: 40,
+                                child: Container(),
+                              )
+                      ],
+                    ),
+                    title: Text(
+                      userList.isNotEmpty
+                          ? userList.first.name
+                          : widget.user.name,
+                    ),
+                    subtitle: Text(userList.isNotEmpty
+                        ? userList[0].isOnline
+                            ? 'Online'
+                            : MyDateUtil.getLastActiveTime(
+                                context: context,
+                                lastActive: userList[0].lastActive)
+                        : MyDateUtil.getLastActiveTime(
+                            context: context,
+                            lastActive: widget.user.lastActive)),
+                    //  widget.user.isOnline
+                    //     ? const Text("Active Now")
+                    //     : const Text("Not Active"),
+                  );
+                }),
+          ),
+          backgroundColor: white,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: StreamBuilder(
+              stream: FirebaseHelper.getAllMessages(widget.user),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return SizedBox();
+
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    final data = snapshot.data?.docs;
+
+                    messages = data
+                            ?.map((e) => ChatMessages.fromJson(
+                                e.data() as Map<String, dynamic>))
+                            .toList() ??
+                        [];
+
+                    if (messages.isNotEmpty) {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            return MessageCard(message: messages[index]);
+                          });
+                    } else {
+                      return Center(
+                        child: Text(
+                          'Say Hi...👋',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                      );
+                    }
+                }
+              },
+            ),
+          ),
+          bottomNavigationBar: SafeArea(
+            child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    top: BorderSide(width: 1.0, color: Colors.grey),
+                  ),
+                  color: Colors.white,
+                ),
+                height: 60.h,
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  BlocBuilder<ToggleMediaCubit, ToggleMediaState>(
+                      builder: (context, state) {
+                    if (state == ToggleMediaState.on) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          //button to choose image from device
+                          IconButton(
+                            onPressed: () {
+                              //showing bottom model sheet to upload image
+                              showModalBottomSheet(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                builder: (BuildContext context) {
+                                  return ChatBottomSheetContent(
+                                    user: widget.user,
+                                  );
+                                },
+                              );
+                              context.read<ToggleMediaCubit>().toggle();
+                            },
+                            icon: Icon(
+                              Icons.photo_rounded,
+                              color: primaryColor,
+                              size: 25,
+                            ),
+                          ),
+                          //button to choose video from device
+                          IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  builder: (context) {
+                                    return CustomBottomModelSheet(
+                                      cameraClick: () {
+                                        pickVideoFromCamera();
+                                      },
+                                      galleryClick: () {
+                                        pickVideoFromGallery();
+                                      },
+                                    );
+                                  });
+                              context.read<ToggleMediaCubit>().toggle();
+                            },
+                            icon: Icon(
+                              Icons.videocam_rounded,
+                              color: primaryColor,
+                              size: 30,
+                            ),
+                          )
+                        ],
+                      );
+                    } else {
+                      return IconButton(
+                          onPressed: () {
+                            context.read<ToggleMediaCubit>().toggle();
+                          },
+                          icon: Icon(
+                            Icons.add_circle_sharp,
+                            color: primaryColor,
+                            size: 30,
+                          ));
+                    }
+                  }),
+                  Expanded(
+                    child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      controller: _textEditingController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: grey,
+                        isDense: true,
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        enabledBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+                          borderSide: BorderSide(color: grey),
+                        ),
+                        border: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+                          borderSide: BorderSide(color: grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(7),
+                            borderSide: BorderSide(color: grey)),
+                        hintText: 'Write a message...',
+                      ),
+                      // onTap: () {
+                      //   setState(() {
+                      //     selectMedia = false;
+                      //   });
+                      // },
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        if (_textEditingController.text.isNotEmpty) {
+                          FirebaseHelper.sendMessage(
+                              widget.user, _textEditingController.text, 'text').then((value) {
+                                FirebaseHelper.updateRecentMessageTime(widget.user);
+                              });
+                          _textEditingController.clear();
+                        } else {
+                          commonService.openSnackBar(
+                              "Please enter some text", context);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.send_rounded,
+                        color: primaryColor,
+                        size: 28,
+                      ))
+                ]),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /*
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
       child: Scaffold(
         appBar:
             // BlocProvider.of<MessagePressedCubit>(context, listen: true)
@@ -175,7 +462,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    'Cencel',
+                                                    'Cancel',
                                                     textScaleFactor: 1.0,
                                                     style: TextStyle(
                                                         color: primaryColor,
@@ -892,5 +1179,5 @@ class _ChattingScreenState extends State<ChattingScreen> {
         ),
       ),
     );
-  }
+  }*/
 }

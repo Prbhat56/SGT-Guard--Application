@@ -30,6 +30,26 @@ class _InactiveJobsTabState extends State<InactiveJobsTab> {
                 'No InActive Jobs Found',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     Container(
+              //       width: 120,
+              //       child: Image.asset(
+              //         'assets/no_active_properties.png',
+              //         fit: BoxFit.contain,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: 24,
+              //     ),
+              //     Text(
+              //       'No Inactive Properties',
+              //       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 17,color:Colors.grey.withOpacity(0.6)),
+              //     ),
+              //   ],
+              // ),
             ),
           )
         : ListView.builder(

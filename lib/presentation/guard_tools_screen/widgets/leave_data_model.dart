@@ -124,6 +124,10 @@ class LeaveDatum {
   String? rejectOfReason;
   DateTime? createdAt;
   DateTime? updatedAt;
+  String? userFirstName;
+  String? userLastName;
+  String? statusUpdateDate;
+  String? statusUpdateTime;
 
   LeaveDatum({
     this.id,
@@ -137,6 +141,10 @@ class LeaveDatum {
     this.rejectOfReason,
     this.createdAt,
     this.updatedAt,
+    this.userFirstName,
+    this.userLastName,
+    this.statusUpdateDate,
+    this.statusUpdateTime,
   });
 
   factory LeaveDatum.fromRawJson(String str) =>
@@ -163,6 +171,10 @@ class LeaveDatum {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        userFirstName: json["user_first_name"],
+        userLastName: json["user_last_name"],
+        statusUpdateDate: json["status_update_date"],
+        statusUpdateTime: json["status_update_time"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -179,6 +191,10 @@ class LeaveDatum {
         "reject_of_reason": rejectOfReason,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "user_first_name": userFirstName,
+        "user_last_name": userLastName,
+        "status_update_date": statusUpdateDate,
+        "status_update_time": statusUpdateTime,
       };
 }
 

@@ -70,14 +70,14 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                           Row(
                             children: [
                               Text(
-                                'Last Shift:',
+                                'Last Shift: ',
                                 style: TextStyle(
                                   color: Colors.red,
                                   fontSize: 11,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              widget.detailsData!.shifts!.isEmpty ?
+                              widget.detailsData!.lastShiftTime!.isEmpty ?
                                Text(
                                 ' No Shift Available ',
                                 style: TextStyle(
@@ -87,7 +87,8 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                                 ),
                               )
                               :  Text(
-                                ' ${widget.detailsData!.shifts!.isEmpty ? '' : widget.detailsData!.shifts!.last.clockIn.toString()} ~ ${widget.detailsData!.shifts!.isEmpty ? '' : widget.detailsData!.shifts!.last.clockOut.toString()}',
+                                widget.detailsData!.lastShiftTime.toString(),
+                                // ' ${widget.detailsData == null ? '' : widget.detailsData!.shifts!.last.clockIn.toString()} ~ ${widget.detailsData!.shifts!.isEmpty ? '' : widget.detailsData!.shifts!.last.clockOut.toString()}',
                                 style: TextStyle(
                                   color: black,
                                   fontSize: 11,
@@ -102,7 +103,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                   )
                 ],
               ),
-              //SizedBox(height: 10),
+              // SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 40),
                 child: Center(
@@ -111,7 +112,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                         title: 'Guards',
                         number: widget.detailsData!.assignStaff.toString()),
                     PropertyDataWidget(
-                        title: 'Points', number: widget.detailsData!.checkpointCount.toString()),
+                        title: 'Checkpoints', number: widget.detailsData!.checkpointCount.toString()),
                     PropertyDataWidget(
                         title: 'Sqft',
                         number: widget.detailsData!.area.toString())

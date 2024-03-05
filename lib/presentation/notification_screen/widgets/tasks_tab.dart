@@ -6,6 +6,7 @@ import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../utils/const.dart';
+import 'package:intl/intl.dart';
 
 class TasksTab extends StatefulWidget {
   const TasksTab({super.key});
@@ -76,7 +77,7 @@ class _TasksTabState extends State<TasksTab> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(snapshot.data!.response!.data![index].notificationTime.toString()),
+                              Text(snapshot.data!.response!.data![index].notificationTime.toString()+' '+'(${snapshot.data!.response!.data![index].createdAt?.day.toString()}-${snapshot.data!.response!.data![index].createdAt?.month.toString()}-${snapshot.data!.response!.data![index].createdAt?.year.toString()})'),
                             ],
                           ),
                         ),

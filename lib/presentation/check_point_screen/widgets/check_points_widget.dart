@@ -4,6 +4,7 @@ import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise
 import 'package:sgt/presentation/check_point_screen/widgets/curve_design_widget.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/timeline_details_widget.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/check_point_time_line.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/clock_out_error_screen.dart';
 import 'package:sgt/presentation/qr_screen/check_out_points_scanning_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'dart:async';
@@ -11,6 +12,7 @@ import 'dart:convert';
 
 import 'package:carp_background_location/carp_background_location.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sgt/theme/custom_theme.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:websocket_universal/websocket_universal.dart';
@@ -30,6 +32,8 @@ class CheckPointWidget extends StatefulWidget {
 }
 
 class _CheckPointWidgetState extends State<CheckPointWidget> {
+  String? statusOfCheckpoints;
+
   final IMessageProcessor<String, String> textSocketProcessor =
       SocketSimpleTextProcessor();
 
@@ -106,21 +110,21 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
     );
 
     /// 2. Listen to webSocket messages:
-    // textSocketHandler.incomingMessagesStream.listen((inMsg) {
-    //   print('> webSocket  got text message from server: "$inMsg" '
+    textSocketHandler.incomingMessagesStream.listen((inMsg) {
+      print('> webSocket  got text message from server: "$inMsg" '
+          '[ping: ${textSocketHandler.pingDelayMs}]');
+      // textMsg = "$inMsg";
+    });
+    // textSocketHandler.outgoingMessagesStream.listen((inMsg) {
+    //   print('> webSocket sent text message to server: "$inMsg" '
     //       '[ping: ${textSocketHandler.pingDelayMs}]');
     //   textMsg = "$inMsg";
     // });
-    textSocketHandler.outgoingMessagesStream.listen((inMsg) {
-      print('> webSocket sent text message to server: "$inMsg" '
-          '[ping: ${textSocketHandler.pingDelayMs}]');
-      textMsg = "$inMsg";
-    });
   }
 
   void onData(LocationDto location) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('>> Background ${location.latitude}, ${location.longitude}');
+    // print('>> Background ${location.latitude}, ${location.longitude}');
 
     _lastLocation = location;
     await textSocketHandler.connect();
@@ -132,10 +136,9 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
       "longitude": "${_lastLocation!.longitude.toString()}",
       "type": "guard",
       "user_email": "${prefs.getString("email")}",
-      "background_task": 1
+      "isBackground": true
     };
     final String encodedData = json.encode(myData);
-
     timer = Timer.periodic(Duration(seconds: 3), (timer) {
       textSocketHandler.sendMessage(encodedData);
     });
@@ -165,23 +168,24 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
                 child: CheckPointTimeLineWidget(
                     checkPointLength: widget.checkpoint),
               ),
-              Expanded(child: TimeLineDetailsWidget())
+              Expanded(child: TimeLineDetailsWidget(
+                onStatusChanged: (checkPointStatus) {
+                  statusOfCheckpoints = checkPointStatus;
+                },
+                ))
             ],
           ),
           Center(
             child: CustomButtonWidget(
                 buttonTitle: 'Clock Out',
                 onBtnPress: () {
-                  // screenNavigator(context, ClockOutErrorScreen());
                   locationSubscription?.cancel();
                   LocationManager().stop();
                   _status = LocationStatus.STOPPED;
-
                   textSocketHandler.disconnect('manual disconnect');
                   textSocketHandler.close();
-
                   timer!.cancel();
-                  screenNavigator(context, CheckPointOutScanningScreen());
+                  screenNavigator(context, CheckPointOutScanningScreen(checkPointsStatus:statusOfCheckpoints.toString()));
                   // screenNavigator(context, ClockOutScreen());
                 }),
           ),

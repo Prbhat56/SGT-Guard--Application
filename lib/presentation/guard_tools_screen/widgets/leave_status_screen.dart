@@ -1,14 +1,13 @@
-
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sgt/presentation/guard_tools_screen/widgets/leave_pending_popup.dart';
 import 'package:sgt/presentation/guard_tools_screen/widgets/leave_rejection_popup.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/const.dart';
 import 'leave_data_model.dart';
@@ -102,12 +101,17 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                           horizontal: 20, vertical: 10),
                       child: Row(
                         children: [
-                          CircleAvatar(
+                          // CircleAvatar(
+                          //   radius: 30,
+                          //   backgroundImage: NetworkImage(
+                          //     'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
+                          //   ),
+                          // ),
+                         CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(
-                              'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyamin-mellish-186077.jpg&fm=jpg',
-                            ),
+                            backgroundImage: AssetImage(leave.status=='Rejected' ? 'assets/rejected_leave.png' : leave.status =='Pending' ? 'assets/pending_leave.png' : leave.status == 'Approved' ? 'assets/approved_leave.png' : 'assets/pending_leave.png')
                           ),
+
                           const SizedBox(
                             width: 20,
                           ),
@@ -173,40 +177,85 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                                         )*/
                               GestureDetector(
                                 onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return LeaveRejectInfo(
-                                          name: '',
-                                          date: '',
-                                          time: '',
-                                          reason:
-                                              leave.rejectOfReason.toString(),
-                                        );
-                                      });
+                                  leave.status == "Rejected"
+                                      ? showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return LeaveRejectInfo(
+                                              statusOfLeave:
+                                                  leave.status.toString(),
+                                              name: leave.userFirstName
+                                                      .toString() +
+                                                  ' ' +
+                                                  leave.userLastName.toString(),
+                                              date: leave.statusUpdateDate
+                                                  .toString(),
+                                              time: leave.statusUpdateTime
+                                                  .toString(),
+                                              reason:
+                                                  leave.rejectOfReason == null
+                                                      ? 'No Reason'
+                                                      : leave.rejectOfReason
+                                                          .toString(),
+                                            );
+                                          })
+                                      : leave.status == "Approved"
+                                          ? showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return LeaveRejectInfo(
+                                                  statusOfLeave:
+                                                      leave.status.toString(),
+                                                  name: leave.userFirstName
+                                                          .toString() +
+                                                      ' ' +
+                                                      leave.userLastName
+                                                          .toString(),
+                                                  date: leave.statusUpdateDate
+                                                      .toString(),
+                                                  time: leave.statusUpdateTime
+                                                      .toString(),
+                                                  reason: leave.subject == null
+                                                      ? 'No Subject'
+                                                      : leave.subject
+                                                          .toString(),
+                                                );
+                                              })
+                                          : print('Waiting');
+                                  // LeavePendingInfo();
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 14),
                                   decoration: BoxDecoration(
-                                      color: leave.status.toString() == "1"
+                                      // color: leave.status.toString() == "1"
+                                      //     ? primaryColor
+                                      //     : leave.status.toString() == "0"
+                                      //         ? white
+                                      //         : Colors.transparent,
+                                      color: leave.status.toString() ==
+                                              "Approved"
                                           ? primaryColor
-                                          : leave.status.toString() == "0"
-                                              ? white
-                                              : Colors.transparent,
+                                          : leave.status.toString() == "Pending"
+                                              ? Colors.grey
+                                              : leave.status.toString() ==
+                                                      "Rejected"
+                                                  ? Colors.red
+                                                  : Colors.transparent,
                                       borderRadius: BorderRadius.circular(16),
                                       border: Border.all(
-                                          color: leave.status.toString() == "0"
+                                          color: leave.status.toString() ==
+                                                  "Approved"
                                               ? primaryColor
                                               : Colors.transparent)),
                                   child: Text(
-                                    leave.status.toString() == "1"
+                                    leave.status.toString() == "Approved"
                                         ? "Approved"
-                                        : "Waiting For Approval",
+                                        : leave.status.toString() == "Pending"
+                                            ? "Pending"
+                                            : "Rejected",
                                     style: TextStyle(
-                                        color: leave.status.toString() == "0"
-                                            ? primaryColor
-                                            : white,
+                                        color: white,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600),
                                   ),
