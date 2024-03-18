@@ -58,7 +58,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                              widget.details!.location.toString(),
+                              widget.details!.type.toString(),
                               maxLines: 2,
                               style: TextStyle(
                                   fontSize: 18,
@@ -103,11 +103,12 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                     TextFieldHeaderWidget(title: 'Missed Shift'),
                     const SizedBox(height: 10),
                     Container(
-                      height: 60,
-                      width: 122,
+                      // width: 122,
                       margin: const EdgeInsets.only(right: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       decoration: BoxDecoration(
-                        color: seconderyColor,
+                        color: white,
+                        border: Border.all(width: 1,color: CustomTheme.seconderyColor),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -115,6 +116,13 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
+                            Text(
+                              widget.details!.shift!.name.toString(),
+                              style: TextStyle(color: primaryColor),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             Text(
                               '${widget.details!.lastShiftTime == null ? '' : 
                               // DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.details!.shift!.shiftDate!.toString())
@@ -149,57 +157,57 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
               SizedBox(
                 height: 10,
               ),
-              // TextFieldHeaderWidget(title: 'Job Details'),
-              // const SizedBox(height: 10),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Text('Guard Name: ',
-              //             style: CustomTheme.blackTextStyle(15)),
-              //         Text(
-              //           '${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.firstName.toString()} ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.lastName.toString()}',
-              //           style: CustomTheme.blueTextStyle(15, FontWeight.w400),
-              //         ),
-              //       ],
-              //     ),
-              //     SizedBox(
-              //       height: 5,
-              //     ),
-              //     Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Text('Position: ', style: CustomTheme.blackTextStyle(15)),
-              //         Text(
-              //           ' ${detailsData!.jobDetails == null ? '' : detailsData!.jobDetails!.guardPosition.toString()}',
-              //           style: CustomTheme.blueTextStyle(15, FontWeight.w400),
-              //         ),
-              //       ],
-              //     ),
-              //     SizedBox(
-              //       height: 5,
-              //     ),
-              //     Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Text('Shift Time: ',
-              //             style: CustomTheme.blackTextStyle(15)),
-              //         Text(
-              //           '${detailsData!.jobDetails == null ? "" : detailsData!.jobDetails!.shiftTime.toString()}',
-              //           style: CustomTheme.blueTextStyle(15, FontWeight.w400),
-              //         ),
-              //       ],
-              //     ),
-              //     SizedBox(
-              //       height: 20,
-              //     ),
-              //     SizedBox(
-              //       height: 5,
-              //     ),
-              //   ],
-              // ),
+              TextFieldHeaderWidget(title: 'Job Details'),
+              const SizedBox(height: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Guard Name: ',
+                          style: CustomTheme.blackTextStyle(15)),
+                      Text(
+                        '${widget.details!.jobDetails == null ? '' : widget.details!.jobDetails!.firstName.toString()} ${widget.details!.jobDetails == null ? '' : widget.details!.jobDetails!.lastName.toString()}',
+                        style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Position: ', style: CustomTheme.blackTextStyle(15)),
+                      Text(
+                        ' ${widget.details!.jobDetails == null ? '' : widget.details!.jobDetails!.guardPosition.toString()}',
+                        style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Shift Time: ',
+                          style: CustomTheme.blackTextStyle(15)),
+                      Text(
+                        '${widget.details!.jobDetails == null ? "" : widget.details!.jobDetails!.shiftTime.toString()}',
+                        style: CustomTheme.blueTextStyle(15, FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 10),
               TextFieldHeaderWidget(title: 'Description'),

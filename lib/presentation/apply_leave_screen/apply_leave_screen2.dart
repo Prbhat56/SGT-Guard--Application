@@ -19,8 +19,7 @@ import 'package:http/http.dart' as http;
 class ApplyLeaveScreen2 extends StatefulWidget {
   String? fromDate;
   String? toDate;
-  String? difference;
-  ApplyLeaveScreen2({super.key, this.fromDate, this.toDate, this.difference});
+  ApplyLeaveScreen2({super.key, this.fromDate, this.toDate,});
 
   @override
   State<ApplyLeaveScreen2> createState() => _ApplyLeaveScreen2State();
@@ -85,44 +84,56 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                 SizedBox(
                   height: 30,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Total Missing Shifts On Leave',
-                        style: CustomTheme.textField_Headertext_Style,
-                        textScaleFactor: 1.0,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: seconderyMediumColor),
-                        child: TextFormField(
-                          // controller: _missingDayText,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            fillColor: primaryColor,
-                            hintText: '${widget.difference}',
-                            hintStyle: TextStyle(color: Colors.black26),
-                            contentPadding: EdgeInsets.only(
-                              left: 10,
-                            ),
-                            border: InputBorder.none,
+                FutureBuilder(
+                    future: missingShiftOnLeave(widget.fromDate, widget.toDate),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                            child: Container(
+                                height: 60,
+                                width: 60,
+                                child: CircularProgressIndicator()));
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Total Missing Shifts On Leave',
+                                style: CustomTheme.textField_Headertext_Style,
+                                textScaleFactor: 1.0,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: seconderyMediumColor),
+                                child: TextFormField(
+                                  // controller: _missingDayText,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    fillColor: primaryColor,
+                                    hintText: '${snapshot.data!.response!.length}',
+                                    hintStyle: TextStyle(color: Colors.black26),
+                                    contentPadding: EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    border: InputBorder.none,
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onTapOutside: (event) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                          keyboardType: TextInputType.number,
-                          onTapOutside: (event) {
-                            FocusScope.of(context).unfocus();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                        );
+                      }
+                    }),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 25),
                   child: Column(
@@ -271,7 +282,10 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                                                     .property!
                                                     .propertyAvatars!
                                                     .isEmpty
-                                                ? CustomCircularImage.getCircularImage('','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuuileEwI49MdSHqO_FR_F9YhKSfG0Sde_8Q&usqp=CAU',
+                                                ? CustomCircularImage
+                                                    .getCircularImage(
+                                                        '',
+                                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuuileEwI49MdSHqO_FR_F9YhKSfG0Sde_8Q&usqp=CAU',
                                                         false,
                                                         30,
                                                         4,
@@ -394,8 +408,13 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                           print(data);
 
                           if (response.statusCode == 200) {
-                            Navigator.of(context).pop();
-                            screenNavigator(context, ApplyLeaveSuccess());
+                            // Navigator.of(context).pop();
+                            showDialog(
+                                context: context,
+                                builder: ((context) {
+                                  return Center(child: ApplyLeaveSuccess());
+                                }));
+                            // screenNavigator(context, ApplyLeaveSuccess());
                           } else {
                             Navigator.of(context).pop();
                             CommonService().openSnackBar(

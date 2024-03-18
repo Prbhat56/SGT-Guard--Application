@@ -26,17 +26,39 @@ import 'package:http/http.dart' as http;
 class CheckPointCardsWidget extends StatefulWidget {
   Property? property;
   String? propertyImageBaseUrl;
-  CheckPointCardsWidget({super.key, this.property, this.propertyImageBaseUrl});
+  List<Checkpoint>? checkPointLength;
+  int? countdownseconds;
+  CheckPointCardsWidget(
+      {super.key,
+      this.property,
+      this.propertyImageBaseUrl,
+      this.checkPointLength,
+      this.countdownseconds});
 
   @override
   State<CheckPointCardsWidget> createState() => _CheckPointCardsWidgetState();
 }
 
+String formatSeconds(int seconds) {
+  int hours = seconds ~/ 3600;
+  int remainingSeconds = seconds % 3600;
+  int minutes = remainingSeconds ~/ 60;
+  int secondsOutput = remainingSeconds % 60;
+
+  String hoursStr = hours.toString().padLeft(2, '0');
+  String minutesStr = minutes.toString().padLeft(2, '0');
+  String secondsStr = secondsOutput.toString().padLeft(2, '0');
+
+  return '${hoursStr} Hrs ${minutesStr} Min ${secondsStr} Secs';
+}
+
 class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
   @override
   Widget build(BuildContext context) {
+    int totalSeconds = widget.countdownseconds!;
+    String formattedTime = formatSeconds(totalSeconds);
     return Container(
-      height: 70,
+      height: 128,
       width: 300,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -57,20 +79,20 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
           SizedBox(
             width: 10,
           ),
-          widget.property!.propertyAvatars != null
-              ? CircleAvatar(
-                  backgroundColor: grey,
-                  backgroundImage: NetworkImage(
-                      widget.propertyImageBaseUrl.toString() +
-                          '' +
-                          widget.property!.propertyAvatars!.first.propertyAvatar
-                              .toString()))
-              : CircleAvatar(
-                  backgroundColor: grey,
-                  backgroundImage: AssetImage('assets/sgt_logo.jpg')),
-          SizedBox(
-            width: 10,
-          ),
+          // widget.property!.propertyAvatars != null
+          //     ? CircleAvatar(
+          //         backgroundColor: grey,
+          //         backgroundImage: NetworkImage(
+          //             widget.propertyImageBaseUrl.toString() +
+          //                 '' +
+          //                 widget.property!.propertyAvatars!.first.propertyAvatar
+          //                     .toString()))
+          //     : CircleAvatar(
+          //         backgroundColor: grey,
+          //         backgroundImage: AssetImage('assets/sgt_logo.jpg')),
+          // SizedBox(
+          //   width: 10,
+          // ),
           Expanded(
             child: Container(
               // height: 50,
@@ -80,35 +102,123 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                   SizedBox(
                     height: 6,
                   ),
-                  Text(
-                    // 'Rivi Properties',
-                    widget.property!.propertyName.toString(),
-                    style: CustomTheme.blackTextStyle(15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          // 'Rivi Properties',
+                          widget.property!.propertyName.toString(),
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: black)),
+                      Text(
+                        // '1517 South Centelella',
+                        widget.property!.type.toString(),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 3,
-                  ),
-                  Text(
-                    // '1517 South Centelella',
-                    widget.property!.location.toString(),
-                    style: CustomTheme.greyTextStyle(10),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(
-                    height: 5,
+                    height: 8,
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Text('Route Name : ',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: black)),
                       Text(
-                        'Remaining Shift Time:',
-                        style: CustomTheme.blueTextStyle(8, FontWeight.w500),
-                      ),
-                      Text(
-                        ' 2 Hrs 30 Min 23 Secs', // api response pending
-                        style: CustomTheme.blackTextStyle(8),
+                        widget.checkPointLength!.first.route!.routeNumber
+                            .toString(), // api response pending
+                        style: CustomTheme.blueTextStyle(12, FontWeight.w400),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Remaining Shift Time: ',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: black)),
+                      Icon(
+                        Icons.timer,
+                        color: CustomTheme.primaryColor,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      widget.countdownseconds != 0
+                          ? Text(
+                              formattedTime,
+                              // widget.countdownseconds.toString(),
+                              style: CustomTheme.blueTextStyle(
+                                  12, FontWeight.w400),
+                            )
+                          : Text(
+                              "Shift Time Over",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.schedule,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "${widget.property!.shift!.totalDutyHours.toString()} Duty",
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Icon(
+                        Icons.edit_note,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "${widget.checkPointLength!.length.toString()} Checkpoints", // api response pending
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 8,
                   )
                 ],
               ),

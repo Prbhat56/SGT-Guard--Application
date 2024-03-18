@@ -243,6 +243,9 @@ class _ChatTileWidgetState extends State<ChatTileWidget> {
                     await showDialog(
                         context: context,
                         builder: (_) => ChatImageDialogue(user: widget.user));
+
+                    // await FirebaseHelper.createGuardLocation(
+                    //     'lat', 'long', 'shiftid', 'checkpId', "routeid");
                   },
                   child: Stack(
                     children: [
@@ -306,24 +309,19 @@ class _ChatTileWidgetState extends State<ChatTileWidget> {
                         ? Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              _messages?.type == 'not_send'
-                                  ? Icon(
-                                      Icons.av_timer,
-                                      size: 17.sp,
-                                    )
-                                  : _messages != null
-                                      ? _messages!.read.isNotEmpty
-                                          ? Icon(
-                                              Icons.done_all_rounded,
-                                              color: primaryColor,
-                                              size: 16,
-                                            )
-                                          : Icon(
-                                              Icons.done_all_rounded,
-                                              color: Colors.grey,
-                                              size: 16,
-                                            )
-                                      : Container(),
+                              _messages != null
+                                  ? _messages!.read.isNotEmpty
+                                      ? Icon(
+                                          Icons.done_all_rounded,
+                                          color: primaryColor,
+                                          size: 16,
+                                        )
+                                      : Icon(
+                                          Icons.done_all_rounded,
+                                          color: Colors.grey,
+                                          size: 16,
+                                        )
+                                  : Container(),
                               _messages?.type == 'photo'
                                   ? Icon(
                                       Icons.photo,
@@ -352,12 +350,36 @@ class _ChatTileWidgetState extends State<ChatTileWidget> {
                               )
                             ],
                           )
-                        : Text(
-                            _messages != null
-                                ? _messages!.message.toString()
-                                : "Hey there! I am using SGT",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _messages?.type == 'photo'
+                                  ? Icon(
+                                      Icons.photo,
+                                      size: 16.sp,
+                                    )
+                                  : _messages?.type == 'video'
+                                      ? Icon(
+                                          Icons.videocam,
+                                          size: 16.sp,
+                                        )
+                                      : Container(),
+                              SizedBox(
+                                width: 140.w,
+                                child: Text(
+                                  _messages?.type == 'photo'
+                                      ? ' Photo'
+                                      : _messages?.type == 'video'
+                                          ? " Video"
+                                          : _messages != null
+                                              ? _messages!.message.toString()
+                                              : "Hey there! I am using SGT",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                              )
+                            ],
                           ),
                 trailing: SizedBox(
                   height: 60.h,
@@ -381,24 +403,6 @@ class _ChatTileWidgetState extends State<ChatTileWidget> {
                           user: widget.user,
                           messages: _messages,
                         ),
-                        // FirebaseHelper.user.uid == _messages?.toId.toString()
-                        //     ? count != 0
-                        //         ? Container(
-                        //             height: 20,
-                        //             width: 20,
-                        //             decoration: BoxDecoration(
-                        //                 color: primaryColor,
-                        //                 borderRadius:
-                        //                     BorderRadius.circular(50)),
-                        //             child: Center(
-                        //               child: Text(
-                        //                 count.toString(),
-                        //                 style: TextStyle(color: white),
-                        //               ),
-                        //             ),
-                        //           )
-                        //         : Container()
-                        //     : Container()
                       ]),
                 ),
               ),

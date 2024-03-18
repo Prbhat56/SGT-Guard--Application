@@ -30,6 +30,7 @@ class CheckpointReportScreen extends StatefulWidget {
   String? shiftId;
   String? checkPointId;
   String? checkpointHistoryId;
+  int? checkpointListIndex;
 
   CheckpointReportScreen(
       {super.key,
@@ -37,7 +38,8 @@ class CheckpointReportScreen extends StatefulWidget {
       this.propId,
       this.shiftId,
       this.checkPointId,
-      this.checkpointHistoryId,});
+      this.checkpointHistoryId, 
+      this.checkpointListIndex,});
 
   static _CheckpointReportScreenState? of(BuildContext context) =>
       context.findAncestorStateOfType<_CheckpointReportScreenState>();
@@ -213,7 +215,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
               appBar: CustomAppBarWidget(
-                appbarTitle: checkPointName,
+                appbarTitle: "CP${widget.checkpointListIndex!+1} ${''+checkPointName}",
               ),
               backgroundColor: white,
               body: SingleChildScrollView(

@@ -5,12 +5,15 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
+import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
 
 import '../../../utils/const.dart';
 
 class EditLocationScreen extends StatefulWidget {
   LatLng? currentPosition;
-  EditLocationScreen({super.key, this.currentPosition});
+  final ValueChanged<LatLng> onStatusChangedSecond;
+  EditLocationScreen({super.key, this.currentPosition,required this.onStatusChangedSecond});
 
   @override
   State<EditLocationScreen> createState() => _EditLocationScreenState();
@@ -22,8 +25,6 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
   late final GoogleMapController _googleMapController;
   final Set<Marker> _markers = {};
   String location = "Search Location";
-
-
 
   void _addMarker() {
     setState(() {
@@ -72,18 +73,18 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("=====================> ${widget.currentPosition}");
-
     return Scaffold(
       body: Stack(
         children: [
           GoogleMap(
-              markers: _markers,
-              initialCameraPosition:CameraPosition(target: widget.currentPosition!, zoom: 14)),
+            markers: _markers,
+            initialCameraPosition:
+                CameraPosition(target: widget.currentPosition!, zoom: 14),
+            myLocationEnabled: true,
+            // zoomGesturesEnabled: true,
+          ),
 
-
-                  
-                  // CameraPosition(target: widget.currentPosition!, zoom: 14)),
+          // CameraPosition(target: widget.currentPosition!, zoom: 14)),
           // Positioned(
           //     //search input bar
           //     top: 10,
@@ -154,7 +155,11 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
                   decoration: BoxDecoration(
                       color: white, border: Border.all(color: Colors.grey)),
                   child: Center(
-                    child: Icon(Icons.arrow_back_ios, color: black),
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.arrow_back_ios, color: black)),
                   ),
                 ),
                 Container(
@@ -197,14 +202,21 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
                     },
                     child: Container(
                       height: 50,
-                      width: 200,
+                      width: 264,
                       decoration: BoxDecoration(
                           color: primaryColor,
                           borderRadius: BorderRadius.circular(30)),
                       child: Center(
-                        child: Text(
-                          "Use Pinned Location",
-                          style: TextStyle(color: white, fontSize: 17),
+                        child: InkWell(
+                          onTap: () {
+                            // print("------------------current Location  ====> ${currentlocation}");
+                            widget.onStatusChangedSecond(currentlocation);
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Use Pinned Location",
+                            style: TextStyle(color: white, fontSize: 17),
+                          ),
                         ),
                       ),
                     ),

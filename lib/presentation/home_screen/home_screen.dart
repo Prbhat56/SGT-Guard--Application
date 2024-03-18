@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/all_team_member/all_team_member_screen.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/home_screen/widgets/circular_profile_widget.dart';
 import 'package:sgt/presentation/home_screen/widgets/location_details_card.dart';
 import 'package:sgt/presentation/home_screen/widgets/location_details_model.dart';
@@ -53,12 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime today = DateTime.now();
     String dateStr = "${today.day}/${today.month}/${today.year}";
     print(dateStr);
-    void whatToDo(int value) {
-      // setState(() {
-        totalTeams = value;
-      // });
-    }
-
     return Scaffold(
       appBar: MainAppBarWidget(
         appBarTitle: 'Security Guard Tracking',
@@ -73,15 +68,20 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(children: [
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Team (${totalTeams.toString()})',
                       style: CustomTheme.textField_Headertext_Style),
                   //btn to see all team members
                   InkWell(
-                    onTap: () {
-                      screenNavigator(context, AllTeamMemberScreen());
+                    onTap: () async {
+                      //screenNavigator(context, AllTeamMemberScreen());
+                      await FirebaseHelper.createGuardLocation('22.572645',
+                              '88.363892', 'current_shift', 'checkpId')
+                          .then((value) {
+                        screenNavigator(context, AllTeamMemberScreen());
+                      });
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10.0),
@@ -92,12 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(
                 height: 20,
-              ),
+              ),*/
               SizedBox(
-                height: 110,
-                child: CircularProfile(
-                  myCallback: whatToDo,
-                ), //showing all team member horizontally
+                height: 145,
+                child: CircularProfile(), //showing all team member horizontally
               ),
               const SizedBox(
                 height: 20,
@@ -308,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'InActive Tours (${inActiveDatum.length})',
+                                'Upcoming Tours (${inActiveDatum.length})',
                                 style: CustomTheme.textField_Headertext_Style,
                               ),
                               //btn to see all the active jobs

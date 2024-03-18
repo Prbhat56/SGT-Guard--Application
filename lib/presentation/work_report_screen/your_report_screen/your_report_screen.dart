@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -25,6 +27,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
   late int last_page = 0;
   List<ReportResponse> reportDatum = [];
   String imgUrl = '';
+  String propertyImgUrl = '';
 
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -76,6 +79,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
             reportListModelFromJson(response.body);
         recentReportDatum = responseModel.recentReports!.data ?? [];
         imgUrl = responseModel.imageBaseUrl ?? '';
+        propertyImgUrl = responseModel.propertyImageBaseUrl ?? '';
         return responseModel;
       } else {
         return ReportListModel();
@@ -119,6 +123,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
           reportListModelFromJson(response.body);
       reportDatum.addAll(responseModel.response!.data!);
       imgUrl = responseModel.imageBaseUrl ?? '';
+      propertyImgUrl = responseModel.propertyImageBaseUrl ?? '';
 
       current_page = responseModel.response!.currentPage ?? 0;
 
@@ -171,7 +176,10 @@ class _YourReportScreenState extends State<YourReportScreen> {
                     isDismissible: false,
                     context: context,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5))),
+                    // RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     builder: (context) {
                       return FilterReportWidget(onData: _onData);
                     }).whenComplete(
@@ -277,9 +285,10 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                         height: 10,
                                       ),
                                       Text(
-                                        myData.reportType.toString(),
+                                        myData.subject.toString(),
                                         textAlign: TextAlign.center,
-                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                         style: CustomTheme.blueTextStyle(
                                             10, FontWeight.w600),
                                       ),
@@ -291,6 +300,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                           screenNavigator(
                                               context,
                                               ReportDetailsPage(
+                                                imgUrl : imgUrl,
                                                 recentReportDatum: myData,
                                               ));
                                         },
@@ -348,61 +358,83 @@ class _YourReportScreenState extends State<YourReportScreen> {
                         final myData = reportDatum[index];
                         return Column(
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
+                            InkWell(
+                              onTap: () {
+                                screenNavigator(
+                                    context,
+                                    ReportDetailsPage(
+                                      imgUrl:imgUrl,
+                                      recentReportDatum: myData,
+                                    ));
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                  child: CircleAvatar(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(30),
-                                      child: CachedNetworkImage(
-                                          imageUrl: imgUrl +
-                                              '${myData.images!.length != 0 ? myData.images!.first.toString() : ''}',
-                                          fit: BoxFit.fill,
-                                          width: 60,
-                                          height: 60,
-                                          placeholder: (context, url) =>
-                                              const CircularProgressIndicator(
-                                                strokeCap: StrokeCap.round,
-                                              ),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                                'assets/sgt_logo.jpg',
-                                                fit: BoxFit.fill,
-                                              )),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
                                     ),
-                                    radius: 30,
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        myData.reportType.toString(),
-                                        maxLines: 2,
-                                        style: CustomTheme.blueTextStyle(
-                                            15, FontWeight.w400),
+                                    child: CircleAvatar(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(30),
+                                        child: CachedNetworkImage(
+                                            imageUrl: propertyImgUrl + '${myData.propertyAvatars!.length != 0 ? myData.propertyAvatars!.first.propertyAvatar.toString() : ''}',
+                                            fit: BoxFit.fill,
+                                            width: 60,
+                                            height: 60,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(
+                                                  strokeCap: StrokeCap.round,
+                                                ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Image.asset(
+                                                      'assets/sgt_logo.jpg',
+                                                      fit: BoxFit.fill,
+                                                    )),
                                       ),
-                                      Text(
-                                        myData.subject.toString(),
-                                        maxLines: 2,
-                                        style: CustomTheme.blackTextStyle(12),
-                                      ),
-                                    ],
+                                      radius: 30,
+                                      backgroundColor: Colors.transparent,
+                                    ),
                                   ),
-                                )
-                              ],
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              myData.subject.toString(),
+                                              maxLines: 2,
+                                              style: CustomTheme.blueTextStyle(
+                                                  15, FontWeight.w400),
+                                            ),
+                                            Text(
+                                              myData.emergencyTime.toString(),
+                                              maxLines: 2,
+                                              style: CustomTheme.greyTextStyle(
+                                                  12),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          myData.emergencyDate.toString(),
+                                          maxLines: 2,
+                                          style: CustomTheme.blackTextStyle(12),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         );

@@ -60,6 +60,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       var responseModel = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
+        print("===============> ${prefs.getString('property_owner_id')}");
         setState(() {
           leaveTerms = responseModel['data']['policies'];
         });
@@ -228,11 +229,12 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             }),
                       ),*/
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     decoration: BoxDecoration(
                         // color: AppColors.white,
                         border: Border.all(width: 1, color: CustomTheme.grey),
-                        borderRadius:BorderRadius.all(Radius.elliptical(5, 5))),
+                        borderRadius:
+                            BorderRadius.all(Radius.elliptical(5, 5))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Row(
@@ -244,10 +246,12 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             width: 3,
                             color: black,
                           ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
+                          SizedBox(
+                            height: 220,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: SingleChildScrollView(
+                              // scrollDirection: Axis.vertical,
+                              physics: AlwaysScrollableScrollPhysics(),
                               child: Text(
                                 (leaveTerms == ''
                                     ? 'No Leave Policy'
@@ -266,7 +270,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 120,
+                    height: 90,
                   ),
                   ListTileTheme(
                     horizontalTitleGap: 0,
@@ -307,7 +311,8 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                                 : screenNavigator(
                                     context,
                                     ApplyLeaveScreen2(
-                                      difference:dt2.difference(dt1).inDays.toString(),
+                                      // difference:
+                                      //     dt2.difference(dt1).inDays.toString(),
                                       fromDate: fromDate,
                                       toDate: toDate,
                                     ));

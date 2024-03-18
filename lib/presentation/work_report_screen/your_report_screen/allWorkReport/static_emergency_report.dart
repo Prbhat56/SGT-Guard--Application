@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class StaticEmergencyReportScreen extends StatefulWidget {
 
 class _StaticEmergencyReportScreenState
     extends State<StaticEmergencyReportScreen> {
+  LatLng? currentLatLng;
   TextEditingController _propertyNameController = TextEditingController();
   TextEditingController _titleController = TextEditingController();
   String? dateValue = '';
@@ -186,8 +188,10 @@ class _StaticEmergencyReportScreenState
         : request.fields['emergency_time'] =
             DateFormat('HH:mm:ss').format(DateTime.now()).toString();
 
-    request.fields['latitude'] = latValue.toString();
-    request.fields['longitude'] = longValue.toString();
+    // request.fields['latitude'] = latValue.toString();
+    request.fields['latitude'] = currentLatLng!.latitude.toString();
+    // request.fields['longitude'] = longValue.toString();
+    request.fields['longitude'] = currentLatLng!.longitude.toString();
     request.fields['emergency_details'] = _detailsController.text.toString();
 
     List<String> peopleNameList = [];
@@ -387,7 +391,10 @@ class _StaticEmergencyReportScreenState
                 ),
                 EmergencyDateTimeWidget(), //taking date and time using this widget
 
-                EmergencyLocationWidget(), //taking location widget
+                EmergencyLocationWidget(  onStatusChanged: (currentPosition) {
+                  // print("----------static_emergency_report =======>${currentPosition}");
+                  currentLatLng = currentPosition;
+                },), //taking location widget
 
                 CustomTextField(
                   controller: _detailsController,

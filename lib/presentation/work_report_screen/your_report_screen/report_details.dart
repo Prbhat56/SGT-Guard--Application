@@ -1,15 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 
-class ReportDetailsPage extends StatelessWidget {
+class ReportDetailsPage extends StatefulWidget {
   ReportDetailsPage({
     super.key,
     required this.recentReportDatum,
+    this.imgUrl,
   });
+  String? imgUrl;
   final ReportResponse recentReportDatum;
 
+  @override
+  State<ReportDetailsPage> createState() => _ReportDetailsPageState();
+}
+
+class _ReportDetailsPageState extends State<ReportDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +36,7 @@ class ReportDetailsPage extends StatelessWidget {
           },
         ),
         title: Text(
-          'Report Details',
+          widget.recentReportDatum.reportType.toString(),
           style: TextStyle(color: primaryColor, fontWeight: FontWeight.w700),
         ),
       ),
@@ -75,11 +83,59 @@ class ReportDetailsPage extends StatelessWidget {
                                 BorderSide(color: seconderyMediumColor)),
                         fillColor: seconderyMediumColor,
                         focusColor: primaryColor,
-                        hintText: recentReportDatum.reportType,
+                        hintText:
+                            widget.recentReportDatum.propertyId.toString(),
                         hintStyle: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w400),
                       ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding:EdgeInsets.only(left:16.0,right:16.0,bottom:8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.event_note,
+                        size: 25,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        widget.recentReportDatum.emergencyDate,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: CustomTheme.primaryColor),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.alarm_on,
+                        size: 25,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        widget.recentReportDatum.emergencyTime, // api response pending
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color:CustomTheme.primaryColor),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -106,7 +162,7 @@ class ReportDetailsPage extends StatelessWidget {
                     child: Scrollbar(
                       child: TextFormField(
                         maxLines: null,
-                        initialValue: recentReportDatum.subject,
+                        initialValue: widget.recentReportDatum.subject,
                         keyboardType: TextInputType.multiline,
                         readOnly: true,
                         decoration: InputDecoration(
@@ -155,7 +211,7 @@ class ReportDetailsPage extends StatelessWidget {
                   Scrollbar(
                     child: TextFormField(
                       maxLines: null,
-                      initialValue: recentReportDatum.notes.toString(),
+                      initialValue: widget.recentReportDatum.notes.toString(),
                       keyboardType: TextInputType.multiline,
                       readOnly: true,
                       decoration: InputDecoration(
@@ -201,17 +257,31 @@ class ReportDetailsPage extends StatelessWidget {
                     mainAxisSpacing: 15,
                     mainAxisExtent: 120, // here set custom Height You Want
                   ),
-                  itemCount: 4,
+                  itemCount: widget.recentReportDatum.images!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Image.asset(
-                        'assets/sgt_logo.jpg',
-                        fit: BoxFit.fill,
-                      ),
+                      child: CachedNetworkImage(
+                          imageUrl: widget.imgUrl! +
+                              '${widget.recentReportDatum.images!.length != 0 ? widget.recentReportDatum.images![index].toString() : ''}',
+                          fit: BoxFit.fill,
+                          width: 60,
+                          height: 60,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(
+                                strokeCap: StrokeCap.round,
+                              ),
+                          errorWidget: (context, url, error) => Image.asset(
+                                'assets/sgt_logo.jpg',
+                                fit: BoxFit.fill,
+                              )),
+                      //  Image.asset(
+                      //   'assets/sgt_logo.jpg',
+                      //   fit: BoxFit.fill,
+                      // ),
                     );
                   },
                 ),

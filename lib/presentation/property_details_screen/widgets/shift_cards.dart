@@ -53,7 +53,8 @@ class _ShiftCardsState extends State<ShiftCards> {
                 },
                 child: Container(
                   height: 48,
-                  width: 122,
+                  // width: 122,
+                  padding: EdgeInsets.symmetric(horizontal: 5),
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
                     color: Colors.green.withOpacity(0.5),
@@ -64,7 +65,7 @@ class _ShiftCardsState extends State<ShiftCards> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                       "(${widget.shifts![index].date.toString()})"+''+widget.shifts![index].shiftTime.toString(),
+                       "(${widget.shifts![index].date.toString()})"+'\n'+widget.shifts![index].shiftTime.toString(),
                         // widget.shifts![index].clockIn.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(

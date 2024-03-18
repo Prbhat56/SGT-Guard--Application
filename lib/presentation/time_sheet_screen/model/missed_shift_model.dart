@@ -81,60 +81,49 @@ class MissedDatum {
       this.lastShiftTime,
       this.propertyAvatars});
 
-  MissedDatum.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    propertyOwnerId = json['property_owner_id'];
-    propertyName = json['property_name'];
-    type = json['type'];
-    assignStaff = json['assign_staff'];
-    area = json['area'];
-    country = json['country'];
-    state = json['state'];
-    city = json['city'];
-    postCode = json['post_code'];
-    propertyDescription = json['property_description'];
-    location = json['location'];
-    longitude = json['longitude'];
-    latitude = json['latitude'];
-    status = json['status'];
-    shift = json['shift'] != null ? new Shift.fromJson(json['shift']) : null;
-    jobDetails: json["job_details"] == null ? null : JobDetails.fromJson(json["job_details"]);
-    lastShiftTime: json["last_shift_time"];
-    if (json['property_avatars'] != null) {
-      propertyAvatars = <PropertyAvatars>[];
-      json['property_avatars'].forEach((v) {
-        propertyAvatars!.add(new PropertyAvatars.fromJson(v));
-      });
-    }
-  }
+  factory MissedDatum.fromJson(Map<String, dynamic> json) => MissedDatum(
+        id: json["id"],
+        propertyOwnerId: json["property_owner_id"],
+        propertyName: json["property_name"],
+        type: json["type"],
+        assignStaff: json["assign_staff"],
+        area: json["area"],
+        country: json["country"],
+        state: json["state"],
+        city: json["city"],
+        postCode: json["post_code"],
+        propertyDescription: json["property_description"],
+        location: json["location"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+        status: json["status"],
+        shift: json["shift"] == null ? null : Shift.fromJson(json["shift"]),
+        jobDetails: json["job_details"] == null ? null : JobDetails.fromJson(json["job_details"]),
+        lastShiftTime: json["last_shift_time"],
+        propertyAvatars: json["property_avatars"] == null ? [] : List<PropertyAvatars>.from(json["property_avatars"]!.map((x) => PropertyAvatars.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['property_owner_id'] = this.propertyOwnerId;
-    data['property_name'] = this.propertyName;
-    data['type'] = this.type;
-    data['assign_staff'] = this.assignStaff;
-    data['area'] = this.area;
-    data['country'] = this.country;
-    data['state'] = this.state;
-    data['city'] = this.city;
-    data['post_code'] = this.postCode;
-    data['property_description'] = this.propertyDescription;
-    data['location'] = this.location;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
-    data['status'] = this.status;
-
-    if (this.shift != null) {
-      data['shift'] = this.shift!.toJson();
-    }
-    if (this.propertyAvatars != null) {
-      data['property_avatars'] =
-          this.propertyAvatars!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "property_owner_id": propertyOwnerId,
+        "property_name": propertyName,
+        "type": type,
+        "assign_staff": assignStaff,
+        "area": area,
+        "country": country,
+        "state": state,
+        "city": city,
+        "post_code": postCode,
+        "property_description": propertyDescription,
+        "location": location,
+        "longitude": longitude,
+        "latitude": latitude,
+        "status": status,
+        "shift": shift?.toJson(),
+        "job_details": jobDetails?.toJson(),
+        "last_shift_time": lastShiftTime,
+        "property_avatars": propertyAvatars == null ? [] : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
+    };
 }
 
 class JobDetails {

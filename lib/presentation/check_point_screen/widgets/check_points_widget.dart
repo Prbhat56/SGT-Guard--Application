@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
+import 'package:sgt/presentation/check_point_screen/utils/countdown_timer.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/curve_design_widget.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/timeline_details_widget.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/check_point_time_line.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/clock_out_error_screen.dart';
 import 'package:sgt/presentation/qr_screen/check_out_points_scanning_screen.dart';
+import 'package:sgt/presentation/shift_details_screen/widgets/time_stamp_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -33,7 +38,8 @@ class CheckPointWidget extends StatefulWidget {
 
 class _CheckPointWidgetState extends State<CheckPointWidget> {
   String? statusOfCheckpoints;
-
+  String? firstCheckpointId;
+  String? routeId;
   final IMessageProcessor<String, String> textSocketProcessor =
       SocketSimpleTextProcessor();
 
@@ -72,6 +78,11 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
 
   @override
   void initState() {
+    String timeString = widget.property!.shift!.clockOutFull!.toString();
+    DateTime dateTime = DateTime.parse(timeString);
+    DateTime currentTime = DateTime.now();
+    int differenceInSeconds = dateTime.difference(currentTime).inSeconds;
+    initTimerOperation(differenceInSeconds.toInt());
     super.initState();
     connectToSocket();
 
@@ -124,11 +135,24 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
 
   void onData(LocationDto location) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // print('>> Background ${location.latitude}, ${location.longitude}');
-
+    firstCheckpointId = widget.checkpoint!.first.id.toString();
+    routeId = widget.checkpoint!.first.routeId.toString();
     _lastLocation = location;
     await textSocketHandler.connect();
-
+    String? shift_id = prefs.getString('shiftId');
+    String? property_id = prefs.getString('propertyId');
+    // print("latitude ==> ${_lastLocation!.latitude.toString()}");
+    // print("longitude ==> ${_lastLocation!.longitude.toString()}");
+    // print("shift_id ==> ${shift_id.toString()}");
+    // print("firstCheckpointId ==> ${firstCheckpointId.toString()}");
+    // print("routeId ==> ${routeId.toString()}");
+    await FirebaseHelper.createGuardLocation(
+        _lastLocation!.latitude.toString(),
+        _lastLocation!.longitude.toString(),
+        shift_id.toString(),
+        firstCheckpointId.toString(),
+        routeId.toString(),
+        property_id.toString());
     Map<String, dynamic> myData = {
       "from_user_id": "${prefs.getString("user_id")}",
       "isGeofencing": true,
@@ -142,8 +166,60 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
     timer = Timer.periodic(Duration(seconds: 3), (timer) {
       textSocketHandler.sendMessage(encodedData);
     });
-
     setState(() {});
+  }
+
+
+  late int countdownSeconds; //total timer limit in seconds
+  late CountdownTimer countdownTimer;
+  bool isTimerRunning = false;
+  
+  
+
+  void initTimerOperation( int countdownseconds) async{
+    
+    //timer callbacks
+    countdownSeconds = countdownseconds;
+    countdownTimer = CountdownTimer(
+      seconds: countdownSeconds,
+      onTick: (seconds) {
+        isTimerRunning = true;
+        setState(() {
+          countdownSeconds = seconds; //this will return the timer values
+        });
+      },
+      onFinished: () {
+        stopTimer();
+        // Handle countdown finished
+      },
+    );
+
+    //native app life cycle
+    SystemChannels.lifecycle.setMessageHandler((msg) {
+      // On AppLifecycleState: paused
+      if (msg == AppLifecycleState.paused.toString()) {
+        if (isTimerRunning) {
+          countdownTimer.pause(countdownSeconds); //setting end time on pause
+        }
+      }
+
+      // On AppLifecycleState: resumed
+      if (msg == AppLifecycleState.resumed.toString()) {
+        if (isTimerRunning) {
+          countdownTimer.resume();
+        }
+      }
+      return Future(() => null);
+    });
+
+    //starting timer
+    isTimerRunning = true;
+    countdownTimer.start();
+  }
+
+   void stopTimer() {
+    isTimerRunning = false;
+    countdownTimer.stop();
   }
 
   @override
@@ -153,6 +229,8 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CurveDesignWidget(
+            countdownseconds:countdownSeconds,
+            checkPointLength: widget.checkpoint,
             property: widget.property,
             propertyImageBaseUrl: widget.propertyImageBaseUrl,
           ),
@@ -175,6 +253,15 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
                 ))
             ],
           ),
+          
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          //   child: Divider(color: CustomTheme.primaryColor),
+          // ),
+          // Center(
+          //   child: Container(width: 280.w, child: TimeStampWidget()),
+          // ),
+          // const SizedBox(height: 30),
           Center(
             child: CustomButtonWidget(
                 buttonTitle: 'Clock Out',
@@ -185,7 +272,10 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
                   textSocketHandler.disconnect('manual disconnect');
                   textSocketHandler.close();
                   timer!.cancel();
-                  screenNavigator(context, CheckPointOutScanningScreen(checkPointsStatus:statusOfCheckpoints.toString()));
+                  screenNavigator(
+                      context,
+                      CheckPointOutScanningScreen(
+                          checkPointsStatus: statusOfCheckpoints.toString()));
                   // screenNavigator(context, ClockOutScreen());
                 }),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/main.dart';
 import 'package:sgt/presentation/onboarding_screen/widgets/build_pages.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -9,7 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  String? oneSignalId;
+  OnboardingScreen({super.key,this.oneSignalId});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -94,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onBtnPress: () async {
                       SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setString('welcome','1');
-                      screenReplaceNavigator(context, SignInScreen());
+                      screenReplaceNavigator(context, SignInScreen(oneSignalId:widget.oneSignalId));
                     })
                 : InkWell(
                     onTap: () {

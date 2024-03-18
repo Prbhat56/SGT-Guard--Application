@@ -129,114 +129,117 @@ class _FullScreenVideoState extends State<FullScreenVideo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarWidget(appbarTitle: ""),
-      body: FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: [
-                AspectRatio(
-                  aspectRatio: controller.value.aspectRatio,
-                  child: VideoPlayer(controller),
-                ),
-                VideoProgressIndicator(
-                  controller,
-                  allowScrubbing: true,
-                  padding: EdgeInsets.zero,
-                  colors: VideoProgressColors(
-                    backgroundColor: Color(0xFF243771),
-                    playedColor: primaryColor,
-                    bufferedColor: Colors.grey,
+      body: SingleChildScrollView(
+        child: FutureBuilder(
+          future: _initializeVideoPlayerFuture,
+          builder: (_, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Column(
+                children: [
+                  AspectRatio(
+                    aspectRatio: controller.value.aspectRatio,
+                    child: VideoPlayer(controller),
                   ),
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    SizedBox(width: 5),
-                    InkWell(
-                      onTap: () {
-                        if (controller.value.isPlaying) {
+                  VideoProgressIndicator(
+                    controller,
+                    allowScrubbing: true,
+                    padding: EdgeInsets.zero,
+                    colors: VideoProgressColors(
+                      backgroundColor: Color(0xFF243771),
+                      playedColor: primaryColor,
+                      bufferedColor: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      SizedBox(width: 5),
+                      InkWell(
+                        onTap: () {
+                          if (controller.value.isPlaying) {
+                            controller.pause();
+                          } else {
+                            controller.play();
+                          }
+                        },
+                        child: ValueListenableBuilder<VideoPlayerValue>(
+                          valueListenable: controller,
+                          builder: (_, _videoPlayerValue, __) {
+                            return Icon(
+                              _videoPlayerValue.isPlaying
+                                  ? Icons.pause_circle_outline_rounded
+                                  : Icons.play_circle_outline_rounded,
+                              size: 30,
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      InkWell(
+                        onTap: () {
+                          controller.seekTo(Duration(seconds: 0));
                           controller.pause();
-                        } else {
-                          controller.play();
-                        }
-                      },
-                      child: ValueListenableBuilder<VideoPlayerValue>(
+                        },
+                        child: Icon(
+                          Icons.stop_circle_outlined,
+                          size: 30,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      // render duration video with current position / total video duration
+                      ValueListenableBuilder<VideoPlayerValue>(
                         valueListenable: controller,
                         builder: (_, _videoPlayerValue, __) {
-                          return Icon(
-                            _videoPlayerValue.isPlaying
-                                ? Icons.pause_circle_outline_rounded
-                                : Icons.play_circle_outline_rounded,
-                            size: 30,
+                          return Text(
+                            "00:${_videoPlayerValue.position.inSeconds.toString().padLeft(2, '0')}",
+                            style: TextStyle(fontSize: 16),
                           );
                         },
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    InkWell(
-                      onTap: () {
-                        controller.seekTo(Duration(seconds: 0));
-                        controller.pause();
-                      },
-                      child: Icon(
-                        Icons.stop_circle_outlined,
-                        size: 30,
+                      Text(
+                        " / 00:${controller.value.duration.inSeconds.toString()}",
+                        style: TextStyle(fontSize: 16),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    // render duration video with current position / total video duration
-                    ValueListenableBuilder<VideoPlayerValue>(
-                      valueListenable: controller,
-                      builder: (_, _videoPlayerValue, __) {
-                        return Text(
-                          "00:${_videoPlayerValue.position.inSeconds.toString().padLeft(2, '0')}",
-                          style: TextStyle(fontSize: 16),
-                        );
-                      },
-                    ),
-                    Text(
-                      " / 00:${controller.value.duration.inSeconds.toString()}",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Spacer(),
-                    //render Volume button
-                    InkWell(
-                      onTap: () {
-                        if (controller.value.volume == 0.0) {
-                          controller.setVolume(1.0);
-                        } else
-                          controller.setVolume(0.0);
-                      },
-                      child: ValueListenableBuilder<VideoPlayerValue>(
-                        valueListenable: controller,
-                        builder: (_, _videoPlayerValue, __) {
-                          return Icon(
-                            _videoPlayerValue.volume == 0.0
-                                ? Icons.volume_off_outlined
-                                : Icons.volume_up_outlined,
-                            size: 30,
-                          );
+                      Spacer(),
+                      //render Volume button
+                      InkWell(
+                        onTap: () {
+                          if (controller.value.volume == 0.0) {
+                            controller.setVolume(1.0);
+                          } else
+                            controller.setVolume(0.0);
                         },
+                        child: ValueListenableBuilder<VideoPlayerValue>(
+                          valueListenable: controller,
+                          builder: (_, _videoPlayerValue, __) {
+                            return Icon(
+                              _videoPlayerValue.volume == 0.0
+                                  ? Icons.volume_off_outlined
+                                  : Icons.volume_up_outlined,
+                              size: 30,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                  ],
+                      SizedBox(width: 10),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                ],
+              );
+            } else {
+              // If the VideoPlayerController is still initializing, show a
+              // loading spinner.
+              return Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 10),
+                child: CircularProgressIndicator(
+                  color: primaryColor,
                 ),
-              ],
-            );
-          } else {
-            // If the VideoPlayerController is still initializing, show a
-            // loading spinner.
-            return Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 10),
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
-            );
-          }
-        },
+              );
+            }
+          },
+        ),
       ),
       /*Center(
         child: Container(

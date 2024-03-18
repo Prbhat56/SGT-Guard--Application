@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/navigator_function.dart';
@@ -56,7 +57,6 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
         }; // assuming this is your full data
         bool everyCheckpointIsSame =
             jsonData["checkpointStatus"]!.every((item) => item == "Visited");
-        // print("squares ===========================))))))))))))))))))====> ${everyCheckpointIsSame}");
         everyCheckpointIsSame == true
             ? widget.onStatusChanged("0")
             : widget.onStatusChanged("1");
@@ -90,7 +90,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                       child: CircularProgressIndicator()));
             } else {
               return Container(
-                height: 81 * checkpointList.length.toDouble(),
+                height: 81.h * checkpointList.length.toDouble(),
                 // width: 100,
                 // color: Colors.amber,
                 child: ListView.builder(
@@ -137,25 +137,22 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                     // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       checkpointList[index]
-                                                  .checkPointAvatar!
-                                                  .length !=
-                                              0
+                                              .checkPointAvatar!
+                                              .isEmpty
+                                          // checkpointList[index].checkPointAvatar!.length == 0
                                           ? CircleAvatar(
+                                              backgroundImage: AssetImage(
+                                                  'assets/sgt_logo.jpg'),
+                                            )
+                                          : CircleAvatar(
                                               backgroundImage:
                                                   // AssetImage('assets/sgt_logo.jpg'),
                                                   NetworkImage(
                                                 snapshot.data!.imageBaseUrl! +
                                                     '' +
-                                                    checkpointList[index]
-                                                        .checkPointAvatar!
-                                                        .first
-                                                        .checkpointAvatars
+                                                    checkpointList[index].checkPointAvatar!.first.checkpointAvatars
                                                         .toString(),
                                               ),
-                                            )
-                                          : CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                  'assets/sgt_logo.jpg'),
                                             ),
                                       SizedBox(
                                         width: 10,
@@ -212,6 +209,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                           CheckPointScanningScreen(
                                               propId: propId,
                                               shiftId: shiftId,
+                                              checkpointlistIndex: index,
                                               checkpointId:
                                                   checkpointList[index]
                                                       .id
@@ -221,21 +219,24 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                                       .checkpointHistoryId
                                                       .toString()));
                                     },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: CustomTheme.primaryColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
-                                        width: 88,
-                                        height: 35,
-                                        child: Center(
-                                            child: Text(
-                                          'Check-In',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 13,
-                                              color: CustomTheme.white),
-                                        ))),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 15),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              color: CustomTheme.primaryColor,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          width: 88,
+                                          height: 35,
+                                          child: Center(
+                                              child: Text(
+                                            'Check-In',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                                color: CustomTheme.white),
+                                          ))),
+                                    ),
                                   ),
                                 ],
                               ),

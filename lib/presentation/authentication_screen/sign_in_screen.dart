@@ -32,7 +32,8 @@ import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'package:geolocator/geolocator.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  String? oneSignalId;
+  SignInScreen({super.key,this.oneSignalId});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -46,10 +47,10 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
+    initPlatformState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
-    initPlatformState();
   }
 
   @override
@@ -83,6 +84,7 @@ class _SignInScreenState extends State<SignInScreen> {
   var commonService = CommonService();
   @override
   Widget build(BuildContext context) {
+    print("One Signal Subscirption Id --------> ${widget.oneSignalId}");
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -247,11 +249,6 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void handle_SignIn(String email, String password) async {
-    // showDialog(
-    //     context: context,
-    //     builder: ((context) {
-    //       return Center(child: CircularProgressIndicator());
-    //     }));
     EasyLoading.show();
 
     print("deviceId->$_deviceId");
@@ -261,7 +258,9 @@ class _SignInScreenState extends State<SignInScreen> {
       Map<String, dynamic> myJsonBody = {
         'email': email,
         'password': password,
-        'one_signal': _deviceId.toString()
+        'one_signal':widget.oneSignalId != null ? widget.oneSignalId : _deviceId.toString(),
+        // 'one_signal':"11",
+        // 'one_signal': widget.oneSignalId, 
       };
       print(myJsonBody.toString());
       Response response = await post(Uri.parse(apiUrl), body: myJsonBody);
