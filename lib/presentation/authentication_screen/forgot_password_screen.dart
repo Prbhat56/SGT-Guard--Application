@@ -107,6 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               textfieldTitle: 'Email',
               hintText: 'Enter Email',
               controller: emailController,
+              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 // print(value);
                 context.read<EmailCheckerCubit>().checkEmail(value);

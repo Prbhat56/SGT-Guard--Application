@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
 import '../../utils/const.dart';
 import '../clocked_in_out_screen/clock_in_screen.dart';
@@ -15,7 +16,8 @@ class CheckPointScanningScreen extends StatefulWidget {
   String? shiftId;
   String? checkpointId;
   String? checkpointHistoryId;
-  CheckPointScanningScreen({super.key,this.propId,this.shiftId,this.checkpointId,this.checkpointHistoryId});
+  int? checkpointlistIndex;
+  CheckPointScanningScreen({super.key,this.propId,this.shiftId,this.checkpointId,this.checkpointHistoryId,this.checkpointlistIndex});
 
   @override
   State<CheckPointScanningScreen> createState() =>
@@ -60,6 +62,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
           propId:widget.propId,shiftId:widget.shiftId,
           checkPointId:widget.checkpointId,
           checkpointHistoryId:widget.checkpointHistoryId,
+          checkpointListIndex:widget.checkpointlistIndex,
         )
         :
          MediaQuery(

@@ -41,6 +41,7 @@ class PropertyDetailsScreen extends StatefulWidget {
   State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
 }
 
+bool? disable = true;
 Data? detailsData = Data();
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
@@ -59,6 +60,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       final PropertyDetailsModel responseModel =
           propertyDetailsModelFromJson(response.body);
       detailsData = responseModel.data;
+      setState(() {
+        disable = detailsData!.emergencyContact!.length <= 1 ? true : false;
+      });
       return responseModel;
     } else {
       return PropertyDetailsModel(
@@ -72,27 +76,28 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Property Detail'),
-        body: FutureBuilder(
-                future: getJobsList(widget.propertyId),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  } else {
-                    return SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
+          appBar: CustomAppBarWidget(appbarTitle: 'Property Detail'),
+          body: FutureBuilder(
+              future: getJobsList(widget.propertyId),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.3,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else {
+                  return SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         PropertyDetailsWidget(
                           imageBaseUrl: snapshot.data!.propertyImageBaseUrl,
                           detailsData: detailsData,
-                          checkPoint:widget.activeData!.checkPoints!.length.toString(),
+                          checkPoint:
+                              widget.activeData!.checkPoints!.length.toString(),
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -113,7 +118,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   InkWell(
                                     onTap: () {
                                       screenNavigator(
-                                          context, ScanningScreen(propertyId:snapshot.data!.data!.id));
+                                          context,
+                                          ScanningScreen(
+                                              propertyId:
+                                                  snapshot.data!.data!.id));
                                     },
                                     child: Container(
                                       height: 32,
@@ -151,7 +159,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       screenNavigator(
                                           context,
                                           CheckPointListsScreen(
-                                            propertyId:widget.propertyId,
+                                            propertyId: widget.propertyId,
                                             imageBaseUrl: widget.imageBaseUrl,
                                           ));
                                     },
@@ -256,7 +264,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               const SizedBox(height: 10),
                               // ShiftCards(shifts: widget.activeData!.shifts), //shift cards widget
                               detailsData!.shifts!.length != 0
-                                  ? ShiftCards(shifts: detailsData!.shifts, imageBaseUrl:snapshot.data!.imageBaseUrl)
+                                  ? ShiftCards(
+                                      shifts: detailsData!.shifts,
+                                      imageBaseUrl: snapshot.data!.imageBaseUrl)
                                   : Text(
                                       'No Upcoming Shift Available',
                                       textAlign: TextAlign.center,
@@ -320,17 +330,461 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 25,
+                                        height: 19,
                                       ),
-                                      // SizedBox(
-                                      //   height: 5,
-                                      // ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Emergency Contact",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: black),
+                                          ),
+                                          Text(
+                                            'Show more',
+                                            style: disable == true
+                                                ? TextStyle(
+                                                    fontSize: 15,
+                                                    color: CustomTheme.grey,
+                                                    fontWeight: FontWeight.w400)
+                                                : CustomTheme.blueTextStyle(
+                                                    15, FontWeight.w400),
+                                          ),
+                                        ],
+                                      ),
+                                      // detailsData!.propertyAvatars!.length <= 1
+                                      //     ?
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // if emergencyContact.length <= 1 ?
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                          Text(
+                                            'Contact 1',
+                                            style: CustomTheme.blueTextStyle(
+                                                15, FontWeight.w500),
+                                          ),
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                          SizedBox(
+                                            child: TextFormField(
+                                              enableInteractiveSelection: true,
+                                              autocorrect: true,
+                                              // controller: emergencyNameController,
+                                              keyboardType: TextInputType.name,
+                                              // obscureText:,
+                                              // obscuringCharacter: obscureCharacter!,
+                                              // style: AppFontStyle.mediumTextStyle(
+                                              //     AppColors.textColor, 14.sp),
+                                              // validator: validator,
+                                              readOnly: true,
+                                              // onTap: onTap,
+                                              // onEditingComplete: onEditingCompleted,
+                                              // onChanged: onChanged,
+                                              autofocus: true,
+                                              // focusNode: focusNode,
+                                              // onSaved: onSaved,
+                                              // onTapOutside: onTapOutside,
+                                              // onFieldSubmitted: onFieldSubmitted,
+                                              // enabled: enabled,
+                                              decoration: InputDecoration(
+                                                // floatingLabelBehavior:
+                                                //     floatingLabelBehavior,
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                hintText: detailsData!
+                                                    .emergencyContact!
+                                                    .first
+                                                    .contactName,
+                                                // hintStyle:
+                                                //     AppFontStyle.regularTextStyle(
+                                                //         AppColors.hintColor, 12.sp),
+                                                // prefixIcon: prefix,
+                                                // suffixIcon: suffix,
+                                                // errorText: errorText != ''
+                                                //     ? errorText
+                                                //     : '\u24D8 $errorText',
+                                                // errorStyle:
+                                                //     AppFontStyle.regularTextStyle(
+                                                //   AppColors.redColor,
+                                                //   10.sp,
+                                                // ),
+                                                // label: label,
+                                                labelText: 'Name',
+                                                // labelStyle:
+                                                //     AppFontStyle.regularTextStyle(
+                                                //         AppColors.textColor, 12.sp),
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 19),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: const BorderSide(
+                                                      width: 1,
+                                                      color: CustomTheme.grey),
+                                                ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: const BorderSide(
+                                                      width: 1,
+                                                      color: CustomTheme.grey),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: const BorderSide(
+                                                    color: CustomTheme
+                                                        .primaryColor,
+                                                    width: 1.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            child: TextFormField(
+                                              enableInteractiveSelection: true,
+                                              autocorrect: true,
+                                              // controller: emergencyNameController,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              // obscureText:,
+                                              // obscuringCharacter: obscureCharacter!,
+                                              // style: AppFontStyle.mediumTextStyle(
+                                              //     AppColors.textColor, 14.sp),
+                                              // validator: validator,
+                                              readOnly: true,
+                                              // onTap: onTap,
+                                              // onEditingComplete: onEditingCompleted,
+                                              // onChanged: onChanged,
+                                              autofocus: true,
+                                              // focusNode: focusNode,
+                                              // onSaved: onSaved,
+                                              // onTapOutside: onTapOutside,
+                                              // onFieldSubmitted: onFieldSubmitted,
+                                              // enabled: enabled,
+                                              decoration: InputDecoration(
+                                                // floatingLabelBehavior:
+                                                //     floatingLabelBehavior,
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                hintText: detailsData!
+                                                    .emergencyContact!
+                                                    .first
+                                                    .contactNumber,
+                                                // hintStyle:
+                                                //     AppFontStyle.regularTextStyle(
+                                                //         AppColors.hintColor, 12.sp),
+                                                // prefixIcon: prefix,
+                                                // suffixIcon: suffix,
+                                                // errorText: errorText != ''
+                                                //     ? errorText
+                                                //     : '\u24D8 $errorText',
+                                                // errorStyle:
+                                                //     AppFontStyle.regularTextStyle(
+                                                //   AppColors.redColor,
+                                                //   10.sp,
+                                                // ),
+                                                // label: label,
+                                                labelText: 'Mobile Number',
+                                                // labelStyle:
+                                                //     AppFontStyle.regularTextStyle(
+                                                //         AppColors.textColor, 12.sp),
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 19),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: const BorderSide(
+                                                      width: 1,
+                                                      color: CustomTheme.grey),
+                                                ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: const BorderSide(
+                                                      width: 1,
+                                                      color: CustomTheme.grey),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: const BorderSide(
+                                                    color: CustomTheme
+                                                        .primaryColor,
+                                                    width: 1.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                      // : ListView.builder(
+                                      //     scrollDirection: Axis.vertical,
+                                      //     physics: BouncingScrollPhysics(),
+                                      //     itemCount: detailsData!.emergencyContact!.length,
+                                      //     itemBuilder: (context, index) {
+                                      //       return Expanded(
+                                      //         child: Column(
+                                      //           children: [
+                                      //             // if emergencyContact.length <= 1 ?
+                                      //             SizedBox(
+                                      //               height: 12,
+                                      //             ),
+                                      //             Text(
+                                      //               'Contact 1',
+                                      //               style: CustomTheme
+                                      //                   .blueTextStyle(15,
+                                      //                       FontWeight.w500),
+                                      //             ),
+                                      //             SizedBox(
+                                      //               height: 12,
+                                      //             ),
+                                      //             SizedBox(
+                                      //               child: TextFormField(
+                                      //                 enableInteractiveSelection:
+                                      //                     true,
+                                      //                 autocorrect: true,
+                                      //                 // controller: emergencyNameController,
+                                      //                 keyboardType:
+                                      //                     TextInputType.name,
+                                      //                 // obscureText:,
+                                      //                 // obscuringCharacter: obscureCharacter!,
+                                      //                 // style: AppFontStyle.mediumTextStyle(
+                                      //                 //     AppColors.textColor, 14.sp),
+                                      //                 // validator: validator,
+                                      //                 readOnly: true,
+                                      //                 // onTap: onTap,
+                                      //                 // onEditingComplete: onEditingCompleted,
+                                      //                 // onChanged: onChanged,
+                                      //                 autofocus: true,
+                                      //                 // focusNode: focusNode,
+                                      //                 // onSaved: onSaved,
+                                      //                 // onTapOutside: onTapOutside,
+                                      //                 // onFieldSubmitted: onFieldSubmitted,
+                                      //                 // enabled: enabled,
+                                      //                 decoration:
+                                      //                     InputDecoration(
+                                      //                   // floatingLabelBehavior:
+                                      //                   //     floatingLabelBehavior,
+                                      //                   filled: true,
+                                      //                   fillColor:
+                                      //                       Colors.white,
+                                      //                   //         hintText: detailsData!
+                                      //                   // .emergencyContact![index].contactName,
+                                      //                   // hintStyle:
+                                      //                   //     AppFontStyle.regularTextStyle(
+                                      //                   //         AppColors.hintColor, 12.sp),
+                                      //                   // prefixIcon: prefix,
+                                      //                   // suffixIcon: suffix,
+                                      //                   // errorText: errorText != ''
+                                      //                   //     ? errorText
+                                      //                   //     : '\u24D8 $errorText',
+                                      //                   // errorStyle:
+                                      //                   //     AppFontStyle.regularTextStyle(
+                                      //                   //   AppColors.redColor,
+                                      //                   //   10.sp,
+                                      //                   // ),
+                                      //                   // label: label,
+                                      //                   labelText: 'Name',
+                                      //                   // labelStyle:
+                                      //                   //     AppFontStyle.regularTextStyle(
+                                      //                   //         AppColors.textColor, 12.sp),
+                                      //                   contentPadding:
+                                      //                       EdgeInsets
+                                      //                           .symmetric(
+                                      //                               horizontal:
+                                      //                                   19),
+                                      //                   border:
+                                      //                       OutlineInputBorder(
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(
+                                      //                                 5.0),
+                                      //                     borderSide:
+                                      //                         const BorderSide(
+                                      //                             width: 1,
+                                      //                             color: CustomTheme
+                                      //                                 .grey),
+                                      //                   ),
+                                      //                   enabledBorder:
+                                      //                       OutlineInputBorder(
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(
+                                      //                                 5.0),
+                                      //                     borderSide:
+                                      //                         const BorderSide(
+                                      //                             width: 1,
+                                      //                             color: CustomTheme
+                                      //                                 .grey),
+                                      //                   ),
+                                      //                   focusedBorder:
+                                      //                       OutlineInputBorder(
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(
+                                      //                                 5.0),
+                                      //                     borderSide:
+                                      //                         const BorderSide(
+                                      //                       color: CustomTheme
+                                      //                           .primaryColor,
+                                      //                       width: 1.0,
+                                      //                     ),
+                                      //                   ),
+                                      //                 ),
+                                      //               ),
+                                      //             ),
+                                      //             SizedBox(
+                                      //               height: 8,
+                                      //             ),
+                                      //             SizedBox(
+                                      //               child: TextFormField(
+                                      //                 enableInteractiveSelection:
+                                      //                     true,
+                                      //                 autocorrect: true,
+                                      //                 // controller: emergencyNameController,
+                                      //                 keyboardType:
+                                      //                     TextInputType
+                                      //                         .number,
+                                      //                 // obscureText:,
+                                      //                 // obscuringCharacter: obscureCharacter!,
+                                      //                 // style: AppFontStyle.mediumTextStyle(
+                                      //                 //     AppColors.textColor, 14.sp),
+                                      //                 // validator: validator,
+                                      //                 readOnly: true,
+                                      //                 // onTap: onTap,
+                                      //                 // onEditingComplete: onEditingCompleted,
+                                      //                 // onChanged: onChanged,
+                                      //                 autofocus: true,
+                                      //                 // focusNode: focusNode,
+                                      //                 // onSaved: onSaved,
+                                      //                 // onTapOutside: onTapOutside,
+                                      //                 // onFieldSubmitted: onFieldSubmitted,
+                                      //                 // enabled: enabled,
+                                      //                 decoration:
+                                      //                     InputDecoration(
+                                      //                   // floatingLabelBehavior:
+                                      //                   //     floatingLabelBehavior,
+                                      //                   filled: true,
+                                      //                   fillColor:
+                                      //                       Colors.white,
+                                      //                   hintText:
+                                      //                       '+919898989898',
+                                      //                   // hintStyle:
+                                      //                   //     AppFontStyle.regularTextStyle(
+                                      //                   //         AppColors.hintColor, 12.sp),
+                                      //                   // prefixIcon: prefix,
+                                      //                   // suffixIcon: suffix,
+                                      //                   // errorText: errorText != ''
+                                      //                   //     ? errorText
+                                      //                   //     : '\u24D8 $errorText',
+                                      //                   // errorStyle:
+                                      //                   //     AppFontStyle.regularTextStyle(
+                                      //                   //   AppColors.redColor,
+                                      //                   //   10.sp,
+                                      //                   // ),
+                                      //                   // label: label,
+                                      //                   labelText: 'Number',
+                                      //                   // labelStyle:
+                                      //                   //     AppFontStyle.regularTextStyle(
+                                      //                   //         AppColors.textColor, 12.sp),
+                                      //                   contentPadding:
+                                      //                       EdgeInsets
+                                      //                           .symmetric(
+                                      //                               horizontal:
+                                      //                                   19),
+                                      //                   border:
+                                      //                       OutlineInputBorder(
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(
+                                      //                                 5.0),
+                                      //                     borderSide:
+                                      //                         const BorderSide(
+                                      //                             width: 1,
+                                      //                             color: CustomTheme
+                                      //                                 .grey),
+                                      //                   ),
+                                      //                   enabledBorder:
+                                      //                       OutlineInputBorder(
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(
+                                      //                                 5.0),
+                                      //                     borderSide:
+                                      //                         const BorderSide(
+                                      //                             width: 1,
+                                      //                             color: CustomTheme
+                                      //                                 .grey),
+                                      //                   ),
+                                      //                   focusedBorder:
+                                      //                       OutlineInputBorder(
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(
+                                      //                                 5.0),
+                                      //                     borderSide:
+                                      //                         const BorderSide(
+                                      //                       color: CustomTheme
+                                      //                           .primaryColor,
+                                      //                       width: 1.0,
+                                      //                     ),
+                                      //                   ),
+                                      //                 ),
+                                      //               ),
+                                      //             ),
+                                      //           ],
+                                      //         ),
+                                      //       );
+                                      //     }),
                                     ],
                                   ), //widgets to show job details
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: 2.0,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey.withAlpha(50)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   TextFieldHeaderWidget(title: 'Description'),
                                   const SizedBox(height: 10),
                                   PropertyDescriptionWidget(
-                                    propertyImageBaseUrl:snapshot.data!.propertyImageBaseUrl,
+                                    propertyImageBaseUrl:
+                                        snapshot.data!.propertyImageBaseUrl,
                                     propDesc: detailsData!.propertyDescription,
                                     propvatars: detailsData!.propertyAvatars,
                                   ), //widget to show property details
@@ -368,7 +822,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                     .read<TimerOnCubit>()
                                                     .turnOnTimer();
                                             screenNavigator(
-                                                context, ScanningScreen(propertyId:snapshot.data!.data!.id));
+                                                context,
+                                                ScanningScreen(
+                                                    propertyId: snapshot
+                                                        .data!.data!.id));
                                           })),
                                   const SizedBox(height: 30),
                                 ],
@@ -378,10 +835,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         ),
                       ],
                     ),
-                    );
-                  }
-                })
-                ),
-      );
+                  );
+                }
+              })),
+    );
   }
 }

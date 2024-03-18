@@ -9,9 +9,8 @@ import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkRe
 import '../../../../theme/custom_theme.dart';
 
 class EmergencyLocationWidget extends StatefulWidget {
-  const EmergencyLocationWidget({
-    super.key,
-  });
+  final ValueChanged<LatLng> onStatusChanged;
+  EmergencyLocationWidget({super.key, required this.onStatusChanged});
 
   @override
   State<EmergencyLocationWidget> createState() =>
@@ -20,16 +19,17 @@ class EmergencyLocationWidget extends StatefulWidget {
 
 class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
   LatLng? _currentPosition;
-  
+  LatLng? pinnedLocation;
   Future<LatLng?> locateUser() async {
     Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high);
     // await Geolocator.getCurrentPosition(
     //         desiredAccuracy: LocationAccuracy.high,
     //         forceAndroidLocationManager: true)
     //     .then((Position position) {
-      _currentPosition = LatLng(position.latitude, position.longitude);
-      print(_currentPosition);
+    _currentPosition = LatLng(position.latitude, position.longitude);
+    // widget.onCallback(currentPosition:_currentPosition);
+    // print(_currentPosition);
     // });
     //setState(() {});
     return _currentPosition;
@@ -67,7 +67,16 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                       SizedBox(width: 135),
                       InkWell(
                         onTap: () {
-                          screenNavigator(context, EditLocationScreen(currentPosition:_currentPosition));
+                          screenNavigator(
+                              context,
+                              EditLocationScreen(
+                                currentPosition: _currentPosition,
+                                onStatusChangedSecond: (pinLocation) {
+                                  // print("----------emergency_location_widget ===> ${pinLocation}");
+                                  // pinnedLocation = pinLocation;
+                                  widget.onStatusChanged(pinLocation);
+                                },
+                              ));
                         },
                         child: Text(
                           'Edit Location',

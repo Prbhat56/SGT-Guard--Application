@@ -103,8 +103,12 @@ class _MessageCardState extends State<MessageCard> {
                           ),
                         );
                       } else if (widget.message.type == "video") {
-                        return VideoPreviewWidget(
-                          vdoUrl: widget.message.message.toString(),
+                        return Container(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: VideoPreviewWidget(
+                            vdoUrl: widget.message.message.toString(),
+                          ),
                         );
                       } else {
                         return Text(
@@ -238,8 +242,12 @@ class _MessageCardState extends State<MessageCard> {
                           ),
                         );
                       } else if (widget.message.type == "video") {
-                        return VideoPreviewWidget(
-                          vdoUrl: widget.message.message.toString(),
+                        return Container(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: VideoPreviewWidget(
+                            vdoUrl: widget.message.message.toString(),
+                          ),
                         );
                       } else {
                         return Text(
@@ -307,8 +315,8 @@ class _MessageCardState extends State<MessageCard> {
                   ?
                   //copy option
                   _OptionItem(
-                      icon: const Icon(Icons.copy_all_rounded,
-                          color: Colors.blue, size: 26),
+                      icon: Icon(Icons.copy_all_rounded,
+                          color: primaryColor, size: 26),
                       name: 'Copy Text',
                       onTap: () async {
                         await Clipboard.setData(
@@ -323,8 +331,8 @@ class _MessageCardState extends State<MessageCard> {
                   :
                   //save option
                   _OptionItem(
-                      icon: const Icon(Icons.download_rounded,
-                          color: Colors.blue, size: 26),
+                      icon: Icon(Icons.download_rounded,
+                          color: primaryColor, size: 26),
                       name: widget.message.type == 'photo'
                           ? 'Save Image'
                           : 'Save Video',
@@ -382,7 +390,7 @@ class _MessageCardState extends State<MessageCard> {
               //edit option
               if (widget.message.type == 'text' && isMe)
                 _OptionItem(
-                    icon: const Icon(Icons.edit, color: Colors.blue, size: 26),
+                    icon: Icon(Icons.edit, color: primaryColor, size: 26),
                     name: 'Edit Message',
                     onTap: () {
                       //for hiding bottom sheet
@@ -411,14 +419,14 @@ class _MessageCardState extends State<MessageCard> {
 
               //sent time
               _OptionItem(
-                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
+                  icon: Icon(Icons.remove_red_eye, color: primaryColor),
                   name:
                       'Sent At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.sent)}',
                   onTap: () {}),
 
               //read time
               _OptionItem(
-                  icon: const Icon(Icons.remove_red_eye, color: Colors.green),
+                  icon: Icon(Icons.remove_red_eye, color: greenColor),
                   name: widget.message.read.isEmpty
                       ? 'Read At: Not seen yet'
                       : 'Read At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.read)}',
@@ -470,6 +478,7 @@ class _MessageCardState extends State<MessageCard> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
                         padding:
@@ -496,18 +505,12 @@ class _MessageCardState extends State<MessageCard> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 70,
-                      ),
                       Container(
                         height: 40,
                         width: 1,
                         decoration: BoxDecoration(
                           color: Colors.grey,
                         ),
-                      ),
-                      SizedBox(
-                        width: 65,
                       ),
                       Container(
                         padding:
@@ -602,6 +605,7 @@ class _MessageCardState extends State<MessageCard> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
                           padding:
@@ -616,6 +620,7 @@ class _MessageCardState extends State<MessageCard> {
                               onTap: () {
                                 if (context.mounted) {
                                   setState(() {
+                                    FocusScope.of(context).unfocus();
                                     Navigator.pop(context);
                                   });
                                 }
@@ -631,9 +636,9 @@ class _MessageCardState extends State<MessageCard> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 50,
-                        ),
+                        // SizedBox(
+                        //   width: 50,
+                        // ),
                         Container(
                           height: 40,
                           width: 1,
@@ -641,9 +646,9 @@ class _MessageCardState extends State<MessageCard> {
                             color: Colors.grey,
                           ),
                         ),
-                        SizedBox(
-                          width: 50,
-                        ),
+                        // SizedBox(
+                        //   width: 50,
+                        // ),
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -659,6 +664,7 @@ class _MessageCardState extends State<MessageCard> {
                                     widget.message, updatedMsg);
                                 if (context.mounted) {
                                   setState(() {
+                                    FocusScope.of(context).unfocus();
                                     Navigator.pop(context);
                                   });
                                 }

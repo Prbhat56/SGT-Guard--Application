@@ -76,7 +76,7 @@ class _PropertiesListPickerState extends State<PropertiesListPicker> {
                     borderRadius: BorderRadius.circular(30),
                     child: CachedNetworkImage(
                         imageUrl: widget.imageBaseUrl.toString() +
-                            '/' +
+                            '' +
                             widget.reportDatum[index].propertyAvatars!.first
                                 .propertyAvatar
                                 .toString(),

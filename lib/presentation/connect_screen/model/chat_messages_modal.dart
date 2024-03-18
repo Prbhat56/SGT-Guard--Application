@@ -1,5 +1,3 @@
-//enum ChatMessageType { text, photo, video, not_send }
-
 class ChatMessages {
   late String type;
   late String message;

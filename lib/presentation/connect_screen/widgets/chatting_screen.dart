@@ -6,6 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/connect_screen/cubit/isSelectedMedia/isSelectedMedia_cubit.dart';
@@ -25,10 +28,12 @@ class ChattingScreen extends StatefulWidget {
   final ChatUsers user;
 
   @override
-  State<ChattingScreen> createState() => _ChattingScreenState();
+  State<ChattingScreen> createState() => _ChattingScreenState(user);
 }
 
 class _ChattingScreenState extends State<ChattingScreen> {
+  _ChattingScreenState(this.chatUser);
+  final ChatUsers chatUser;
   final ImagePicker _picker = ImagePicker();
 
   //pick video from carmera
@@ -59,17 +64,33 @@ class _ChattingScreenState extends State<ChattingScreen> {
         : null;
   }
 
-  List selectedChatTile = [];
+  final _userController = Get.put(ChatProfileController());
+  final _myController = Get.put(ChatMessageController());
 
-  List<ChatMessages> messages = [];
+  late TextEditingController _textEditingController;
 
-  TextEditingController _textEditingController = TextEditingController();
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+    Get.delete<ChatMessageController>;
+    _myController.putUser(chatUser);
+    Get.delete<ChatProfileController>;
+    _userController.putUser(chatUser);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    _myController.dispose();
+    _userController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('reloading');
-    var commonService = CommonService();
-    return MediaQuery(
+    final commonService = CommonService();
+    return new MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
       child: GestureDetector(
         onTap: () {
@@ -95,7 +116,91 @@ class _ChattingScreenState extends State<ChattingScreen> {
             ),
             leadingWidth: 60,
             titleSpacing: -10,
-            title: StreamBuilder(
+            title: Obx(() {
+              if (_userController.users.isNotEmpty) {
+                return ListTile(
+                  leading: Stack(
+                    children: [
+                      CachedNetworkImage(
+                          imageUrl: _userController.users.isNotEmpty
+                              ? _userController.users.first.profileUrl
+                              : widget.user.profileUrl.toString(),
+                          fit: BoxFit.fill,
+                          width: 40,
+                          height: 40,
+                          imageBuilder: (context, imageProvider) {
+                            return CircleAvatar(
+                              radius: 20,
+                              backgroundColor: grey,
+                              backgroundImage: NetworkImage(
+                                _userController.users.isNotEmpty
+                                    ? _userController.users.first.profileUrl
+                                    : widget.user.profileUrl.toString(),
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(
+                                strokeCap: StrokeCap.round,
+                              ),
+                          errorWidget: (context, url, error) => CircleAvatar(
+                                radius: 0,
+                                child: Image.asset(
+                                  'assets/chatProfile.png',
+                                  fit: BoxFit.fill,
+                                ),
+                              )),
+                      _userController.users.isNotEmpty
+                          ? _userController.users[0].isOnline
+                              ? Positioned(
+                                  top: 26,
+                                  left: 26,
+                                  child: Container(
+                                    height: 13,
+                                    width: 13,
+                                    decoration: BoxDecoration(
+                                      color: greenColor,
+                                      border:
+                                          Border.all(color: white, width: 2),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                  ),
+                                )
+                              : Positioned(
+                                  top: 40,
+                                  left: 40,
+                                  child: Container(),
+                                )
+                          : Positioned(
+                              top: 40,
+                              left: 40,
+                              child: Container(),
+                            )
+                    ],
+                  ),
+                  title: Text(
+                    _userController.users.isNotEmpty
+                        ? _userController.users.first.name
+                        : widget.user.name,
+                  ),
+                  subtitle: Text(_userController.users.isNotEmpty
+                      ? _userController.users[0].isOnline
+                          ? 'Online'
+                          : MyDateUtil.getLastActiveTime(
+                              context: context,
+                              lastActive: _userController.users[0].lastActive)
+                      : MyDateUtil.getLastActiveTime(
+                          context: context,
+                          lastActive: widget.user.lastActive)),
+                  //  widget.user.isOnline
+                  //     ? const Text("Active Now")
+                  //     : const Text("Not Active"),
+                );
+              } else {
+                return Container();
+              }
+            }),
+            /*StreamBuilder(
                 stream: FirebaseHelper.getUserInfo(widget.user),
                 builder: (context, snapshot) {
                   final data = snapshot.data?.docs;
@@ -182,50 +287,32 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     //     ? const Text("Active Now")
                     //     : const Text("Not Active"),
                   );
-                }),
+                }),*/
           ),
           backgroundColor: white,
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: StreamBuilder(
-              stream: FirebaseHelper.getAllMessages(widget.user),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                    return SizedBox();
-
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    final data = snapshot.data?.docs;
-
-                    messages = data
-                            ?.map((e) => ChatMessages.fromJson(
-                                e.data() as Map<String, dynamic>))
-                            .toList() ??
-                        [];
-
-                    if (messages.isNotEmpty) {
-                      return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          reverse: true,
-                          physics: BouncingScrollPhysics(),
-                          itemCount: messages.length,
-                          itemBuilder: (context, index) {
-                            return MessageCard(message: messages[index]);
-                          });
-                    } else {
-                      return Center(
-                        child: Text(
-                          'Say Hi...👋',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 30),
-                        ),
-                      );
-                    }
-                }
-              },
-            ),
+            child: Obx(() {
+              if (_myController.messages.isNotEmpty) {
+                return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    reverse: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: _myController.messages.length,
+                    itemBuilder: (context, index) {
+                      return MessageCard(
+                          message:
+                              _myController.messages.reversed.toList()[index]);
+                    });
+              } else {
+                return Center(
+                  child: Text(
+                    'Say Hi...👋',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                );
+              }
+            }),
           ),
           bottomNavigationBar: SafeArea(
             child: Padding(
@@ -307,10 +394,11 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     }
                   }),
                   Expanded(
-                    child: TextFormField(
+                    child: TextField(
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       controller: _textEditingController,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: grey,
@@ -330,20 +418,16 @@ class _ChattingScreenState extends State<ChattingScreen> {
                             borderSide: BorderSide(color: grey)),
                         hintText: 'Write a message...',
                       ),
-                      // onTap: () {
-                      //   setState(() {
-                      //     selectMedia = false;
-                      //   });
-                      // },
                     ),
                   ),
                   IconButton(
                       onPressed: () {
                         if (_textEditingController.text.isNotEmpty) {
-                          FirebaseHelper.sendMessage(
-                              widget.user, _textEditingController.text, 'text').then((value) {
-                                FirebaseHelper.updateRecentMessageTime(widget.user);
-                              });
+                          FirebaseHelper.sendMessage(widget.user,
+                                  _textEditingController.text, 'text')
+                              .then((value) {
+                            FirebaseHelper.updateRecentMessageTime(widget.user);
+                          });
                           _textEditingController.clear();
                         } else {
                           commonService.openSnackBar(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/utils/const.dart';
@@ -17,9 +18,9 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 20.0),
+      padding: EdgeInsets.only(left: 20.w),
       child: SizedBox(
-        width: 50,
+        width: 50.w,
         child: Column(
           children: [
             Text(
@@ -28,11 +29,11 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 12),
+                  fontSize: 12.sp),
             ),
             Container(
-              height: 83 * widget.checkPointLength!.length.toDouble(),
-              width: 30,
+              height: 70.h * widget.checkPointLength!.length.toDouble(),
+              width: 30.w * widget.checkPointLength!.length.toDouble(),
               child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: widget.checkPointLength!.length,
@@ -41,7 +42,7 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
                       clipBehavior: Clip.none,
                       children: [
                         SizedBox(
-                          width: 150,
+                          width: 150.w,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -49,7 +50,7 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
                               index == 0
                                   ? Container(
                                       margin:
-                                          EdgeInsets.only(top: 10, bottom: 3),
+                                          EdgeInsets.only(top: 10.h, bottom: 3.h),
                                       padding: EdgeInsets.all(3),
                                       decoration: BoxDecoration(
                                           color: white,
@@ -57,31 +58,31 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
                                             BoxShadow(
                                               color: seconderyColor,
                                               offset: Offset(0, 0),
-                                              blurRadius: 10,
-                                              spreadRadius: 4,
+                                              blurRadius: 10.r,
+                                              spreadRadius: 4.r,
                                             ),
                                           ],
                                           border: Border.all(
-                                              color: primaryColor, width: 2),
+                                              color: primaryColor, width: 2.w),
                                           borderRadius:
-                                              BorderRadius.circular(50)),
+                                              BorderRadius.circular(50.r)),
                                       child: Container(
-                                        height: 8,
-                                        width: 8,
+                                        height: 8.h,
+                                        width: 8.w,
                                         decoration: BoxDecoration(
                                             color: primaryColor,
                                             borderRadius:
-                                                BorderRadius.circular(50)),
+                                                BorderRadius.circular(50.r)),
                                       ),
                                     )
                                   : Container(
-                                      height: 8,
-                                      width: 8,
-                                      margin: EdgeInsets.all(7),
+                                      height: 8.h,
+                                      width: 8.w,
+                                      margin: EdgeInsets.all(7.w),
                                       decoration: BoxDecoration(
                                           color: seconderyColor,
                                           borderRadius:
-                                              BorderRadius.circular(50)),
+                                              BorderRadius.circular(50.r)),
                                     ),
                               index == widget.checkPointLength!.length - 1
                                   ? Container()
@@ -89,21 +90,21 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
                                       height: 70,
                                       child: VerticalDivider(
                                         color: primaryColor,
-                                        thickness: 2,
+                                        thickness: 2.w,
                                       ))
                             ],
                           ),
                         ),
                         Positioned(
-                          right: 25.0,
-                          top: 10,
+                          right: 20.w,
+                          top: 5.h,
                           child: Text(
                             'CP ${index+1}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 12),
+                                fontSize: 12.sp),
                           ),
                         )
                       ],

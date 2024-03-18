@@ -24,29 +24,32 @@ class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-              child: SvgPicture.asset(
-            'assets/green_tick.svg',
-            height: 66,
-          )),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Sent\nSuccessfully',
-              textAlign: TextAlign.center,
-              style: CustomTheme.blackTextStyle(25)),
-          SizedBox(
-            height: 20,
-          ),
-          Text('Wait for approval!', style: CustomTheme.blackTextStyle(17))
-        ],
-      )),
+    return Dialog(
+      child: Container(
+        width: 318,
+        height: 318,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+                child: SvgPicture.asset(
+              'assets/green_tick.svg',
+              height: 66,
+            )),
+            SizedBox(
+              height: 15,
+            ),
+            Text('Sent\nSuccessfully',
+                textAlign: TextAlign.center,
+                style: CustomTheme.blackTextStyle(25)),
+            SizedBox(
+              height: 20,
+            ),
+            Text('Wait for approval!', style: CustomTheme.blackTextStyle(17))
+          ],
+        ),
+      ),
     );
   }
 }

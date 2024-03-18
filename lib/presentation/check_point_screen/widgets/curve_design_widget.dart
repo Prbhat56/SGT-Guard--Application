@@ -5,11 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'check_point_card_widget.dart';
 import 'package:http/http.dart' as http;
 
-
 class CurveDesignWidget extends StatefulWidget {
-Property? property ;
-String? propertyImageBaseUrl;
-  CurveDesignWidget({super.key, this.property, this.propertyImageBaseUrl});
+  Property? property;
+  String? propertyImageBaseUrl;
+  List<Checkpoint>? checkPointLength;
+  int? countdownseconds;
+  CurveDesignWidget({super.key, this.property, this.propertyImageBaseUrl, this.checkPointLength, this.countdownseconds});
 
   @override
   State<CurveDesignWidget> createState() => _CurveDesignWidgetState();
@@ -19,14 +20,20 @@ class _CurveDesignWidgetState extends State<CurveDesignWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      height: 380,
       child: Stack(
         children: [
-          widget.property!.propertyAvatars != null ?
-          Image.network(
-            widget.propertyImageBaseUrl.toString()+''+widget.property!.propertyAvatars!.first.propertyAvatar.toString(),
-            fit: BoxFit.cover,
-          ):Image.asset('assets/sgt_logo.png'),
+          widget.property!.propertyAvatars != null
+              ? Container(
+                  width: 425,
+                  height: 285,
+                  child: Image.network(
+                    widget.propertyImageBaseUrl.toString() + '' + widget.property!.propertyAvatars!.first.propertyAvatar
+                            .toString(),
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Center(child: Image.asset('assets/sgt_logo.png')),
 
           // Image.network(
           //   widget.propertyImageBaseUrl.toString()+'/'+widget.property!.propertyAvatars!.first.propertyAvatar.toString(),
@@ -42,12 +49,14 @@ class _CurveDesignWidgetState extends State<CurveDesignWidget> {
             height: 300,
           ),
           Positioned(
-            top: 260,
+            top: 250,
             left: 16,
             right: 16,
             child: CheckPointCardsWidget(
-              property:widget.property,
-              propertyImageBaseUrl:widget.propertyImageBaseUrl,
+              countdownseconds:widget.countdownseconds,
+              property: widget.property,
+              propertyImageBaseUrl: widget.propertyImageBaseUrl,
+              checkPointLength: widget.checkPointLength
             ),
           ),
         ],

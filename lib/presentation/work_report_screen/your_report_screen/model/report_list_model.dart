@@ -212,12 +212,15 @@ class ReportListModel {
   RecentReports? recentReports;
   RecentReports? response;
   String? imageBaseUrl;
+  String? propertyImageBaseUrl;
+  
   int? status;
 
   ReportListModel({
     this.recentReports,
     this.response,
     this.imageBaseUrl,
+    this.propertyImageBaseUrl,
     this.status,
   });
 
@@ -230,6 +233,7 @@ class ReportListModel {
             ? null
             : RecentReports.fromJson(json["response"]),
         imageBaseUrl: json["image_base_url"],
+        propertyImageBaseUrl: json["property_image_base_url"],
         status: json["status"],
       );
 
@@ -237,6 +241,7 @@ class ReportListModel {
         "recentReports": recentReports?.toJson(),
         "response": response?.toJson(),
         "image_base_url": imageBaseUrl,
+        "property_image_base_url": propertyImageBaseUrl,
         "status": status,
       };
 }
@@ -330,6 +335,7 @@ class ReportResponse {
   dynamic policeReport;
   dynamic officerName;
   dynamic officerDesignation;
+  List<PropertyAvatar>? propertyAvatars;
   // dynamic peopleInvolvedName;
   // dynamic peopleInvolvedPhone;
   // dynamic witnessesName;
@@ -359,6 +365,7 @@ class ReportResponse {
     this.policeReport,
     this.officerName,
     this.officerDesignation,
+    this.propertyAvatars,
     // this.peopleInvolvedName,
     // this.peopleInvolvedPhone,
     // this.witnessesName,
@@ -391,7 +398,7 @@ class ReportResponse {
         policeReport: json["police_report"] ?? "",
         officerName: json["officer_name"] ?? "",
         officerDesignation: json["officer_designation"] ?? "",
-        
+        propertyAvatars: json["property_avatars"] == null ? [] : List<PropertyAvatar>.from(json["property_avatars"]!.map((x) => PropertyAvatar.fromJson(x))),
         // peopleInvolvedName: json["people_involved_name"],
         // peopleInvolvedPhone: json["people_involved_phone"],
         // witnessesName: json["witnesses_name"],
@@ -423,10 +430,43 @@ class ReportResponse {
         "police_report": policeReport,
         "officer_name": officerName,
         "officer_designation": officerDesignation,
-
+        "property_avatars": propertyAvatars == null ? [] : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
         // "people_involved_name": peopleInvolvedName,
         // "people_involved_phone": peopleInvolvedPhone,
         // "witnesses_name": witnessesName,
         // "witnesses_phone": witnessesPhone,
       };
+}
+
+class PropertyAvatar {
+    int? id;
+    int? propertyOwnerId;
+    int? propertyId;
+    String? propertyAvatar;
+    DateTime? createdAt;
+    DateTime? updatedAt;
+    PropertyAvatar({
+        this.id,
+        this.propertyOwnerId,
+        this.propertyId,
+        this.propertyAvatar,
+        this.createdAt,
+        this.updatedAt,
+    });
+    factory PropertyAvatar.fromJson(Map<String, dynamic> json) => PropertyAvatar(
+        id: json["id"],
+        propertyOwnerId: json["property_owner_id"],
+        propertyId: json["property_id"],
+        propertyAvatar: json["property_avatar"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    );
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "property_owner_id": propertyOwnerId,
+        "property_id": propertyId,
+        "property_avatar": propertyAvatar,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+    };
 }

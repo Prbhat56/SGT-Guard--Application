@@ -108,7 +108,7 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                       height: 10,
                                     ),
                                     Text(
-                                      shiftDatum[index].lastShiftTime ==null ? '': shiftDatum[index].lastShiftTime.toString(),
+                                      shiftDatum[index].lastShiftTime.toString(),
                                       // shiftDatum[index].shift == null
                                       //     ? ''
                                       //     :

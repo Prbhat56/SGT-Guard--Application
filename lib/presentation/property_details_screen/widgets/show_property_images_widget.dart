@@ -23,8 +23,7 @@ class _PropertyImagesWidgetState extends State<PropertyImagesWidget> {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: widget.avatars!.length,
-          itemBuilder: (context, index) => index ==
-                  2 //using index to show the masked image by ternary operator
+          itemBuilder: (context, index) => index == 2 //using index to show the masked image by ternary operator
               ? Padding(
                   padding: const EdgeInsets.all(3),
                   child: Stack(
@@ -90,7 +89,7 @@ class _PropertyImagesWidgetState extends State<PropertyImagesWidget> {
                       clipBehavior: Clip.antiAlias,
                       child: Image.network(
                         widget.imageBaseUrl.toString() +
-                            '/' +
+                            '' +
                             widget.avatars![index].propertyAvatar.toString(),
                         height: 88,
                         width: 122,

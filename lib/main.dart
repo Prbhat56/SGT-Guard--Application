@@ -8,6 +8,7 @@ import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:flutter_notification_channel/notification_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/route_manager.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/isMediaSelected/isMediaSelected_cubit.dart';
@@ -95,7 +96,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => PasswordCheckerCubit()),
               BlocProvider(create: (context) => IssigninvalidCubit())
             ],
-            child: MaterialApp(
+            child: GetMaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'SGT',
               theme: CustomTheme.tabBarTheme,
@@ -172,8 +173,7 @@ Future<void> initOneSignalState() async {
   });
 
   OneSignal.InAppMessages.addClickListener((event) {
-    print(
-        "In App Message Clicked: \n${event.result.jsonRepresentation().replaceAll("\\n", "\n")}");
+    print("In App Message Clicked: \n${event.result.jsonRepresentation().replaceAll("\\n", "\n")}");
   });
   OneSignal.InAppMessages.addWillDisplayListener((event) {
     print("ON WILL DISPLAY IN APP MESSAGE ${event.message.messageId}");
@@ -274,10 +274,10 @@ class _SplashScreenState extends State<SplashScreen> {
             }
           }
         } else {
-          screenReplaceNavigator(context, SignInScreen());
+          screenReplaceNavigator(context, SignInScreen(oneSignalId:OneSignal.User.pushSubscription.id));
         }
       } else {
-        screenReplaceNavigator(context, OnboardingScreen());
+        screenReplaceNavigator(context, OnboardingScreen(oneSignalId:OneSignal.User.pushSubscription.id));
       }
     });
   }

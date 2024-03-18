@@ -9,6 +9,7 @@ import 'package:sgt/main.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
+import 'package:sgt/presentation/connect_screen/model/live_location_modal.dart';
 import 'package:sgt/utils/database_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -273,7 +274,6 @@ class FirebaseHelper {
     return firestore
         .collection(
             'property_owner_${prefs.getString('property_owner_id').toString()}')
-        //.where('id', isNotEqualTo: user.uid.toString())
         .orderBy('recentMessageTimestamp', descending: true)
         .snapshots();
   }
@@ -348,17 +348,34 @@ class FirebaseHelper {
 //GET MESSAGES METHOD
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
       ChatUsers chatUsers) {
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
+    } else {
+      converseId = getConversationID(chatUsers.id);
+    }
+    // return firestore
+    //     .collection('chats/${getConversationID(chatUsers.id)}/messages/')
+    //     .orderBy('sent', descending: true)
+    //     .snapshots();
     return firestore
         .collection('chats/${getConversationID(chatUsers.id)}/messages/')
-        .orderBy('sent', descending: true)
+        .orderBy('sent', descending: false)
         .snapshots();
   }
 
   //GET UNREAD MESSAGES METHOD
   static Stream<QuerySnapshot<Map<String, dynamic>>> getUnreadMessages(
       ChatUsers chatUsers) {
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
+    } else {
+      converseId = getConversationID(chatUsers.id);
+    }
     return firestore
-        .collection('chats/${getConversationID(chatUsers.id)}/messages/')
+        // .collection('chats/${getConversationID(chatUsers.id)}/messages/')
+        .collection('chats/${converseId}/messages/')
         .where('toId', isEqualTo: user.uid)
         .where('read', isEqualTo: '')
         .snapshots();
@@ -377,8 +394,17 @@ class FirebaseHelper {
       sent: time,
       isSendByMe: false,
     );
-    final ref = firestore
-        .collection('chats/${getConversationID(chatUser.id)}/messages/');
+    String? converseId = getConversationID(chatUser.id);
+    if (chatUser.position == "property_owner") {
+      converseId = "${user.uid}_${chatUser.id}";
+    } else {
+      converseId = getConversationID(chatUser.id);
+    }
+    print("Conversation Id ===========> ${getConversationID(chatUser.id)}");
+
+    // final ref = firestore
+    //     .collection('chats/${getConversationID(chatUser.id)}/messages/');
+    final ref = firestore.collection('chats/${converseId}/messages/');
     await ref
         .doc(time)
         .set(message.toJson())
@@ -412,8 +438,15 @@ class FirebaseHelper {
   //get only last message of a specific chat
   static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(
       ChatUsers chatUsers) {
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
+    } else {
+      converseId = getConversationID(chatUsers.id);
+    }
     return firestore
-        .collection('chats/${getConversationID(chatUsers.id)}/messages/')
+        // .collection('chats/${getConversationID(chatUsers.id)}/messages/')
+        .collection('chats/${converseId}/messages/')
         .orderBy('sent', descending: true)
         .limit(1)
         .snapshots();
@@ -423,7 +456,6 @@ class FirebaseHelper {
   static Future<void> sendChatImage(ChatUsers chatUser, File file) async {
     //getting image file extension
     final ext = file.path.split('.').last;
-
     try {
       Reference ref = storage.ref().child(
           'images/${getConversationID(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
@@ -558,7 +590,7 @@ class FirebaseHelper {
         "notification": {
           "title": me.name, //our name should be send
           "body": msgType == 'photo'
-              ? '📷 Image'
+              ? '📷 Photo'
               : msgType == 'video'
                   ? '📹 Video'
                   : msg,
@@ -583,4 +615,100 @@ class FirebaseHelper {
       print('\nsendPushNotificationE: $e');
     }
   }
+
+  /****************/ //LIVE LOCATION///****************** */
+
+  static Future<void> createGuardLocation(String lat, String long, String shift,
+      String checkpId, String routeId, String propertyId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> json =
+        jsonDecode(pref.getString('user_profile').toString());
+    var userDetails = GuardDetails.fromJson(json);
+    final currentTime = DateTime.now().millisecondsSinceEpoch.toString();
+    // print("lat -- ${lat}");
+    // print("long -- ${long}");
+    // print("shift -- ${shift}");
+    // print("checkpId -- ${checkpId}");
+    // print("routeId -- ${routeId}");
+    final userLocation = GuardLocation(
+        latitude: lat,
+        longitude: long,
+        timeStamp: currentTime,
+        propertyId: propertyId,
+        shiftId: shift,
+        checkpointId: checkpId);
+
+    String userId = user.uid.toString();
+    // print("userId ===> ${userId}");
+    // print('liveLocation/property_${userDetails.userDetails!.propertyOwnerId.toString()}/route_${routeId}/${userId}/${userDetails.userDetails!.emailAddress.toString()}');
+    final ref = firestore.collection(
+        'liveLocation/property_${propertyId.toString()}/route_${routeId}/${userId}/${userDetails.userDetails!.emailAddress.toString()}');
+
+    await ref.doc(currentTime).set(userLocation.toJson());
+  }
+
+  //GET LOCATION METHOD
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLiveLocation() {
+    return firestore.collection('liveLocation').snapshots();
+  }
+
+  //UPDATE Location METHOD
+  static Future<void> updateLiveLocation(String lat, String long) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> json =
+        jsonDecode(pref.getString('user_profile').toString());
+    var userDetails = GuardDetails.fromJson(json);
+    String userId = user.uid.toString();
+    await firestore
+        .collection(
+            'liveLocation/property_${userDetails.userDetails!.propertyOwnerId.toString()}/route_265/${userId}/${userDetails.userDetails!.emailAddress.toString()}')
+        .doc(user.uid)
+        .update({
+      'latitude': lat,
+      'longitude': long,
+      'timeStamp': DateTime.now().millisecondsSinceEpoch.toString(),
+    });
+  }
 }
+/**
+ StreamBuilder(
+              stream: messagesStream(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return SizedBox();
+
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    final data = snapshot.data?.docs;
+
+                    messages = data
+                            ?.map((e) => ChatMessages.fromJson(
+                                e.data() as Map<String, dynamic>))
+                            .toList() ??
+                        [];
+                    print(messages.length);
+
+                    if (messages.isNotEmpty) {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            return MessageCard(message: messages[index]);
+                          });
+                    } else {
+                      return Center(
+                        child: Text(
+                          'Say Hi...👋',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                      );
+                    }
+                }
+              },
+            ),
+ */

@@ -57,7 +57,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                             height: 6,
                           ),
                           Text(
-                            widget.detailsData!.location.toString(),
+                            widget.detailsData!.type.toString(),
                             maxLines: 2,
                             style: TextStyle(
                                 fontSize: 13,

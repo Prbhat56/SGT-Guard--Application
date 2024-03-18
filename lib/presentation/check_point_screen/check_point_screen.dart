@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sgt/presentation/home.dart';
+import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/service/socket_home.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -34,8 +35,45 @@ class CheckPointScreen extends StatefulWidget {
 
 Property? property = Property();
 List<Checkpoint>? checkpoint = [];
+Data? shiftDetails = Data();
 
 class _CheckPointScreenState extends State<CheckPointScreen> {
+
+   @override
+  void initState() {
+    super.initState();
+    getJobsList();
+  }
+
+   Future<PropertyDetailsModel> getJobsList() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? property_id = prefs.getString('propertyId');
+      Map<String, String> myHeader = <String, String>{
+        "Authorization": "Bearer ${prefs.getString('token')}",
+      };
+      String apiUrl = baseUrl + apiRoutes['dutyDetails']! + property_id.toString();
+      final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
+
+      if (response.statusCode == 201) {
+        final PropertyDetailsModel responseModel = propertyDetailsModelFromJson(response.body);
+        shiftDetails = responseModel.data;
+        // print("-------------------->  ${shiftDetails}");
+        return responseModel;
+      } else {
+        return PropertyDetailsModel(
+          status: response.statusCode,
+        );
+      }
+    } catch (e) {
+      print('error caught: $e');
+      return PropertyDetailsModel(
+        status: 500,
+      );
+    }
+  }
+
+
   Future<CheckPointPropertyShiftWise> getCheckpointsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? property_id = prefs.getString('propertyId');
@@ -70,7 +108,6 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(checkpoint!.length);
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(

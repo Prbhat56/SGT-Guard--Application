@@ -363,7 +363,7 @@ class _FilterReportWidgetState extends State<FilterReportWidget> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           CustomButtonWidget(
               buttonTitle: 'Apply',
