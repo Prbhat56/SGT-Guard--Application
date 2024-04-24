@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
 
 import '../../../utils/const.dart';
@@ -19,7 +21,7 @@ class PropertyMediaPreviewScreen extends StatefulWidget {
 class _PropertyMediaPreviewScreenState
     extends State<PropertyMediaPreviewScreen> {
   final controller = CarouselController();
-  int activeIndex = 0;
+  int? activeIndex = 0;
   // List data = [
   //   'https://images.pexels.com/photos/2957862/pexels-photo-2957862.jpeg?auto=compress&cs=tinysrgb&w=1600',
   //   'https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=1600',
@@ -60,6 +62,7 @@ class _PropertyMediaPreviewScreenState
               carouselController: controller,
               itemCount: widget.avatars!.length,
               itemBuilder: (context, index, realIndex) {
+                activeIndex = index;
                 return Stack(
                   children: [
                     index == 3
@@ -98,7 +101,9 @@ class _PropertyMediaPreviewScreenState
               left: 0,
               child: IconButton(
                 onPressed: () {
-                  controller.previousPage();
+                  activeIndex! != 0 ?
+                  controller.previousPage() :
+                  print(' IndexMore ');
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
@@ -112,7 +117,8 @@ class _PropertyMediaPreviewScreenState
               right: 0,
               child: IconButton(
                 onPressed: () {
-                  controller.nextPage();
+                    (activeIndex!) != widget.avatars!.length ?
+                  controller.nextPage(): print(' IndexMore ');;
                 },
                 icon: Icon(
                   Icons.arrow_forward_ios,

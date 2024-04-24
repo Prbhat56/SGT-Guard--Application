@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sgt/presentation/time_sheet_screen/upcoming_screen.dart';
+import 'package:sgt/theme/colors.dart';
+import 'package:sgt/theme/font_style.dart';
 import 'package:sgt/utils/const.dart';
 import '../map_screen/active_map_screen.dart';
 import '../qr_screen/scanning_screen.dart';
@@ -35,7 +38,7 @@ class GuardToolScreen extends StatelessWidget {
                       icon: Icon(
                         Icons.close,
                         color: Colors.black,
-                        size: 40,
+                        size: 20.sp,
                       )),
                 ],
               ),
@@ -45,13 +48,18 @@ class GuardToolScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SvgPicture.asset('assets/guard_logo.svg'),
+                  SvgPicture.asset(
+                    'assets/guard_logo.svg',
+                    width: 24.w,
+                    height: 35.h,
+                  ),
                   SizedBox(
-                    width: 20,
+                    width: 20.w,
                   ),
                   Text(
                     "Guard Tools",
-                    style: TextStyle(color: black, fontSize: 30),
+                    style: TextStyle(color: black, fontSize: 30.sp),
+                    // AppFontStyle.mediumTextStyle(AppColors.black, 25.sp),
                   ),
                 ],
               ),
@@ -61,7 +69,7 @@ class GuardToolScreen extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
               child: Divider(
                 color: seconderyColor,
-                thickness: 2,
+                thickness: 2.w,
                 height: 0,
               ),
             ),
@@ -107,131 +115,32 @@ class GuardToolScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return const LeaveStatusScreen();
-                      }));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/close.svg',
-                            width: 17,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            'Leave Status',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return UpcomingThimeSheet(); //TimeSheetScreen();
-                      }));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/event_upcoming.svg',
-                            width: 17,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            'Upcoming Shifts',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
                         return const ActiveMapScreen();
                       }));
                     },
                     child: Container(
                       decoration: BoxDecoration(
                           // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10.r)),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
                             'assets/add_location.svg',
-                            width: 17,
+                            width: 17.w,
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 15.w,
                           ),
                           Text(
                             'Active Property Map View',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const MissedShiftScreen();
-                      }));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/call_missed.svg',
-                            width: 17,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            'Missed Shifts',
-                            style: TextStyle(
-                              fontSize: 17,
+                            style: 
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
+                            TextStyle(
+                              fontSize: 17.sp,
                               color: primaryColor,
                             ),
                           ),
@@ -249,26 +158,28 @@ class GuardToolScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10.r)),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
                             'assets/report.svg',
-                            width: 17,
+                            width: 17.w,
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 15.w,
                           ),
                           Text(
                             'General Report',
-                            style: TextStyle(
-                              fontSize: 17,
+                            style: 
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
+ TextStyle(
+                              fontSize: 17.sp,
                               color: primaryColor,
-                            ),
-                          ),
+                            ),                          ),
                         ],
                       ),
                     ),
@@ -283,25 +194,28 @@ class GuardToolScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10.r)),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            'assets/report.svg',
-                            width: 17,
+                            'assets/maintanance_report.svg',
+                            width: 17.w,
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 15.w,
                           ),
                           Text(
                             'Maintenance Report',
-                            style: TextStyle(
-                              fontSize: 17,
+                            style:
+                            TextStyle(
+                              fontSize: 17.sp,
                               color: primaryColor,
                             ),
+                            //  AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
                           ),
                         ],
                       ),
@@ -317,25 +231,27 @@ class GuardToolScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10.r)),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            'assets/report.svg',
-                            width: 17,
+                            'assets/parking_report.svg',
+                            width: 17.w,
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 15.w,
                           ),
                           Text(
                             'Parking Report',
-                            style: TextStyle(
-                              fontSize: 17,
+                            style:TextStyle(
+                              fontSize: 17.sp,
                               color: primaryColor,
-                            ),
+                            ), 
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
                           ),
                         ],
                       ),
@@ -351,25 +267,136 @@ class GuardToolScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           // color: seconderyMediumColor,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10.r)),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            'assets/report.svg',
-                            width: 17,
+                            'assets/emergency_report.svg',
+                            width: 17.w,
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 15.w,
                           ),
                           Text(
                             'Emergency Report',
-                            style: TextStyle(
-                              fontSize: 17,
+                            style: 
+                            TextStyle(
+                              fontSize: 17.sp,
                               color: primaryColor,
                             ),
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return UpcomingThimeSheet(); //TimeSheetScreen();
+                      }));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          // color: seconderyMediumColor,
+                          borderRadius: BorderRadius.circular(10.r)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/event_upcoming.svg',
+                            width: 17.w,
+                          ),
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Text(
+                            'Upcoming Shifts',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: primaryColor,
+                            ),
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const MissedShiftScreen();
+                      }));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          // color: seconderyMediumColor,
+                          borderRadius: BorderRadius.circular(10.r)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/call_missed.svg',
+                            width: 17.w,
+                          ),
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Text(
+                            'Missed Shifts',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: primaryColor,
+                            ),
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const LeaveStatusScreen();
+                      }));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          // color: seconderyMediumColor,
+                          borderRadius: BorderRadius.circular(10.r)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/close.svg',
+                            width: 17.w,
+                          ),
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Text(
+                            'Leave Status',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: primaryColor,
+                            ),
+                            // AppFontStyle.mediumTextStyle(
+                            //     AppColors.primaryColor, 17.sp),
                           ),
                         ],
                       ),

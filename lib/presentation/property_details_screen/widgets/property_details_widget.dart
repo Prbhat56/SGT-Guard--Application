@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
 
@@ -25,14 +26,14 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
         color: seconderyColor.withAlpha(40),
       ),
       child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
                     child: CustomCircularImage.getCircularImage(
                         widget.imageBaseUrl.toString(),
                         // '${widget.detailsData!.propertyAvatars!.isEmpty ? null : widget.detailsData!.propertyAvatars!.first.propertyAvatar}',
@@ -50,22 +51,23 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                         children: [
                           Text(
                             widget.detailsData!.propertyName.toString(),
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
+                                fontSize: 25.sp, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
-                            height: 6,
+                            height: 6.h,
                           ),
                           Text(
                             widget.detailsData!.type.toString(),
                             maxLines: 2,
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 color: Colors.grey,
                                 overflow: TextOverflow.ellipsis),
                           ),
                           SizedBox(
-                            height: 6,
+                            height: 6.h,
                           ),
                           Row(
                             children: [
@@ -73,7 +75,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                                 'Last Shift: ',
                                 style: TextStyle(
                                   color: Colors.red,
-                                  fontSize: 11,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -82,7 +84,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                                 ' No Shift Available ',
                                 style: TextStyle(
                                   color: black,
-                                  fontSize: 11,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -91,7 +93,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                                 // ' ${widget.detailsData == null ? '' : widget.detailsData!.shifts!.last.clockIn.toString()} ~ ${widget.detailsData!.shifts!.isEmpty ? '' : widget.detailsData!.shifts!.last.clockOut.toString()}',
                                 style: TextStyle(
                                   color: black,
-                                  fontSize: 11,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -105,7 +107,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
               ),
               // SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(left: 40),
+                padding: EdgeInsets.only(left: 40.w),
                 child: Center(
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                     PropertyDataWidget(
@@ -119,7 +121,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                   ]),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           )),
     );

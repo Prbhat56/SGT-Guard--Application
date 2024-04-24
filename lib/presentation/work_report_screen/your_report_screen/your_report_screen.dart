@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
@@ -158,14 +160,19 @@ class _YourReportScreenState extends State<YourReportScreen> {
             icon: Icon(
               Icons.arrow_back_ios,
               color: primaryColor,
+              size: 20.sp,
             ),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          title: Text(
-            'Your Reports',
-            style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+          title: Align(
+            alignment: Alignment(-1.1.w, 0.w),
+            child: Text(
+              'Your Reports',
+              style:
+                  TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+            ),
           ),
           actions: [
             IconButton(
@@ -260,8 +267,8 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             child: CachedNetworkImage(
-                                                imageUrl: imgUrl +
-                                                    '${myData.images!.length != 0 ? myData.images!.first.toString() : ''}',
+                                                imageUrl: propertyImgUrl +
+                                                    '${myData.propertyAvatars!.length != 0 ? myData.propertyAvatars!.first.propertyAvatar.toString() : ''}',
                                                 fit: BoxFit.fill,
                                                 width: 40,
                                                 height: 40,
@@ -300,7 +307,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                           screenNavigator(
                                               context,
                                               ReportDetailsPage(
-                                                imgUrl : imgUrl,
+                                                imgUrl: imgUrl,
                                                 recentReportDatum: myData,
                                               ));
                                         },
@@ -363,7 +370,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                 screenNavigator(
                                     context,
                                     ReportDetailsPage(
-                                      imgUrl:imgUrl,
+                                      imgUrl: imgUrl,
                                       recentReportDatum: myData,
                                     ));
                               },
@@ -380,7 +387,8 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(30),
                                         child: CachedNetworkImage(
-                                            imageUrl: propertyImgUrl + '${myData.propertyAvatars!.length != 0 ? myData.propertyAvatars!.first.propertyAvatar.toString() : ''}',
+                                            imageUrl: propertyImgUrl +
+                                                '${myData.propertyAvatars!.length != 0 ? myData.propertyAvatars!.first.propertyAvatar.toString() : ''}',
                                             fit: BoxFit.fill,
                                             width: 60,
                                             height: 60,
@@ -411,22 +419,27 @@ class _YourReportScreenState extends State<YourReportScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              myData.subject.toString(),
-                                              maxLines: 2,
-                                              style: CustomTheme.blueTextStyle(
-                                                  15, FontWeight.w400),
+                                            Flexible(
+                                              flex: 1,
+                                              child: Text(
+                                                myData.subject.toString(),
+                                                overflow: TextOverflow.ellipsis,
+                                                // maxLines: 2,
+                                                style:
+                                                    CustomTheme.blueTextStyle(
+                                                        15, FontWeight.w400),
+                                              ),
                                             ),
                                             Text(
-                                              myData.emergencyTime.toString(),
+                                              myData.createTime.toString(),
                                               maxLines: 2,
-                                              style: CustomTheme.greyTextStyle(
-                                                  12),
+                                              style:
+                                                  CustomTheme.greyTextStyle(12),
                                             ),
                                           ],
                                         ),
                                         Text(
-                                          myData.emergencyDate.toString(),
+                                          myData.createDate.toString(),
                                           maxLines: 2,
                                           style: CustomTheme.blackTextStyle(12),
                                         ),

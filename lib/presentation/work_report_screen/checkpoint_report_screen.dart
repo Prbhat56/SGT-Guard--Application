@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:carp_background_location/carp_background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
+import 'package:sgt/presentation/qr_screen/model/checkpoint_qr_details_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -32,14 +36,15 @@ class CheckpointReportScreen extends StatefulWidget {
   String? checkpointHistoryId;
   int? checkpointListIndex;
 
-  CheckpointReportScreen(
-      {super.key,
-      this.checkPointqrData,
-      this.propId,
-      this.shiftId,
-      this.checkPointId,
-      this.checkpointHistoryId, 
-      this.checkpointListIndex,});
+  CheckpointReportScreen({
+    super.key,
+    this.checkPointqrData,
+    this.propId,
+    this.shiftId,
+    this.checkPointId,
+    this.checkpointHistoryId,
+    this.checkpointListIndex,
+  });
 
   static _CheckpointReportScreenState? of(BuildContext context) =>
       context.findAncestorStateOfType<_CheckpointReportScreenState>();
@@ -50,8 +55,10 @@ class CheckpointReportScreen extends StatefulWidget {
 
 class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
   bool? checkIdList;
+  String? latestCheckpointId;
 
   List<CheckPointTask> checkpointTask = [];
+  // CheckPointData? checkpointData;
   TextEditingController additionalCommentsController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
@@ -59,6 +66,30 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
   // List<int> checkpointIds = [];
 
 //pick image from gallery
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
+  void sendCurrentCheckPointStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? latitude = prefs.getString('latitude');
+    String? longitude = prefs.getString('propertyId');
+    String? latestCheckpointId = prefs.getString('Cp');
+    String? routeId = prefs.getString('routeId');
+    String? shift_id = prefs.getString('shiftId');
+    String? property_id = prefs.getString('propertyId');
+
+    await FirebaseHelper.createGuardLocation(
+        latitude.toString(),
+        longitude.toString(),
+        shift_id.toString(),
+        latestCheckpointId.toString(),
+        routeId.toString(),
+        property_id.toString());
+  }
+
   void pickGalleryImage() async {
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images != null) {
@@ -103,8 +134,9 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
         .add(checkpointTask.toString().replaceAll("(", "").replaceAll(")", ""));
     ids = checkpointsIds.join(',');
     String apiUrl = baseUrl + apiRoutes['checkpointTaskUpdate']!;
-    print("apiUrl ==================> ${apiUrl.toString()}");
-    print("--------------------------------${additionalCommentsController.text.toString()}");
+    // print("apiUrl ==================> ${apiUrl.toString()}");
+    // print(
+    // "--------------------------------${additionalCommentsController.text.toString()}");
     var request = new http.MultipartRequest('POST', Uri.parse(apiUrl));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
@@ -130,6 +162,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     if (response.statusCode == 200) {
       // print('=============================================> Request Submitted');
       // setState(() {
+      sendCurrentCheckPointStatus();
       screenNavigator(context, CheckPointCompleteSuccess());
       // });
       // screenNavigator(context, ReportSubmitSuccess());
@@ -144,6 +177,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
   Future<CheckPointDetailsModal> getCheckpointsTaskList(checkpoint_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? shift_id = prefs.getString('shiftId');
+    prefs.setString('Cp', checkpoint_id.toString());
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
     };
@@ -156,12 +190,13 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     String apiUrl = baseUrl + apiRoutes['checkpointTaskList']!;
     final response =
         await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
-    var data = jsonDecode(response.body.toString());
-    print("data-------> ${data}");
+    // var data = jsonDecode(response.body.toString());
+    // print("data-------> ${data}");
     if (response.statusCode == 201) {
       final CheckPointDetailsModal responseModel =
           checkPointDetailsModalFromJson(response.body);
       checkpointTask = responseModel.data!.checkPointTask!;
+      // checkpointData = responseModel.data!;
       return responseModel;
     } else {
       return CheckPointDetailsModal(
@@ -178,11 +213,17 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String? jsonString = widget.checkPointqrData;
-    Map<String, dynamic> jsonData = jsonDecode(jsonString!);
-    int checkpointId = jsonData['checkpoint_details']['checkpoint_id'];
-    String checkPointName = jsonData['checkpoint_details']['checkpoint_name'];
-    print('CheckPoint ID: ${checkpointId}');
+    final CheckpointQrDetails checkPointQr =
+        checkpointQrDetailsFromJson(widget.checkPointqrData!);
+    String? checkpointId =
+        checkPointQr.checkpointDetails!.checkpointId.toString();
+    String checkPointName =
+        checkPointQr.checkpointDetails!.checkpointName.toString();
+    // String? jsonString = widget.checkPointqrData;
+    // Map<String, dynamic> jsonData = jsonDecode(jsonString!);
+    // int checkpointId = jsonData['checkpoint_details']['checkpoint_id'];
+    // String checkPointName = jsonData['checkpoint_details']['checkpoint_name'];
+    // print('CheckPoint ID: ${checkpointId}');
     var cubit = context.watch<ReportTypeCubit>().state;
     print(cubit.isparkingReport);
     return widget.checkPointId != checkpointId.toString()
@@ -192,7 +233,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "You are Scanned Wrong CheckPoint",
+                  "You have scanned wrong checkpoint",
                   style: TextStyle(
                     fontSize: 17,
                     color: Colors.red,
@@ -215,7 +256,8 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
               appBar: CustomAppBarWidget(
-                appbarTitle: "CP${widget.checkpointListIndex!+1} ${''+checkPointName}",
+                appbarTitle:
+                    "CP-${widget.checkpointListIndex! + 1} ${'' + checkPointName}",
               ),
               backgroundColor: white,
               body: SingleChildScrollView(
@@ -310,8 +352,11 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                                           SizedBox(
                                             height: 10,
                                           ),
+                                         
                                           TextFormField(
-                                            initialValue: snapshot.data!.data!.taskRemarks,
+                                            // initialValue: snapshot
+                                            //     .data!.data!.taskRemarks
+                                            //     .toString(),
                                             controller:
                                                 additionalCommentsController,
                                             maxLines: 5,

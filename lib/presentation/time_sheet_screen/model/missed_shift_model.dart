@@ -180,6 +180,7 @@ class Shift {
   String? qrCodeOut;
   String? status;
   String? shiftDate;
+  String? missedShiftDate;
 
   Shift({
     this.id,
@@ -194,6 +195,7 @@ class Shift {
     this.qrCodeOut,
     this.status,
     this.shiftDate,
+    this.missedShiftDate,
   });
 
   Shift.fromJson(Map<String, dynamic> json) {
@@ -209,6 +211,7 @@ class Shift {
     qrCodeOut = json['qr_code_out'];
     status = json['status'];
     shiftDate = json["shift_date"] == null ? "" : json["shift_date"];
+    missedShiftDate = json["missed_shift_date"];
   }
 
   Map<String, dynamic> toJson() {
@@ -225,6 +228,7 @@ class Shift {
     data['qr_code_out'] = this.qrCodeOut;
     data['status'] = this.status;
     data['shift_date'] = this.shiftDate;
+    data['missed_shift_date'] = this.missedShiftDate;
     return data;
   }
 }

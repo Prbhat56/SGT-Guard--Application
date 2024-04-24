@@ -104,7 +104,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   child: CachedNetworkImage(
                                       imageUrl: (snapshot.data!.imageBaseUrl
                                               .toString() +
-                                          '/' +
+                                          '' +
                                           snapshot.data!.userDetails!.avatar
                                               .toString()),
                                       fit: BoxFit.fill,
@@ -195,7 +195,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               .data!.userDetails!.contactCode ==
                                           null
                                       ? ''
-                                      : "+${snapshot.data!.userDetails!.contactCode.toString()}") +
+                                      : "${snapshot.data!.userDetails!.contactCode.toString()}") +
                                   ' ' +
                                   (snapshot.data!.userDetails!.contactNumber ==
                                           null

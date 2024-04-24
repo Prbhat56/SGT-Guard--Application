@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,6 +20,7 @@ String imgBaseUrl = '';
 List<Checkpoint> checkpoint = [];
 
 class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
+
   Completer<GoogleMapController> _controller = Completer();
 
   List<Marker> markers = <Marker>[];

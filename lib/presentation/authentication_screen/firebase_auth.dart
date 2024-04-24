@@ -359,7 +359,7 @@ class FirebaseHelper {
     //     .orderBy('sent', descending: true)
     //     .snapshots();
     return firestore
-        .collection('chats/${getConversationID(chatUsers.id)}/messages/')
+        .collection('chats/${converseId}/messages/')
         .orderBy('sent', descending: false)
         .snapshots();
   }
@@ -383,10 +383,10 @@ class FirebaseHelper {
 
   //FOR SENDING MESSAGE
   static Future<void> sendMessage(
-      ChatUsers chatUser, String msg, String msgType) async {
+      ChatUsers chatUsers, String msg, String msgType) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
     final ChatMessages message = ChatMessages(
-      toId: chatUser.id,
+      toId: chatUsers.id,
       message: msg,
       read: '',
       type: msgType,
@@ -394,13 +394,12 @@ class FirebaseHelper {
       sent: time,
       isSendByMe: false,
     );
-    String? converseId = getConversationID(chatUser.id);
-    if (chatUser.position == "property_owner") {
-      converseId = "${user.uid}_${chatUser.id}";
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
     } else {
-      converseId = getConversationID(chatUser.id);
+      converseId = getConversationID(chatUsers.id);
     }
-    print("Conversation Id ===========> ${getConversationID(chatUser.id)}");
 
     // final ref = firestore
     //     .collection('chats/${getConversationID(chatUser.id)}/messages/');
@@ -408,13 +407,21 @@ class FirebaseHelper {
     await ref
         .doc(time)
         .set(message.toJson())
-        .then((value) => sendPushNotification(chatUser, msg, msgType));
+        .then((value) => sendPushNotification(chatUsers, msg, msgType));
   }
 
 //update read status of message
-  static Future<void> updateMessageReadStatus(ChatMessages msg) async {
+  static Future<void> updateMessageReadStatus(
+      ChatMessages msg, ChatUsers chatUsers) async {
+    String? converseId = getConversationID(msg.fromId);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${msg.fromId}";
+    } else {
+      converseId = getConversationID(msg.fromId);
+    }
+
     await firestore
-        .collection('chats/${getConversationID(msg.fromId)}/messages/')
+        .collection('chats/${converseId}/messages/')
         .doc(msg.sent)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
@@ -453,12 +460,18 @@ class FirebaseHelper {
   }
 
   //send chat image
-  static Future<void> sendChatImage(ChatUsers chatUser, File file) async {
+  static Future<void> sendChatImage(ChatUsers chatUsers, File file) async {
     //getting image file extension
     final ext = file.path.split('.').last;
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
+    } else {
+      converseId = getConversationID(chatUsers.id);
+    }
     try {
       Reference ref = storage.ref().child(
-          'images/${getConversationID(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+          'images/${converseId}/${DateTime.now().millisecondsSinceEpoch}.$ext');
 
       await ref
           .putFile(file, SettableMetadata(contentType: 'image/$ext'))
@@ -470,7 +483,7 @@ class FirebaseHelper {
       final imageUrl = await ref.getDownloadURL();
       print("Image uploaded successfully. Download URL: $imageUrl");
 
-      await sendMessage(chatUser, imageUrl, 'photo');
+      await sendMessage(chatUsers, imageUrl, 'photo');
     } catch (e) {
       print("Error uploading image: $e");
     }
@@ -478,19 +491,24 @@ class FirebaseHelper {
 
   //STORE VIDEOS
   static Future<void> uplodVideo(
-      ChatUsers chatUser, String videoFilePath) async {
+      ChatUsers chatUsers, String videoFilePath) async {
     final file = File(videoFilePath);
     final ext = file.path.split('.').last;
-
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
+    } else {
+      converseId = getConversationID(chatUsers.id);
+    }
     try {
       TaskSnapshot taskSnapshot = await storage
           .ref()
           .child(
-              'videos/${getConversationID(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext')
+              'videos/${converseId}/${DateTime.now().millisecondsSinceEpoch}.$ext')
           .putFile(file);
       final vdoUrl = await taskSnapshot.ref.getDownloadURL();
       print("Video uploaded successfully. Download URL: $vdoUrl");
-      await sendMessage(chatUser, vdoUrl, 'video');
+      await sendMessage(chatUsers, vdoUrl, 'video');
     } catch (e) {
       print("Error uploading image: $e");
     }

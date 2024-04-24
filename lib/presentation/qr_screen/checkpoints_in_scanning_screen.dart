@@ -124,6 +124,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
       HapticFeedback.vibrate();
       setState(() {
         result = scanData;
+        print('-------------------------> ${scanData}');
       });
     });
     this.controller!.pauseCamera();

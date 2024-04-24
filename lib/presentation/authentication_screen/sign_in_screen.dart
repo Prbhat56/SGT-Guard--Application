@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
@@ -68,7 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
       } else if (Platform.isAndroid) {
         var uiid = await PlatformDeviceId.getDeviceId;
         deviceId = uuid.v5(Uuid.NAMESPACE_URL, uiid).toUpperCase();
-        print("======================> ${deviceId}");
+        print("deviceId ===========> ${deviceId}");
       }
     } on PlatformException {
       deviceId = 'Failed to get deviceId.';
@@ -84,7 +85,6 @@ class _SignInScreenState extends State<SignInScreen> {
   var commonService = CommonService();
   @override
   Widget build(BuildContext context) {
-    print("One Signal Subscirption Id --------> ${widget.oneSignalId}");
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -258,9 +258,7 @@ class _SignInScreenState extends State<SignInScreen> {
       Map<String, dynamic> myJsonBody = {
         'email': email,
         'password': password,
-        'one_signal':widget.oneSignalId != null ? widget.oneSignalId : _deviceId.toString(),
-        // 'one_signal':"11",
-        // 'one_signal': widget.oneSignalId, 
+        'one_signal':OneSignal.User.pushSubscription.id !=null ? OneSignal.User.pushSubscription.id : _deviceId.toString(),
       };
       print(myJsonBody.toString());
       Response response = await post(Uri.parse(apiUrl), body: myJsonBody);

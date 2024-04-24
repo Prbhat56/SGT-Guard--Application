@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/apply_leave_screen/model/leave_missing_shift_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -8,6 +11,7 @@ import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
+import 'package:sgt/theme/font_style.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,13 +23,18 @@ import 'package:http/http.dart' as http;
 class ApplyLeaveScreen2 extends StatefulWidget {
   String? fromDate;
   String? toDate;
-  ApplyLeaveScreen2({super.key, this.fromDate, this.toDate,});
+  ApplyLeaveScreen2({
+    super.key,
+    this.fromDate,
+    this.toDate,
+  });
 
   @override
   State<ApplyLeaveScreen2> createState() => _ApplyLeaveScreen2State();
 }
 
 class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
+  
   TextEditingController _missingDayText = TextEditingController();
 
   TextEditingController _subjectText = TextEditingController();
@@ -116,7 +125,8 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                                   readOnly: true,
                                   decoration: InputDecoration(
                                     fillColor: primaryColor,
-                                    hintText: '${snapshot.data!.response!.length}',
+                                    hintText:
+                                        '${snapshot.data!.response!.length}',
                                     hintStyle: TextStyle(color: Colors.black26),
                                     contentPadding: EdgeInsets.only(
                                       left: 10,
@@ -267,98 +277,129 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                                       width: 60,
                                       child: CircularProgressIndicator()));
                             } else {
-                              return ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: snapshot.data!.response!.length,
-                                  itemBuilder: ((context, index) {
-                                    return Column(
-                                      children: [
-                                        Row(
+                              return snapshot.data!.response!.isEmpty
+                                  ? SizedBox(
+                                      child: Center(
+                                        child: Text(
+                                          'No Shifts Found',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                          snapshot.data!.response!.length,
+                                      itemBuilder: ((context, index) {
+                                        return Column(
                                           children: [
-                                            snapshot
-                                                    .data!
-                                                    .response![index]
-                                                    .property!
-                                                    .propertyAvatars!
-                                                    .isEmpty
-                                                ? CustomCircularImage
-                                                    .getCircularImage(
-                                                        '',
-                                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuuileEwI49MdSHqO_FR_F9YhKSfG0Sde_8Q&usqp=CAU',
-                                                        false,
-                                                        30,
-                                                        4,
-                                                        43)
-                                                :
-                                                // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuuileEwI49MdSHqO_FR_F9YhKSfG0Sde_8Q&usqp=CAU',
-                                                CustomCircularImage
-                                                    .getCircularImage(
-                                                        snapshot
-                                                            .data!.imageBaseUrl
-                                                            .toString(),
-                                                        snapshot
-                                                            .data!
-                                                            .response![index]
-                                                            .property!
-                                                            .propertyAvatars!
-                                                            .first
-                                                            .propertyAvatar
-                                                            .toString(),
-                                                        false,
-                                                        30,
-                                                        4,
-                                                        43),
-                                            SizedBox(
-                                              width: 12,
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                            Row(
                                               children: [
-                                                Text(
-                                                  snapshot
-                                                      .data!
-                                                      .response![index]
-                                                      .property!
-                                                      .propertyName
-                                                      .toString(),
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 17,
-                                                        color:
-                                                            CustomTheme.black,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
+                                                snapshot
+                                                        .data!
+                                                        .response![index]
+                                                        .property!
+                                                        .propertyAvatars!
+                                                        .isEmpty
+                                                    ? CustomCircularImage
+                                                        .getCircularImage(
+                                                            '',
+                                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuuileEwI49MdSHqO_FR_F9YhKSfG0Sde_8Q&usqp=CAU',
+                                                            false,
+                                                            30,
+                                                            4,
+                                                            43)
+                                                    :
+                                                    // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuuileEwI49MdSHqO_FR_F9YhKSfG0Sde_8Q&usqp=CAU',
+                                                    CustomCircularImage
+                                                        .getCircularImage(
+                                                            snapshot.data!
+                                                                .imageBaseUrl
+                                                                .toString(),
+                                                            snapshot
+                                                                .data!
+                                                                .response![
+                                                                    index]
+                                                                .property!
+                                                                .propertyAvatars!
+                                                                .first
+                                                                .propertyAvatar
+                                                                .toString(),
+                                                            false,
+                                                            30,
+                                                            4,
+                                                            43),
+                                                SizedBox(
+                                                  width: 12,
                                                 ),
-                                                Text(
-                                                  'Check-in by ${snapshot.data!.response![index].clockIn}',
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 13,
-                                                        color: CustomTheme
-                                                            .primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+                                                Expanded(
+                                                  child: Container(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // AppFontStyle.FlexibleText(snapshot
+                                                        //       .data!
+                                                        //       .response![index]
+                                                        //       .property!
+                                                        //       .propertyName
+                                                        //       .toString(),AppFontStyle.boldTextStyle(CustomTheme.black,17.sp)),
+                                                        Text(
+                                                          snapshot
+                                                              .data!
+                                                              .response![index]
+                                                              .property!
+                                                              .propertyName
+                                                              .toString(),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle: TextStyle(
+                                                                fontSize: 17,
+                                                                color:
+                                                                    CustomTheme
+                                                                        .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'Check-in by ${snapshot.data!.response![index].clockIn}',
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle: TextStyle(
+                                                                fontSize: 13,
+                                                                color: CustomTheme
+                                                                    .primaryColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
+                                            SizedBox(
+                                              height: 12,
+                                            ),
+                                            Divider(
+                                              color: CustomTheme.seconderyColor,
+                                              thickness: 1,
+                                            ),
                                           ],
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Divider(
-                                          color: CustomTheme.seconderyColor,
-                                          thickness: 1,
-                                        ),
-                                      ],
-                                    );
-                                  }));
+                                        );
+                                      }));
                             }
                           }),
                     ],

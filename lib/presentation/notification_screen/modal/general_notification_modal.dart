@@ -102,6 +102,7 @@ class Datum {
     DateTime? createdAt;
     DateTime? updatedAt;
     String? notificationTime;
+    String? notificationDate;
     String? userAvtar;
 
     Datum({
@@ -114,6 +115,7 @@ class Datum {
         this.createdAt,
         this.updatedAt,
         this.notificationTime,
+        this.notificationDate,
         this.userAvtar,
     });
 
@@ -127,6 +129,7 @@ class Datum {
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         notificationTime: json["notification_time"],
+        notificationDate: json["notification_date"],
         userAvtar: json["user_avtar"],
     );
 
@@ -140,6 +143,7 @@ class Datum {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "notification_time": notificationTime,
+        "notification_date": notificationDate,
         "user_avtar": userAvtar,
     };
 }
@@ -159,14 +163,6 @@ enum NotificationFor {
 final notificationForValues = EnumValues({
     "guard": NotificationFor.GUARD
 });
-
-// enum NotificationTime {
-//     THE_1200_AM
-// }
-
-// final notificationTimeValues = EnumValues({
-//     "12:00 AM": NotificationTime.THE_1200_AM
-// });
 
 class Link {
     String? url;

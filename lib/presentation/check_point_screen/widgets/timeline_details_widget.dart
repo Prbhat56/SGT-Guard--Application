@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
@@ -17,9 +19,11 @@ import '../../qr_screen/checkpoints_in_scanning_screen.dart';
 
 class TimeLineDetailsWidget extends StatefulWidget {
   final ValueChanged<String> onStatusChanged;
+  final ValueChanged<String> onCheckpointVisitedStatusChanged;
   TimeLineDetailsWidget({
     super.key,
     required this.onStatusChanged,
+    required this.onCheckpointVisitedStatusChanged,
   });
 
   @override
@@ -55,6 +59,12 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
         var jsonData = {
           "checkpointStatus": squares.toList()
         }; // assuming this is your full data
+        print(
+            "------------------??????? >>>>>>>>>>>>>>>>${jsonData["checkpointStatus"].toString()}");
+        print(
+            "----------------####### >>>>>> ${jsonData["checkpointStatus"]!.every((item) => item == "Visited")}");
+        print(
+            "----------------@@@@@@@@@@ >>>>>> ${jsonData["checkpointStatus"]!.indexWhere((element) => element == "Upcoming" || element == "Missed")}");
         bool everyCheckpointIsSame =
             jsonData["checkpointStatus"]!.every((item) => item == "Visited");
         everyCheckpointIsSame == true
@@ -131,76 +141,87 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    // mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    // crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      checkpointList[index]
-                                              .checkPointAvatar!
-                                              .isEmpty
-                                          // checkpointList[index].checkPointAvatar!.length == 0
-                                          ? CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                  'assets/sgt_logo.jpg'),
-                                            )
-                                          : CircleAvatar(
-                                              backgroundImage:
-                                                  // AssetImage('assets/sgt_logo.jpg'),
-                                                  NetworkImage(
-                                                snapshot.data!.imageBaseUrl! +
-                                                    '' +
-                                                    checkpointList[index].checkPointAvatar!.first.checkpointAvatars
-                                                        .toString(),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Row(
+                                      // mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      // crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // checkpointList[index]
+                                        //         .checkPointAvatar!
+                                        //         .isEmpty
+                                        checkpointList[index]
+                                                    .checkPointAvatar!
+                                                    .length ==
+                                                0
+                                            ? CircleAvatar(
+                                                backgroundImage: AssetImage(
+                                                    'assets/sgt_logo.jpg'),
+                                              )
+                                            : CircleAvatar(
+                                                backgroundImage:
+                                                    // AssetImage('assets/sgt_logo.jpg'),
+                                                    NetworkImage(
+                                                  snapshot.data!.imageBaseUrl! +
+                                                      '' +
+                                                      checkpointList[index]
+                                                          .checkPointAvatar!
+                                                          .first
+                                                          .checkpointAvatars
+                                                          .toString(),
+                                                ),
                                               ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          // mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              // 'Building Hallway 1',
+                                              checkpointList[index]
+                                                  .checkpointName
+                                                  .toString(),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: CustomTheme.blueTextStyle(
+                                                  13, FontWeight.w400),
                                             ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        // mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            // 'Building Hallway 1',
-                                            checkpointList[index]
-                                                .checkpointName
-                                                .toString(),
-                                            style: CustomTheme.blueTextStyle(
-                                                13, FontWeight.w400),
-                                          ),
-                                          SizedBox(height: 5),
-                                          checkpointList[index].status ==
-                                                      "Visited" ||
-                                                  checkpointList[index]
-                                                          .status ==
-                                                      "Missed"
-                                              ? Text(
-                                                  checkpointList[index]
-                                                      .status
-                                                      .toString(),
-                                                  style: CustomTheme
-                                                      .blackTextStyle(10),
-                                                )
-                                              : Text(
-                                                  // 'Check-in by ' +
-                                                  checkpointList[index]
-                                                      .checkInTime
-                                                      .toString(),
-                                                  style: CustomTheme
-                                                      .blackTextStyle(10),
-                                                )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.1),
-                                    ],
+                                            SizedBox(height: 5),
+                                            checkpointList[index].status ==
+                                                        "Visited" ||
+                                                    checkpointList[index]
+                                                            .status ==
+                                                        "Missed"
+                                                ? Text(
+                                                    checkpointList[index]
+                                                        .status
+                                                        .toString(),
+                                                    style: CustomTheme
+                                                        .blackTextStyle(10),
+                                                  )
+                                                : Text(
+                                                    // 'Check-in by ' +
+                                                    checkpointList[index]
+                                                        .checkInTime
+                                                        .toString(),
+                                                    style: CustomTheme
+                                                        .blackTextStyle(10),
+                                                  )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.1),
+                                      ],
+                                    ),
                                   ),
                                   InkWell(
                                     onTap: () {

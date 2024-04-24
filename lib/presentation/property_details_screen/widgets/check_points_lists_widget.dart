@@ -32,7 +32,7 @@ class CheckPointListsWidget extends StatefulWidget {
 class _CheckPointListsWidgetState extends State<CheckPointListsWidget> {
   @override
   Widget build(BuildContext context) {
-    print("=============> ${widget.imageUrl}");
+    // print("=============> ${widget.imageUrl}");
     return Column(
       children: [
         Row(

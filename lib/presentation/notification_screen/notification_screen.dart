@@ -37,21 +37,6 @@ class _NotificationScreenState extends State<NotificationScreen>
     final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
     var data = jsonDecode(response.body.toString());
     print(data);
-    // if (response.statusCode == 201) {
-    //   final DutyListModel responseModel = dutyModelFromJson(response.body);
-    //   activeDatum = responseModel.activeData ?? [];
-    //   print('Active: $activeDatum');
-    //   inActiveDatum = responseModel.inactiveData ?? [];
-    //   print('InActive: $inActiveDatum');
-    //   imgBaseUrl = responseModel.imageBaseUrl ?? '';
-    //   return responseModel;
-    // } else {
-    //   return DutyListModel(
-    //       activeData: [],
-    //       inactiveData: [],
-    //       status: response.statusCode,
-    //       imageBaseUrl: '');
-    // }
   }
 
   @override

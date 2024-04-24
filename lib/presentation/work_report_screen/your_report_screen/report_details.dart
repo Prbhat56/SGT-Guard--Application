@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
@@ -22,7 +23,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 48,
+        toolbarHeight: 48.h,
         shadowColor: Color.fromARGB(255, 186, 185, 185),
         elevation: 6,
         backgroundColor: white,
@@ -35,9 +36,12 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
-          widget.recentReportDatum.reportType.toString(),
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.w700),
+        title: Align(
+          alignment: Alignment(-1.1.w, 0.w),
+          child: Text(
+            widget.recentReportDatum.reportType.toString() + ' Report ',
+            style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -52,39 +56,39 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Property Name',
-                      style: CustomTheme.blueTextStyle(17, FontWeight.w700)),
+                      style: CustomTheme.blueTextStyle(17.sp, FontWeight.w700)),
                   SizedBox(
                     height: 10,
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(6.r),
                         color: seconderyMediumColor),
                     child: TextFormField(
                       readOnly: true,
                       decoration: InputDecoration(
                         contentPadding:
-                            EdgeInsets.only(top: 10, bottom: 0, left: 10),
+                            EdgeInsets.only(top: 10.h, bottom: 0, left: 10.w),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         fillColor: seconderyMediumColor,
                         focusColor: primaryColor,
                         hintText:
-                            widget.recentReportDatum.propertyId.toString(),
+                            widget.recentReportDatum.propertyName.toString(),
                         hintStyle: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w400),
                       ),
@@ -94,7 +98,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               ),
             ),
             Padding(
-              padding:EdgeInsets.only(left:16.0,right:16.0,bottom:8.0),
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 8.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -102,38 +106,39 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                     children: [
                       Icon(
                         Icons.event_note,
-                        size: 25,
+                        size: 15.sp,
                       ),
                       SizedBox(
-                        width: 5,
+                        width: 5.w,
                       ),
                       Text(
-                        widget.recentReportDatum.emergencyDate,
+                        widget.recentReportDatum.createDate.toString(),
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                             color: CustomTheme.primaryColor),
                       ),
                     ],
                   ),
                   SizedBox(
-                    width: 12,
+                    width: 12.w,
                   ),
                   Row(
                     children: [
                       Icon(
                         Icons.alarm_on,
-                        size: 25,
+                        size: 15.sp,
                       ),
                       SizedBox(
-                        width: 5,
+                        width: 5.w,
                       ),
                       Text(
-                        widget.recentReportDatum.emergencyTime, // api response pending
+                        widget.recentReportDatum.createTime
+                            .toString(), // api response pending
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
-                            color:CustomTheme.primaryColor),
+                            color: CustomTheme.primaryColor),
                       ),
                     ],
                   ),
@@ -141,9 +146,9 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               ),
             ),
             Divider(
-              height: 3,
+              height: 3.h,
               color: Colors.grey.shade200,
-              thickness: 4,
+              thickness: 4.w,
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
@@ -152,13 +157,13 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Title',
-                      style: CustomTheme.blueTextStyle(17, FontWeight.w700)),
+                      style: CustomTheme.blueTextStyle(17.sp, FontWeight.w700)),
                   SizedBox(
-                    height: 10,
+                    height: 10.h,
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6), color: white),
+                        borderRadius: BorderRadius.circular(6.r), color: white),
                     child: Scrollbar(
                       child: TextFormField(
                         maxLines: null,
@@ -167,21 +172,21 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                         readOnly: true,
                         decoration: InputDecoration(
                           contentPadding:
-                              EdgeInsets.only(top: 10, bottom: 0, left: 10),
+                              EdgeInsets.only(top: 10.h, bottom: 0, left: 10.w),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.r),
                               borderSide:
                                   BorderSide(color: seconderyMediumColor)),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.r),
                               borderSide:
                                   BorderSide(color: seconderyMediumColor)),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.r),
                               borderSide:
                                   BorderSide(color: seconderyMediumColor)),
                           disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.r),
                               borderSide:
                                   BorderSide(color: seconderyMediumColor)),
                           focusColor: primaryColor,
@@ -193,20 +198,20 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               ),
             ),
             Divider(
-              height: 3,
+              height: 3.h,
               color: Colors.grey.shade200,
-              thickness: 4,
+              thickness: 4.w,
             ),
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(15.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Notes',
-                      style: CustomTheme.blueTextStyle(17, FontWeight.w700)),
+                      style: CustomTheme.blueTextStyle(17.sp, FontWeight.w700)),
                   SizedBox(
-                    height: 10,
+                    height: 10.h,
                   ),
                   Scrollbar(
                     child: TextFormField(
@@ -216,21 +221,21 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       readOnly: true,
                       decoration: InputDecoration(
                         contentPadding:
-                            EdgeInsets.only(top: 10, bottom: 0, left: 10),
+                            EdgeInsets.only(top: 10.h, bottom: 0, left: 10.w),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             borderSide:
                                 BorderSide(color: seconderyMediumColor)),
                         focusColor: primaryColor,
@@ -241,35 +246,35 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               ),
             ),
             Divider(
-              height: 3,
+              height: 3.h,
               color: Colors.grey.shade200,
-              thickness: 4,
+              thickness: 4.w,
             ),
             Container(
-              height: 500,
+              height: 300.h,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                    mainAxisExtent: 120, // here set custom Height You Want
+                    crossAxisSpacing: 15.w,
+                    mainAxisSpacing: 15.w,
+                    mainAxisExtent: 120.w, // here set custom Height You Want
                   ),
                   itemCount: widget.recentReportDatum.images!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: CachedNetworkImage(
                           imageUrl: widget.imgUrl! +
                               '${widget.recentReportDatum.images!.length != 0 ? widget.recentReportDatum.images![index].toString() : ''}',
                           fit: BoxFit.fill,
-                          width: 60,
-                          height: 60,
+                          width: 166.w,
+                          height: 130.h,
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(
                                 strokeCap: StrokeCap.round,

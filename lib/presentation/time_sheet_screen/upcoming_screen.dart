@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/timesheet_details.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -81,7 +82,9 @@ class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
                       ),
                     ),
                   )
-                : ListView.builder(
+                : 
+                
+                ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: upcomingData.length,
                     itemBuilder: (context, index) {
@@ -93,12 +96,20 @@ class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
                               onTap: () {
                                 screenNavigator(
                                     context,
-                                    TimeSheetDetailsWidget(
-                                      shiftDate:upcomingData[index].shifts!.first.date.toString(),
-                                      shiftId: upcomingData[index].shifts!.first.id.toString(),
-                                      propId: upcomingData[index].id.toString(),
-                                      propName: upcomingData[index].propertyName.toString(),
+                                    PropertyDetailsScreen(
+                                      propertyId: upcomingData[index].id,
+                                      imageBaseUrl:
+                                          snapshot.data!.propertyImageBaseUrl,
+                                      propertyImageBaseUrl:
+                                          snapshot.data!.propertyImageBaseUrl,
+                                      // activeData: snapshot.data?.activeData![index],
                                     ));
+                                // TimeSheetDetailsWidget(
+                                //   shiftDate:upcomingData[index].shifts!.first.date.toString(),
+                                //   shiftId: upcomingData[index].shifts!.first.id.toString(),
+                                //   propId: upcomingData[index].id.toString(),
+                                //   propName: upcomingData[index].propertyName.toString(),
+                                // ));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -135,15 +146,19 @@ class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
                                           upcomingData[index]
                                                       .shifts!
                                                       .first
-                                                      .date !=
-                                                  ""
-                                              ? DateFormat.MMMEd().format(
-                                                  DateTime.parse(
-                                                      upcomingData[index]
-                                                          .shifts!
-                                                          .first
-                                                          .date
-                                                          .toString()))
+                                                      .date != ""
+                                              ? upcomingData[index]
+                                                  .shifts!
+                                                  .first
+                                                  .date
+                                                  .toString()
+                                              // DateFormat.MMMEd().format(
+                                              //     DateTime.parse(
+                                              //         upcomingData[index]
+                                              //             .shifts!
+                                              //             .first
+                                              //             .date
+                                              //             .toString()))
                                               : "No Date",
                                           style: const TextStyle(
                                               fontSize: 14,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/property_details_screen/inactive_property_details_screen.dart';
+import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/timesheet_details.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -71,17 +73,27 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                       onTap: () {
                         screenNavigator(
                             context,
-                            TimeSheetDetailsWidget(
-                              shiftDate: widget
-                                  .upcomingData[index].shifts!.first.date
-                                  .toString(),
-                              shiftId: widget
-                                  .upcomingData[index].shifts!.first.id
-                                  .toString(),
-                              propId: widget.upcomingData[index].id.toString(),
-                              propName: widget.upcomingData[index].propertyName
-                                  .toString(),
-                            ));
+                    //          InActivePropertyDetailsScreen(
+                    //   propertyId: widget.upcomingData[index].id,
+                    // )
+                     PropertyDetailsScreen(
+                                          propertyId: widget.upcomingData[index].id,
+                                          imageBaseUrl: widget.imageBaseUrl,
+                                          propertyImageBaseUrl: widget.imageBaseUrl,
+                                          // activeData: widget.upcomingData![index],
+                                        ));
+                            // TimeSheetDetailsWidget(
+                            //   shiftDate: widget
+                            //       .upcomingData[index].shifts!.first.date
+                            //       .toString(),
+                            //   shiftId: widget
+                            //       .upcomingData[index].shifts!.first.id
+                            //       .toString(),
+                            //   propId: widget.upcomingData[index].id.toString(),
+                            //   propName: widget.upcomingData[index].propertyName
+                            //       .toString(),
+                            // )
+                            // );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -111,14 +123,19 @@ class _UpcomingWidgetTabState extends State<UpcomingWidgetTab> {
                                 Text(
                                   widget.upcomingData[index].shifts!.first
                                               .date !=
-                                          ""
-                                      ? DateFormat.MMMEd().format(
-                                          DateTime.parse(widget
+                                          "" ? widget
                                               .upcomingData[index]
                                               .shifts!
                                               .first
                                               .date
-                                              .toString()))
+                                              .toString()
+                                      // ? DateFormat.MMMEd().format(
+                                      //     DateTime.parse(widget
+                                      //         .upcomingData[index]
+                                      //         .shifts!
+                                      //         .first
+                                      //         .date
+                                      //         .toString()))
                                       : "No Date",
                                   style: const TextStyle(
                                       fontSize: 14,

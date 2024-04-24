@@ -2,12 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_in_modal.dart';
+import 'package:sgt/presentation/clocked_in_out_screen/widget/check_point_count_widget.dart';
+import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/presentation/home.dart';
+import 'package:sgt/presentation/qr_screen/scanning_screen.dart';
+import 'package:sgt/presentation/timer/timer.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
@@ -44,11 +49,12 @@ Future<ClockInModal> getCheckpointsTaskList(propertyId) async {
   String apiUrl = baseUrl + apiRoutes['clockIn']!;
   final response =
       await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
-  print("=============> ${myJsonBody}");
+  // print("=============> ${myJsonBody}");
   var data = jsonDecode(response.body.toString());
   if (response.statusCode == 200) {
     await prefs.setString('propertyId', data["property"]["id"].toString());
     final ClockInModal responseModel = clockInModalFromJson(response.body);
+    prefs.setString('isTimer','1');
     return responseModel;
   } else {
     // if (response.statusCode == 400) {
@@ -61,8 +67,9 @@ Future<ClockInModal> getCheckpointsTaskList(propertyId) async {
   }
 }
 
-backtoHome(context) async {
+backToHome(context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('isTimer', '0');
   prefs.remove('shiftId');
   prefs.remove('propertyId');
   screenNavigator(context, Home());
@@ -71,6 +78,10 @@ backtoHome(context) async {
 class _ClockInScreenState extends State<ClockInScreen> {
   @override
   Widget build(BuildContext context) {
+    //logic to start the timer if it's not start
+    context.read<TimerOnCubit>().state.istimerOn
+        ? null
+        : context.read<TimerOnCubit>().turnOnTimer();
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
@@ -105,7 +116,15 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                   CustomButtonWidget(
                                     buttonTitle: 'Home',
                                     onBtnPress: () {
-                                      backtoHome(context);
+                                      context
+                                          .read<TimerOnCubit>()
+                                          .turnOffTimer();
+                                      backToHome(context);
+                                      // screenNavigator(
+                                      //     context,
+                                      //     ScanningScreen(
+                                      //         propertyId:
+                                      //             widget.propId));
                                       // screenNavigator(context, Home());
                                     },
                                   ),
@@ -167,7 +186,8 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                       height: 2,
                                     ),
                                     Text(
-                                      snapshot.data!.jobDetails!.guardPosition.toString(),
+                                      snapshot.data!.jobDetails!.guardPosition
+                                          .toString(),
                                       style: TextStyle(
                                           fontSize: 13, color: Colors.grey),
                                     ),
@@ -189,6 +209,12 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                       style: TextStyle(
                                           fontSize: 15, color: Colors.grey),
                                     ),
+                                    //    const SizedBox(height: 15),
+                                    // Center(
+                                    //     child: CheckPointCountWidget(
+                                    //   completedCheckPoint: snapshot.data!.jobDetails!.,
+                                    //   remainningCheckPoint: snapshot.data!.jobDetails!.remaningCheckpoint.toString(),
+                                    // )),
                                     const SizedBox(height: 15),
                                     Center(
                                         child: TimeDetailsWidget(

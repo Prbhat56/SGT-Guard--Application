@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:flutter_notification_channel/notification_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/route_manager.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/isMediaSelected/isMediaSelected_cubit.dart';
@@ -30,8 +30,10 @@ import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_typ
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:get/route_manager.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
+import 'package:sgt/utils/timer_provider.dart';
 import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
 import 'presentation/authentication_screen/cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'presentation/connect_screen/cubit/image_picker_cubit/image_picker_cubit.dart';
@@ -46,6 +48,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+
 
 late SharedPreferences prefs;
 void main() async {
@@ -58,7 +62,11 @@ void main() async {
     _initializeFirebase();
     configLoading();
     initOneSignalState();
-    runApp(const MyApp());
+    // runApp(const MyApp());
+    runApp(ChangeNotifierProvider(
+      create: (context) => TimerProvider(),
+      child: MyApp(),
+    ),);
   });
   prefs = await SharedPreferences.getInstance();
 }
@@ -120,9 +128,17 @@ void configLoading() {
 }
 
 void _initializeFirebase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else if (Platform.isIOS) {
+    await Firebase.initializeApp();
+  }
 
   var result = await FlutterNotificationChannel.registerNotificationChannel(
     description: 'For Showing Message Notification',
@@ -173,7 +189,8 @@ Future<void> initOneSignalState() async {
   });
 
   OneSignal.InAppMessages.addClickListener((event) {
-    print("In App Message Clicked: \n${event.result.jsonRepresentation().replaceAll("\\n", "\n")}");
+    print(
+        "In App Message Clicked: \n${event.result.jsonRepresentation().replaceAll("\\n", "\n")}");
   });
   OneSignal.InAppMessages.addWillDisplayListener((event) {
     print("ON WILL DISPLAY IN APP MESSAGE ${event.message.messageId}");
@@ -240,22 +257,22 @@ class _SplashScreenState extends State<SplashScreen> {
           } else {
             if (permission == LocationPermission.always ||
                 permission == LocationPermission.whileInUse) {
-              if (prefs.getString('shiftId') != null) {
-                var map = new Map<String, dynamic>();
-                map['email'] = prefs.getString('email');
-                map['password'] = prefs.getString('password');
-                var apiService = ApiCallMethodsService();
-                apiService.post(apiRoutes['login']!, map).then((value) async {
-                  apiService.updateUserDetails(value);
-                  Map<String, dynamic> jsonMap = json.decode(value);
-                  String token = jsonMap['token'];
-                  var commonService = CommonService();
-                  commonService.setUserToken(token);
-                }).onError((error, stackTrace) {
-                  print(error);
-                });
-                screenNavigator(context, CheckPointScreen());
-              } else {
+              // if (prefs.getString('shiftId') != null) {
+              //   var map = new Map<String, dynamic>();
+              //   map['email'] = prefs.getString('email');
+              //   map['password'] = prefs.getString('password');
+              //   var apiService = ApiCallMethodsService();
+              //   apiService.post(apiRoutes['login']!, map).then((value) async {
+              //     apiService.updateUserDetails(value);
+              //     Map<String, dynamic> jsonMap = json.decode(value);
+              //     String token = jsonMap['token'];
+              //     var commonService = CommonService();
+              //     commonService.setUserToken(token);
+              //   }).onError((error, stackTrace) {
+              //     print(error);
+              //   });
+              //   screenNavigator(context, CheckPointScreen());
+              // } else {
                 var map = new Map<String, dynamic>();
                 map['email'] = prefs.getString('email');
                 map['password'] = prefs.getString('password');
@@ -270,14 +287,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   print(error);
                 });
                 screenNavigator(context, Home());
-              }
+              // }
             }
           }
         } else {
-          screenReplaceNavigator(context, SignInScreen(oneSignalId:OneSignal.User.pushSubscription.id));
+          screenReplaceNavigator(context,
+              SignInScreen(oneSignalId: OneSignal.User.pushSubscription.id));
         }
       } else {
-        screenReplaceNavigator(context, OnboardingScreen(oneSignalId:OneSignal.User.pushSubscription.id));
+        screenReplaceNavigator(context,
+            OnboardingScreen(oneSignalId: OneSignal.User.pushSubscription.id));
       }
     });
   }

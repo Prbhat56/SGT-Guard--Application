@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const.dart';
 
@@ -25,8 +26,8 @@ class CustomCircularImage {
           left: left,
           child: isOnline
               ? Container(
-                  height: 15,
-                  width: 15,
+                  height: 15.h,
+                  width: 15.w,
                   decoration: CustomTheme.onlineIndecatorStyle(),
                 )
               : Container(),
@@ -40,21 +41,21 @@ class CustomCircularImage {
     return Stack(
       children: [
         CircleAvatar(
-          radius: 35,
+          radius: 35.r,
           backgroundColor: grey,
           backgroundImage: NetworkImage(baseUrl + imageUrl),
         ),
         isActive
             ? Positioned(
-                top: 47,
-                left: 54,
+                top: 47.h,
+                left: 54.w,
                 child: Container(
-                  height: 17,
-                  width: 17,
+                  height: 17.h,
+                  width: 17.w,
                   decoration: BoxDecoration(
-                    border: Border.all(color: white, width: 3),
+                    border: Border.all(color: white, width: 3.w),
                     color: greenColor,
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(50.r),
                   ),
                 ),
               )

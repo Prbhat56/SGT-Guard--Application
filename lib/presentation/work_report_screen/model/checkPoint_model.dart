@@ -335,7 +335,7 @@ class Data {
     String? checkpointQrCode;
     DateTime? createdAt;
     DateTime? updatedAt;
-    dynamic taskRemarks;
+    String? taskRemarks;
     List<dynamic>? taskImages;
     List<CheckPointTask>? checkPointTask;
     Property? property;

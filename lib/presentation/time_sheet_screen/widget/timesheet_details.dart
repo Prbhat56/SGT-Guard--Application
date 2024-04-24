@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/property_details_screen/cubit/showmore/showmore_cubit.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/job_details_widget.dart';
@@ -11,6 +15,8 @@ import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/your_report_screen.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/colors.dart';
+import 'package:sgt/theme/font_style.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -75,7 +81,9 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-
+  print("-------propId--------> ${widget.propId}");
+  print("-------shiftId--------> ${widget.shiftId}");
+  print("-------shiftdate--------> ${widget.shiftDate}");
     return Scaffold(
       appBar: CustomAppBarWidget(appbarTitle: widget.propName),
       body: FutureBuilder(
@@ -83,7 +91,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
+              height: MediaQuery.of(context).size.height / 1.3.h,
               child: Center(
                 child: CircularProgressIndicator(),
               ),
@@ -95,23 +103,23 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 30,
+                    height: 30.h,
                   ),
                   Center(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      margin: EdgeInsets.all(15),
-                      height: 140,
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      margin: EdgeInsets.all(15.w),
+                      height: 140.h,
+                      width: MediaQuery.of(context).size.width * 0.8.w,
                       decoration: BoxDecoration(
                         color: seconderyMediumColor,
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(15.r),
                       ),
                       child: Row(
                         children: [
                           CircleAvatar(
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
+                              borderRadius: BorderRadius.circular(50.r),
                               child: CachedNetworkImage(
                                   imageUrl: (imgBaseUrl.toString() +
                                       '' +
@@ -119,8 +127,8 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                                           .propertyAvatars!.first.propertyAvatar
                                           .toString()),
                                   fit: BoxFit.fill,
-                                  width: 100,
-                                  height: 100,
+                                  width: 100.w,
+                                  height: 100.h,
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(
                                         strokeCap: StrokeCap.round,
@@ -131,37 +139,44 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                                         fit: BoxFit.fill,
                                       )),
                             ),
-                            radius: 50,
+                            radius: 50.r,
                             backgroundColor: Colors.transparent,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15.0,
-                              top: 40,
+                            padding: EdgeInsets.only(
+                              left: 15.w,
+                              top: 40.h,
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  widget.propName,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w600,
-                                      color: black),
+                                Container(
+                                  width: 180.w,
+                                  child: Text(
+                                    widget.propName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
+                                    style: 
+                                    TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: black,
+                                      ),
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: 8,
+                                  height: 8.h,
                                 ),
                                 SizedBox(
-                                  width: 120,
+                                  width: 180.w,
                                   child: Text(
                                     // 'Shift Time: ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockIn.toString()} - ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockOut.toString()}',
                                   'Shift Time:  ${detailsData.jobDetails!.shiftTime.toString()}',
-                                    maxLines: 2,
+                                    maxLines: 1,
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13.sp,
                                         color: Colors.black,
                                         overflow: TextOverflow.ellipsis),
                                   ),
@@ -173,9 +188,9 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -184,9 +199,9 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 40.r),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -195,9 +210,9 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -209,9 +224,9 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -224,7 +239,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 20.h,
                   ),
                   Center(
                     child: GestureDetector(
@@ -233,23 +248,23 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                       },
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 14),
+                            EdgeInsets.symmetric(vertical: 5.h, horizontal: 14.w),
                         decoration: BoxDecoration(
                             color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(color: primaryColor)),
                         child: Text(
                           "View Reports",
                           style: TextStyle(
                               color: primaryColor,
-                              fontSize: 10,
+                              fontSize: 10.sp,
                               fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 25.h,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -260,8 +275,8 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
+                    padding:  EdgeInsets.symmetric(
+                        vertical: 20.h, horizontal: 20.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -269,7 +284,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextFieldHeaderWidget(title: 'Job Details'),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10.h),
                             JobDetailsWidget(jobDetails: detailsData.jobDetails)
                           ],
                         ),
@@ -286,13 +301,13 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                   ),
                   //const SizedBox(height: 25),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
+                    padding: EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFieldHeaderWidget(title: 'Description'),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         // Text(
                         //   detailsData.propertyDescription.toString(),
                         //   maxLines:
@@ -311,7 +326,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  width: 300,
+                                  width: 300.w,
                                   child: Text(
                                     detailsData.propertyDescription.toString(),
                                     maxLines: context
@@ -362,18 +377,18 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
+                    padding: EdgeInsets.symmetric(
+                        vertical: 20.h, horizontal: 20.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFieldHeaderWidget(title: 'Location'),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         Text(
                           detailsData.location.toString(),
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(fontSize: 15.sp),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         MapCardWidget(
                           currentlocation: LatLng(
                               double.parse(detailsData.latitude.toString())
@@ -381,7 +396,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                               double.parse(detailsData.longitude.toString())
                                   .toDouble()),
                         ), //showing map card
-                        const SizedBox(height: 30),
+                        SizedBox(height: 30.h),
                       ],
                     ),
                   ),

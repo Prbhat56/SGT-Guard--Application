@@ -391,9 +391,10 @@ class _ChatTileWidgetState extends State<ChatTileWidget> {
                         Text(
                           _messages == null
                               ? ""
-                              : MyDateUtil.getLastMessageTime(
+                              : MyDateUtil.getChatMsgTime(
                                   context: context,
-                                  time: _messages!.sent.toString()),
+                                  lastActive: _messages!.sent.toString()),
+                                  textAlign: TextAlign.center,
                           style: const TextStyle(color: Colors.grey),
                         ),
                         const SizedBox(

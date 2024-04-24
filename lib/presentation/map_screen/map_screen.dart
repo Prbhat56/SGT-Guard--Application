@@ -32,14 +32,14 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? _currentPosition;
   Future<LatLng?> getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high);
     // await Geolocator.getCurrentPosition(
     //         desiredAccuracy: LocationAccuracy.high,
     //         forceAndroidLocationManager: true)
-        // .then((Position position) {
-          print(position);
-      _currentPosition = LatLng(position.latitude, position.longitude);
-      print(_currentPosition);
+    // .then((Position position) {
+    print(position);
+    _currentPosition = LatLng(position.latitude, position.longitude);
+    print(_currentPosition);
     // });
     setState(() {
       _currentPosition;
@@ -55,13 +55,26 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: GoogleMap(
-            zoomGesturesEnabled: false,
-            initialCameraPosition:
-                CameraPosition(target: _currentPosition!, zoom: 14)),
-      ),
-    );
+    return FutureBuilder(
+        future: getCurrentLocation(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+                child: Container(
+                    height: 60, width: 60, child: CircularProgressIndicator()));
+          } else {
+          return Scaffold(
+              body: SafeArea(
+                child: GoogleMap(
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  compassEnabled: true,
+                    zoomGesturesEnabled: true,
+                    initialCameraPosition: CameraPosition(target: _currentPosition!, zoom: 14)
+                        ),
+              ),
+            );
+          }
+        });
   }
 }

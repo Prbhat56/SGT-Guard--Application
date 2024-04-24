@@ -20,6 +20,9 @@ class EmergencyLocationWidget extends StatefulWidget {
 class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
   LatLng? _currentPosition;
   LatLng? pinnedLocation;
+  Set<Marker> markersList = {};
+  late GoogleMapController googleMapController;
+
   Future<LatLng?> locateUser() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -72,9 +75,12 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                               EditLocationScreen(
                                 currentPosition: _currentPosition,
                                 onStatusChangedSecond: (pinLocation) {
-                                  // print("----------emergency_location_widget ===> ${pinLocation}");
-                                  // pinnedLocation = pinLocation;
+                                  print(
+                                      "----------emergency_location_widget ===> ${pinLocation}");
+                                  pinnedLocation = pinLocation;
                                   widget.onStatusChanged(pinLocation);
+                                  gettingMarker(
+                                      googleMapController, pinnedLocation);
                                 },
                               ));
                         },
@@ -96,7 +102,11 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                     height: 200,
                     child: GoogleMap(
                         myLocationEnabled: true,
+                        markers: markersList,
                         zoomGesturesEnabled: true,
+                        onMapCreated: (GoogleMapController controller) {
+                          googleMapController = controller;
+                        },
                         onCameraMove: (position) {
                           EmergencyReportScreen.of(context)!.latValue =
                               position.target.latitude.toString();
@@ -116,5 +126,20 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
             );
           }
         });
+  }
+
+  void gettingMarker(
+      GoogleMapController _googleMapController, LatLng? pinnedLocation) {
+    markersList.clear();
+    setState(() {
+      markersList.add(Marker(
+        markerId: MarkerId(pinnedLocation.toString()),
+        position: pinnedLocation!,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      ));
+      _currentPosition = pinnedLocation;
+      _googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
+          LatLng(pinnedLocation.latitude, pinnedLocation.longitude), 14.0));
+    });
   }
 }
