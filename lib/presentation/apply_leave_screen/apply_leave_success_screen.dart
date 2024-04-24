@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/settings_screen/settings_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
 
 class ApplyLeaveSuccess extends StatefulWidget {
@@ -14,11 +17,12 @@ class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
   @override
   void initState() {
     Timer(Duration(seconds: 3), () {
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsScreen()),(route) => false,).then((value) => setState(() {}));
+      // screenReplaceNavigator(context, SettingsScreen());
     });
-
     super.initState();
   }
 
@@ -26,8 +30,8 @@ class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        width: 318,
-        height: 318,
+        width: 318.w,
+        height: 318.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,18 +39,18 @@ class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
             Center(
                 child: SvgPicture.asset(
               'assets/green_tick.svg',
-              height: 66,
+              height: 66.h,
             )),
             SizedBox(
-              height: 15,
+              height: 15.h,
             ),
             Text('Sent\nSuccessfully',
                 textAlign: TextAlign.center,
-                style: CustomTheme.blackTextStyle(25)),
+                style: CustomTheme.blackTextStyle(25.sp)),
             SizedBox(
-              height: 20,
+              height: 20.h,
             ),
-            Text('Wait for approval!', style: CustomTheme.blackTextStyle(17))
+            Text('Wait for approval!', style: CustomTheme.blackTextStyle(17.sp))
           ],
         ),
       ),

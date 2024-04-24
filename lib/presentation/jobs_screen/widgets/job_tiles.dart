@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
-import 'package:sgt/presentation/property_details_screen/widgets/property_details_screen.dart';
+import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
 import '../../property_details_screen/inactive_property_details_screen.dart';
@@ -41,7 +41,7 @@ class _JobsTileState extends State<JobsTile> {
                     context,
                     PropertyDetailsScreen(
                       imageBaseUrl: widget.imageBaseUrl,
-                      activeData: widget.inActiveData,
+                      // activeData: widget.inActiveData,
                       propertyId: widget.inActiveData!.id,
                       propertyImageBaseUrl: widget.propertyImageBaseUrl,
                     ))

@@ -36,7 +36,55 @@ class _VideoPreviewWidgetState extends State<VideoPreviewWidget> {
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return SizedBox(
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        FullScreenVideo(widget.vdoUrl.toString())),
+              );
+            },
+            child: Container(
+              child: Stack(
+                children: [
+                  SizedBox(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: SizedBox(
+                        width: _controller.value.size.width,
+                        height: _controller.value.size.height,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: VideoPlayer(_controller),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 50,
+                    left: 120,
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(100)),
+                      child: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+          /*SizedBox(
             height: 150,
             width: MediaQuery.of(context).size.width * 0.7,
             child: GestureDetector(
@@ -82,7 +130,7 @@ class _VideoPreviewWidgetState extends State<VideoPreviewWidget> {
                 ),
               ),
             ),
-          );
+          );*/
         } else {
           return Center(
             child: CircularProgressIndicator(),
@@ -230,11 +278,12 @@ class _FullScreenVideoState extends State<FullScreenVideo> {
             } else {
               // If the VideoPlayerController is still initializing, show a
               // loading spinner.
-              return Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 10),
-                child: CircularProgressIndicator(
-                  color: primaryColor,
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.2,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: primaryColor,
+                  ),
                 ),
               );
             }

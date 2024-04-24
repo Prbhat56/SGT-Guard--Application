@@ -5,7 +5,7 @@ import 'package:sgt/presentation/home_screen/model/GuardHome.dart';
 import 'package:sgt/presentation/jobs_screen/jobs_screen.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/job_details_widget.dart';
-import 'package:sgt/presentation/property_details_screen/widgets/property_details_screen.dart';
+import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +79,7 @@ class _LocationDetailsCardState extends State<LocationDetailsCard> {
                                   imageBaseUrl: snapshot.data!.imageBaseUrl,
                                   propertyImageBaseUrl:
                                       snapshot.data!.propertyImageBaseUrl,
-                                  activeData: snapshot.data?.activeData![index],
+                                  // activeData: snapshot.data?.activeData![index],
                                 ));
                           },
                           child: Padding(

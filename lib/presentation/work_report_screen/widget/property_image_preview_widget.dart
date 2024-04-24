@@ -57,7 +57,7 @@ class _PropertyImagesPreviewWidgetState extends State<PropertyImagesPreviewWidge
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Center(
-                            child: Text('+${widget.avatars!.length} - 3',
+                            child: Text('+${widget.avatars!.length-3}',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 25,

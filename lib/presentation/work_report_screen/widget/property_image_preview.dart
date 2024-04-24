@@ -60,7 +60,7 @@ class _PropertyImageMediaPreviewScreenState
                         Center(
                             child: Image.network(
                               widget.imageBaseUrl.toString() +
-                                  '/' +
+                                  '' +
                                   widget.avatars![index].propertyAvatar
                                       .toString(),
                               height: MediaQuery.of(context).size.height,

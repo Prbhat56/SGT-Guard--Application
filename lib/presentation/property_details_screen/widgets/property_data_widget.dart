@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PropertydataModel {
   final String title;
@@ -31,18 +32,18 @@ class PropertyDataWidget extends StatelessWidget {
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w600,
-                fontSize: 15
+                fontSize: 17.sp
               ),
             ),
             Text(
               title,
               style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w500,
-                fontSize: 13),
+                fontSize: 13.sp),
             )
           ],
         ),
-        const SizedBox(
-          width: 60,
+        SizedBox(
+          width: 40.w,
         ),
       ],
     );

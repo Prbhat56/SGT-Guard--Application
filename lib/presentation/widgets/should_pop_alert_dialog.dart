@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShouldPopAlertDialog extends StatelessWidget {
   const ShouldPopAlertDialog({super.key});
@@ -9,7 +10,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title:
-          const Text('Do you want to go close the app?', textScaleFactor: 1.0),
+          Text('Are you sure,You want to exit the app ?', textScaleFactor: 1.0,textAlign: TextAlign.center,style: TextStyle(fontSize: 17.sp),),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
         GestureDetector(
@@ -17,20 +18,21 @@ class ShouldPopAlertDialog extends StatelessWidget {
             Navigator.pop(context, false);
           },
           child: Container(
-            height: 30,
-            width: 40,
+            height: 30.h,
+            width: 40.w,
             alignment: AlignmentDirectional.center,
             // padding: const EdgeInsets.only(
             //   top: 6,
             //   left: 15,
             // ),
             decoration: BoxDecoration(
-                color: Colors.green, borderRadius: BorderRadius.circular(4)),
-            child: const Text(
+                color: Colors.green, borderRadius: BorderRadius.circular(4.r)),
+            child:Text(
               "No",
               textScaleFactor: 1.0,
               style: TextStyle(
                 color: Colors.white,
+                fontSize: 13.sp,
               ),
             ),
           ),
@@ -44,20 +46,21 @@ class ShouldPopAlertDialog extends StatelessWidget {
             }
           },
           child: Container(
-            height: 30,
-            width: 40,
+            height: 30.h,
+            width: 40.w,
             alignment: AlignmentDirectional.center,
             // padding: const EdgeInsets.only(
             //   top: 12,
             //   left: 20,
             // ),
             decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(4)),
-            child: const Text(
+                color: Colors.blue, borderRadius: BorderRadius.circular(4.r)),
+            child: Text(
               "Yes",
               textScaleFactor: 1.0,
               style: TextStyle(
                 color: Colors.white,
+                fontSize: 13.sp,
               ),
             ),
           ),

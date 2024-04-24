@@ -114,7 +114,12 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
         Navigator.of(context).pop();
       });
       print('Image Uploaded');
-      screenNavigator(context, ReportSubmitSuccess());
+      showDialog(
+          context: context,
+          builder: ((context) {
+            return Center(child: ReportSubmitSuccess());
+          }));
+      // screenNavigator(context, ReportSubmitSuccess());
     } else {
       setState(() {
         Navigator.of(context).pop();
@@ -133,7 +138,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
     getTasks();
   }
 
-   Future<AssignedPropertiesListModal> getTasks() async {
+  Future<AssignedPropertiesListModal> getTasks() async {
     try {
       EasyLoading.show();
       String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
@@ -287,9 +292,8 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                 ],
               ),
               propertyClicked
-                  ? 
-                    PropertiesListPicker(
-                     onCallback: (() {
+                  ? PropertiesListPicker(
+                      onCallback: (() {
                         setState(() {
                           propertyClicked = !propertyClicked;
                           _propertyNameController.text = propertyName ?? "";
@@ -297,7 +301,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                       }),
                       reportDatum: reportDatum,
                       imageBaseUrl: imageBaseUrl,
-                  )
+                    )
                   // CustomListPicker(
                   //     onCallback: (() {
                   //       setState(() {
@@ -350,17 +354,17 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                           }),
                     )
                   : Container(),
-                  RichText(
-                      text: TextSpan(
-                          text: 'Upload Record Sample',
-                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
-                          children: [
-                        TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ))
-                      ])),
+              RichText(
+                  text: TextSpan(
+                      text: 'Upload Record Sample',
+                      style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                      children: [
+                    TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ))
+                  ])),
               // Text(
               //   'Upload Record Sample',
               //   style: TextStyle(
@@ -399,31 +403,29 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                   : SizedBox(
                       height: 117.h,
                     ),
-              Container(
-                  margin: EdgeInsets.symmetric(vertical: 30),
-                  child: CustomButtonWidget(
-                      buttonTitle: 'Send',
-                      onBtnPress: () {
-                        if (_propertyNameController.text.isEmpty) {
-                          CommonService().openSnackBar(
-                              'Please Select Property', context);
-                        } else if (_titleController.text.isEmpty) {
-                          CommonService()
-                              .openSnackBar('Please enter title', context);
-                        } else if (_notesController.text.isEmpty) {
-                          CommonService()
-                              .openSnackBar('Please enter notes', context);
-                        } else if (imageFileList!.isEmpty) {
-                            CommonService()
-                              .openSnackBar('Please upload Record Sample', context);
-                        } 
-                        else {
-                          uploadImage();
-                        }
-                      }))
             ],
           ),
         )),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.symmetric(horizontal: 32),
+            margin: EdgeInsets.symmetric(vertical: 30),
+            child: CustomButtonWidget(
+                buttonTitle: 'Send',
+                onBtnPress: () {
+                  if (_propertyNameController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please Select Property', context);
+                  } else if (_titleController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter title', context);
+                  } else if (_notesController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter notes', context);
+                  } else if (imageFileList!.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please upload Record Sample', context);
+                  } else {
+                    uploadImage();
+                  }
+                })),
       ),
     );
   }

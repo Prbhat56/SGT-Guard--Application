@@ -32,7 +32,7 @@ class _PropertiesListPickerState extends State<PropertiesListPicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.reportDatum.length == 1 ? 72 : 3 * 72,
+      height: widget.reportDatum.length == 1 ? 72 : widget.reportDatum.length == 2 ? (2 * 72) : 3 * 72,
       decoration: BoxDecoration(
           color: white,
           borderRadius: BorderRadius.circular(10),

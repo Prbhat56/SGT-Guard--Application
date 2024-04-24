@@ -2,9 +2,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
+import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -95,6 +97,9 @@ class SignOutDialog extends StatelessWidget {
                   child: Center(
                     child: TextButton(
                       onPressed: () {
+                        context.read<TimerOnCubit>().state.istimerOn
+                            ? context.read<TimerOnCubit>().turnOffTimer()
+                            : null ;
                         _handlesignOut(context);
                       },
                       child: Text(
@@ -114,6 +119,7 @@ class SignOutDialog extends StatelessWidget {
   }
 
   void _handlesignOut(context) {
+    // Map<String, dynamic> routes = {'/login': (context) => SignInScreen()};
     var apiService = ApiCallMethodsService();
     apiService.post(apiRoutes['logout']!, '').then((value) {
       apiService.updateUserDetails('');
@@ -125,7 +131,11 @@ class SignOutDialog extends StatelessWidget {
       FirebaseHelper.auth = FirebaseAuth.instance;
       commonService.logDataClear();
       commonService.clearLocalStorage();
-      screenNavigator(context, SignInScreen());
+      // screenNavigator(context, SignInScreen());
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+        (route) => false,
+      );
     }).onError((error, stackTrace) {
       print(error);
     });

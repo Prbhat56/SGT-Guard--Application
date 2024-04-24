@@ -16,9 +16,12 @@ class _CheckPointCompleteSuccessState extends State<CheckPointCompleteSuccess> {
   @override
   void initState() {
     Timer(Duration(seconds: 2), () {
-      // Navigator.pop(context);
-      screenNavigator(
-      context, CheckPointScreen());
+      // screenNavigator(
+      // context, CheckPointScreen());
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => CheckPointScreen()),
+        (route) => false,
+      );
     });
 
     super.initState();

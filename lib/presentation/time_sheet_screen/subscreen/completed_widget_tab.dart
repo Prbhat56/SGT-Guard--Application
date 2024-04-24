@@ -17,14 +17,14 @@ class CompletedWidgetTab extends StatefulWidget {
 }
 
 class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
-  getDifference(String date1, String date2) {
-    var dt1 = DateFormat("HH:mm:ss").parse(date1);
-    var dt2 = DateFormat("HH:mm:ss").parse(date2);
-    Duration duration = dt2.difference(dt1).abs();
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes % 60;
-    return '$hours Hrs $minutes mins';
-  }
+  // getDifference(String date1, String date2) {
+  //   var dt1 = DateFormat("HH:mm:ss").parse(date1);
+  //   var dt2 = DateFormat("HH:mm:ss").parse(date2);
+  //   Duration duration = dt2.difference(dt1).abs();
+  //   final hours = duration.inHours;
+  //   final minutes = duration.inMinutes % 60;
+  //   return '$hours Hrs $minutes mins';
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +61,7 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
             physics: BouncingScrollPhysics(),
             itemCount: widget.completedData.length,
             itemBuilder: (context, index) {
+              print(widget.completedData[index].shifts!.first.date.toString());
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Column(
@@ -70,8 +71,12 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                         screenNavigator(
                             context,
                             TimeSheetDetailsWidget(
-                              shiftDate:widget.completedData[index].shifts!.first.date.toString(),
-                              shiftId:widget.completedData[index].shifts!.first.id.toString(),
+                              shiftDate: widget
+                                  .completedData[index].shifts!.first.formattedDate
+                                  .toString(),
+                              shiftId: widget
+                                  .completedData[index].shifts!.first.id
+                                  .toString(),
                               propId: widget.completedData[index].id.toString(),
                               propName: widget.completedData[index].propertyName
                                   .toString(),
@@ -104,15 +109,17 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                                 ),
                                 Text(
                                   widget.completedData[index].shifts!.first
-                                              .date !=
-                                          ""
-                                      ? DateFormat.MMMEd().format(
-                                          DateTime.parse(widget
-                                              .completedData[index]
-                                              .shifts!
-                                              .first
-                                              .date
-                                              .toString()))
+                                              .date !=""
+                                      ? widget.completedData[index].shifts!
+                                          .first.date
+                                          .toString()
+                                      // DateFormat.MMMEd().format(
+                                      //     DateTime.parse(widget
+                                      //         .completedData[index]
+                                      //         .shifts!
+                                      //         .first
+                                      //         .date
+                                      //         .toString()))
                                       : "No Date",
                                   style: const TextStyle(
                                       fontSize: 14,
@@ -130,13 +137,22 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                               ],
                             ),
                           ),
-                          Text(
-                            getDifference(
-                                    '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockIn}',
-                                    '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockOut}')
-                                .toString(),
-                            style: TextStyle(fontSize: 11, color: primaryColor),
-                          ),
+                          // Text(
+                          //   widget.completedData[index].shifts!.isEmpty
+                          //       ? ""
+                          //       : widget.completedData[index].shifts!.first
+                          //               .clockIn
+                          //               .toString() +
+                          //           '~' +
+                          //           widget.completedData[index].shifts!.first
+                          //               .clockOut
+                          //               .toString(),
+                          // getDifference(
+                          //         '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockIn}',
+                          //         '${widget.completedData[index].shifts!.isEmpty ? "" : widget.completedData[index].shifts!.first.clockOut}')
+                          //     .toString(),
+                          // style: TextStyle(fontSize: 11, color: primaryColor),
+                          // ),
                         ]),
                       ),
                     ),
@@ -146,7 +162,6 @@ class _CompletedWidgetTabState extends State<CompletedWidgetTab> {
                   ],
                 ),
               );
-           
             });
   }
 }

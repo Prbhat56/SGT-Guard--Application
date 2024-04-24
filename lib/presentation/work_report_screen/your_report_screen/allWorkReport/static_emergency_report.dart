@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -308,16 +309,16 @@ class _StaticEmergencyReportScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RichText(
-                      text: TextSpan(
-                          text: 'Property Name',
-                          style: CustomTheme.textField_Headertext_Style,
-                          children: [
-                        TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ))
-                      ])),
+                        text: TextSpan(
+                            text: 'Property Name',
+                            style: CustomTheme.textField_Headertext_Style,
+                            children: [
+                          TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ))
+                        ])),
                     // Text(
                     //   'Property Name \*',
                     //   style: CustomTheme.textField_Headertext_Style,
@@ -391,10 +392,12 @@ class _StaticEmergencyReportScreenState
                 ),
                 EmergencyDateTimeWidget(), //taking date and time using this widget
 
-                EmergencyLocationWidget(  onStatusChanged: (currentPosition) {
-                  // print("----------static_emergency_report =======>${currentPosition}");
-                  currentLatLng = currentPosition;
-                },), //taking location widget
+                EmergencyLocationWidget(
+                  onStatusChanged: (currentPosition) {
+                    // print("----------static_emergency_report =======>${currentPosition}");
+                    currentLatLng = currentPosition;
+                  },
+                ), //taking location widget
 
                 CustomTextField(
                   controller: _detailsController,
@@ -507,12 +510,12 @@ class _StaticEmergencyReportScreenState
                   isFilled: false,
                   maxLines: 5,
                 ),
-                 CustomReportTextField(
+                CustomReportTextField(
                   controller: _policeReportController,
                   textfieldTitle: 'Police Report#',
                   hintText: 'Police report number',
                 ),
-               CustomReportTextField(
+                CustomReportTextField(
                   controller: _officerController,
                   textfieldTitle: 'Officer Name#',
                   hintText: 'Officer Name',
@@ -530,8 +533,8 @@ class _StaticEmergencyReportScreenState
                   textScaleFactor: 1.0,
                 ),
                 SizedBox(
-                    height: 5,
-                  ),
+                  height: 5,
+                ),
                 DropdownButtonFormField<String>(
                   value: towedValue,
                   isExpanded: true,
@@ -576,17 +579,17 @@ class _StaticEmergencyReportScreenState
                 const SizedBox(
                   height: 18,
                 ),
-                 RichText(
-                      text: TextSpan(
-                          text: 'Upload Record Sample',
-                          style: CustomTheme.blueTextStyle(17, FontWeight.w500),
-                          children: [
-                        TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ))
-                      ])),
+                RichText(
+                    text: TextSpan(
+                        text: 'Upload Record Sample',
+                        style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                        children: [
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ))
+                    ])),
                 // Text(
                 //   'Upload Record Sample',
                 //   style: CustomTheme.blueTextStyle(17, FontWeight.w500),
@@ -617,45 +620,79 @@ class _StaticEmergencyReportScreenState
                       title: 'Choose a file',
                       height: 15,
                     )),
-                Center(
-                  child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 30),
-                      child: CustomButtonWidget(
-                          buttonTitle: 'Send',
-                          onBtnPress: () {
-                           if (_propertyNameController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please Select Property', context);
-                            } else if (_titleController.text.isEmpty) {
-                              CommonService()
-                                  .openSnackBar('Please enter title', context);
-                            } else if (_detailsController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter emergency details', context);
-                            } else if (_actionController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter action taken', context);
-                            } else if (_policeReportController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter Police report number', context);
-                            } else if (_officerController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter Officer name', context);
-                            } else if (_officeController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter officer designation', context);
-                            } else if (imageFileList!.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please upload Record Sample', context);
-                            } else {
-                              uploadImage();
-                            }
-                          })),
-                )
+                // Center(
+                //   child: Container(
+                //       margin: EdgeInsets.symmetric(vertical: 30),
+                //       child: CustomButtonWidget(
+                //           buttonTitle: 'Send',
+                //           onBtnPress: () {
+                //            if (_propertyNameController.text.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please Select Property', context);
+                //             } else if (_titleController.text.isEmpty) {
+                //               CommonService()
+                //                   .openSnackBar('Please enter title', context);
+                //             } else if (_detailsController.text.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please enter emergency details', context);
+                //             } else if (_actionController.text.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please enter action taken', context);
+                //             } else if (_policeReportController.text.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please enter Police report number', context);
+                //             } else if (_officerController.text.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please enter Officer name', context);
+                //             } else if (_officeController.text.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please enter officer designation', context);
+                //             } else if (imageFileList!.isEmpty) {
+                //               CommonService().openSnackBar(
+                //                   'Please upload Record Sample', context);
+                //             } else {
+                //               uploadImage();
+                //             }
+                //           })),
+                // )
               ],
             ),
           ),
         ),
+        bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            margin: EdgeInsets.symmetric(vertical: 20.h),
+            child: CustomButtonWidget(
+                buttonTitle: 'Send',
+                onBtnPress: () {
+                  if (_propertyNameController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please Select Property', context);
+                  } else if (_titleController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter title', context);
+                  } else if (_detailsController.text.isEmpty) {
+                    CommonService().openSnackBar(
+                        'Please enter emergency details', context);
+                  } else if (_actionController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter action taken', context);
+                  } else if (_policeReportController.text.isEmpty) {
+                    CommonService().openSnackBar(
+                        'Please enter Police report number', context);
+                  } else if (_officerController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter Officer name', context);
+                  } else if (_officeController.text.isEmpty) {
+                    CommonService().openSnackBar(
+                        'Please enter officer designation', context);
+                  } else if (imageFileList!.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please upload Record Sample', context);
+                  } else {
+                    uploadImage();
+                  }
+                })),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,6 +96,32 @@ class MyDateUtil {
     return TimeOfDay.fromDateTime(date).format(context);
   }
 
+  static String getChatMsgTime(
+      {required BuildContext context, required String lastActive}) {
+    final int i = int.tryParse(lastActive) ?? -1;
+
+    //if time is not available then return below statement
+    if (i == -1) return 'Not available';
+
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(i);
+    DateTime now = DateTime.now();
+
+    String month = _getMonth(time);
+
+    String formattedTime = TimeOfDay.fromDateTime(time).format(context);
+    if (time.day == now.day &&
+        time.month == now.month &&
+        time.year == time.year) {
+      return '$formattedTime';  // return 'Today at $formattedTime';
+    } else if ((now.difference(time).inHours / 24).round() == 1) {
+      return 'Yesterday at $formattedTime';
+    } else if ((now.difference(time).inHours / 24).round() == 0) {
+      return 'Yesterday at $formattedTime';
+    } else {
+      return '${time.day} $month, $formattedTime';
+    }
+  }
+
   // for getting formatted time for sent & read
   static String getMessageTime(
       {required BuildContext context, required String time}) {
@@ -190,3 +217,97 @@ class MyDateUtil {
     return 'NA';
   }
 }
+
+
+
+// class MyLiveLocationInit {
+//    final IMessageProcessor<String, String> textSocketProcessor =
+//       SocketSimpleTextProcessor();
+
+//   final connectionOptions = SocketConnectionOptions(
+//     pingIntervalMs: 3000, // send Ping message every 3000 ms
+//     timeoutConnectionMs: 4000, // connection fail timeout after 4000 ms
+//     skipPingMessages: false,
+//     pingRestrictionForce: false,
+//   );
+//  String textMsg = "";
+
+//   Timer? timer;
+
+//   LocationDto? _lastLocation;
+//   StreamSubscription<LocationDto>? locationSubscription;
+//   LocationStatus _status = LocationStatus.UNKNOWN;
+
+//   Future<bool> isLocationAlwaysGranted() async =>
+//       await Permission.locationAlways.isGranted;
+
+//   Future<bool> askedLocationAlwaysPermission() async {
+//     bool granted = await Permission.locationAlways.isGranted;
+
+//     if (!granted) {
+//       granted =
+//           await Permission.locationAlways.request() == PermissionStatus.granted;
+//     }
+//     return granted;
+//   }
+   
+//    LocationManager().interval = 10;
+//     LocationManager().distanceFilter = 0;
+//     LocationManager().notificationTitle = 'CARP Location Example';
+//     LocationManager().notificationMsg = 'CARP is tracking your location';
+
+//     _status = LocationStatus.INITIALIZED;
+
+//     startBackgroundLocation();
+
+//      void startBackgroundLocation() async {
+//     if (!await isLocationAlwaysGranted()) {
+//       await askedLocationAlwaysPermission();
+//     }
+
+//     locationSubscription?.cancel();
+//     locationSubscription = LocationManager().locationStream.listen(onData);
+//     await LocationManager().start();
+
+//     setState(() {
+//       _status = LocationStatus.RUNNING;
+//     });
+//   }
+
+//    void onData(LocationDto location) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     firstCheckpointId = widget.checkpoint!.first.id.toString();
+//     routeId = widget.checkpoint!.first.routeId.toString();
+//     _lastLocation = location;
+//     await textSocketHandler.connect();
+//     prefs.setString('latitude', _lastLocation!.latitude.toString());
+//     prefs.setString('longitude', _lastLocation!.longitude.toString());
+//     String? shift_id = prefs.getString('shiftId');
+//     String? property_id = prefs.getString('propertyId');
+//     print("latitude ==> ${_lastLocation!.latitude.toString()}");
+//     // print("longitude ==> ${_lastLocation!.longitude.toString()}");
+//     // print("shift_id ==> ${shift_id.toString()}");
+//     // print("firstCheckpointId ==> ${firstCheckpointId.toString()}");
+//     // print("routeId ==> ${routeId.toString()}");
+//     await FirebaseHelper.createGuardLocation(
+//         _lastLocation!.latitude.toString(),
+//         _lastLocation!.longitude.toString(),
+//         shift_id.toString(),
+//         firstCheckpointId.toString(),
+//         routeId.toString(),
+//         property_id.toString());
+//     // Map<String, dynamic> myData = {
+//     //   "from_user_id": "${prefs.getString("user_id")}",
+//     //   "isGeofencing": true,
+//     //   "latitude": "${_lastLocation!.latitude.toString()}",
+//     //   "longitude": "${_lastLocation!.longitude.toString()}",
+//     //   "type": "guard",
+//     //   "user_email": "${prefs.getString("email")}",
+//     //   "isBackground": true
+//     // };
+//     // final String encodedData = json.encode(myData);
+//     // timer = Timer.periodic(Duration(seconds: 20), (timer) {
+//     //   textSocketHandler.sendMessage(encodedData);
+//     // });
+//   }
+// }

@@ -314,7 +314,7 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
                               }),
                         )
                       : Container(),
-                       RichText(
+                  RichText(
                       text: TextSpan(
                           text: 'Upload Record Sample',
                           style: CustomTheme.blueTextStyle(17, FontWeight.w500),
@@ -359,41 +359,71 @@ class _StaticParkingReportScreenState extends State<StaticParkingReportScreen> {
             const SizedBox(
               height: 26,
             ),
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                child: CustomButtonWidget(
-                    buttonTitle: 'Send',
-                    onBtnPress: () {
-                      if (_propertyNameController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please Select Property', context);
-                      } else if (_titleController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter title', context);
-                      } else if (_vehicleTypeController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter manufacturer', context);
-                      } else if (_modelController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter model', context);
-                      } else if (_colorController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter color', context);
-                      } else if (_lincenseController.text.isEmpty) {
-                        CommonService().openSnackBar(
-                            'Please enter licence number', context);
-                      } else if (_stateMyController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter state', context);
-                      } else if (imageFileList!.isEmpty) {
-                        CommonService().openSnackBar(
-                            'Please upload Record Sample', context);
-                      } else {
-                        uploadImage();
-                      }
-                    }))
+            // Container(
+            //     margin: EdgeInsets.symmetric(vertical: 30),
+            //     child: CustomButtonWidget(
+            //         buttonTitle: 'Send',
+            //         onBtnPress: () {
+            //           if (_propertyNameController.text.isEmpty) {
+            //             CommonService()
+            //                 .openSnackBar('Please Select Property', context);
+            //           } else if (_titleController.text.isEmpty) {
+            //             CommonService()
+            //                 .openSnackBar('Please enter title', context);
+            //           } else if (_vehicleTypeController.text.isEmpty) {
+            //             CommonService()
+            //                 .openSnackBar('Please enter manufacturer', context);
+            //           } else if (_modelController.text.isEmpty) {
+            //             CommonService()
+            //                 .openSnackBar('Please enter model', context);
+            //           } else if (_colorController.text.isEmpty) {
+            //             CommonService()
+            //                 .openSnackBar('Please enter color', context);
+            //           } else if (_lincenseController.text.isEmpty) {
+            //             CommonService().openSnackBar(
+            //                 'Please enter licence number', context);
+            //           } else if (_stateMyController.text.isEmpty) {
+            //             CommonService()
+            //                 .openSnackBar('Please enter state', context);
+            //           } else if (imageFileList!.isEmpty) {
+            //             CommonService().openSnackBar(
+            //                 'Please upload Record Sample', context);
+            //           } else {
+            //             uploadImage();
+            //           }
+            //         }))
           ],
         )),
+        bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(horizontal: 32),
+            margin: EdgeInsets.symmetric(vertical: 30),
+            child: CustomButtonWidget(
+                buttonTitle: 'Send',
+                onBtnPress: () {
+                  if (_propertyNameController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please Select Property', context);
+                  } else if (_titleController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter title', context);
+                  } else if (_vehicleTypeController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter manufacturer', context);
+                  } else if (_modelController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter model', context);
+                  } else if (_colorController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter color', context);
+                  } else if (_lincenseController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter licence number', context);
+                  } else if (_stateMyController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter state', context);
+                  } else if (imageFileList!.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please upload Record Sample', context);
+                  } else {
+                    uploadImage();
+                  }
+                })),
       ),
     );
   }

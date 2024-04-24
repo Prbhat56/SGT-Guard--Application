@@ -1,19 +1,12 @@
-import 'dart:convert';
 import 'dart:async';
-
-import 'package:carp_background_location/carp_background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:sgt/presentation/home.dart';
+import 'package:sgt/main.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
-import 'package:sgt/presentation/widgets/custom_button_widget.dart';
-import 'package:sgt/service/socket_home.dart';
+import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:websocket_universal/websocket_universal.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
@@ -35,28 +28,30 @@ class CheckPointScreen extends StatefulWidget {
 
 Property? property = Property();
 List<Checkpoint>? checkpoint = [];
+RouteDetail? route =RouteDetail();
 Data? shiftDetails = Data();
 
 class _CheckPointScreenState extends State<CheckPointScreen> {
-
-   @override
+  @override
   void initState() {
     super.initState();
     getJobsList();
   }
 
-   Future<PropertyDetailsModel> getJobsList() async {
+  Future<PropertyDetailsModel> getJobsList() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? property_id = prefs.getString('propertyId');
       Map<String, String> myHeader = <String, String>{
         "Authorization": "Bearer ${prefs.getString('token')}",
       };
-      String apiUrl = baseUrl + apiRoutes['dutyDetails']! + property_id.toString();
+      String apiUrl =
+          baseUrl + apiRoutes['dutyDetails']! + property_id.toString();
       final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
 
       if (response.statusCode == 201) {
-        final PropertyDetailsModel responseModel = propertyDetailsModelFromJson(response.body);
+        final PropertyDetailsModel responseModel =
+            propertyDetailsModelFromJson(response.body);
         shiftDetails = responseModel.data;
         // print("-------------------->  ${shiftDetails}");
         return responseModel;
@@ -73,7 +68,6 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
     }
   }
 
-
   Future<CheckPointPropertyShiftWise> getCheckpointsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? property_id = prefs.getString('propertyId');
@@ -88,12 +82,18 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
     String apiUrl = baseUrl + apiRoutes['checkpointListShiftWise']!;
     final response =
         await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
-    print("=============> ${response.body}");
+    // print("=============> ${response.body}");
     if (response.statusCode == 201) {
       final CheckPointPropertyShiftWise responseModel =
           checkPointPropertyShiftWiseFromJson(response.body);
       property = responseModel.property;
       checkpoint = responseModel.checkpoints;
+      route = responseModel.property!.route;
+      print("${prefs.getString('Cp')}");
+      if(prefs.getString('Cp')==null || prefs.getString('Cp')=='null'){
+        prefs.setString('Cp', checkpoint!.first.id.toString());
+      }
+      prefs.setString('routeId', route!.id.toString());
       // var checks = json.decode(checkpoint.toString());
       // print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ===> ${checks}");
       return responseModel;
@@ -108,22 +108,23 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? property_id = prefs.getString('propertyId');
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: white,
             leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: primaryColor,
-              ),
+              icon:Icon(
+                    Icons.arrow_back_ios,
+                    color: primaryColor,
+                  ),
               onPressed: () {
-                if (ModalRoute.of(context)!.settings.name != null) {
-                  screenNavigator(context, ClockInScreen());
-                } else {
-                  screenNavigator(context, ShouldPopAlertDialog());
-                }
+                // if (ModalRoute.of(context)!.settings.name != null) {
+                screenNavigator(context, ClockInScreen());
+                // } else {
+                //   screenNavigator(context, ShouldPopAlertDialog());
+                // }
                 // String? currentPath;
                 // navigatorKey.currentState?.popUntil((route) {
                 //   currentPath = route.settings.name;
@@ -133,16 +134,26 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
               },
             ),
             // centerTitle: true,
-            title: Text(
-              "Checkpoints",
-              textScaleFactor: 1.0,
-              style:
-                  TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+            title: Align(
+              alignment: Alignment(-1.3.w
+              ,0.w),
+              child: Text(
+                "Checkpoints",
+                textScaleFactor: 1.0,
+                style:
+                    TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+              ),
             ),
             actions: [
               InkWell(
                   onTap: () {
                     // screenNavigator(context, ClockInScreen());
+                    screenNavigator(
+                        context,
+                        WorkReportScreen(
+                          propertyId: property!.id.toString(),
+                          propertyName: property!.propertyName.toString(),
+                        ));
                   },
                   child: const Icon(
                     Icons.add,
@@ -158,8 +169,7 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
                   onTap: () {
                     screenNavigator(context, ClockInScreen());
                   },
-                  child: SvgPicture.asset('assets/clock.svg')
-                  ),
+                  child: SvgPicture.asset('assets/clock.svg')),
               IconButton(
                   onPressed: () {
                     BlocProvider.of<ToggleSwitchCubit>(context)
@@ -224,50 +234,20 @@ class _CheckPointScreenState extends State<CheckPointScreen> {
                         width: 60,
                         child: CircularProgressIndicator()));
               } else {
-                if (snapshot.data!.status != 201) {
-                  return Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Something Went Wrong! Please Try Again to ClockIn",
-                          // snapshot.data!.message.toString(),
-                          style: TextStyle(color: Colors.red, fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 12.dg,
-                        ),
-                        Container(
-                          width: 180,
-                          child: CustomButtonWidget(
-                              buttonTitle: 'Home',
-                              onBtnPress: () {
-                                screenNavigator(context, Home());
-                              }),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        context.watch<ToggleSwitchCubit>().state.isSwitched
-                            ? CheckPointMapScreen()
-                            : CheckPointWidget(
-                                property: property,
-                                propertyImageBaseUrl:
-                                    snapshot.data!.propertyImageBaseUrl,
-                                checkpoint: checkpoint),
-                      ],
-                    ),
-                  );
-                }
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      context.watch<ToggleSwitchCubit>().state.isSwitched
+                          ? CheckPointMapScreen()
+                          : CheckPointWidget(
+                              property: property,
+                              propertyImageBaseUrl: snapshot.data!.propertyImageBaseUrl,
+                              checkpoint: checkpoint),
+                    ],
+                  ),
+                );
               }
+              // }
             },
           )),
     );

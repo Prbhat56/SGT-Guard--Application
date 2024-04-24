@@ -2,22 +2,18 @@
 
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/connect_screen/cubit/isSelectedMedia/isSelectedMedia_cubit.dart';
-import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chat_bottom_sheet.dart';
 import 'package:sgt/presentation/connect_screen/widgets/message_card.dart';
 import 'package:sgt/presentation/connect_screen/widgets/video_sending_screen.dart';
-import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/service/common_service.dart';
 import '../../../utils/const.dart';
 import '../../widgets/custom_bottom_model_sheet.dart';
@@ -302,7 +298,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     itemBuilder: (context, index) {
                       return MessageCard(
                           message:
-                              _myController.messages.reversed.toList()[index]);
+                              _myController.messages.reversed.toList()[index], user: widget.user,);
                     });
               } else {
                 return Center(

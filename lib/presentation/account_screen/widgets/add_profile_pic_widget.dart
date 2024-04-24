@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,11 +9,13 @@ import '../../../theme/custom_theme.dart';
 import '../../widgets/custom_bottom_model_sheet.dart';
 import 'add_profilepic_icon.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/src/multipart_file.dart';
 
 class AddProfilePicWidget extends StatefulWidget {
+  final ValueChanged<http.MultipartFile> onProfilePicChange;
   String baseUrl;
   String imgUrl;
-  AddProfilePicWidget({super.key, required this.baseUrl, required this.imgUrl});
+  AddProfilePicWidget({super.key, required this.baseUrl, required this.imgUrl, required this.onProfilePicChange,});
 
   @override
   State<AddProfilePicWidget> createState() => _AddProfilePicWidgetState();
@@ -65,33 +68,36 @@ class _AddProfilePicWidgetState extends State<AddProfilePicWidget> {
     stream.cast();
 
     var length = await image!.length();
-    String apiUrl = baseUrl + apiRoutes['updateProfilePic']!;
-    var request = new http.MultipartRequest('POST', Uri.parse(apiUrl));
+    // String apiUrl = baseUrl + apiRoutes['updateProfilePic']!;
+    // var request = new http.MultipartRequest('POST', Uri.parse(apiUrl));
 
     var multipart = new http.MultipartFile('avatar', stream, length,
         filename: image!.path.split('/').last);
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
-    request.files.add(multipart);
-
-    var response = await request.send();
-    print(response.stream.toString());
-
-    //final respStr = await response.stream.bytesToString();
-    if (response.statusCode == 201) {
-      setState(() {
-        Navigator.of(context).pop();
+    widget.onProfilePicChange(multipart);
+      Navigator.of(context).pop();
         Navigator.pop(context);
-      });
-      print('Image Uploaded');
-    } else {
-      setState(() {
-        Navigator.of(context).pop();
-        Navigator.pop(context);
-      });
-      print('Failed');
-    }
+
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
+    // request.files.add(multipart);
+
+    // var response = await request.send();
+    // print(response.stream.toString());
+
+    // //final respStr = await response.stream.bytesToString();
+    // if (response.statusCode == 201) {
+    //   setState(() {
+    //     Navigator.of(context).pop();
+    //     Navigator.pop(context);
+    //   });
+    //   print('Image Uploaded');
+    // } else {
+    //   setState(() {
+    //     Navigator.of(context).pop();
+    //     Navigator.pop(context);
+    //   });
+    //   print('Failed');
+    // }
   }
 
   @override

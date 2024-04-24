@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_back_images.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_front_images.dart';
@@ -32,6 +34,8 @@ class EditAccountScreen extends StatefulWidget {
 }
 
 class _EditAccountScreenState extends State<EditAccountScreen> {
+  http.MultipartFile? multipart;
+
   TextEditingController first_name_controller = TextEditingController();
   FocusNode first_name_FocusNode = FocusNode();
   TextEditingController last_name_controller = TextEditingController();
@@ -82,7 +86,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
 
       phone_code_Controller = TextEditingController(
           text: (_guardDetails.userDetails?.contactCode != null
-              ? "+${_guardDetails.userDetails?.contactCode.toString()}"
+              ? "${_guardDetails.userDetails?.contactCode.toString()}"
               : ''));
 
       contact_number_Controller = TextEditingController(
@@ -162,7 +166,32 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWidget(appbarTitle: 'Edit Account Details'),
+      appBar: AppBar(
+        backgroundColor: white,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: primaryColor,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        // centerTitle: true,
+        title: Align(
+          alignment: Alignment(-1.1.w, 0.w),
+          child: Text(
+            "Edit Account Details",
+            textScaleFactor: 1.0,
+            style: TextStyle(
+                color: primaryColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 15.sp),
+          ),
+        ),
+      ),
+
+      // CustomAppBarWidget(appbarTitle: 'Edit Account Details'),
       backgroundColor: white,
       body: Form(
         key: _formKey,
@@ -189,9 +218,12 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         ),
                         Center(
                             child: AddProfilePicWidget(
-                                baseUrl: snapshot.data?.imageBaseUrl ?? "",
-                                imgUrl:
-                                    snapshot.data?.userDetails?.avatar ?? "")),
+                          baseUrl: snapshot.data?.imageBaseUrl ?? "",
+                          imgUrl: snapshot.data?.userDetails?.avatar ?? "",
+                          onProfilePicChange: (changePic) {
+                            multipart = changePic;
+                          },
+                        )),
                         Text(
                           'Personal',
                           style: CustomTheme.blackTextStyle(21),
@@ -277,6 +309,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                   CommonService.fieldFocusChnage(context,
                                       contact_number_FocusNode, dob_FocusNode);
                                 },
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
                                 decoration: InputDecoration(
                                   hintText: 'Phone Number',
                                   enabledBorder: UnderlineInputBorder(
@@ -496,64 +531,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         SizedBox(
                           height: 30,
                         ),
-                        CustomButtonWidget(
-                            buttonTitle: 'Update',
-                            onBtnPress: () {
-                              // verifyProfileDetail();
-                              // if (_formKey.currentState!.validate()) {
-                              //   // verifyDetails();
-                              //   ScaffoldMessenger.of(context).showSnackBar(
-                              //     const SnackBar(content: Text('Processing Data')),
-                              //   );
-                              // }
-                              showDialog(
-                                  context: context,
-                                  builder: ((context) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  }));
-                              var map = new Map<String, dynamic>();
-                              map['first_name'] =
-                                  first_name_controller.text.toString();
-                              map['last_name'] =
-                                  last_name_controller.text.toString();
-                              map['email_address'] =
-                                  emailController.text.toString();
-                              map['contact_code'] =
-                                  phone_code_Controller.text.toString();
-                              map['contact_number'] =
-                                  contact_number_Controller.text.toString();
-                              map['gender'] = _selectedGender.toString();
-                              map['date_of_birth'] =
-                                  dob_Controller.text.toString();
-                              map['street'] = street_Controller.text.toString();
-                              map['city'] = cityId.toString();
-                              map['state'] = stateId.toString();
-                              map['country'] = countryId.toString();
-                              map['zip_code'] =
-                                  zip_code_Controller.text.toString();
-                              var apiService = ApiCallMethodsService();
-                              apiService
-                                  .post(apiRoutes['profileUpdate']!, map)
-                                  .then((value) {
-                                apiService.updateUserDetails(value);
-                                Map<String, dynamic> jsonMap =
-                                    json.decode(value);
-                                var commonService = CommonService();
-                                commonService.openSnackBar(
-                                    jsonMap['message'], context);
-                                // screenNavigator(context, SettingsScreen());
-                                Navigator.of(context).pop();
-                                Navigator.pop(context);
-                              }).onError((error, stackTrace) {
-                                print(error);
-                                Navigator.of(context).pop();
-                                Navigator.pop(context);
-                                var commonService = CommonService();
-                                commonService.openSnackBar(
-                                    error.toString(), context);
-                              });
-                            }),
+
                         SizedBox(
                           height: 40.h,
                         ),
@@ -566,7 +544,90 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 8.h),
+        child: CustomButtonWidget(
+            buttonTitle: 'Update',
+            onBtnPress: () {
+              UpdateProfileDetails();
+            }),
+      ),
     );
+  }
+
+  void UpdateProfileDetails() async {
+    // verifyProfileDetail();
+    // if (_formKey.currentState!.validate()) {
+    //   // verifyDetails();
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Processing Data')),
+    //   );
+    // }
+    print(" country----------------> ${countryId}");
+    print(" state----------------> ${stateId}");
+    print(" city----------------> ${cityId}");
+
+    var map = new Map<String, dynamic>();
+    map['first_name'] = first_name_controller.text.toString();
+    map['last_name'] = last_name_controller.text.toString();
+    map['email_address'] = emailController.text.toString();
+    map['contact_code'] = phone_code_Controller.text.toString();
+    map['contact_number'] = contact_number_Controller.text.toString();
+    map['gender'] = _selectedGender.toString();
+    map['date_of_birth'] = dob_Controller.text.toString();
+    map['street'] = street_Controller.text.toString();
+    map['city'] = cityId == 0 ? '' : cityId.toString();
+    map['state'] = stateId == 0 ? '' : stateId.toString();
+    map['country'] = countryId.toString();
+    map['zip_code'] = zip_code_Controller.text.toString();
+    var apiService = ApiCallMethodsService();
+    apiService.post(apiRoutes['profileUpdate']!, map).then((value) {
+      apiService.updateUserDetails(value);
+      Map<String, dynamic> jsonMap = json.decode(value);
+      var commonService = CommonService();
+      commonService.openSnackBar(jsonMap['message'], context);
+      if (multipart != null) {
+        UpdateDetails();
+      }
+      // screenNavigator(context, SettingsScreen());
+      Navigator.of(context).pop();
+      Navigator.pop(context);
+    }).onError((error, stackTrace) {
+      print(error);
+      Navigator.of(context).pop();
+      Navigator.pop(context);
+      var commonService = CommonService();
+      commonService.openSnackBar(error.toString(), context);
+    });
+  }
+
+  void UpdateDetails() async {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return Center(child: CircularProgressIndicator());
+        }));
+
+    String apiUrl = baseUrl + apiRoutes['updateProfilePic']!;
+    var request = new http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    request.headers['Authorization'] = 'Bearer ${prefs.getString('token')}';
+    request.files.add(multipart!);
+    var response = await request.send();
+    if (response.statusCode == 201) {
+      setState(() {
+        Navigator.of(context).pop();
+        Navigator.pop(context);
+      });
+      print('Image Uploaded');
+    } else {
+      setState(() {
+        Navigator.of(context).pop();
+        Navigator.pop(context);
+      });
+      print('Failed');
+    }
   }
 }
 

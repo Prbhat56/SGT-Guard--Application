@@ -13,6 +13,7 @@ import 'package:sgt/presentation/timer/timer.dart';
 import 'package:sgt/presentation/widgets/bottom_navigation_bar_model.dart';
 import 'package:sgt/presentation/widgets/should_pop_alert_dialog.dart';
 import 'package:sgt/utils/const.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen/home_screen.dart';
 
 class Home extends StatefulWidget {
@@ -23,6 +24,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String? timerStatus;
   int hour = 00;
   int minute = 00;
   int second = 00;
@@ -32,12 +34,18 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
+    checkTimerStatus();
     _selectedIndex = 0;
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       updateTime();
     });
+  }
+
+  void checkTimerStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+      timerStatus = prefs.getString('isTimer');
+      timerStatus == '1' ? context.read<TimerOnCubit>().turnOnTimer() : context.read<TimerOnCubit>().turnOffTimer();
   }
 
   void updateTime() {
@@ -67,6 +75,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    checkTimerStatus();
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: WillPopScope(
@@ -90,9 +99,11 @@ class _HomeState extends State<Home> {
                     top: 595.h,
                     left: 30.w,
                     right: 30.w,
-                    child: context.watch<TimerOnCubit>().state.istimerOn
-                        ? TimerWidget()
-                        : Container(),
+                    child: (timerStatus == null || timerStatus == '1' || timerStatus == 'null' || timerStatus == '')
+                        ? context.watch<TimerOnCubit>().state.istimerOn
+                            ? TimerWidget()
+                            : Container()
+                        : Container()
                   )
                 ],
               ),

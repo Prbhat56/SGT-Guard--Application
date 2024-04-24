@@ -128,7 +128,12 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
         Navigator.of(context).pop();
       });
       print('Image Uploaded');
-      screenNavigator(context, ReportSubmitSuccess());
+      showDialog(
+          context: context,
+          builder: ((context) {
+            return Center(child: ReportSubmitSuccess());
+          }));
+      // screenNavigator(context, ReportSubmitSuccess());
     } else {
       setState(() {
         Navigator.of(context).pop();
@@ -465,41 +470,38 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
             const SizedBox(
               height: 26,
             ),
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                child: CustomButtonWidget(
-                    buttonTitle: 'Send',
-                    onBtnPress: () {
-                      if (_propertyNameController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please Select Property', context);
-                      } else if (_titleController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter title', context);
-                      } else if (_vehicleTypeController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter manufacturer', context);
-                      } else if (_modelController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter model', context);
-                      } else if (_colorController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter color', context);
-                      } else if (_lincenseController.text.isEmpty) {
-                        CommonService().openSnackBar(
-                            'Please enter licence number', context);
-                      } else if (_stateMyController.text.isEmpty) {
-                        CommonService()
-                            .openSnackBar('Please enter state', context);
-                      } else if (imageFileList!.isEmpty) {
-                        CommonService().openSnackBar(
-                            'Please upload Record Sample', context);
-                      } else {
-                        uploadImage();
-                      }
-                    }))
           ],
         )),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.symmetric(horizontal: 32),
+            margin: EdgeInsets.symmetric(vertical: 30),
+            child: CustomButtonWidget(
+                buttonTitle: 'Send',
+                onBtnPress: () {
+                  if (_propertyNameController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please Select Property', context);
+                  } else if (_titleController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter title', context);
+                  } else if (_vehicleTypeController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter manufacturer', context);
+                  } else if (_modelController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter model', context);
+                  } else if (_colorController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter color', context);
+                  } else if (_lincenseController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter licence number', context);
+                  } else if (_stateMyController.text.isEmpty) {
+                    CommonService().openSnackBar('Please enter state', context);
+                  } else if (imageFileList!.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please upload Record Sample', context);
+                  } else {
+                    uploadImage();
+                  }
+                })),
       ),
     );
   }

@@ -109,7 +109,7 @@ class _InActivePropertyDetailsScreenState
                                       height: 5,
                                     ),
                                     Text(
-                                      snapshot.data!.data!.location.toString(),
+                                      snapshot.data!.data!.type.toString(),
                                       maxLines: 2,
                                       style: TextStyle(
                                           fontSize: 18,
@@ -128,7 +128,7 @@ class _InActivePropertyDetailsScreenState
                                               fontSize: 12, color: Colors.red),
                                         ),
                                         Text(
-                                          '${snapshot.data!.data!.shifts!.isEmpty ? null : snapshot.data!.data!.shifts!.last.clockIn.toString()} ~ ${snapshot.data!.data!.shifts!.isEmpty ? null : snapshot.data!.data!.shifts!.last.clockOut.toString()}',
+                                          '${snapshot.data!.data!.lastShiftTime!.isEmpty ? '' : snapshot.data!.data!.lastShiftTime.toString()}',
                                           style: TextStyle(
                                               fontSize: 12, color: black),
                                         ),
@@ -157,14 +157,14 @@ class _InActivePropertyDetailsScreenState
                       Row(
                         children: [
                           Text(
-                            'Gaurd Name: ',
+                            'Guard Name: ',
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w300,
                                 color: black),
                           ),
                           Text(
-                            ' ${snapshot.data!.data!.jobDetails == null ? null : snapshot.data!.data!.jobDetails!.firstName.toString()} ${snapshot.data!.data!.jobDetails == null ? null : snapshot.data!.data!.jobDetails!.lastName.toString()}',
+                            ' ${snapshot.data!.data!.jobDetails == null ? '' : snapshot.data!.data!.jobDetails!.firstName.toString()} ${snapshot.data!.data!.jobDetails == null ? '' : snapshot.data!.data!.jobDetails!.lastName.toString()}',
                             style: TextStyle(
                               fontSize: 15,
                               color: primaryColor,
@@ -187,7 +187,7 @@ class _InActivePropertyDetailsScreenState
                           ),
                           Text(
                             //' ${snapshot.data!.data!.jobDetails!.guardPosition.toString()}',
-                            ' ${snapshot.data!.data!.jobDetails == null ? null : snapshot.data!.data!.jobDetails!.guardPosition.toString()}',
+                            ' ${snapshot.data!.data!.jobDetails == null ? '' : snapshot.data!.data!.jobDetails!.guardPosition.toString()}',
                             style: TextStyle(
                               fontSize: 15,
                               color: primaryColor,

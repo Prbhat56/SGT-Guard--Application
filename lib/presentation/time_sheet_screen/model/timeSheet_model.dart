@@ -66,6 +66,7 @@ class Completed {
   String? cityText;
   String? stateText;
   String? countryText;
+  String? latestShiftTime;
   List<PropertyAvatar>? propertyAvatars;
   List<Shift>? shifts;
 
@@ -88,6 +89,7 @@ class Completed {
     this.cityText,
     this.stateText,
     this.countryText,
+    this.latestShiftTime,
     this.propertyAvatars,
     this.shifts,
   });
@@ -111,6 +113,7 @@ class Completed {
         cityText: json["city_text"],
         stateText: json["state_text"],
         countryText: json["country_text"],
+        latestShiftTime:json['latest_shift_time'],
         propertyAvatars: json["property_avatars"] == null
             ? []
             : List<PropertyAvatar>.from(json["property_avatars"]!
@@ -139,6 +142,7 @@ class Completed {
         "city_text": cityText,
         "state_text": stateText,
         "country_text": countryText,
+        "latest_shift_time":latestShiftTime,
         "property_avatars": propertyAvatars == null
             ? []
             : List<dynamic>.from(propertyAvatars!.map((x) => x.toJson())),
@@ -187,6 +191,7 @@ class Shift {
   String? propertyName;
   String? propertyImage;
   String? date;
+  String? formattedDate;
 
   Shift({
     this.id,
@@ -203,6 +208,7 @@ class Shift {
     this.propertyName,
     this.propertyImage,
     this.date,
+    this.formattedDate
   });
 
   factory Shift.fromJson(Map<String, dynamic> json) => Shift(
@@ -218,9 +224,9 @@ class Shift {
         qrCodeOut: json["qr_code_out"],
         status: json["status"],
         propertyName: json["property_name"],
-        propertyImage:
-            json["property_image"] == null ? "" : json["property_image"],
+        propertyImage: json["property_image"] == null ? "" : json["property_image"],
         date: json["date"] == null ? "" : json["date"],
+        formattedDate: json['formatted_date'] == null ? "" : json["formatted_date"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -238,5 +244,6 @@ class Shift {
         "property_name": propertyName,
         "property_image": propertyImage,
         "date": date,
+        "formatted_date":formattedDate,
       };
 }

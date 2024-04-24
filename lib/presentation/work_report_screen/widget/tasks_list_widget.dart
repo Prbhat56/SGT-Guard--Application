@@ -44,7 +44,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                 setState(
                   () {
                     checkbox[index] = value!;
-                    print("value =======================> ${value}");
+                    // print("value =======================> ${value}");
                   },
                 );
                 if (checkpointsStatus

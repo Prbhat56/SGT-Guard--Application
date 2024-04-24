@@ -52,7 +52,7 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title:statusOfLeave=='Rejected'? 'Rejected At: ':'Approved By: ',
+                title:statusOfLeave=='Rejected'? 'Rejected At: ':'Approved At: ',
                 titleValue: time,
                 fontsize: 15,
               ),

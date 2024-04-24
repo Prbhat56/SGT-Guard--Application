@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -270,7 +271,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
         Navigator.of(context).pop();
       });
       print('Image Uploaded');
-      screenNavigator(context, ReportSubmitSuccess());
+      showDialog(
+          context: context,
+          builder: ((context) {
+            return Center(child: ReportSubmitSuccess());
+          }));
+      // screenNavigator(context, ReportSubmitSuccess());
     } else {
       setState(() {
         Navigator.of(context).pop();
@@ -373,12 +379,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
         backgroundColor: white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 30,
+                  height: 30.h,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,31 +406,31 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     //   textScaleFactor: 1.0,
                     // ),
                     SizedBox(
-                      height: 10,
+                      height: 10.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10.r),
                           color: seconderyMediumColor),
                       child: TextFormField(
                         controller: _propertyNameController,
                         readOnly: true,
                         decoration: InputDecoration(
                             contentPadding:
-                                EdgeInsets.only(top: 10, bottom: 0, left: 10),
+                                EdgeInsets.only(top: 10.h, bottom: 0, left: 10.w),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                                 borderSide:
                                     BorderSide(color: seconderyMediumColor)),
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                                 borderSide: BorderSide(color: primaryColor)),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                                 borderSide:
                                     BorderSide(color: seconderyMediumColor)),
                             disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                                 borderSide:
                                     BorderSide(color: seconderyMediumColor)),
                             fillColor: seconderyMediumColor,
@@ -472,7 +478,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     //   )
                     : Container(),
                 SizedBox(
-                  height: 30,
+                  height: 30.h,
                 ),
                 CustomTextField(
                   controller: _titleController,
@@ -492,15 +498,15 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           ))
                     ])),
                 SizedBox(
-                  height: 10,
+                  height: 10.h,
                 ),
                 EmergencyDateTimeWidget(), //taking date and time using this widget
 
                 EmergencyLocationWidget(
-                   onStatusChanged: (currentPosition) {
+                  onStatusChanged: (currentPosition) {
                     // print("--------- emergencyReportScreen ===> ${currentPosition}");
-                  currentLatLng = currentPosition;
-                },
+                    currentLatLng = currentPosition;
+                  },
                 ), //taking location widget
 
                 CustomTextField(
@@ -510,13 +516,13 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   isFilled: false,
                   maxLines: 5,
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 Text(
                   'People Involved',
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 17.sp,
                     color: CustomTheme.black,
                     fontWeight: FontWeight.w500,
                   ),
@@ -524,7 +530,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   textScaleFactor: 1.0,
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 10.h,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,12 +552,12 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                         setState(() {});
                       },
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: EdgeInsets.symmetric(vertical: 10.h),
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                         decoration: BoxDecoration(
                             color: CustomTheme.primaryColor,
-                            borderRadius: BorderRadius.circular(15)),
+                            borderRadius: BorderRadius.circular(15.r)),
                         child: Text(
                           'Add peoples +',
                           style: TextStyle(
@@ -562,21 +568,21 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 Text(
                   'Witnesss',
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 17.sp,
                     color: CustomTheme.black,
                     fontWeight: FontWeight.w500,
                   ),
                   // CustomTheme.textField_Headertext_Style,
                   textScaleFactor: 1.0,
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -598,9 +604,9 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                         setState(() {});
                       },
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: EdgeInsets.symmetric(vertical: 10.h),
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                         decoration: BoxDecoration(
                             color: CustomTheme.primaryColor,
                             borderRadius: BorderRadius.circular(15)),
@@ -614,8 +620,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10.h,
                 ),
                 CustomTextField(
                   controller: _actionController,
@@ -647,7 +653,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   textScaleFactor: 1.0,
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 5.h,
                 ),
                 DropdownButtonFormField<String>(
                   value: towedValue,
@@ -663,7 +669,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   }).toList(),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 30.h,
                 ),
                 imageFileList!.isNotEmpty
                     ? Text(
@@ -673,7 +679,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     : Container(),
                 imageFileList!.isNotEmpty
                     ? SizedBox(
-                        height: 130 * imageFileList!.length.toDouble(),
+                        height: 130.h * imageFileList!.length.toDouble(),
                         child: ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: imageFileList!.length,
@@ -690,13 +696,13 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                             }),
                       )
                     : Container(),
-                const SizedBox(
-                  height: 18,
+                SizedBox(
+                  height: 18.h,
                 ),
                 RichText(
                     text: TextSpan(
                         text: 'Upload Record Sample',
-                        style: CustomTheme.blueTextStyle(17, FontWeight.w500),
+                        style: CustomTheme.blueTextStyle(17.sp, FontWeight.w500),
                         children: [
                       TextSpan(
                           text: ' *',
@@ -709,8 +715,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 //   style: CustomTheme.blueTextStyle(17, FontWeight.w500),
                 //   textScaleFactor: 1.0,
                 // ),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: 20.h,
                 ),
                 InkWell(
                     onTap: () {
@@ -718,7 +724,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                       showModalBottomSheet(
                           context: context,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(20.r)),
                           builder: (context) {
                             return CustomBottomModelSheet(
                               cameraClick: () {
@@ -732,44 +738,43 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     },
                     child: DottedChooseFileWidget(
                       title: 'Choose a file',
-                      height: 15,
+                      height: 15.h,
                     )),
-                Center(
-                  child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 30),
-                      child: CustomButtonWidget(
-                          buttonTitle: 'Send',
-                          onBtnPress: () {
-                            if (_propertyNameController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please Select Property', context);
-                            } else if (_titleController.text.isEmpty) {
-                              CommonService()
-                                  .openSnackBar('Please enter title', context);
-                            } else if (_actionController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter action taken', context);
-                            } else if (_policeReportController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter Police report number', context);
-                            } else if (_officerController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter Officer name', context);
-                            } else if (_officeController.text.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please enter officer designation', context);
-                            } else if (imageFileList!.isEmpty) {
-                              CommonService().openSnackBar(
-                                  'Please upload Record Sample', context);
-                            } else {
-                              uploadImage();
-                            }
-                          })),
-                )
               ],
             ),
           ),
         ),
+        bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            margin: EdgeInsets.symmetric(vertical: 30.h),
+            child: CustomButtonWidget(
+                buttonTitle: 'Send',
+                onBtnPress: () {
+                  if (_propertyNameController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please Select Property', context);
+                  } else if (_titleController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter title', context);
+                  } else if (_actionController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter action taken', context);
+                  } else if (_policeReportController.text.isEmpty) {
+                    CommonService().openSnackBar(
+                        'Please enter Police report number', context);
+                  } else if (_officerController.text.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please enter Officer name', context);
+                  } else if (_officeController.text.isEmpty) {
+                    CommonService().openSnackBar(
+                        'Please enter officer designation', context);
+                  } else if (imageFileList!.isEmpty) {
+                    CommonService()
+                        .openSnackBar('Please upload Record Sample', context);
+                  } else {
+                    uploadImage();
+                  }
+                })),
       ),
     );
   }

@@ -124,10 +124,10 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                               height: 5,
                             ),
                             Text(
-                              '${widget.details!.lastShiftTime == null ? '' : 
+                              '${widget.details!.shift == null ? '' : 
                               // DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.details!.shift!.shiftDate!.toString())
                               // ).toString()
-                              widget.details!.lastShiftTime.toString()
+                              widget.details!.shift!.shiftDate.toString()
                               }',
                               style: TextStyle(
                                   color: primaryColor,
@@ -136,12 +136,12 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                             const SizedBox(
                               height: 5,
                             ),
-                            Text(
-                              widget.details!.shift == null
-                                  ? ''
-                                  : widget.details!.shift!.clockIn.toString(),
-                              style: TextStyle(color: primaryColor),
-                            ),
+                            // Text(
+                            //   widget.details!.shift == null
+                            //       ? ''
+                            //       : widget.details!.shift!.clockIn.toString(),
+                            //   style: TextStyle(color: primaryColor),
+                            // ),
                           ],
                         ),
                       ),

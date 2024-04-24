@@ -43,14 +43,17 @@ class _VideoWidgetState extends State<VideoWidget> {
         if (snapshot.connectionState == ConnectionState.done) {
           return Stack(
             children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+              Center(
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                ),
               ),
               Positioned(
                 top: MediaQuery.of(context).size.height * 1 / 2.5,
                 left: MediaQuery.of(context).size.width * 1 / 2.5,
                 child: InkWell(
+                  splashFactory: NoSplash.splashFactory,
                   onTap: () {
                     setState(() {
                       if (_controller.value.isPlaying) {

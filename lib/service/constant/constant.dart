@@ -20,6 +20,7 @@ Map<String, String> apiRoutes = {
   "profileUpdate": "guard/profile-update",
   "leavePolicy": "guard/leave-policy",
   "leaveApply": "guard/leave-apply",
+  "leaveRequestCancel" : "guard/leave-request-delete",
   "leaveStatusList": "guard/leave-applications",
   "leaveMissingShift":"guard/leave-apply-missing-shifts",
   "helpAndSupport": "guard/help-and-support",

@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gal/gal.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
+import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import 'package:sgt/presentation/connect_screen/widgets/custom_shape.dart';
 import 'package:sgt/presentation/connect_screen/widgets/video_preview.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -16,8 +17,9 @@ import 'package:sgt/utils/const.dart';
 import 'package:dio/dio.dart';
 
 class MessageCard extends StatefulWidget {
-  const MessageCard({super.key, required this.message});
+  const MessageCard({super.key, required this.message, required this.user});
   final ChatMessages message;
+  final ChatUsers user;
 
   @override
   State<MessageCard> createState() => _MessageCardState();
@@ -88,7 +90,7 @@ class _MessageCardState extends State<MessageCard> {
                             borderRadius: BorderRadius.circular(5),
                             child: CachedNetworkImage(
                                 imageUrl: widget.message.message.toString(),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.contain,
                                 height: 150,
                                 width: 150,
                                 placeholder: (context, url) =>
@@ -132,8 +134,10 @@ class _MessageCardState extends State<MessageCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    MyDateUtil.getFormattedTime(
-                        context: context, time: widget.message.sent),
+                    // MyDateUtil.getFormattedTime(
+                    //     context: context, time: widget.message.sent),
+                    MyDateUtil.getChatMsgTime(
+                        context: context, lastActive: widget.message.sent),
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                   SizedBox(
@@ -172,7 +176,7 @@ class _MessageCardState extends State<MessageCard> {
 
   Widget _receivedMessage() {
     if (widget.message.read.isEmpty) {
-      FirebaseHelper.updateMessageReadStatus(widget.message);
+      FirebaseHelper.updateMessageReadStatus(widget.message, widget.user);
     }
     final messageTextGroup = Flexible(
       child: Container(
@@ -227,7 +231,7 @@ class _MessageCardState extends State<MessageCard> {
                             borderRadius: BorderRadius.circular(5),
                             child: CachedNetworkImage(
                                 imageUrl: widget.message.message.toString(),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.contain,
                                 height: 150,
                                 width: 150,
                                 placeholder: (context, url) =>
@@ -267,8 +271,10 @@ class _MessageCardState extends State<MessageCard> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    MyDateUtil.getFormattedTime(
-                        context: context, time: widget.message.sent),
+                    // MyDateUtil.getFormattedTime(
+                    //     context: context, time: widget.message.sent),
+                    MyDateUtil.getChatMsgTime(
+                        context: context, lastActive: widget.message.sent),
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                 ],

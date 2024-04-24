@@ -49,14 +49,10 @@ class _ScanningScreenState extends State<ScanningScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final ShiftDetailsModal shiftDetails = shiftDetailsModalFromJson(result?.code);
     String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
-    // String? jsonString = result?.code.toString();
-    // Map<String, dynamic> jsonData = jsonDecode(jsonString!);
-    // int shiftId = jsonData['shift_details']['shift_id'];
     print('Shift ID: $shiftId');
-    // print("==============jsonString===================>   ${jsonString}");
-    // print("==============ShiftStatus===================>   ${jsonData}");
+    log("===shift scanner clockout status====>   ${shiftDetails.shiftDetails!.clockOut}");
     shiftDetails.shiftDetails!.clockOut == null ? 
-    await prefs.setString('shiftId', shiftId) : print("-------------------------------------");
+    await prefs.setString('shiftId', shiftId) : print("-------");
   }
   
   @override

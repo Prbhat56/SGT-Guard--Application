@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +14,7 @@ import '../widgets/custom_button_widget.dart';
 import 'apply_leave_screen2.dart';
 import 'widgets/custom_calender.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
 class ApplyLeaveScreen extends StatefulWidget {
   const ApplyLeaveScreen({super.key});
@@ -27,6 +29,7 @@ class ApplyLeaveScreen extends StatefulWidget {
 class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   bool leaveFromclicked = false;
   bool leaveToclicked = false;
+  RxBool termsChecked = true.obs;
 
   String? fromDate;
   String? toDate;
@@ -60,7 +63,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       var responseModel = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
-        print("===============> ${prefs.getString('property_owner_id')}");
+        // print("===============> ${prefs.getString('property_owner_id')}");
         setState(() {
           leaveTerms = responseModel['data']['policies'];
         });
@@ -244,7 +247,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             margin: EdgeInsets.only(top: 8, right: 6),
                             height: 3,
                             width: 3,
-                            color: black,
+                            // color: black,
                           ),
                           SizedBox(
                             height: 220,
@@ -304,6 +307,9 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                           } else if (_toText.text.isEmpty) {
                             CommonService()
                                 .openSnackBar('Please choose To date', context);
+                          } else if (_termsChecked == false) {
+                            CommonService()
+                                .openSnackBar('Please Select Terms&Condition', context);
                           } else {
                             dt1.difference(dt2).inDays > 0
                                 ? CommonService().openSnackBar(

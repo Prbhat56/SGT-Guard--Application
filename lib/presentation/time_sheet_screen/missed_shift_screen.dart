@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/missed_shift_model.dart';
@@ -6,6 +7,7 @@ import 'package:sgt/presentation/time_sheet_screen/widget/missed_shift_details.d
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/colors.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +44,7 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
       final MissedShiftModel responseModel =
           missedShiftModelFromJson(response.body);
       shiftDatum = responseModel.data ?? [];
-      print('Shift: $shiftDatum');
+      // print('Shift: $shiftDatum');
       imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
       return responseModel;
     } else {
@@ -65,8 +67,19 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                   ),
                 );
               } else {
-                return Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                return
+               shiftDatum.isEmpty
+                ? SizedBox(
+                    child: Center(
+                      child: Text(
+                        'No Missed Shift Found',
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.sp),
+                      ),
+                    ),
+                  )
+                :
+                 Padding(
+                    padding:EdgeInsets.only(top: 20.h),
                     child: ListView.separated(
                         itemBuilder: (context, index) {
                           return Column(
@@ -81,7 +94,7 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                       ));
                                 },
                                 contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
+                                    horizontal: 20.w, vertical: 5.h),
                                 dense: false,
                                 leading: CustomCircularImage.getCircularImage(
                                     imgBaseUrl.toString(),
@@ -100,27 +113,27 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                     Text(
                                       shiftDatum[index].propertyName.toString(),
                                       maxLines: 1,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          overflow: TextOverflow.ellipsis),
+                                      style: TextStyle(
+                                          fontSize: 15.sp,
+                                          overflow: TextOverflow.ellipsis,fontWeight: FontWeight.w500),
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
+                                    // SizedBox(
+                                    //   height: 4.h,
+                                    // ),
                                     Text(
-                                      shiftDatum[index].lastShiftTime.toString(),
+                                      shiftDatum[index].shift!.missedShiftDate.toString(),
                                       // shiftDatum[index].shift == null
                                       //     ? ''
                                       //     :
-                                          //  '${DateFormat.MMMMEEEEd().format(DateTime.parse(shiftDatum[index].shift!.shiftDate.toString()))}'
-                                      style: const TextStyle(fontSize: 15),
+                                      //      '${DateFormat.MMMMEEEEd().format(DateTime.parse(shiftDatum[index].shift!.shiftDate.toString()))}',
+                                      style: TextStyle(fontSize: 13.sp,fontWeight: FontWeight.w400),
                                     ),
                                   ],
                                 ),
                                 subtitle: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
-                                      '${shiftDatum[index].shift == null ? '' : shiftDatum[index].shift!.clockIn.toString()} - ${shiftDatum[index].shift == null ? '' : shiftDatum[index].shift!.clockOut.toString()}'),
+                                      '${shiftDatum[index].shift == null ? '' : shiftDatum[index].shift!.clockIn.toString()} - ${shiftDatum[index].shift == null ? '' : shiftDatum[index].shift!.clockOut.toString()}',style: TextStyle(fontSize: 10.sp,fontWeight: FontWeight.w500,color: AppColors.grayColor),),
                                 ),
                                 trailing: Column(
                                   children: [
@@ -140,22 +153,22 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                     //                   .toString())
                                     //       .toString(),
                                     // ),
-                                    const SizedBox(
-                                      height: 18,
+                                    SizedBox(
+                                      height: 18.h,
                                     ),
                                     Container(
-                                      height: 20,
-                                      width: 80,
+                                      height: 20.h,
+                                      width: 80.w,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
                                           borderRadius:
-                                              BorderRadius.circular(20)),
+                                              BorderRadius.circular(20.r)),
                                       child: Center(
                                         child: Text(
                                           'Missed',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 12),
+                                              fontSize: 12.sp),
                                         ),
                                       ),
                                     )

@@ -105,13 +105,16 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                          // 'Rivi Properties',
-                          widget.property!.propertyName.toString(),
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: black)),
+                      Flexible(
+                        flex: 1 ,
+                        child: Text(
+                            // 'Rivi Properties',
+                            widget.property!.propertyName.toString(),
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: black)),
+                      ),
                       Text(
                         // '1517 South Centelella',
                         widget.property!.type.toString(),
@@ -136,7 +139,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                               color: black)),
                       Text(
                         widget.checkPointLength!.first.route!.routeNumber
-                            .toString(), // api response pending
+                            .toString(),
                         style: CustomTheme.blueTextStyle(12, FontWeight.w400),
                       ),
                     ],
@@ -209,7 +212,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                         width: 5,
                       ),
                       Text(
-                        "${widget.checkPointLength!.length.toString()} Checkpoints", // api response pending
+                        "${widget.checkPointLength!.length.toString()} Checkpoints",
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,

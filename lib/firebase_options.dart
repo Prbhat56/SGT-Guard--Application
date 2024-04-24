@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:1070413214874:android:242f2b971c2f216ebb1b23',
     messagingSenderId: '1070413214874',
     projectId: 'sgtguardappchat',
+    databaseURL: 'https://sgtguardappchat-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'sgtguardappchat.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:1070413214874:ios:ff5c368ada5b332cbb1b23',
     messagingSenderId: '1070413214874',
     projectId: 'sgtguardappchat',
+    databaseURL: 'https://sgtguardappchat-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'sgtguardappchat.appspot.com',
     iosBundleId: 'com.dbm123.sgt',
   );
