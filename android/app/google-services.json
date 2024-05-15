@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1070413214874",
+    "firebase_url": "https://sgtguardappchat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sgtguardappchat",
+    "storage_bucket": "sgtguardappchat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070413214874:android:242f2b971c2f216ebb1b23",
+        "android_client_info": {
+          "package_name": "com.example.sgt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8UGWEUdZg7o7vw_TpvWlvaRrCxgPYK4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

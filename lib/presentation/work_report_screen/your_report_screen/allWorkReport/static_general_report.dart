@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -9,6 +12,7 @@ import 'package:sgt/presentation/widgets/custom_textfield_widget.dart';
 import 'package:sgt/presentation/widgets/dotted_choose_file_widget.dart';
 import 'package:sgt/presentation/widgets/media_uploading_widget.dart';
 import 'package:sgt/presentation/work_report_screen/widget/report_submit_success.dart';
+import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -109,10 +113,28 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
       print('Image Uploaded');
       screenNavigator(context, ReportSubmitSuccess());
     } else {
-      setState(() {
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        setState(() {
         Navigator.of(context).pop();
       });
       print('Failed');
+      }
+      
     }
   }
 

@@ -18,10 +18,11 @@ class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
   void initState() {
     Timer(Duration(seconds: 3), () {
       // Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => SettingsScreen()),(route) => false,).then((value) => setState(() {}));
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => SettingsScreen()),(route) => false,).then((value) => setState(() {}));
       // screenReplaceNavigator(context, SettingsScreen());
+        Navigator.of(context)..pop()..pop()..pop()..pop();
     });
     super.initState();
   }

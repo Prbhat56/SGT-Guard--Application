@@ -1,15 +1,19 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/assigned_propertieslist_modal.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/today_active_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_textfield_parking_report.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/propertieslist_picker.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/task_picker.dart';
+import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -135,10 +139,27 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
           }));
       // screenNavigator(context, ReportSubmitSuccess());
     } else {
-      setState(() {
-        Navigator.of(context).pop();
-      });
-      print('Failed');
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        setState(() {
+          Navigator.of(context).pop();
+        });
+        print('Failed');
+      }
     }
   }
 
@@ -180,7 +201,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
   //   }
   // }
 
-  Future<AssignedPropertiesListModal> getTasks() async {
+  Future getTasks() async {
     try {
       EasyLoading.show();
       String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
@@ -198,9 +219,26 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
         EasyLoading.dismiss();
         return responseModel;
       } else {
-        EasyLoading.dismiss();
-        return AssignedPropertiesListModal(
-            data: [], propertyImageBaseUrl: '', status: response.statusCode);
+        if (response.statusCode == 401) {
+          print("--------------------------------Unauthorized");
+          var apiService = ApiCallMethodsService();
+          apiService.updateUserDetails('');
+          var commonService = CommonService();
+          FirebaseHelper.signOut();
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('welcome', '1');
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => SignInScreen()),
+            (route) => false,
+          );
+        } else {
+          EasyLoading.dismiss();
+          return AssignedPropertiesListModal(
+              data: [], propertyImageBaseUrl: '', status: response.statusCode);
+        }
       }
     } catch (e) {
       EasyLoading.dismiss();
@@ -473,7 +511,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
           ],
         )),
         bottomNavigationBar: Container(
-          padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             margin: EdgeInsets.symmetric(vertical: 30),
             child: CustomButtonWidget(
                 buttonTitle: 'Send',

@@ -1,12 +1,19 @@
+// ignore_for_file: unnecessary_import, unused_import
+
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/account_screen/account_screen.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/check_points_list.dart';
@@ -21,6 +28,8 @@ import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/colors.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -46,9 +55,20 @@ class PropertyDetailsScreen extends StatefulWidget {
 
 bool? disable = true;
 Data? detailsData = Data();
-
+var jobDetailDataFetched;
+String? imageBaseUrlData;
+String? propertyImageBaseUrlData;
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
-  Future<PropertyDetailsModel> getJobsList(property_id) async {
+
+ @override
+  void initState() {
+    super.initState();
+   jobDetailDataFetched = getJobDetailList(widget.propertyId);
+  }
+
+
+  
+  Future getJobDetailList(property_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, String> myHeader = <String, String>{
@@ -62,12 +82,32 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     if (response.statusCode == 201) {
       final PropertyDetailsModel responseModel =
           propertyDetailsModelFromJson(response.body);
-      detailsData = responseModel.data;
+      detailsData = responseModel.data ?? Data();
+      imageBaseUrlData = responseModel.imageBaseUrl;
+      propertyImageBaseUrlData = responseModel.propertyImageBaseUrl;
       return responseModel;
     } else {
-      return PropertyDetailsModel(
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return PropertyDetailsModel(
         status: response.statusCode,
       );
+      }
+      
     }
   }
 
@@ -78,7 +118,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       child: Scaffold(
           appBar: CustomAppBarWidget(appbarTitle: 'Property Detail'),
           body: FutureBuilder(
-              future: getJobsList(widget.propertyId),
+              future: jobDetailDataFetched,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return SizedBox(
@@ -94,10 +134,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         PropertyDetailsWidget(
-                            imageBaseUrl: snapshot.data!.propertyImageBaseUrl,
+                            imageBaseUrl: propertyImageBaseUrlData,
                             detailsData: detailsData,
                             checkPoint:
-                                snapshot.data!.data!.checkpointCount.toString()
+                                detailsData!.checkpointCount.toString()
                             // widget.activeData!.checkPoints!.length.toString(),
                             ),
                         SizedBox(
@@ -122,7 +162,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                           context,
                                           ScanningScreen(
                                               propertyId:
-                                                  snapshot.data!.data!.id));
+                                                  detailsData!.id));
                                     },
                                     child: Container(
                                       height: 32.h,
@@ -200,10 +240,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       screenNavigator(
                                           context,
                                           WorkReportScreen(
-                                            propertyId: snapshot.data!.data!.id
+                                            propertyId: detailsData!.id
                                                 .toString(),
-                                            propertyName: snapshot
-                                                .data!.data!.propertyName,
+                                            propertyName: detailsData!.propertyName,
                                           ));
                                     },
                                     child: Container(
@@ -267,7 +306,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               detailsData!.shifts!.length != 0
                                   ? ShiftCards(
                                       shifts: detailsData!.shifts,
-                                      imageBaseUrl: snapshot.data!.imageBaseUrl)
+                                      imageBaseUrl: imageBaseUrlData)
                                   : Text(
                                       'No Upcoming Shift Available',
                                       textAlign: TextAlign.center,
@@ -344,30 +383,39 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                 fontWeight: FontWeight.w500,
                                                 color: black),
                                           ),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                disable = !disable!;
-                                              });
-                                            },
-                                            child: Text(
-                                              disable == true
-                                                  ? 'Show more'
-                                                  : 'Show less',
-                                              style: detailsData!
-                                                          .emergencyContact!
-                                                          .length <=
-                                                      1
-                                                  ? TextStyle(
-                                                      fontSize: 13.sp,
-                                                      color:
-                                                          Colors.grey.shade500,
-                                                      fontWeight:
-                                                          FontWeight.w500)
-                                                  : CustomTheme.blueTextStyle(
-                                                      15.sp, FontWeight.w400),
-                                            ),
-                                          ),
+                                          detailsData!.emergencyContact!
+                                                      .length <=
+                                                  1
+                                              ? Container()
+                                              : InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      disable = !disable!;
+                                                    });
+                                                  },
+                                                  child: Text(
+                                                    disable == true
+                                                        ? 'Show more'
+                                                        : 'Show less',
+                                                    style:
+                                                        // detailsData!
+                                                        //             .emergencyContact!
+                                                        //             .length <=
+                                                        //         1
+                                                        //     ? TextStyle(
+                                                        //         fontSize: 13.sp,
+                                                        //         color:
+                                                        //             Colors.grey.shade500,
+                                                        //         fontWeight:
+                                                        //             FontWeight.w500)
+                                                        //     :
+                                                        CustomTheme
+                                                            .blueTextStyle(
+                                                                15.sp,
+                                                                FontWeight
+                                                                    .w400),
+                                                  ),
+                                                ),
                                         ],
                                       ),
                                       disable == true
@@ -390,103 +438,154 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                 SizedBox(
                                                   height: 12.h,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 19.w),
-                                                  child: Text(
-                                                    'Name',
-                                                    style: TextStyle(
-                                                        fontSize: 12.sp,
-                                                        color: Colors
-                                                            .grey.shade700,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+                                                TextFormField(
+                                                  initialValue: detailsData!
+                                                      .emergencyContact!
+                                                      .first
+                                                      .contactName
+                                                      .toString(),
+                                                  readOnly: true,
+                                                  decoration: InputDecoration(
+                                                    border: OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            width: 1.w,
+                                                            color: CustomTheme
+                                                                .seconderyLightColor)),
+                                                    label: Text(
+                                                      'Name',
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp,
+                                                          color: Colors
+                                                              .grey.shade700,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
                                                   ),
                                                 ),
-                                                Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      .9,
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 19.w,
-                                                      vertical: 14.h),
-                                                  decoration: BoxDecoration(
-                                                      color: CustomTheme.white,
-                                                      border: Border.all(
-                                                          width: 1.w,
-                                                          color:
-                                                              CustomTheme.grey),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.elliptical(
-                                                                  5.r, 5.r))),
-                                                  child: Text(
-                                                    detailsData!
-                                                        .emergencyContact!
-                                                        .first
-                                                        .contactName
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 15.sp,
-                                                        color: Colors
-                                                            .grey.shade700,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextFormField(
+                                                  initialValue: detailsData!
+                                                      .emergencyContact!
+                                                      .first
+                                                      .contactNumber
+                                                      .toString(),
+                                                  readOnly: true,
+                                                  decoration: InputDecoration(
+                                                    border: OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            width: 1.w,
+                                                            color: CustomTheme
+                                                                .seconderyLightColor)),
+                                                    label: Text(
+                                                      'Mobile Number',
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp,
+                                                          color: Colors
+                                                              .grey.shade700,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 19.w),
-                                                  child: Text(
-                                                    'Mobile Number',
-                                                    style: TextStyle(
-                                                        fontSize: 12.sp,
-                                                        color: Colors
-                                                            .grey.shade700,
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      .9,
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 19.w,
-                                                      vertical: 14.h),
-                                                  decoration: BoxDecoration(
-                                                      color: CustomTheme.white,
-                                                      border: Border.all(
-                                                          width: 1.w,
-                                                          color:
-                                                              CustomTheme.grey),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.elliptical(
-                                                                  5.r, 5.r))),
-                                                  child: Text(
-                                                    detailsData!
-                                                        .emergencyContact!
-                                                        .first
-                                                        .contactNumber
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 15.sp,
-                                                        color: Colors
-                                                            .grey.shade700,
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                ),
+                                                // Padding(
+                                                //   padding: EdgeInsets.only(
+                                                //       left: 19.w),
+                                                //   child: Text(
+                                                //     'Name',
+                                                //     style: TextStyle(
+                                                //         fontSize: 12.sp,
+                                                //         color: Colors
+                                                //             .grey.shade700,
+                                                //         fontWeight:
+                                                //             FontWeight.w400),
+                                                //   ),
+                                                // ),
+                                                // Container(
+                                                //   width: MediaQuery.of(context)
+                                                //           .size
+                                                //           .width *
+                                                //       .9,
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       horizontal: 19.w,
+                                                //       vertical: 14.h),
+                                                //   decoration: BoxDecoration(
+                                                //       color: CustomTheme.white,
+                                                //       border: Border.all(
+                                                //           width: 1.w,
+                                                //           color:
+                                                //               CustomTheme.grey),
+                                                //       borderRadius:
+                                                //           BorderRadius.all(
+                                                //               Radius.elliptical(
+                                                //                   5.r, 5.r))),
+                                                //   child: Text(
+                                                //     detailsData!
+                                                //         .emergencyContact!
+                                                //         .first
+                                                //         .contactName
+                                                //         .toString(),
+                                                //     style: TextStyle(
+                                                //         fontSize: 15.sp,
+                                                //         color: Colors
+                                                //             .grey.shade700,
+                                                //         fontWeight:
+                                                //             FontWeight.w400),
+                                                //   ),
+                                                // ),
+                                                // Padding(
+                                                //   padding: EdgeInsets.only(
+                                                //       left: 19.w),
+                                                //   child: Text(
+                                                //     'Mobile Number',
+                                                //     style: TextStyle(
+                                                //         fontSize: 12.sp,
+                                                //         color: Colors
+                                                //             .grey.shade700,
+                                                //         fontWeight:
+                                                //             FontWeight.w400),
+                                                //   ),
+                                                // ),
+                                                // Container(
+                                                //   width: MediaQuery.of(context)
+                                                //           .size
+                                                //           .width *
+                                                //       .9,
+                                                //   padding: EdgeInsets.symmetric(
+                                                //       horizontal: 19.w,
+                                                //       vertical: 14.h),
+                                                //   decoration: BoxDecoration(
+                                                //       color: CustomTheme.white,
+                                                //       border: Border.all(
+                                                //           width: 1.w,
+                                                //           color:
+                                                //               CustomTheme.grey),
+                                                //       borderRadius:
+                                                //           BorderRadius.all(
+                                                //               Radius.elliptical(
+                                                //                   5.r, 5.r))),
+                                                //   child: Text(
+                                                //     detailsData!
+                                                //         .emergencyContact!
+                                                //         .first
+                                                //         .contactNumber
+                                                //         .toString(),
+                                                //     style: TextStyle(
+                                                //         fontSize: 15.sp,
+                                                //         color: Colors
+                                                //             .grey.shade700,
+                                                //         fontWeight:
+                                                //             FontWeight.w400),
+                                                //   ),
+                                                // ),
                                               ],
                                             )
                                           : EmergencyContact()
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 20,
+                                    height: 12.h,
                                   ),
                                   SizedBox(
                                     width: double.infinity,
@@ -503,7 +602,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   const SizedBox(height: 10),
                                   PropertyDescriptionWidget(
                                     propertyImageBaseUrl:
-                                        snapshot.data!.propertyImageBaseUrl,
+                                        propertyImageBaseUrlData,
                                     propDesc: detailsData!.propertyDescription,
                                     propvatars: detailsData!.propertyAvatars,
                                   ), //widget to show property details
@@ -511,19 +610,17 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   TextFieldHeaderWidget(title: 'Location'),
                                   const SizedBox(height: 10),
                                   Text(
-                                    snapshot.data!.data!.location.toString(),
+                                    detailsData!.location.toString(),
                                     // widget.activeData!.location.toString(),
                                     style: TextStyle(fontSize: 15.sp),
                                   ),
                                   const SizedBox(height: 20),
                                   MapCardWidget(
                                     currentlocation: LatLng(
-                                        double.parse(snapshot
-                                                .data!.data!.latitude
+                                        double.parse(detailsData!.latitude
                                                 .toString())
                                             .toDouble(),
-                                        double.parse(snapshot
-                                                .data!.data!.longitude
+                                        double.parse(detailsData!.longitude
                                                 .toString())
                                             .toDouble()),
                                   ), //showing map card
@@ -535,8 +632,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                             screenNavigator(
                                                 context,
                                                 ScanningScreen(
-                                                    propertyId: snapshot
-                                                        .data!.data!.id));
+                                                    propertyId: detailsData!.id));
                                           })),
                                   const SizedBox(height: 30),
                                 ],
@@ -574,62 +670,103 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   SizedBox(
                     height: 12.h,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 19.w),
-                    child: Text(
-                      'Name',
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * .9,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 19.w, vertical: 14.h),
-                    decoration: BoxDecoration(
-                        color: CustomTheme.white,
-                        border: Border.all(width: 1, color: CustomTheme.grey),
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(5.r, 5.r))),
-                    child: Text(
-                      detailsData!.emergencyContact![index].contactName
+                  TextFormField(
+                    initialValue: detailsData!.emergencyContact![index].contactName
                           .toString(),
-                      style: TextStyle(
-                          fontSize: 15.sp,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w400),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.w,
+                              color: CustomTheme.grey)),
+                      label: Text(
+                        'Name',
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.grey.shade700,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 19.h),
-                    child: Text(
-                      'Mobile Number',
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w400),
-                    ),
+                  SizedBox(
+                    height: 10.h,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * .9,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 19.w, vertical: 14.h),
-                    decoration: BoxDecoration(
-                        color: CustomTheme.white,
-                        border: Border.all(width: 1, color: CustomTheme.grey),
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(5.r, 5.r))),
-                    child: Text(
-                      detailsData!.emergencyContact![index].contactNumber
+                  TextFormField(
+                    initialValue: detailsData!.emergencyContact![index].contactNumber
                           .toString(),
-                      style: TextStyle(
-                          fontSize: 15.sp,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w400),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.w,
+                              color: CustomTheme.grey)),
+                      label: Text(
+                        'Mobile Number',
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.grey.shade700,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ),
+
+
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 19.w),
+                  //   child: Text(
+                  //     'Name',
+                  //     style: TextStyle(
+                  //         fontSize: 12.sp,
+                  //         color: Colors.grey.shade700,
+                  //         fontWeight: FontWeight.w400),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width * .9,
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: 19.w, vertical: 14.h),
+                  //   decoration: BoxDecoration(
+                  //       color: CustomTheme.white,
+                  //       border: Border.all(width: 1, color: CustomTheme.grey),
+                  //       borderRadius:
+                  //           BorderRadius.all(Radius.elliptical(5.r, 5.r))),
+                  //   child: Text(
+                  //     detailsData!.emergencyContact![index].contactName
+                  //         .toString(),
+                  //     style: TextStyle(
+                  //         fontSize: 15.sp,
+                  //         color: Colors.grey.shade700,
+                  //         fontWeight: FontWeight.w400),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 19.h),
+                  //   child: Text(
+                  //     'Mobile Number',
+                  //     style: TextStyle(
+                  //         fontSize: 12.sp,
+                  //         color: Colors.grey.shade700,
+                  //         fontWeight: FontWeight.w400),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width * .9,
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: 19.w, vertical: 14.h),
+                  //   decoration: BoxDecoration(
+                  //       color: CustomTheme.white,
+                  //       border: Border.all(width: 1, color: CustomTheme.grey),
+                  //       borderRadius:
+                  //           BorderRadius.all(Radius.elliptical(5.r, 5.r))),
+                  //   child: Text(
+                  //     detailsData!.emergencyContact![index].contactNumber
+                  //         .toString(),
+                  //     style: TextStyle(
+                  //         fontSize: 15.sp,
+                  //         color: Colors.grey.shade700,
+                  //         fontWeight: FontWeight.w400),
+                  //   ),
+                  // ),
                 ]);
           }),
     );

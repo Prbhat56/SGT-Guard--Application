@@ -86,9 +86,9 @@ class _ClockOutErrorScreenState extends State<ClockOutErrorScreen> {
                   CustomButtonWidget(
                       buttonTitle: 'Clock Out',
                       onBtnPress: () {
-                        context.read<TimerOnCubit>().state.istimerOn
-                            ? context.read<TimerOnCubit>().turnOffTimer()
-                            : null ;
+                        // context.read<TimerOnCubit>().state.istimerOn
+                        //     ? context.read<TimerOnCubit>().turnOffTimer()
+                        //     : null ;
                         screenNavigator(context, ClockOutScreen(clockOutQrData:widget.clockOutQrData));
                       }),
                 ]),

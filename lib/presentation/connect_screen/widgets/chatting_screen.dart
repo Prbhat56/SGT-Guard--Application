@@ -99,7 +99,10 @@ class _ChattingScreenState extends State<ChattingScreen> {
             backgroundColor: white,
             leading: InkWell(
               onTap: () {
-                Navigator.pop(context);
+                //Navigator.pop(context);
+                Navigator.pop(context, () {
+                  FirebaseHelper.getAllUsers();
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

@@ -73,7 +73,7 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                           screenNavigator(
                               context,
                               EditLocationScreen(
-                                currentPosition: _currentPosition,
+                                currentPosition:pinnedLocation==null? _currentPosition:pinnedLocation,
                                 onStatusChangedSecond: (pinLocation) {
                                   print(
                                       "----------emergency_location_widget ===> ${pinLocation}");

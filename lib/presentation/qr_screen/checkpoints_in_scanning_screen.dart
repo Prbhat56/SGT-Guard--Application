@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
+import 'package:sgt/presentation/qr_screen/model/checkpoint_qr_details_model.dart';
+import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
+import 'package:sgt/theme/font_style.dart';
+import '../../theme/colors.dart';
 import '../../utils/const.dart';
 import '../clocked_in_out_screen/clock_in_screen.dart';
 import '../widgets/custom_appbar_widget.dart';
@@ -17,7 +22,13 @@ class CheckPointScanningScreen extends StatefulWidget {
   String? checkpointId;
   String? checkpointHistoryId;
   int? checkpointlistIndex;
-  CheckPointScanningScreen({super.key,this.propId,this.shiftId,this.checkpointId,this.checkpointHistoryId,this.checkpointlistIndex});
+  CheckPointScanningScreen(
+      {super.key,
+      this.propId,
+      this.shiftId,
+      this.checkpointId,
+      this.checkpointHistoryId,
+      this.checkpointlistIndex});
 
   @override
   State<CheckPointScanningScreen> createState() =>
@@ -25,13 +36,11 @@ class CheckPointScanningScreen extends StatefulWidget {
 }
 
 class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
+  Map<String, dynamic>? jsonResponse;
+  CheckpointQrDetails? checkPointDetails;
   final qrKey = GlobalKey(debugLabel: "Qr");
   QRViewController? controller;
   Barcode? result;
-
-  void navigateUser() async {
-    screenReplaceNavigator(context, ClockInScreen());
-  }
 
   @override
   void initState() {
@@ -53,19 +62,64 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
     }
   }
 
+  retriveAndChecksCheckpointId(result) async {
+    log("${result!.code.toString()}");
+    jsonResponse = json.decode(result!.code.toString());
+    log("jsonResponse =>  ${jsonResponse}");
+  }
 
   @override
   Widget build(BuildContext context) {
     return result != null
-        ? CheckpointReportScreen(
-          checkPointqrData:result?.code,
-          propId:widget.propId,shiftId:widget.shiftId,
-          checkPointId:widget.checkpointId,
-          checkpointHistoryId:widget.checkpointHistoryId,
-          checkpointListIndex:widget.checkpointlistIndex,
-        )
-        :
-         MediaQuery(
+        ? jsonResponse!.containsKey("checkpoint_details") == true
+            ? 
+            CheckpointReportScreen(
+                checkPointqrData: result?.code,
+                propId: widget.propId,
+                shiftId: widget.shiftId,
+                checkPointId: widget.checkpointId,
+                checkpointHistoryId: widget.checkpointHistoryId,
+                checkpointListIndex: widget.checkpointlistIndex,
+              )
+            : Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "You have scanned wrong checkpoint",
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        screenReplaceNavigator(
+                            context,
+                            CheckPointScanningScreen(
+                                propId: widget.propId,
+                                shiftId: widget.shiftId,
+                                checkpointlistIndex: widget.checkpointlistIndex,
+                                checkpointId: widget.checkpointId,
+                                checkpointHistoryId:
+                                    widget.checkpointHistoryId));
+                        // Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Re-scan',
+                        style: AppFontStyle.boldTextStyle(
+                            AppColors.primaryColor, 17),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+        : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
               appBar: CustomAppBarWidget(appbarTitle: 'QR Scan'),
@@ -89,7 +143,10 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
                       'Scan QR code to view\n checkpoint details',
                       textScaleFactor: 1.0,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17, color: Colors.grey,fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                   SizedBox(height: 88),
@@ -98,7 +155,6 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
               ),
             ),
           );
-  
   }
 
   Widget buildQrView(BuildContext context) => QRView(
@@ -124,7 +180,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
       HapticFeedback.vibrate();
       setState(() {
         result = scanData;
-        print('-------------------------> ${scanData}');
+        retriveAndChecksCheckpointId(result);
       });
     });
     this.controller!.pauseCamera();

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_back_images.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_front_images.dart';
 import 'package:sgt/presentation/account_screen/widgets/dropdown_Country.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/service/api_call_service.dart';
@@ -59,7 +62,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   late String _selectedGender;
   List<String> _dropdownItems = <String>['Male', 'Female', 'Other'];
 
-  Future<GuardDetails> getGuardDetailsAPI() async {
+  Future getGuardDetailsAPI() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -141,7 +144,24 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       cityId = _guardDetails.userDetails?.city;
       return GuardDetails.fromJson(data);
     } else {
-      throw Exception('Failed to load guard');
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to load guard');
+      }
     }
   }
 
@@ -199,7 +219,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: FutureBuilder<GuardDetails>(
+              child: FutureBuilder(
                 future: getGuardDetailsAPI(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {

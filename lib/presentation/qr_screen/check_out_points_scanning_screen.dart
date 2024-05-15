@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -30,14 +31,11 @@ class CheckPointOutScanningScreen extends StatefulWidget {
 
 class _CheckPointScanningScreenState
     extends State<CheckPointOutScanningScreen> {
+  Map<String, dynamic>? jsonResponse;
   String? clockInStatus;
   final qrKey = GlobalKey(debugLabel: "Qr");
   QRViewController? controller;
   Barcode? result;
-
-  void navigateUser() async {
-    screenReplaceNavigator(context, ClockInScreen());
-  }
 
   @override
   void initState() {
@@ -60,7 +58,19 @@ class _CheckPointScanningScreenState
   }
 
   retriveAndCheckShiftId(result) async {
+    // final ShiftDetailsModal shiftDetails;
+    log("${result!.code.toString()}");
+    jsonResponse = json.decode(result!.code.toString());
+    print("jsonResponse--------------------> ${jsonResponse}");
+    print(
+        "checkpoint_details------------>${jsonResponse!.containsKey("shift_details")}");
     print("widget.qrData =====> ${result?.code}");
+    // if(jsonResponse.containsKey("shift_details")==true){
+    //  shiftDetails = shiftDetailsModalFromJson(result?.code);
+    // }
+    // else{
+    //  shiftDetails = shiftDetailsModalFromJson('');
+    // }
     final ShiftDetailsModal shiftDetails =
         shiftDetailsModalFromJson(result?.code);
     log("===shift scanner clockin status====>   ${shiftDetails.shiftDetails!.clockIn}");
@@ -71,37 +81,87 @@ class _CheckPointScanningScreenState
   Widget build(BuildContext context) {
     print("------${widget.checkPointsStatus}");
     return result != null
-        ? clockInStatus == null
-            ? (widget.checkPointsStatus == "0"
-                ? (
-                    ClockOutScreen(clockOutQrData: result?.code)
-                    )
-                : (
-                // shiftDetails.shiftDetails?.shiftId != null ?
-                ClockOutErrorScreen(clockOutQrData: result?.code)
-                // :
-                //           Center(
-                //               child: Container(
-                //             height: 200,
-                //             width: 200,
-                //             child: Column(
-                //                   mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //             Text(
-                //               'Scan Wrong Qr',
-                //               textAlign: TextAlign.center,
-                //               style: TextStyle(fontSize: 15, color: primaryColor),
-                //             ),
-                //             SizedBox(height: 20), // Add spacing if needed
-                //             CustomButtonWidget(
-                //               buttonTitle: 'Rescan',
-                //               onBtnPress: () {
-                //                 screenNavigator(context, CheckPointOutScanningScreen(checkPointsStatus: widget.checkPointsStatus,));
-                //               },
-                //             ),
-                //             ]
-                //           )))
-                ))
+        ? jsonResponse!.containsKey("shift_details") == true
+            ? (clockInStatus == null
+                ? (widget.checkPointsStatus == "0"
+                    ? (ClockOutScreen(clockOutQrData: result?.code))
+                    : (
+                        // shiftDetails.shiftDetails?.shiftId != null ?
+                        ClockOutErrorScreen(clockOutQrData: result?.code)
+                    // :
+                    //           Center(
+                    //               child: Container(
+                    //             height: 200,
+                    //             width: 200,
+                    //             child: Column(
+                    //                   mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //             Text(
+                    //               'Scan Wrong Qr',
+                    //               textAlign: TextAlign.center,
+                    //               style: TextStyle(fontSize: 15, color: primaryColor),
+                    //             ),
+                    //             SizedBox(height: 20), // Add spacing if needed
+                    //             CustomButtonWidget(
+                    //               buttonTitle: 'Rescan',
+                    //               onBtnPress: () {
+                    //                 screenNavigator(context, CheckPointOutScanningScreen(checkPointsStatus: widget.checkPointsStatus,));
+                    //               },
+                    //             ),
+                    //             ]
+                    //           )))
+                    ))
+                : Center(
+                    child: Container(
+                        height: 220,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Icon(
+                                Icons.cancel,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'Scan Wrong Qr',
+                                textAlign: TextAlign.center,
+                                style: AppFontStyle.boldTextStyle(
+                                    AppColors.redColor, 40),
+                              ),
+                              SizedBox(height: 20), // Add spacing if needed
+                              InkWell(
+                                onTap: () {
+                                  screenReplaceNavigator(
+                                      context,
+                                      CheckPointOutScanningScreen(
+                                        checkPointsStatus:
+                                            widget.checkPointsStatus,
+                                      ));
+                                  // Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Re-scan',
+                                  style: AppFontStyle.boldTextStyle(
+                                      AppColors.primaryColor, 17),
+                                ),
+                              ),
+                              // CustomButtonWidget(
+                              //   buttonTitle: 'Rescan',
+                              //   onBtnPress: () {
+                              //     screenNavigator(
+                              //         context,
+                              //         CheckPointOutScanningScreen(
+                              //           checkPointsStatus: widget.checkPointsStatus,
+                              //         ));
+                              //   },
+                              // ),
+                            ]))))
             : Center(
                 child: Container(
                     height: 220,

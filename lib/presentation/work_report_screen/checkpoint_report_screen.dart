@@ -1,14 +1,19 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:carp_background_location/carp_background_location.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
+import 'package:sgt/presentation/qr_screen/checkpoints_in_scanning_screen.dart';
 import 'package:sgt/presentation/qr_screen/model/checkpoint_qr_details_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_bottom_model_sheet.dart';
@@ -18,8 +23,12 @@ import 'package:sgt/presentation/widgets/media_uploading_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/widget/check_point_success.dart';
 import 'package:sgt/presentation/work_report_screen/widget/property_image_preview_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:sgt/theme/colors.dart';
 import 'package:sgt/theme/custom_theme.dart';
+import 'package:sgt/theme/font_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 import '../widgets/dotted_choose_file_widget.dart';
@@ -53,6 +62,10 @@ class CheckpointReportScreen extends StatefulWidget {
   State<CheckpointReportScreen> createState() => _CheckpointReportScreenState();
 }
 
+var checkpointDetailsDataFetched;
+String? propertyImageBaseUrlData;
+Property? property = Property();
+
 class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
   bool? checkIdList;
   String? latestCheckpointId;
@@ -67,10 +80,15 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
 
 //pick image from gallery
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    final CheckpointQrDetails checkPointQr =
+        checkpointQrDetailsFromJson(widget.checkPointqrData!);
+    String? checkpointId =
+        checkPointQr.checkpointDetails!.checkpointId.toString();
+    checkpointDetailsDataFetched = getCheckpointsTaskList(checkpointId);
+    super.initState();
+  }
 
   void sendCurrentCheckPointStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -80,7 +98,6 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     String? routeId = prefs.getString('routeId');
     String? shift_id = prefs.getString('shiftId');
     String? property_id = prefs.getString('propertyId');
-
     await FirebaseHelper.createGuardLocation(
         latitude.toString(),
         longitude.toString(),
@@ -88,6 +105,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
         latestCheckpointId.toString(),
         routeId.toString(),
         property_id.toString());
+    screenNavigator(context, CheckPointCompleteSuccess());
   }
 
   void pickGalleryImage() async {
@@ -146,35 +164,39 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
         widget.checkpointHistoryId.toString();
     request.fields['shift_id'] = widget.shiftId.toString();
     request.fields['checkpoint_id'] = checkpointId.toString();
-    print("==================================== ${request.fields}");
     if (imageFileList!.length > 0) {
       for (var i = 0; i < imageFileList!.length; i++) {
         var stream = new http.ByteStream(imageFileList![i].openRead());
         stream.cast();
-
         var length = await imageFileList![i].length();
-
         request.files.add(http.MultipartFile('media_files[]', stream, length,
-            filename: imageFileList![i].path.split("/").last));
+            // filename: imageFileList![i].path.split("/").last
+            filename: imageFileList![i].path.split("/").last
+            ));
       }
     }
+    print("==================================== ${request.files.map((e) => e.filename)}");
     var response = await request.send();
+
+    response.stream.transform(utf8.decoder).listen((value) {    // to print response
+          debugPrint(value);
+       });
+    print(response.statusCode);
     if (response.statusCode == 200) {
       // print('=============================================> Request Submitted');
       // setState(() {
       sendCurrentCheckPointStatus();
-      screenNavigator(context, CheckPointCompleteSuccess());
       // });
       // screenNavigator(context, ReportSubmitSuccess());
     } else {
       setState(() {
         Navigator.of(context).pop();
       });
-      print('Failed');
+      print('falied');
     }
   }
 
-  Future<CheckPointDetailsModal> getCheckpointsTaskList(checkpoint_id) async {
+  Future getCheckpointsTaskList(checkpoint_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? shift_id = prefs.getString('shiftId');
     prefs.setString('Cp', checkpoint_id.toString());
@@ -195,13 +217,33 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
     if (response.statusCode == 201) {
       final CheckPointDetailsModal responseModel =
           checkPointDetailsModalFromJson(response.body);
-      checkpointTask = responseModel.data!.checkPointTask!;
+      checkpointTask = responseModel.data!.checkPointTask ?? [];
+      propertyImageBaseUrlData = responseModel.propertyImageBaseUrl ?? '';
+      property = responseModel.data!.property ?? Property();
       // checkpointData = responseModel.data!;
       return responseModel;
     } else {
-      return CheckPointDetailsModal(
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return CheckPointDetailsModal(
         status: response.statusCode,
       );
+      }
+      
     }
   }
 
@@ -219,14 +261,11 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
         checkPointQr.checkpointDetails!.checkpointId.toString();
     String checkPointName =
         checkPointQr.checkpointDetails!.checkpointName.toString();
-    // String? jsonString = widget.checkPointqrData;
-    // Map<String, dynamic> jsonData = jsonDecode(jsonString!);
-    // int checkpointId = jsonData['checkpoint_details']['checkpoint_id'];
-    // String checkPointName = jsonData['checkpoint_details']['checkpoint_name'];
-    // print('CheckPoint ID: ${checkpointId}');
+    var jsonResponse = json.decode(widget.checkPointqrData!.toString());
     var cubit = context.watch<ReportTypeCubit>().state;
     print(cubit.isparkingReport);
-    return widget.checkPointId != checkpointId.toString()
+    return widget.checkPointId != checkpointId.toString() ||
+            jsonResponse.containsKey("checkpoint_details") == false
         ? Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -243,12 +282,31 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                 SizedBox(
                   height: 30,
                 ),
-                CustomButtonWidget(
-                  buttonTitle: 'back To Checkpoints',
-                  onBtnPress: () {
-                    screenNavigator(context, CheckPointScreen());
+                InkWell(
+                  onTap: () {
+                    screenReplaceNavigator(
+                            context,
+                            CheckPointScanningScreen(
+                                propId: widget.propId,
+                                shiftId: widget.shiftId,
+                                checkpointlistIndex: widget.checkpointListIndex,
+                                checkpointId: widget.checkPointId,
+                                checkpointHistoryId:
+                                    widget.checkpointHistoryId));
+                    // Navigator.pop(context);
                   },
+                  child: Text(
+                    'Re-scan',
+                    style:
+                        AppFontStyle.boldTextStyle(AppColors.primaryColor, 17),
+                  ),
                 ),
+                // CustomButtonWidget(
+                //   buttonTitle: 'back To Checkpoints',
+                //   onBtnPress: () {
+                //     screenNavigator(context, CheckPointScreen());
+                //   },
+                // ),
               ],
             ),
           )
@@ -262,7 +320,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
               backgroundColor: white,
               body: SingleChildScrollView(
                   child: FutureBuilder(
-                      future: getCheckpointsTaskList(checkpointId),
+                      future: checkpointDetailsDataFetched,
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
@@ -271,196 +329,189 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                                   width: 60,
                                   child: CircularProgressIndicator()));
                         } else {
-                          return Column(
-                            children: [
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: PropertyImagesPreviewWidget(
-                                    avatars: snapshot
-                                        .data!.data!.property!.propertyAvatars,
-                                    propertyImageBaseUrl:
-                                        snapshot.data!.propertyImageBaseUrl,
-                                  )),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Tasks',
-                                      style: TextStyle(
-                                          fontSize: 17, color: primaryColor),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    checkpointTask.length != 0
-                                        ? Container(
-                                            child: TasksListWidget(
-                                              checkPointTask: checkpointTask,
-                                              // checkPointIdList:(checkPointStatus) {
-                                              //   checkIdList = checkPointStatus;
-                                              // },
-                                            ),
-                                          )
-                                        : Container(
-                                            child: Text(
-                                              'No Tasks Assigned',
-                                              style: TextStyle(
-                                                  fontSize: 10, color: black),
-                                            ),
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: PropertyImagesPreviewWidget(
+                                  avatars: property!.propertyAvatars,
+                                  propertyImageBaseUrl:
+                                      propertyImageBaseUrlData,
+                                )),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tasks',
+                                    style: TextStyle(
+                                        fontSize: 17, color: primaryColor),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  checkpointTask.length != 0
+                                      ? Container(
+                                          child: TasksListWidget(
+                                            checkPointTask: checkpointTask,
+                                            // checkPointIdList:(checkPointStatus) {
+                                            //   checkIdList = checkPointStatus;
+                                            // },
                                           ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
+                                        )
+                                      : Container(
+                                          child: Text(
+                                            'No Tasks Assigned',
+                                            style: TextStyle(
+                                                fontSize: 10, color: black),
+                                          ),
+                                        ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Additional comments',
+                                        style: TextStyle(
+                                            fontSize: 17, color: primaryColor),
+                                      ),
+                                      Text(
+                                        '(Optional)',
+                                        style: TextStyle(
+                                            fontSize: 10, color: primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 25),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Additional comments',
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              color: primaryColor),
+                                          '',
+                                          style: CustomTheme
+                                              .textField_Headertext_Style,
+                                          textScaleFactor: 1.0,
                                         ),
-                                        Text(
-                                          '(Optional)',
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              color: primaryColor),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFormField(
+                                          // initialValue: snapshot
+                                          //     .data!.data!.taskRemarks
+                                          //     .toString(),
+                                          controller:
+                                              additionalCommentsController,
+                                          maxLines: 5,
+                                          decoration:
+                                              CustomTheme.textfieldDecoration(
+                                                  'Something here',
+                                                  false,
+                                                  false),
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 25),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '',
-                                            style: CustomTheme
-                                                .textField_Headertext_Style,
-                                            textScaleFactor: 1.0,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                         
-                                          TextFormField(
-                                            // initialValue: snapshot
-                                            //     .data!.data!.taskRemarks
-                                            //     .toString(),
-                                            controller:
-                                                additionalCommentsController,
-                                            maxLines: 5,
-                                            decoration:
-                                                CustomTheme.textfieldDecoration(
-                                                    'Something here',
-                                                    false,
-                                                    false),
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  // CustomTextField(
+                                  //   controller: additionalCommentsController,
+                                  //   textfieldTitle: '',
+                                  //   hintText: 'Something here',
+                                  //   isFilled: false,
+                                  //   maxLines: 5,
+                                  // ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  imageFileList!.isNotEmpty
+                                      ? Text(
+                                          'Media',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: primaryColor),
+                                        )
+                                      : Container(),
+                                  imageFileList!.isNotEmpty
+                                      ? SizedBox(
+                                          height: 110 *
+                                              imageFileList!.length.toDouble(),
+                                          child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemCount: imageFileList!.length,
+                                              itemBuilder: (context, index) {
+                                                return MediaUploadingWidget(
+                                                    imageFileList:
+                                                        imageFileList!,
+                                                    imageNames: imageNames,
+                                                    clickClose: () {
+                                                      setState(() {
+                                                        imageFileList!
+                                                            .removeAt(index);
+                                                      });
+                                                    },
+                                                    index: index);
+                                              }),
+                                        )
+                                      : Container(),
+                                  Text(
+                                    'Add Media',
+                                    style: TextStyle(
+                                        fontSize: 17, color: primaryColor),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      //showing bottom model sheet to upload image
+                                      showModalBottomSheet(
+                                          context: context,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          builder: (context) {
+                                            return CustomBottomModelSheet(
+                                              cameraClick: () {
+                                                pickCameraImage();
+                                              },
+                                              galleryClick: () {
+                                                pickGalleryImage();
+                                              },
+                                            );
+                                          });
+                                    },
+                                    child: DottedChooseFileWidget(
+                                      title: 'Choose a file',
+                                      height: 50,
                                     ),
-                                    // CustomTextField(
-                                    //   controller: additionalCommentsController,
-                                    //   textfieldTitle: '',
-                                    //   hintText: 'Something here',
-                                    //   isFilled: false,
-                                    //   maxLines: 5,
-                                    // ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    imageFileList!.isNotEmpty
-                                        ? Text(
-                                            'Media',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: primaryColor),
-                                          )
-                                        : Container(),
-                                    imageFileList!.isNotEmpty
-                                        ? SizedBox(
-                                            height: 110 *
-                                                imageFileList!.length
-                                                    .toDouble(),
-                                            child: ListView.builder(
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                itemCount:
-                                                    imageFileList!.length,
-                                                itemBuilder: (context, index) {
-                                                  return MediaUploadingWidget(
-                                                      imageFileList:
-                                                          imageFileList!,
-                                                      imageNames: imageNames,
-                                                      clickClose: () {
-                                                        setState(() {
-                                                          imageFileList!
-                                                              .removeAt(index);
-                                                        });
-                                                      },
-                                                      index: index);
-                                                }),
-                                          )
-                                        : Container(),
-                                    Text(
-                                      'Add Media',
-                                      style: TextStyle(
-                                          fontSize: 17, color: primaryColor),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        //showing bottom model sheet to upload image
-                                        showModalBottomSheet(
-                                            context: context,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            builder: (context) {
-                                              return CustomBottomModelSheet(
-                                                cameraClick: () {
-                                                  pickCameraImage();
-                                                },
-                                                galleryClick: () {
-                                                  pickGalleryImage();
-                                                },
-                                              );
-                                            });
-                                      },
-                                      child: DottedChooseFileWidget(
-                                        title: 'Choose a file',
-                                        height: 50,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                ],
                               ),
-                              CustomButtonWidget(
-                                  buttonTitle: 'Send',
-                                  onBtnPress: () {
-                                    uploadImage(checkpointId,
-                                        checkpointTask.map((e) => e.id));
-                                  }),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          );
+                            ),
+                            CustomButtonWidget(
+                                buttonTitle: 'Send',
+                                onBtnPress: () {
+                                  uploadImage(checkpointId,
+                                      checkpointTask.map((e) => e.id));
+                                }),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                          ],
+                        );
                         }
                       })),
             ),

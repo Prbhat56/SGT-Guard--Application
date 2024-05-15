@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,19 +8,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/property_details_screen/cubit/showmore/showmore_cubit.dart';
+import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/job_details_widget.dart';
 import 'package:sgt/presentation/property_details_screen/widgets/map_card_widget.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timesheet_details_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/your_report_screen.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/colors.dart';
 import 'package:sgt/theme/font_style.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+import '../../authentication_screen/sign_in_screen.dart';
 
 class TimeSheetDetailsWidget extends StatefulWidget {
   String propId = '';
@@ -56,7 +63,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
   //   }
   // }
 
-   Future<TimeSheetDetailsModel> getTimeSheetList() async {
+   Future getTimeSheetList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -75,7 +82,25 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
       imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
       return responseModel;
     } else {
-      return TimeSheetDetailsModel();
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return TimeSheetDetailsModel();
+      }
+      
     }
   }
 
@@ -144,7 +169,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              left: 15.w,
+                              left: 8.w,
                               top: 40.h,
                             ),
                             child: Column(
@@ -157,7 +182,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                                     widget.propName,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
+                                    softWrap: true,
                                     style: 
                                     TextStyle(
                                         fontSize: 14.sp,
@@ -220,7 +245,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                         TextFieldHeaderWidget(
                             title: detailsData.shifts!.isEmpty
                                 ? ''
-                                : detailsData.shifts!.first.clockIn.toString())
+                                : detailsData.shifts!.first.actualClockin.toString())
                       ],
                     ),
                   ),
@@ -234,7 +259,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                         TextFieldHeaderWidget(
                             title: detailsData.shifts!.isEmpty
                                 ? ''
-                                : detailsData.shifts!.first.clockOut.toString())
+                                : detailsData.shifts!.first.actualClockOut.toString())
                       ],
                     ),
                   ),
@@ -244,7 +269,11 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        screenNavigator(context, YourReportScreen());
+                        screenNavigator(context, YourReportScreen(
+                          property_id:detailsData.id.toString(),
+                          shift_id:detailsData.shifts!.first.id.toString(),
+                          shift_date:detailsData.shifts!.first.date,
+                        ));
                       },
                       child: Container(
                         padding:

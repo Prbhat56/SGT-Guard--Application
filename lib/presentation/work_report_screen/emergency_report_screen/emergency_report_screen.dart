@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,8 @@ import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/assigned_propertieslist_modal.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/today_active_model.dart';
 import 'package:sgt/presentation/widgets/custom_textfield_report_widget.dart';
@@ -17,6 +20,7 @@ import 'package:sgt/presentation/work_report_screen/cubit/addImage/add_image_cub
 import 'package:sgt/presentation/work_report_screen/widget/report_submit_success.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/propertieslist_picker.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/task_picker.dart';
+import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -278,10 +282,27 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
           }));
       // screenNavigator(context, ReportSubmitSuccess());
     } else {
-      setState(() {
-        Navigator.of(context).pop();
-      });
-      print('Failed');
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        setState(() {
+          Navigator.of(context).pop();
+        });
+        print('Failed');
+      }
     }
   }
 
@@ -297,7 +318,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     item2.addAll({0: newWitnessMethod(context, 0)});
   }
 
-  Future<AssignedPropertiesListModal> getTasks() async {
+  Future getTasks() async {
     try {
       EasyLoading.show();
       String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
@@ -315,9 +336,26 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
         EasyLoading.dismiss();
         return responseModel;
       } else {
-        EasyLoading.dismiss();
-        return AssignedPropertiesListModal(
-            data: [], propertyImageBaseUrl: '', status: response.statusCode);
+        if (response.statusCode == 401) {
+          print("--------------------------------Unauthorized");
+          var apiService = ApiCallMethodsService();
+          apiService.updateUserDetails('');
+          var commonService = CommonService();
+          FirebaseHelper.signOut();
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('welcome', '1');
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => SignInScreen()),
+            (route) => false,
+          );
+        } else {
+          EasyLoading.dismiss();
+          return AssignedPropertiesListModal(
+              data: [], propertyImageBaseUrl: '', status: response.statusCode);
+        }
       }
     } catch (e) {
       EasyLoading.dismiss();
@@ -416,8 +454,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                         controller: _propertyNameController,
                         readOnly: true,
                         decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.only(top: 10.h, bottom: 0, left: 10.w),
+                            contentPadding: EdgeInsets.only(
+                                top: 10.h, bottom: 0, left: 10.w),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.r),
                                 borderSide:
@@ -553,8 +591,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 10.h),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 5.h),
                         decoration: BoxDecoration(
                             color: CustomTheme.primaryColor,
                             borderRadius: BorderRadius.circular(15.r)),
@@ -605,8 +643,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 10.h),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 5.h),
                         decoration: BoxDecoration(
                             color: CustomTheme.primaryColor,
                             borderRadius: BorderRadius.circular(15)),
@@ -702,7 +740,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 RichText(
                     text: TextSpan(
                         text: 'Upload Record Sample',
-                        style: CustomTheme.blueTextStyle(17.sp, FontWeight.w500),
+                        style:
+                            CustomTheme.blueTextStyle(17.sp, FontWeight.w500),
                         children: [
                       TextSpan(
                           text: ' *',
@@ -754,8 +793,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                     CommonService()
                         .openSnackBar('Please Select Property', context);
                   } else if (_titleController.text.isEmpty) {
-                    CommonService()
-                        .openSnackBar('Please enter title', context);
+                    CommonService().openSnackBar('Please enter title', context);
                   } else if (_actionController.text.isEmpty) {
                     CommonService()
                         .openSnackBar('Please enter action taken', context);

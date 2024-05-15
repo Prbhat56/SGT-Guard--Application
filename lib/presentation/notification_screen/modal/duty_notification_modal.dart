@@ -30,7 +30,7 @@ class DutyNotification {
 
 class Response {
     int? currentPage;
-    List<Datum>? data;
+    List<DutyDatum>? data;
     String? firstPageUrl;
     int? from;
     int? lastPage;
@@ -61,7 +61,7 @@ class Response {
 
     factory Response.fromJson(Map<String, dynamic> json) => Response(
         currentPage: json["current_page"],
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: json["data"] == null ? [] : List<DutyDatum>.from(json["data"]!.map((x) => DutyDatum.fromJson(x))),
         firstPageUrl: json["first_page_url"],
         from: json["from"],
         lastPage: json["last_page"],
@@ -92,7 +92,7 @@ class Response {
     };
 }
 
-class Datum {
+class DutyDatum {
     int? id;
     int? userId;
     String? notificationFor;
@@ -105,7 +105,7 @@ class Datum {
     String? notificationDate;
     String? userAvtar;
 
-    Datum({
+    DutyDatum({
         this.id,
         this.userId,
         this.notificationFor,
@@ -119,7 +119,7 @@ class Datum {
         this.userAvtar,
     });
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory DutyDatum.fromJson(Map<String, dynamic> json) => DutyDatum(
         id: json["id"],
         userId: json["user_id"],
         notificationFor: json["notification_for"],

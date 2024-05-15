@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,9 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
@@ -33,8 +38,15 @@ class TimeLineDetailsWidget extends StatefulWidget {
 List<Checkpoint> checkpointList = [];
 String? propId;
 String? shiftId;
+var checkpointAllListFetched;
 
 class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
+  @override
+  void initState() {
+    super.initState();
+    checkpointAllListFetched = getCheckpointsList();
+  }
+
   Future<CheckPointPropertyShiftWise> getCheckpointsList() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,12 +71,12 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
         var jsonData = {
           "checkpointStatus": squares.toList()
         }; // assuming this is your full data
-        print(
-            "------------------??????? >>>>>>>>>>>>>>>>${jsonData["checkpointStatus"].toString()}");
-        print(
-            "----------------####### >>>>>> ${jsonData["checkpointStatus"]!.every((item) => item == "Visited")}");
-        print(
-            "----------------@@@@@@@@@@ >>>>>> ${jsonData["checkpointStatus"]!.indexWhere((element) => element == "Upcoming" || element == "Missed")}");
+        // print(
+        //     "------------------??????? >>>>>>>>>>>>>>>>${jsonData["checkpointStatus"].toString()}");
+        // print(
+        //     "----------------####### >>>>>> ${jsonData["checkpointStatus"]!.every((item) => item == "Visited")}");
+        // print(
+        //     "----------------@@@@@@@@@@ >>>>>> ${jsonData["checkpointStatus"]!.indexWhere((element) => element == "Upcoming" || element == "Missed")}");
         bool everyCheckpointIsSame =
             jsonData["checkpointStatus"]!.every((item) => item == "Visited");
         everyCheckpointIsSame == true
@@ -73,9 +85,26 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
         propId = responseModel.property!.id.toString();
         return responseModel;
       } else {
-        return CheckPointPropertyShiftWise(
-          status: response.statusCode,
-        );
+        if (response.statusCode == 401) {
+          print("--------------------------------Unauthorized");
+          var apiService = ApiCallMethodsService();
+          apiService.updateUserDetails('');
+          var commonService = CommonService();
+          FirebaseHelper.signOut();
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('welcome', '1');
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => SignInScreen()),
+            (route) => false,
+          );
+        } else {
+          return CheckPointPropertyShiftWise(
+            status: response.statusCode,
+          );
+        }
       }
     } catch (e) {
       print("========error======> ${e.toString()}");
@@ -89,8 +118,8 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 14.0),
-      child: FutureBuilder(
-          future: getCheckpointsList(),
+      child: FutureBuilder<CheckPointPropertyShiftWise>(
+          future: checkpointAllListFetched,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(

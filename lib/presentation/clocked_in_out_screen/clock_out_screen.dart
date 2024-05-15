@@ -1,16 +1,21 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_out_modal.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/widget/clock_out_total_time_widget.dart';
 import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/presentation/property_details_screen/model/shift_details_modal.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,38 +34,70 @@ class ClockOutScreen extends StatefulWidget {
   State<ClockOutScreen> createState() => _ClockOutScreenState();
 }
 
-Future<ClockOutModal> getClockOutData(shift_id) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  Map<String, String> myHeader = <String, String>{
-    "Authorization": "Bearer ${prefs.getString('token')}",
-  };
-  Map<String, dynamic> myJsonBody = {'shift_id': shift_id.toString()};
-  String apiUrl = baseUrl + apiRoutes['clockOut']!;
-  final response =
-      await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
-  if (response.statusCode == 200) {
-    prefs.remove('isTimer');
-    prefs.remove('shiftId');
-    prefs.remove('propertyId');
-    prefs.remove('Cp');
-    prefs.remove('routeId');
-    final ClockOutModal responseModel = clockOutModalFromJson(response.body);
-    return responseModel;
-  } else {
-    if (response.statusCode == 400) {
-      final ClockOutModal responseModel = clockOutModalFromJson(response.body);
-      return responseModel;
-    } else {
-      final ClockOutModal responseModel = clockOutModalFromJson(response.body);
-      return responseModel;
-    }
-  }
-}
-
 final imageUrl =
     'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
+// var clockOutFetchedData;
+
 class _ClockOutScreenState extends State<ClockOutScreen> {
+  @override
+  void initState() {
+    print("${widget.clockOutQrData}");
+    super.initState();
+    final ShiftDetailsModal shiftDetails =
+        shiftDetailsModalFromJson(widget.clockOutQrData.toString());
+    String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
+    getClockOutData(
+        shiftDetails.shiftDetails!.clockOut != null ? shiftId : '');
+  }
+
+  Future getClockOutData(shift_id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, String> myHeader = <String, String>{
+      "Authorization": "Bearer ${prefs.getString('token')}",
+    };
+    Map<String, dynamic> myJsonBody = {'shift_id': shift_id.toString()};
+    String apiUrl = baseUrl + apiRoutes['clockOut']!;
+    final response =
+        await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
+    if (response.statusCode == 200) {
+      prefs.remove('isTimer');
+      prefs.remove('shiftId');
+      prefs.remove('propertyId');
+      prefs.remove('Cp');
+      prefs.remove('routeId');
+      context.read<TimerOnCubit>().turnOffTimer();
+      final ClockOutModal responseModel = clockOutModalFromJson(response.body);
+      return responseModel;
+    } else {
+      if (response.statusCode == 400) {
+        final ClockOutModal responseModel =
+            clockOutModalFromJson(response.body);
+        return responseModel;
+      } else {
+        if (response.statusCode == 401) {
+          var apiService = ApiCallMethodsService();
+          apiService.updateUserDetails('');
+          var commonService = CommonService();
+          FirebaseHelper.signOut();
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('welcome', '1');
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => SignInScreen()),
+            (route) => false,
+          );
+        } else {
+          final ClockOutModal responseModel =
+              clockOutModalFromJson(response.body);
+          return responseModel;
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<TimerOnCubit>().state.istimerOn

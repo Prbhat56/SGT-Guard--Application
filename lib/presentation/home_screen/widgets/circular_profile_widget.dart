@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/all_team_member/all_team_member_screen.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import 'package:sgt/presentation/home_screen/model/GuardHome.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
@@ -29,7 +33,7 @@ class CircularProfile extends StatefulWidget {
 class _CircularProfileState extends State<CircularProfile> {
   late List<ChatUsers> userList = [];
 
-  Future<GuardHome> getPropertyGuardListAPI() async {
+  Future getPropertyGuardListAPI() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -40,7 +44,24 @@ class _CircularProfileState extends State<CircularProfile> {
     if (response.statusCode == 200) {
       return GuardHome.fromJson(data);
     } else {
-      return GuardHome.fromJson(data);
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return GuardHome.fromJson(data);
+      }
     }
   }
 

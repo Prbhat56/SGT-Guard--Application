@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/notification_screen/modal/general_notification_modal.dart';
 import 'package:sgt/presentation/notification_screen/widgets/notification_model.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -16,15 +23,16 @@ class GeneralTab extends StatefulWidget {
 }
 
 List<Datum> messageList = [];
+var generalNotificationDataFetched;
 
 class _GeneralTabState extends State<GeneralTab> {
   @override
   void initState() {
     super.initState();
-    generalNotificationsList();
+   generalNotificationDataFetched = generalNotificationsList();
   }
 
-  Future<GeneralNotification> generalNotificationsList() async {
+  Future generalNotificationsList() async {
     // print("****************************************");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
@@ -40,35 +48,54 @@ class _GeneralTabState extends State<GeneralTab> {
     if (response.statusCode == 200) {
       final GeneralNotification responseModel =
           generalNotificationFromJson(response.body);
+          messageList = responseModel.response!.data ?? [];
       return responseModel;
     } else {
-      return GeneralNotification();
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return GeneralNotification();
+      }
+      
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: generalNotificationsList(),
+        future: generalNotificationDataFetched,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
+          // if (!snapshot.hasData) {
+          //   return SizedBox(
+          //     height: MediaQuery.of(context).size.height / 1.3,
+          //     child: Center(
+          //       child: CircularProgressIndicator(),
+          //     ),
+          //   );
+          // } else {
                   return ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      itemCount: snapshot.data!.response!.data!.length,
+                      itemCount: messageList.length,
                       itemBuilder: (context, index) {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListTile(
                               title: Text(
-                                  snapshot.data!.response!.data![index].message.toString()),
+                                  messageList[index].message.toString()),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Row(
@@ -81,7 +108,7 @@ class _GeneralTabState extends State<GeneralTab> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Text(snapshot.data!.response!.data![index].notificationTime.toString()+' '+'(${snapshot.data!.response!.data![index].notificationDate.toString()})'),
+                                    Text(messageList[index].notificationTime.toString()+' '+'(${messageList[index].notificationDate.toString()})'),
                                   //   Text(
                                   // snapshot.data!.response!.data![index].notificationTime.toString()),
                                   ],
@@ -91,7 +118,7 @@ class _GeneralTabState extends State<GeneralTab> {
                                 radius: 30,
                                 backgroundColor: grey,
                                 backgroundImage: NetworkImage(
-                                  snapshot.data!.response!.data![index].userAvtar.toString()
+                                  messageList[index].userAvtar.toString()
                                 ),
                               ),
                             ),
@@ -101,7 +128,7 @@ class _GeneralTabState extends State<GeneralTab> {
                           ],
                         );
                       });
-                }});
+                  });
           }
         }
 //   }

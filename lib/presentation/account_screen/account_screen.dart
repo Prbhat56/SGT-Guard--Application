@@ -1,8 +1,12 @@
-import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/settings_screen/settings_screen.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,15 +14,51 @@ import '../../utils/const.dart';
 import '../widgets/custom_underline_textfield_widget.dart';
 import 'package:http/http.dart' as http;
 
+abstract class MyState<T extends StatefulWidget> extends State {
+  @override
+  void initState() {
+    super.initState();
+    // var apiService = ApiCallMethodsService();
+    // apiService.updateUserDetails('');
+    // var commonService = CommonService();
+    // FirebaseHelper.signOut();
+    // FirebaseHelper.auth = FirebaseAuth.instance;
+    // commonService.logDataClear();
+    // commonService.clearLocalStorage();
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(builder: (context) => SignInScreen()),
+    //   (route) => false,
+    // );
+  }
+}
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
-  Future<GuardDetails> getGuardDetailsAPI() async {
+var AccountDetailsFetched;
+String? imageBaseUrl;
+UserDetails userDetails = UserDetails();
+
+class _AccountScreenState extends MyState<AccountScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    // LocationDependencyInjection.init();
+    AccountDetailsFetched = getGuardDetailsAPI();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    AccountDetailsFetched;
+    super.dispose();
+  }
+
+  Future getGuardDetailsAPI() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -26,12 +66,32 @@ class _AccountScreenState extends State<AccountScreen> {
 
     String apiUrl = baseUrl + apiRoutes['userDetails']!;
     final response = await http.get(Uri.parse(apiUrl), headers: myHeader);
-    var data = jsonDecode(response.body.toString());
-
+    // var data = jsonDecode(response.body.toString());
+    // if (response.statusCode == 200) {
+    //   return GuardDetails.fromJson(data);
     if (response.statusCode == 200) {
-      return GuardDetails.fromJson(data);
+      print("new call =====>");
+      final GuardDetails responseModel = guardDetailsFromJson(response.body);
+      imageBaseUrl = responseModel.imageBaseUrl;
+      userDetails = responseModel.userDetails ?? UserDetails();
+      return responseModel;
     } else {
-      throw Exception('Failed to load guard');
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to load guard');
+      }
     }
   }
 
@@ -80,8 +140,8 @@ class _AccountScreenState extends State<AccountScreen> {
           child: SingleChildScrollView(
             child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: FutureBuilder<GuardDetails>(
-                    future: getGuardDetailsAPI(),
+                child: FutureBuilder(
+                    future: AccountDetailsFetched,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return SizedBox(
@@ -102,11 +162,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(70),
                                   child: CachedNetworkImage(
-                                      imageUrl: (snapshot.data!.imageBaseUrl
-                                              .toString() +
+                                      imageUrl: (imageBaseUrl.toString() +
                                           '' +
-                                          snapshot.data!.userDetails!.avatar
-                                              .toString()),
+                                          userDetails.avatar.toString()),
                                       fit: BoxFit.fill,
                                       width: 140,
                                       height: 140,
@@ -145,11 +203,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'First Name',
-                              hintText:
-                                  (snapshot.data!.userDetails!.firstName == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.firstName
-                                          .toString()),
+                              hintText: (userDetails.firstName == null
+                                  ? ''
+                                  : userDetails.firstName.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -158,11 +214,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Last Name',
-                              hintText:
-                                  (snapshot.data!.userDetails!.lastName == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.lastName
-                                          .toString()),
+                              hintText: (userDetails.lastName == null
+                                  ? ''
+                                  : userDetails.lastName.toString()),
                               // snapshot.data!.userDetails!.lastName.toString(),
                               readonly: true,
                             ),
@@ -172,8 +226,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Email',
-                              hintText: snapshot.data!.userDetails!.emailAddress
-                                  .toString(),
+                              hintText: userDetails.emailAddress.toString(),
                               readonly: true,
                             ),
                             // const SizedBox(
@@ -191,18 +244,13 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Phone',
-                              hintText: (snapshot
-                                              .data!.userDetails!.contactCode ==
-                                          null
+                              hintText: (userDetails.contactCode == null
                                       ? ''
-                                      : "${snapshot.data!.userDetails!.contactCode.toString()}") +
+                                      : "${userDetails.contactCode.toString()}") +
                                   ' ' +
-                                  (snapshot.data!.userDetails!.contactNumber ==
-                                          null
+                                  (userDetails.contactNumber == null
                                       ? ''
-                                      : snapshot
-                                          .data!.userDetails!.contactNumber
-                                          .toString()),
+                                      : userDetails.contactNumber.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -211,11 +259,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Gender',
-                              hintText:
-                                  (snapshot.data!.userDetails!.gender == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.gender
-                                          .toString()),
+                              hintText: (userDetails.gender == null
+                                  ? ''
+                                  : userDetails.gender.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -224,13 +270,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Date Of Birth',
-                              hintText:
-                                  (snapshot.data!.userDetails!.dateOfBirth ==
-                                          null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.dateOfBirth!
-                                          .toString()
-                                          .substring(0, 10)),
+                              hintText: (userDetails.dateOfBirth == null
+                                  ? ''
+                                  : userDetails.dateOfBirth!
+                                      .toString()
+                                      .substring(0, 10)),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -239,11 +283,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Guard Position',
-                              hintText: (snapshot
-                                          .data!.userDetails!.guardPosition ==
-                                      null
+                              hintText: (userDetails.guardPosition == null
                                   ? ''
-                                  : snapshot.data!.userDetails!.guardPosition
+                                  : userDetails.guardPosition
                                       .toString()
                                       .capitalized()),
                               readonly: true,
@@ -271,11 +313,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Street',
-                              hintText:
-                                  (snapshot.data!.userDetails!.street == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.street
-                                          .toString()),
+                              hintText: (userDetails.street == null
+                                  ? ''
+                                  : userDetails.street.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -284,11 +324,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'City',
-                              hintText:
-                                  (snapshot.data!.userDetails!.cityText == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.cityText
-                                          .toString()),
+                              hintText: (userDetails.cityText == null
+                                  ? ''
+                                  : userDetails.cityText.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -297,11 +335,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'State',
-                              hintText:
-                                  (snapshot.data!.userDetails!.stateText == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.stateText
-                                          .toString()),
+                              hintText: (userDetails.stateText == null
+                                  ? ''
+                                  : userDetails.stateText.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -310,12 +346,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Country',
-                              hintText:
-                                  (snapshot.data!.userDetails!.countryText ==
-                                          null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.countryText
-                                          .toString()),
+                              hintText: (userDetails.countryText == null
+                                  ? ''
+                                  : userDetails.countryText.toString()),
                               readonly: true,
                             ),
                             const SizedBox(
@@ -324,11 +357,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
                               textfieldTitle: 'Zipcode',
-                              hintText:
-                                  snapshot.data!.userDetails!.zipCode == null
-                                      ? ''
-                                      : snapshot.data!.userDetails!.zipCode
-                                          .toString(),
+                              hintText: userDetails.zipCode == null
+                                  ? ''
+                                  : userDetails.zipCode.toString(),
                               readonly: true,
                             ),
                             SizedBox(
@@ -376,16 +407,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                         border: Border.all(color: Colors.grey)),
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: snapshot.data!.userDetails!
-                                                    .frontSideIdCard !=
+                                        child: userDetails.frontSideIdCard !=
                                                 null
                                             ? CachedNetworkImage(
-                                                imageUrl: (snapshot
-                                                        .data!.imageBaseUrl
+                                                imageUrl: (imageBaseUrl
                                                         .toString() +
                                                     '' +
-                                                    snapshot.data!.userDetails!
-                                                        .frontSideIdCard
+                                                    userDetails.frontSideIdCard
                                                         .toString()),
                                                 fit: BoxFit.fill,
                                                 placeholder: (context, url) =>
@@ -434,16 +462,13 @@ class _AccountScreenState extends State<AccountScreen> {
                                         border: Border.all(color: Colors.grey)),
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: snapshot.data!.userDetails!
-                                                    .backSideIdCard !=
+                                        child: userDetails.backSideIdCard !=
                                                 null
                                             ? CachedNetworkImage(
-                                                imageUrl: snapshot
-                                                        .data!.imageBaseUrl
+                                                imageUrl: imageBaseUrl
                                                         .toString() +
                                                     '' +
-                                                    snapshot.data!.userDetails!
-                                                        .backSideIdCard
+                                                    userDetails.backSideIdCard
                                                         .toString(),
                                                 fit: BoxFit.fill,
                                                 placeholder: (context, url) =>
@@ -474,7 +499,9 @@ class _AccountScreenState extends State<AccountScreen> {
                           ],
                         );
                       }
-                    })),
+                    }
+                    // }
+                    )),
           ),
         ));
   }

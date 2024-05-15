@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sgt/helper/navigator_function.dart';
@@ -82,7 +84,7 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
     // connectToSocket();
 
     LocationManager().interval = 10;
-    LocationManager().distanceFilter = 0;
+    LocationManager().distanceFilter = 5;
     LocationManager().notificationTitle = 'CARP Location Example';
     LocationManager().notificationMsg = 'CARP is tracking your location';
 
@@ -92,10 +94,10 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
   }
 
   @override
-void dispose() {
-  timer!.cancel();
-  super.dispose();
-}
+  void dispose() {
+    timer!.cancel();
+    super.dispose();
+  }
 
   void startBackgroundLocation() async {
     if (!await isLocationAlwaysGranted()) {
@@ -172,15 +174,11 @@ void dispose() {
     // setState(() {});
   }
 
-
   late int countdownSeconds; //total timer limit in seconds
   late CountdownTimer countdownTimer;
   bool isTimerRunning = false;
-  
-  
 
-  void initTimerOperation( int countdownseconds) async{
-    
+  void initTimerOperation(int countdownseconds) async {
     //timer callbacks
     countdownSeconds = countdownseconds;
     countdownTimer = CountdownTimer(
@@ -194,14 +192,15 @@ void dispose() {
       },
       onFinished: () {
         stopTimer();
+        locationSubscription?.cancel();
+        LocationManager().stop();
+        _status = LocationStatus.STOPPED;
         // Handle countdown finished
       },
     );
 
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     print("countdownSeconds -----------------${countdownSeconds}" );
-     countdownSeconds == 0 && countdownSeconds == "0" ? prefs.setString('isTimer', '0') : '';
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    countdownSeconds == 0 ? prefs.setString('isTimer', '0') : '';
     //native app life cycle
     SystemChannels.lifecycle.setMessageHandler((msg) {
       // On AppLifecycleState: paused
@@ -225,7 +224,7 @@ void dispose() {
     countdownTimer.start();
   }
 
-   void stopTimer() {
+  void stopTimer() {
     isTimerRunning = false;
     countdownTimer.stop();
   }
@@ -239,7 +238,7 @@ void dispose() {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CurveDesignWidget(
-                countdownseconds:countdownSeconds,
+                countdownseconds: countdownSeconds,
                 checkPointLength: widget.checkpoint,
                 property: widget.property,
                 propertyImageBaseUrl: widget.propertyImageBaseUrl,
@@ -251,16 +250,14 @@ void dispose() {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CheckPointTimeLineWidget(
-                      checkPointLength: widget.checkpoint),
-                  Expanded(child: TimeLineDetailsWidget(
-                    onStatusChanged: (checkPointStatus) {
-                      statusOfCheckpoints = checkPointStatus;
-                    },
-                    onCheckpointVisitedStatusChanged : (visitedIndex) {
-                      checkpointVisitedStatus = visitedIndex;
-                    }
-                    ))
+                  CheckPointTimeLineWidget(checkPointLength: widget.checkpoint),
+                  Expanded(
+                      child: TimeLineDetailsWidget(
+                          onStatusChanged: (checkPointStatus) {
+                    statusOfCheckpoints = checkPointStatus;
+                  }, onCheckpointVisitedStatusChanged: (visitedIndex) {
+                    checkpointVisitedStatus = visitedIndex;
+                  }))
                 ],
               ),
               Center(
@@ -276,7 +273,8 @@ void dispose() {
                       screenNavigator(
                           context,
                           CheckPointOutScanningScreen(
-                              checkPointsStatus: statusOfCheckpoints.toString()));
+                              checkPointsStatus:
+                                  statusOfCheckpoints.toString()));
                       // screenNavigator(context, ClockOutScreen());
                     }),
               ),

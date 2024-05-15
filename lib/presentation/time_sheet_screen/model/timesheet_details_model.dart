@@ -347,6 +347,8 @@ class Shift {
   GuardDetails? guardDetails;
   String? shiftTime;
   String? propertyName;
+  String? actualClockin;
+  String? actualClockOut;
 
   Shift(
       {this.id,
@@ -364,7 +366,9 @@ class Shift {
       this.dateText,
       this.guardDetails,
       this.shiftTime,
-      this.propertyName});
+      this.propertyName,
+      this.actualClockin,
+      this.actualClockOut,});
 
   Shift.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -385,6 +389,8 @@ class Shift {
         : null;
     shiftTime = json['shift_time'];
     propertyName = json['property_name'];
+    actualClockin = json["actual_clockin"];
+    actualClockOut = json["actual_clockOut"];
   }
 
   Map<String, dynamic> toJson() {
@@ -407,6 +413,8 @@ class Shift {
     }
     data['shift_time'] = this.shiftTime;
     data['property_name'] = this.propertyName;
+    data["actual_clockin"]= this.actualClockin;
+    data["actual_clockOut"]= this.actualClockOut;
     return data;
   }
 }

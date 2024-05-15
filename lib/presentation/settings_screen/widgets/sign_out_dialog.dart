@@ -10,6 +10,7 @@ import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
@@ -121,7 +122,7 @@ class SignOutDialog extends StatelessWidget {
   void _handlesignOut(context) {
     // Map<String, dynamic> routes = {'/login': (context) => SignInScreen()};
     var apiService = ApiCallMethodsService();
-    apiService.post(apiRoutes['logout']!, '').then((value) {
+    apiService.post(apiRoutes['logout']!, '').then((value) async{
       apiService.updateUserDetails('');
       var commonService = CommonService();
       //Map<String, dynamic> jsonMap = json.decode(value);
@@ -131,7 +132,10 @@ class SignOutDialog extends StatelessWidget {
       FirebaseHelper.auth = FirebaseAuth.instance;
       commonService.logDataClear();
       commonService.clearLocalStorage();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('welcome','1');
       // screenNavigator(context, SignInScreen());
+      
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => SignInScreen()),
         (route) => false,

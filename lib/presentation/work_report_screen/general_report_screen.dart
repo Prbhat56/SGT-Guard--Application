@@ -1,15 +1,20 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/assigned_propertieslist_modal.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/today_active_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/propertieslist_picker.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/task_picker.dart';
+import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -105,8 +110,16 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
       }
     }
 
+    print(request.files.map((e) => e.length));
+    print(request.files.map((e) => e.filename));
+
     var response = await request.send();
     print(response.stream.toString());
+
+    response.stream.transform(utf8.decoder).listen((value) {    // to print response
+          debugPrint(value);
+       });
+    print(response.statusCode);
 
     //final respStr = await response.stream.bytesToString();
     if (response.statusCode == 201) {
@@ -121,10 +134,27 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
           }));
       // screenNavigator(context, ReportSubmitSuccess());
     } else {
-      setState(() {
-        Navigator.of(context).pop();
-      });
-      print('Failed');
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        setState(() {
+          Navigator.of(context).pop();
+        });
+        print('Failed');
+      }
     }
   }
 
@@ -167,7 +197,7 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
   //   }
   // }
 
-  Future<AssignedPropertiesListModal> getTasks() async {
+  Future getTasks() async {
     try {
       EasyLoading.show();
       String apiUrl = baseUrl + apiRoutes['assignedPropertiesList']!;
@@ -185,9 +215,26 @@ class _GeneralReportScreenState extends State<GeneralReportScreen> {
         EasyLoading.dismiss();
         return responseModel;
       } else {
-        EasyLoading.dismiss();
-        return AssignedPropertiesListModal(
-            data: [], propertyImageBaseUrl: '', status: response.statusCode);
+        if (response.statusCode == 401) {
+          print("--------------------------------Unauthorized");
+          var apiService = ApiCallMethodsService();
+          apiService.updateUserDetails('');
+          var commonService = CommonService();
+          FirebaseHelper.signOut();
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('welcome', '1');
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => SignInScreen()),
+            (route) => false,
+          );
+        } else {
+          EasyLoading.dismiss();
+          return AssignedPropertiesListModal(
+              data: [], propertyImageBaseUrl: '', status: response.statusCode);
+        }
       }
     } catch (e) {
       EasyLoading.dismiss();

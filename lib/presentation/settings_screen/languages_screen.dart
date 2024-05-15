@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_textfield_widget.dart';
+import 'package:sgt/theme/colors.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import '../../utils/const.dart';
 
@@ -14,18 +15,51 @@ class LanguagesScreen extends StatefulWidget {
 }
 
 class _LanguagesScreenState extends State<LanguagesScreen> {
+  List<String> _searchedItems = [];
   List<String> languages = [
+    // 'English',
+    // 'Deutsch',
+    // 'Spanish',
+    // 'Language 4 (native)',
+    // 'Башҡортса',
+    // 'Українська',
+    // 'Yorùbá',
+    // '中文',
+    // 'Кыргызча',
+    // 'Português'
     'English',
-    'Deutsch',
     'Spanish',
-    'Language 4 (native)',
-    'Башҡортса',
-    'Українська',
-    'Yorùbá',
-    '中文',
-    'Кыргызча',
-    'Português'
+    'Hindi',
+    'Arbaic',
+    'Manderin',
+    'German',
+    'French',
+    'Italian',
+    'Urdu',
+    'Benagli',
   ];
+
+ @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _searchedItems = languages;
+    });
+  }
+
+  void filter(String searchText) {
+    List<String> results = [];
+    if(searchText.isEmpty) {
+      results = languages;
+    } else {
+       results = languages.where((element) => element.toLowerCase().contains(searchText.toLowerCase())).toList();
+    }
+
+    setState(() {
+      _searchedItems = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -48,6 +82,9 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: TextFormField(
+                onChanged: ((value) {
+                  filter(value);
+                }),
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -85,27 +122,33 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: languages.length,
+                  itemCount: _searchedItems.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: index == 0
-                            ? CustomTheme.seconderyMediumColor
-                            : white,
-                      ),
-                      child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                        title: Text(
-                          languages[index],
-                          textScaleFactor: 1.0,
-                          style:
-                              TextStyle(color: CustomTheme.black, fontSize: 13),
+                    final name = _searchedItems[index];
+                    return InkWell(
+                      onTap: () {
+                        
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: index == 0
+                              ? CustomTheme.seconderyMediumColor
+                              : white,
                         ),
-                        trailing: index == 0 ? Text('default') : Text(''),
+                        child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                          title: Text(
+                            name.toString(),
+                            textScaleFactor: 1.0,
+                            style:
+                                TextStyle(color: CustomTheme.black, fontSize: 13),
+                          ),
+                          // trailing: index == 0 ? Text('default') : Text(''),
+                        ),
                       ),
                     );
                   }),
@@ -113,7 +156,11 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child:
-                  CustomButtonWidget(buttonTitle: 'Change', onBtnPress: () {}),
+                  CustomButtonWidget(buttonTitle: 'Change', onBtnPress: (
+
+                  ) {
+                    
+                  }),
             ),
           ]),
         ),

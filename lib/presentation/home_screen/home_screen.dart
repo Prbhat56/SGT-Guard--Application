@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/home_screen/widgets/circular_profile_widget.dart';
 import 'package:sgt/presentation/jobs_screen/jobs_screen.dart';
@@ -22,8 +23,25 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+var activeToursDataFetched;
+var upcomingToursDataFetched;
 
 class _HomeScreenState extends State<HomeScreen> {
+  
+  @override void initState() {
+    // TODO: implement initState
+  activeToursDataFetched = getJobsList();
+  upcomingToursDataFetched = getUpcomingJobsList();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    activeToursDataFetched;
+    upcomingToursDataFetched;
+    super.dispose();
+  }
+
   int? totalTeams;
   String? propertyImgBaseUrl;
   List<Completed> upcomingData = [];
@@ -122,8 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 20,
               ),*/
               //LocationDetailsCard(),
-              FutureBuilder(
-                  future: getJobsList(),
+              FutureBuilder<DutyListModel>(
+                  future: activeToursDataFetched,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
@@ -194,172 +212,175 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 10,
                           ),
                           snapshot.data!.activeData!.isEmpty
-                            ? SizedBox(
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 120,
-                                        child: Image.asset(
-                                          'assets/no_active_jobs.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 12,
-                                      ),
-                                      Text(
-                                        'No active jobs',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 17,
-                                            color:
-                                                Colors.grey.withOpacity(0.6)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            :
-                          ListView.builder(
-                              itemCount: snapshot.data!.activeData!.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    screenNavigator(
-                                        context,
-                                        PropertyDetailsScreen(
-                                          propertyId: snapshot
-                                              .data!.activeData![index].id,
-                                          imageBaseUrl:
-                                              snapshot.data!.imageBaseUrl,
-                                          propertyImageBaseUrl: snapshot
-                                              .data!.propertyImageBaseUrl,
-                                          // activeData:
-                                          //     snapshot.data?.activeData![index],
-                                        ));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
+                              ? SizedBox(
+                                  child: Center(
                                     child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          height: 204,
-                                          decoration:
-                                              CustomTheme.locationCardStyle(
-                                                  snapshot.data!
-                                                      .propertyImageBaseUrl
-                                                      .toString(),
-                                                  snapshot
-                                                      .data!
-                                                      .activeData![index]
-                                                      .propertyAvatars!
-                                                      .first
-                                                      .propertyAvatar
-                                                      .toString()),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            // AppFontStyle.FlexibleText(snapshot.data!.activeData![index].propertyName.toString(),AppFontStyle.mediumTextStyle(AppColors.black,17.sp)),
-                                            Flexible(
-                                              flex: 1,
-                                              child: Text(
-                                                snapshot
-                                                    .data!
-                                                    .activeData![index]
-                                                    .propertyName
-                                                    .toString(),
-                                                // locationData[index].title,
-                                                // maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style:
-                                                    // AppFontStyle.mediumTextStyle(AppColors.black,17.sp),
-                                                    TextStyle(fontSize: 17),
-                                              ),
-                                            ),
-                                            Text(
-                                              snapshot.data!.activeData![index]
-                                                  .latestShiftTime
-                                                  .toString(),
-                                              // locationData[index].duty,
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                color: primaryColor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              Icons.location_on,
-                                              color: primaryColor,
-                                              size: 15,
-                                            ),
-                                            Text(
-                                              snapshot
-                                                  // .data!.jobs!.data![index].propertyName
-                                                  .data!
-                                                  .activeData![index]
-                                                  .propertyName
-                                                  .toString(),
-                                              // locationData[index].subtitle,
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.grey),
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15.0),
-                                          child: Text(
-                                            // locationData[index].address,
-                                            snapshot.data!.activeData![index]
-                                                .location
-                                                // snapshot.data!.jobs!.data![index].location
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 13, color: black),
+                                          width: 120,
+                                          child: Image.asset(
+                                            'assets/no_active_jobs.png',
+                                            fit: BoxFit.contain,
                                           ),
-                                        )
+                                        ),
+                                        SizedBox(
+                                          height: 12,
+                                        ),
+                                        Text(
+                                          'No active jobs',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 17,
+                                              color:
+                                                  Colors.grey.withOpacity(0.6)),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                );
-                              }),
-                          FutureBuilder(
-                              future: getUpcomingJobsList(),
+                                )
+                              : ListView.builder(
+                                  itemCount: snapshot.data!.activeData!.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        screenNavigator(
+                                            context,
+                                            PropertyDetailsScreen(
+                                              propertyId: snapshot
+                                                  .data!.activeData![index].id,
+                                              imageBaseUrl:
+                                                  snapshot.data!.imageBaseUrl,
+                                              propertyImageBaseUrl: snapshot
+                                                  .data!.propertyImageBaseUrl,
+                                              // activeData:
+                                              //     snapshot.data?.activeData![index],
+                                            ));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              height: 204,
+                                              decoration:
+                                                  CustomTheme.locationCardStyle(
+                                                      snapshot.data!
+                                                          .propertyImageBaseUrl
+                                                          .toString(),
+                                                      snapshot
+                                                          .data!
+                                                          .activeData![index]
+                                                          .propertyAvatars!
+                                                          .first
+                                                          .propertyAvatar
+                                                          .toString()),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                // AppFontStyle.FlexibleText(snapshot.data!.activeData![index].propertyName.toString(),AppFontStyle.mediumTextStyle(AppColors.black,17.sp)),
+                                                Flexible(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    snapshot
+                                                        .data!
+                                                        .activeData![index]
+                                                        .propertyName
+                                                        .toString(),
+                                                    // locationData[index].title,
+                                                    // maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        // AppFontStyle.mediumTextStyle(AppColors.black,17.sp),
+                                                        TextStyle(fontSize: 17),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  snapshot
+                                                      .data!
+                                                      .activeData![index]
+                                                      .latestShiftTime
+                                                      .toString(),
+                                                  // locationData[index].duty,
+                                                  style: TextStyle(
+                                                    fontSize: 17,
+                                                    color: primaryColor,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.location_on,
+                                                  color: primaryColor,
+                                                  size: 15,
+                                                ),
+                                                Text(
+                                                  snapshot
+                                                      // .data!.jobs!.data![index].propertyName
+                                                      .data!
+                                                      .activeData![index]
+                                                      .propertyName
+                                                      .toString(),
+                                                  // locationData[index].subtitle,
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.grey),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15.0),
+                                              child: Text(
+                                                // locationData[index].address,
+                                                snapshot.data!
+                                                    .activeData![index].location
+                                                    // snapshot.data!.jobs!.data![index].location
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 13, color: black),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                          FutureBuilder<TimeSheetModel>(
+                              future: upcomingToursDataFetched,
                               builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                      child: Container(
-                                          height: 60,
-                                          width: 60,
-                                          child: CircularProgressIndicator()));
-                                } else {
-                                  if (snapshot.data!.upcomming!.isEmpty) {
+                                // if (!snapshot.hasData) {
+                                //   return Center(
+                                //       child: Container(
+                                //           height: 60,
+                                //           width: 60,
+                                //           child: CircularProgressIndicator()));
+                                // } else {
+                                  if (upcomingData.isEmpty) {
                                     return SizedBox(
                                       child: Center(
                                         child: Column(
@@ -368,6 +389,48 @@ class _HomeScreenState extends State<HomeScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
+                                            SizedBox(
+                                              height: 16.h,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Upcoming Tours (${upcomingData.length})',
+                                                  style: CustomTheme
+                                                      .textField_Headertext_Style,
+                                                ),
+                                                //btn to see all the active jobs
+                                                InkWell(
+                                                  onTap: () {
+                                                    // screenNavigator(context, JobsScreen());
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return UpcomingThimeSheet();
+                                                    }));
+                                                    // screenNavigator(context, TimeSheetScreen());
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 10.0),
+                                                    child: upcomingData
+                                                                .length ==
+                                                            0
+                                                        ? Container()
+                                                        : Text('See all',
+                                                            style: CustomTheme
+                                                                .seeAllBtnStyle),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
                                             Container(
                                               width: 120,
                                               child: Image.asset(
@@ -436,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  snapshot.data!.upcomming!
+                                                  upcomingData
                                                           .isNotEmpty
                                                       ? Column(
                                                           mainAxisAlignment:
@@ -612,7 +675,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     );
                                   }
-                                }
+                                // }
                               })
                         ],
                       );

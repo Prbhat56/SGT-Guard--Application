@@ -22,7 +22,8 @@ class _PasswordChangeSuccessScreenState
     super.initState();
     Timer(Duration(seconds: 2), () {
       // Navigator.pop(context);
-      screenReplaceNavigator(context, SignInScreen());
+      // screenReplaceNavigator(context, SignInScreen());
+      Navigator.of(context)..pop()..pop()..pop(); // ScreenUntill also can be used here 
     });
   }
 
@@ -53,25 +54,25 @@ class _PasswordChangeSuccessScreenState
                   ),
                 ),
                 Spacer(),
-                const Center(
-                  child: Text(
-                    'You can now log-in to your SGT account',
-                    textScaleFactor: 1.0,
-                    style: TextStyle(fontSize: 13),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                CustomButtonWidget(
-                  buttonTitle: 'Back To Log In',
-                  onBtnPress: () {
-                    screenReplaceNavigator(context, SignInScreen());
-                  },
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
+                // const Center(
+                //   child: Text(
+                //     'You can now log-in to your SGT account',
+                //     textScaleFactor: 1.0,
+                //     style: TextStyle(fontSize: 13),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 8,
+                // ),
+                // CustomButtonWidget(
+                //   buttonTitle: 'Back To Log In',
+                //   onBtnPress: () {
+                //     screenReplaceNavigator(context, SignInScreen());
+                //   },
+                // ),
+                // SizedBox(
+                //   height: 30.h,
+                // ),
               ],
             ),
           ),

@@ -1,7 +1,12 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/subscreen/upcoming_tab.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/main_appbar_widget.dart';
@@ -18,7 +23,7 @@ class TimeSheetScreen extends StatefulWidget {
 List<Completed> upcomingData = [];
 List<Completed> completedData = [];
 String imgBaseUrl = '';
-
+var timeSheetDataFetched;
 class _TimeSheetScreenState extends State<TimeSheetScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
@@ -28,7 +33,7 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
     _tabController.dispose();
   }
 
-  Future<TimeSheetModel> getTimeSheetList() async {
+  Future getTimeSheetList() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Map<String, String> myHeader = <String, String>{
@@ -39,8 +44,7 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
       // var data = jsonDecode(response.body.toString());
       // print(data);
       if (response.statusCode == 200) {
-        final TimeSheetModel responseModel =
-            timeSheetModelFromJson(response.body);
+        final TimeSheetModel responseModel = timeSheetModelFromJson(response.body);
         upcomingData = responseModel.upcomming ?? [];
         print('Upcoming: $upcomingData');
         completedData = responseModel.completed ?? [];
@@ -48,11 +52,29 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
         imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
         return responseModel;
       } else {
+        if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
         return TimeSheetModel(
             upcomming: [],
             completed: [],
             status: 500,
             propertyImageBaseUrl: '');
+      }
+        
       }
     } catch (e) {
       print(e.toString());
@@ -69,6 +91,7 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
       length: 2,
       vsync: this,
     );
+   timeSheetDataFetched= getTimeSheetList();
   }
 
   @override
@@ -78,16 +101,16 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
         appBarTitle: 'TimeSheet',
       ),
       body: FutureBuilder(
-        future: getTimeSheetList(),
+        future: timeSheetDataFetched,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
+          // if (!snapshot.hasData) {
+          //   return SizedBox(
+          //     height: MediaQuery.of(context).size.height / 1.3,
+          //     child: Center(
+          //       child: CircularProgressIndicator(),
+          //     ),
+          //   );
+          // } else {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -128,7 +151,7 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
                 )
               ],
             );
-          }
+          // }
         },
       ),
     );

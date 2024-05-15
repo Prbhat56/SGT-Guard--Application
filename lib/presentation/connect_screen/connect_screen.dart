@@ -38,6 +38,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
 
       return Future.value(message);
     });
+    // LocationDependencyInjection.init();
   }
 
   @override

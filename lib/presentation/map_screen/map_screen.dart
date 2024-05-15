@@ -4,14 +4,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  LatLng currentLocation;
+  MapScreen({super.key, required this.currentLocation});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  //final Map<String, Marker> _markers = {};
+  List<Marker> _markers = <Marker>[];
   // Future<void> _onMapCreated(GoogleMapController controller) async {
   // final googleOffices = await locations.getGoogleOffices();
   // setState(() {
@@ -33,17 +34,21 @@ class _MapScreenState extends State<MapScreen> {
   Future<LatLng?> getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    // await Geolocator.getCurrentPosition(
-    //         desiredAccuracy: LocationAccuracy.high,
-    //         forceAndroidLocationManager: true)
-    // .then((Position position) {
     print(position);
     _currentPosition = LatLng(position.latitude, position.longitude);
     print(_currentPosition);
-    // });
     setState(() {
       _currentPosition;
     });
+    _markers.add(Marker(
+      markerId: MarkerId('office'),
+      position: LatLng(
+          widget.currentLocation.latitude, widget.currentLocation.longitude),
+      infoWindow: InfoWindow(
+        title: "",
+        snippet: "",
+      ),
+    ));
     return _currentPosition;
   }
 
@@ -63,15 +68,16 @@ class _MapScreenState extends State<MapScreen> {
                 child: Container(
                     height: 60, width: 60, child: CircularProgressIndicator()));
           } else {
-          return Scaffold(
+            return Scaffold(
               body: SafeArea(
                 child: GoogleMap(
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  compassEnabled: true,
+                    markers: Set<Marker>.of(_markers),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    compassEnabled: true,
                     zoomGesturesEnabled: true,
-                    initialCameraPosition: CameraPosition(target: _currentPosition!, zoom: 14)
-                        ),
+                    initialCameraPosition: CameraPosition(
+                        target: widget.currentLocation, zoom: 14)),
               ),
             );
           }

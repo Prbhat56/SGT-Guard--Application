@@ -9,8 +9,8 @@ class CurveDesignWidget extends StatefulWidget {
   Property? property;
   String? propertyImageBaseUrl;
   List<Checkpoint>? checkPointLength;
-  int? countdownseconds;
-  CurveDesignWidget({super.key, this.property, this.propertyImageBaseUrl, this.checkPointLength, this.countdownseconds});
+  int countdownseconds;
+  CurveDesignWidget({super.key, this.property, this.propertyImageBaseUrl, this.checkPointLength,required this.countdownseconds});
 
   @override
   State<CurveDesignWidget> createState() => _CurveDesignWidgetState();
