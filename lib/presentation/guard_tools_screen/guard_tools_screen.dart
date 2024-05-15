@@ -136,10 +136,10 @@ class GuardToolScreen extends StatelessWidget {
                           ),
                           Text(
                             'Active Property Map View',
-                            style: 
-                            // AppFontStyle.mediumTextStyle(
-                            //     AppColors.primaryColor, 17.sp),
-                            TextStyle(
+                            style:
+                                // AppFontStyle.mediumTextStyle(
+                                //     AppColors.primaryColor, 17.sp),
+                                TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
                             ),
@@ -173,13 +173,14 @@ class GuardToolScreen extends StatelessWidget {
                           ),
                           Text(
                             'General Report',
-                            style: 
-                            // AppFontStyle.mediumTextStyle(
-                            //     AppColors.primaryColor, 17.sp),
- TextStyle(
+                            style:
+                                // AppFontStyle.mediumTextStyle(
+                                //     AppColors.primaryColor, 17.sp),
+                                TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
-                            ),                          ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -209,8 +210,7 @@ class GuardToolScreen extends StatelessWidget {
                           ),
                           Text(
                             'Maintenance Report',
-                            style:
-                            TextStyle(
+                            style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
                             ),
@@ -246,10 +246,10 @@ class GuardToolScreen extends StatelessWidget {
                           ),
                           Text(
                             'Parking Report',
-                            style:TextStyle(
+                            style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
-                            ), 
+                            ),
                             // AppFontStyle.mediumTextStyle(
                             //     AppColors.primaryColor, 17.sp),
                           ),
@@ -282,8 +282,7 @@ class GuardToolScreen extends StatelessWidget {
                           ),
                           Text(
                             'Emergency Report',
-                            style: 
-                            TextStyle(
+                            style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
                             ),

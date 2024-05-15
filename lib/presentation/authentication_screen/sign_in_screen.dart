@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
@@ -31,6 +32,8 @@ import 'package:http/http.dart';
 import 'package:uuid/uuid.dart';
 import 'cubit/issign_in_valid/issigninvalid_cubit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+
 
 class SignInScreen extends StatefulWidget {
   String? oneSignalId;
@@ -106,7 +109,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   Center(
                     child: Text(
-                      'Welcome back',
+                      'welcome'.tr,
                       textScaleFactor: 1.0,
                       style: CustomTheme.blackTextStyle(25),
                     ),
@@ -117,7 +120,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Center(
                     child: Text(
                         textScaleFactor: 1.0,
-                        'Sign in to continue',
+                        'sign_in'.tr,
                         style: CustomTheme.greyTextStyle(17)),
                   ),
                   SizedBox(
@@ -125,8 +128,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   CustomUnderlineTextFieldWidget(
                     bottomPadding: 7,
-                    textfieldTitle: 'Email',
-                    hintText: 'Enter Email',
+                    textfieldTitle: 'email'.tr,
+                    hintText: 'enter_email'.tr,
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     autoCorrect: false,
@@ -143,8 +146,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   CustomUnderlineTextFieldWidget(
                     bottomPadding: 7,
-                    textfieldTitle: 'Password',
-                    hintText: 'Enter Password',
+                    textfieldTitle: 'password'.tr,
+                    hintText: 'enter_password'.tr,
                     controller: _passwordController,
                     autoCorrect: false,
                     obscureText: context.watch<ObscureCubit>().state.isObscure,
@@ -188,7 +191,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           screenNavigator(context, ForgotPasswordScreen());
                         },
                         child: Text(
-                          'Forgot password',
+                          'forget_password'.tr,
                           style: TextStyle(color: Colors.blue, fontSize: 12.sp),
                         ),
                       ),
@@ -202,7 +205,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               .watch<IssigninvalidCubit>()
                               .state
                               .issigninValid,
-                          buttonTitle: 'Sign In',
+                          buttonTitle: 'sign_in_text'.tr,
                           onBtnPress: () {
                             if (_emailController.text.isEmpty) {
                               // commonService.openSnackBar(
@@ -261,7 +264,7 @@ class _SignInScreenState extends State<SignInScreen> {
         'one_signal':OneSignal.User.pushSubscription.id !=null ? OneSignal.User.pushSubscription.id : _deviceId.toString(),
       };
       print(myJsonBody.toString());
-      Response response = await post(Uri.parse(apiUrl), body: myJsonBody);
+      final response = await post(Uri.parse(apiUrl), body: myJsonBody);
       var data = jsonDecode(response.body.toString());
       print(data);
 
@@ -291,6 +294,7 @@ class _SignInScreenState extends State<SignInScreen> {
           FirebaseHelper.signUp(email: email, password: password)
               .then((result) {
             if (result == null) {
+              EasyLoading.show();
               FirebaseHelper.signIn(email: email, password: password)
                   .then((result) async {
                 if (result == null) {
@@ -324,6 +328,7 @@ class _SignInScreenState extends State<SignInScreen> {
             FirebaseHelper.signUp(email: email, password: password)
                 .then((result) {
               if (result == null) {
+                EasyLoading.show();
                 FirebaseHelper.signIn(email: email, password: password)
                     .then((result) async {
                   if (result == null) {

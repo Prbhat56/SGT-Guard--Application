@@ -40,7 +40,7 @@ class MapCardWidget extends StatelessWidget {
           right: 10,
           child: InkWell(
             onTap: () {
-              screenNavigator(context, MapScreen());
+              screenNavigator(context, MapScreen(currentLocation:currentlocation));
             },
             child: Container(
               decoration: BoxDecoration(

@@ -16,9 +16,9 @@ import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/i
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/password_checker/password_checker_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
-import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/connect_screen/cubit/issearching/issearching_cubit.dart';
 import 'package:sgt/presentation/connect_screen/cubit/message_pressed/message_pressed_cubit.dart';
+import 'package:sgt/presentation/cubit/intenet_connectivity/internet_state.dart';
 import 'package:sgt/presentation/cubit/navigation/navigation_cubit.dart';
 import 'package:sgt/presentation/home.dart';
 import 'package:sgt/presentation/onboarding_screen/cubit/islastpage/islastpage_cubit.dart';
@@ -31,7 +31,10 @@ import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:get/route_manager.dart';
+import 'package:sgt/shared/local_string.dart';
+import 'package:sgt/theme/colors.dart';
 import 'package:sgt/theme/custom_theme.dart';
+import 'package:sgt/theme/font_style.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:sgt/utils/timer_provider.dart';
 import 'presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
@@ -50,7 +53,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 
-
 late SharedPreferences prefs;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,12 +63,15 @@ void main() async {
       .then((value) {
     _initializeFirebase();
     configLoading();
+    DependencyInjection.init();
     initOneSignalState();
     // runApp(const MyApp());
-    runApp(ChangeNotifierProvider(
-      create: (context) => TimerProvider(),
-      child: MyApp(),
-    ),);
+    runApp(
+      ChangeNotifierProvider(
+        create: (context) => TimerProvider(),
+        child: MyApp(),
+      ),
+    );
   });
   prefs = await SharedPreferences.getInstance();
 }
@@ -105,6 +110,8 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => IssigninvalidCubit())
             ],
             child: GetMaterialApp(
+              translations: LocalString(),
+              locale: Locale('en','USA'),
               debugShowCheckedModeBanner: false,
               title: 'SGT',
               theme: CustomTheme.tabBarTheme,
@@ -215,11 +222,29 @@ class SplashScreen extends StatefulWidget {
   }
 }
 
+
 class _SplashScreenState extends State<SplashScreen> {
+  // late Timer _timer;
+  // bool _gpsStatus = false;
+
+
   @override
   void initState() {
     super.initState();
     startTimer();
+    
+    // _timer = Timer.periodic(Duration(seconds: 10), (timer) async {
+    //   bool status = await checkGPSStatus();
+    //   setState(() {
+    //     _gpsStatus = status;
+    //   });
+    // });
+  }
+
+  @override
+  void dispose() {
+    // _timer.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
   }
 
   @override
@@ -245,7 +270,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void startTimer() {
     Timer(const Duration(seconds: 1), () async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (prefs.getString('welcome') != null) {
+         if (prefs.getString('welcome') != null) {
         if (prefs.getString('token') != null) {
           LocationPermission permission;
           permission = await Geolocator.checkPermission();
@@ -257,37 +282,20 @@ class _SplashScreenState extends State<SplashScreen> {
           } else {
             if (permission == LocationPermission.always ||
                 permission == LocationPermission.whileInUse) {
-              // if (prefs.getString('shiftId') != null) {
-              //   var map = new Map<String, dynamic>();
-              //   map['email'] = prefs.getString('email');
-              //   map['password'] = prefs.getString('password');
-              //   var apiService = ApiCallMethodsService();
-              //   apiService.post(apiRoutes['login']!, map).then((value) async {
-              //     apiService.updateUserDetails(value);
-              //     Map<String, dynamic> jsonMap = json.decode(value);
-              //     String token = jsonMap['token'];
-              //     var commonService = CommonService();
-              //     commonService.setUserToken(token);
-              //   }).onError((error, stackTrace) {
-              //     print(error);
-              //   });
-              //   screenNavigator(context, CheckPointScreen());
-              // } else {
-                var map = new Map<String, dynamic>();
-                map['email'] = prefs.getString('email');
-                map['password'] = prefs.getString('password');
-                var apiService = ApiCallMethodsService();
-                apiService.post(apiRoutes['login']!, map).then((value) async {
-                  apiService.updateUserDetails(value);
-                  Map<String, dynamic> jsonMap = json.decode(value);
-                  String token = jsonMap['token'];
-                  var commonService = CommonService();
-                  commonService.setUserToken(token);
-                }).onError((error, stackTrace) {
-                  print(error);
-                });
-                screenNavigator(context, Home());
-              // }
+              var map = new Map<String, dynamic>();
+              map['email'] = prefs.getString('email');
+              map['password'] = prefs.getString('password');
+              var apiService = ApiCallMethodsService();
+              apiService.post(apiRoutes['login']!, map).then((value) async {
+                apiService.updateUserDetails(value);
+                Map<String, dynamic> jsonMap = json.decode(value);
+                String token = jsonMap['token'];
+                var commonService = CommonService();
+                commonService.setUserToken(token);
+              }).onError((error, stackTrace) {
+                print(error);
+              });
+              screenNavigator(context, Home());
             }
           }
         } else {
@@ -301,3 +309,81 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 }
+
+
+// import 'dart:async';
+// import 'package:flutter/material.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:location/location.dart';
+
+// class LocationServiceCheck extends StatefulWidget {
+//   @override
+//   _LocationServiceCheckState createState() => _LocationServiceCheckState();
+// }
+
+// class _LocationServiceCheckState extends State<LocationServiceCheck> {
+//   final Location _location = Location();
+//   late Timer _timer;
+//   bool _isLocationEnabled = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     // Start the timer when the widget initializes
+//     _timer = Timer.periodic(Duration(seconds: 8), (Timer timer) {
+//       _checkLocationService(); // Call function to check location service
+//     });
+//   }
+
+//   // @override
+//   // void dispose() {
+//   //   super.dispose();
+//   //   // Cancel the timer when the widget is disposed
+//   //   _timer.cancel();
+//   // }
+
+//   void _checkLocationService() async {
+//     LocationPermission permission;
+//     bool serviceEnabled = await _location.serviceEnabled();
+//     permission = serviceEnabled== false ? LocationPermission.always : LocationPermission.denied;
+//     print(serviceEnabled);
+//     if(serviceEnabled==false)
+//     {
+//       print("service");
+//       print(permission == LocationPermission.always);
+//       if(permission == LocationPermission.always){
+//         print("service location check");
+//           _location.requestService();
+//       }
+//     }
+//     setState(() {
+//       _isLocationEnabled = serviceEnabled;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Location Service Check'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             Text(
+//               'Location Service Enabled: $_isLocationEnabled',
+//               style: TextStyle(fontSize: 18),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// void main() {
+//   runApp(MaterialApp(
+//     home: LocationServiceCheck(),
+//   ));
+// }

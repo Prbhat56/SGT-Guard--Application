@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,7 +78,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width: 10,
+            width: 10.w,
           ),
           // widget.property!.propertyAvatars != null
           //     ? CircleAvatar(
@@ -100,13 +101,13 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 6,
+                    height: 6.h,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        flex: 1 ,
+                        flex: 1,
                         child: Text(
                             // 'Rivi Properties',
                             widget.property!.propertyName.toString(),
@@ -176,7 +177,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                                   fontSize: 12,
                                   color: Colors.red,
                                   fontWeight: FontWeight.w400),
-                            ),
+                            )
                     ],
                   ),
                   SizedBox(

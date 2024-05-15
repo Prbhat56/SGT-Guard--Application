@@ -48,6 +48,7 @@ class _NotificationScreenState extends State<NotificationScreen>
       length: 2,
       vsync: this,
     );
+    // LocationDependencyInjection.init();
   }
 
   @override

@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+GuardDetails guardDetailsFromJson(String str) => GuardDetails.fromJson(json.decode(str));
+
+String guardDetailsToJson(GuardDetails data) => json.encode(data.toJson());
+
 class GuardDetails {
   UserDetails? userDetails;
   int? status;

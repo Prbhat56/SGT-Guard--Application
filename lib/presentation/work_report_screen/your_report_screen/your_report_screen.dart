@@ -1,15 +1,20 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/report_details.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/custom_filter_report.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
@@ -17,7 +22,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class YourReportScreen extends StatefulWidget {
-  const YourReportScreen({super.key});
+  String? property_id;
+  String? shift_id;
+  String? shift_date;
+  YourReportScreen(
+      {super.key, this.property_id, this.shift_id, this.shift_date});
   @override
   State<YourReportScreen> createState() => _YourReportScreenState();
 }
@@ -55,8 +64,16 @@ class _YourReportScreenState extends State<YourReportScreen> {
     reportType = _type;
   }
 
-  Future<ReportListModel> getRecentList(
-      int propView, int dateRange, String from, String to, String type) async {
+  Future getRecentList(
+    int propView,
+    int dateRange,
+    String from,
+    String to,
+    String type,
+    String property_id,
+    String shift_id,
+    String shift_date,
+  ) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Map<String, String> myHeader = <String, String>{
@@ -71,11 +88,13 @@ class _YourReportScreenState extends State<YourReportScreen> {
         'date_from': from.toString(),
         'date_to': to.toString(),
         'report_type': type.toString(),
+        'property_id': property_id.toString(),
+        'shift_id': shift_id.toString(),
+        'shift_date': shift_date.toString(),
       };
       print(myJsonBody);
       final response = await http.post(Uri.parse(apiUrl),
           headers: myHeader, body: myJsonBody);
-
       if (response.statusCode == 200) {
         final ReportListModel responseModel =
             reportListModelFromJson(response.body);
@@ -84,7 +103,24 @@ class _YourReportScreenState extends State<YourReportScreen> {
         propertyImgUrl = responseModel.propertyImageBaseUrl ?? '';
         return responseModel;
       } else {
-        return ReportListModel();
+        if (response.statusCode == 401) {
+          print("--------------------------------Unauthorized");
+          var apiService = ApiCallMethodsService();
+          apiService.updateUserDetails('');
+          var commonService = CommonService();
+          FirebaseHelper.signOut();
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('welcome', '1');
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => SignInScreen()),
+            (route) => false,
+          );
+        } else {
+          return ReportListModel();
+        }
       }
     } catch (e) {
       print('error caught: $e');
@@ -92,8 +128,16 @@ class _YourReportScreenState extends State<YourReportScreen> {
     }
   }
 
-  Future<bool> getReportsList(
-      int propView, int dateRange, String from, String to, String type) async {
+  Future getReportsList(
+    int propView,
+    int dateRange,
+    String from,
+    String to,
+    String type,
+    String property_id,
+    String shift_id,
+    String shift_date,
+  ) async {
     EasyLoading.show();
     // if (current_page < last_page) {
     //   refreshController.loadNoData();
@@ -115,6 +159,9 @@ class _YourReportScreenState extends State<YourReportScreen> {
       'date_from': from.toString(),
       'date_to': to.toString(),
       'report_type': type.toString(),
+      'property_id': property_id.toString(),
+      'shift_id': shift_id.toString(),
+      'shift_date': shift_date.toString(),
     };
     print(myJsonBody);
     final response = await http.post(Uri.parse(pageApiUrl),
@@ -124,6 +171,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
       final ReportListModel responseModel =
           reportListModelFromJson(response.body);
       reportDatum.addAll(responseModel.response!.data!);
+      print("reports data => ${responseModel.response!.data!}");
       imgUrl = responseModel.imageBaseUrl ?? '';
       propertyImgUrl = responseModel.propertyImageBaseUrl ?? '';
 
@@ -137,15 +185,46 @@ class _YourReportScreenState extends State<YourReportScreen> {
       setState(() {});
       return true;
     } else {
-      EasyLoading.dismiss();
-      return false;
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        EasyLoading.dismiss();
+        return false;
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getReportsList(propView, dateRange, fromDate, toDate, reportType);
+    getReportsList(
+        propView,
+        dateRange,
+        fromDate,
+        toDate,
+        reportType,
+        widget.property_id == null || widget.property_id == 'null'
+            ? ''
+            : widget.property_id.toString(),
+        widget.shift_id == null || widget.shift_id == 'null'
+            ? ''
+            : widget.shift_id.toString(),
+        widget.shift_date == null || widget.shift_date == 'null'
+            ? ''
+            : widget.shift_date.toString());
   }
 
   @override
@@ -192,12 +271,40 @@ class _YourReportScreenState extends State<YourReportScreen> {
                     }).whenComplete(
                   () {
                     getRecentList(
-                            propView, dateRange, fromDate, toDate, reportType)
+                            propView,
+                            dateRange,
+                            fromDate,
+                            toDate,
+                            reportType,
+                            widget.property_id == null
+                                ? ''
+                                : widget.property_id.toString(),
+                            widget.shift_id == null
+                                ? ''
+                                : widget.shift_id.toString(),
+                            widget.shift_date == null
+                                ? ''
+                                : widget.shift_date.toString())
                         .whenComplete(() {
                       current_page = 1;
                       reportDatum.clear();
                       getReportsList(
-                          propView, dateRange, fromDate, toDate, reportType);
+                          propView,
+                          dateRange,
+                          fromDate,
+                          toDate,
+                          reportType,
+                          widget.property_id == null ||
+                                  widget.property_id == 'null'
+                              ? ''
+                              : widget.property_id.toString(),
+                          widget.shift_id == null || widget.shift_id == 'null'
+                              ? ''
+                              : widget.shift_id.toString(),
+                          widget.shift_date == null ||
+                                  widget.shift_date == 'null'
+                              ? ''
+                              : widget.shift_date.toString());
                     });
                     setState(() {});
                   },
@@ -225,7 +332,21 @@ class _YourReportScreenState extends State<YourReportScreen> {
                 height: 120,
                 child: FutureBuilder(
                     future: getRecentList(
-                        propView, dateRange, fromDate, toDate, reportType),
+                        propView,
+                        dateRange,
+                        fromDate,
+                        toDate,
+                        reportType,
+                        widget.property_id == null ||
+                                widget.property_id == 'null'
+                            ? ''
+                            : widget.property_id.toString(),
+                        widget.shift_id == null || widget.shift_id == 'null'
+                            ? ''
+                            : widget.shift_id.toString(),
+                        widget.shift_date == null || widget.shift_date == 'null'
+                            ? ''
+                            : widget.shift_date.toString()),
                     builder: ((context, snapshot) {
                       if (!snapshot.hasData) {
                         return SizedBox(
@@ -349,7 +470,21 @@ class _YourReportScreenState extends State<YourReportScreen> {
                   enablePullDown: false,
                   onLoading: () async {
                     final result = await getReportsList(
-                        propView, dateRange, fromDate, toDate, reportType);
+                        propView,
+                        dateRange,
+                        fromDate,
+                        toDate,
+                        reportType,
+                        widget.property_id == null ||
+                                widget.property_id == 'null'
+                            ? ''
+                            : widget.property_id.toString(),
+                        widget.shift_id == null || widget.shift_id == 'null'
+                            ? ''
+                            : widget.shift_id.toString(),
+                        widget.shift_date == null || widget.shift_date == 'null'
+                            ? ''
+                            : widget.shift_date.toString());
                     if (result) {
                       if (current_page <= last_page) {
                         refreshController.loadComplete();

@@ -1,13 +1,18 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/property_details_screen/property_details_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
 import 'package:sgt/presentation/time_sheet_screen/widget/timesheet_details.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_circular_image_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/utils/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +29,7 @@ List<Completed> upcomingData = [];
 String imgBaseUrl = '';
 
 class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
-  Future<TimeSheetModel> getTimeSheetList() async {
+  Future getTimeSheetList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -42,8 +47,26 @@ class _UpcomingThimeSheetState extends State<UpcomingThimeSheet> {
       imgBaseUrl = responseModel.propertyImageBaseUrl ?? '';
       return responseModel;
     } else {
-      return TimeSheetModel(
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return TimeSheetModel(
           upcomming: [], completed: [], status: 500, propertyImageBaseUrl: '');
+      }
+      
     }
   }
 

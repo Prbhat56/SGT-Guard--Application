@@ -61,9 +61,10 @@ class _ShareLocationScreenState extends State<ShareLocationScreen> {
           commonService.openSnackBar(error.toString(), context);
         });
       }
-      if (permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
         commonService.openSnackBar('Location Not Available', context);
-        return Future.error('Location Not Available');
+        screenNavigator(context, Home());
+        // return Future.error('Location Not Available');
       }
     } else {
       if (permission == LocationPermission.always ||

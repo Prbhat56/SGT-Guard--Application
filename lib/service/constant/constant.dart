@@ -1,8 +1,9 @@
- const String baseUrl = 'https://sgt-inhouse.myclientdemo.us/api/'; //STAGE_URL
+//  const String baseUrl = 'https://sgt-inhouse.myclientdemo.us/api/'; //STAGE_URL
 //  const String baseUrl = 'https://appdeveloperpro.online/api/'; //NEW PRODUCTION URL
 // const String baseUrl = 'https://sgtsuperadmin.oohap.com/api/'; //PRODUCTION_URL
 // const String baseImageUrl = 'https://sgt-inhouse.myclientdemo.us'; //Image_URL
 // const String baseUrl = 'https://arrowtrack-solutions.com/api/'; // Latest Production URL
+const String baseUrl = 'https://arrowtrack-solutions.com/public/api/'; // Latest Production URL
 
 
 Map<String, String> apiRoutes = {
@@ -47,4 +48,5 @@ Map<String, String> apiRoutes = {
   "clockIn": "guard/clock-in",
   "clockOut": "guard/clock-out",
   "notification": "guard/notifications",
+  "propertyOwnerNotification":"guard/notify-property-owner ",
 };

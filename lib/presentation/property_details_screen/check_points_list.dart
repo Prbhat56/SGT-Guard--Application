@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/property_details_screen/model/checkPointsList_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
@@ -17,9 +22,21 @@ class CheckPointListsScreen extends StatefulWidget {
   @override
   State<CheckPointListsScreen> createState() => _CheckPointListsScreenState();
 }
-List<Checkpoint>? checkpoint = [];
+List<Checkpoint> checkpoint = [];
+var getCheckpointDataFetched;
+String? imageBaseUrlData;
+String? propertyImageBaseUrlData;
 class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
-  Future<CheckpointsOnProperty> getCheckpointsList(property_id) async {
+
+ @override
+  void initState() {
+    super.initState();
+   getCheckpointDataFetched = getCheckpointsList(widget.propertyId);
+  }
+
+
+
+  Future getCheckpointsList(property_id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   // String? property_id = prefs.getString('propertyId');
   Map<String, String> myHeader = <String, String>{
@@ -32,13 +49,33 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
   if (response.statusCode == 201) {
     final CheckpointsOnProperty responseModel =
         checkpointsOnPropertyFromJson(response.body);
-        checkpoint = responseModel.checkpoints;
+        checkpoint = responseModel.checkpoints ?? [];
+        imageBaseUrlData = responseModel.imageBaseUrl;
+        propertyImageBaseUrlData = responseModel.propertyImageBaseUrl;
     return responseModel;
   } else {
-    return CheckpointsOnProperty(
+    if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return CheckpointsOnProperty(
       status: response.statusCode,
       // imageBaseUrl: ''
     );
+      }
+    
   }
 }
   @override
@@ -53,14 +90,14 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
           body: FutureBuilder(
               future: getCheckpointsList(widget.propertyId),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                      child: Container(
-                          height: 60,
-                          width: 60,
-                          child: CircularProgressIndicator()));
-                } else {
-                  return checkpoint!.isEmpty
+                // if (!snapshot.hasData) {
+                //   return Center(
+                //       child: Container(
+                //           height: 60,
+                //           width: 60,
+                //           child: CircularProgressIndicator()));
+                // } else {
+                  return checkpoint.isEmpty
                       ? SizedBox(
                           child: Center(
                             child: Text(
@@ -74,7 +111,7 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
                               horizontal: 20.w, vertical: 10),
                           child: ListView.builder(
                             // itemCount: widget.checkPoint!.length,
-                            itemCount: checkpoint!.length,
+                            itemCount: checkpoint.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
@@ -85,19 +122,19 @@ class _CheckPointListsScreenState extends State<CheckPointListsScreen> {
                                       });
                                 },
                                 child: CheckPointListsWidget(
-                                  title: checkpoint![index].checkpointName.toString(),
-                                  imageBaseUrl: snapshot.data!.imageBaseUrl.toString(),
-                                  imageUrl:checkpoint![index].checkPointAvatar!.isEmpty ?'' :checkpoint![index].checkPointAvatar![0].checkpointAvatars.toString(),
+                                  title: checkpoint[index].checkpointName.toString(),
+                                  imageBaseUrl: imageBaseUrlData.toString(),
+                                  imageUrl:checkpoint[index].checkPointAvatar!.isEmpty ?'' :checkpoint[index].checkPointAvatar![0].checkpointAvatars.toString(),
                                   // iscompleted: snapshot.data!.checkpoints![index].isCompleted,
-                                  checkpointNo:checkpoint![index].id ?? 0,
-                                  date: checkpoint![index].checkInTime.toString(),
-                                  time:checkpoint![index].checkInDate.toString(),
+                                  checkpointNo:checkpoint[index].id ?? 0,
+                                  date: checkpoint[index].checkInTime.toString(),
+                                  time:checkpoint[index].checkInDate.toString(),
                                 ),
                               );
                             },
                           ),
                         );
-                }
+                // }
               })),
     );
   }

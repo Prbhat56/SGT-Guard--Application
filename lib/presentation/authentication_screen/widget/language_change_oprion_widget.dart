@@ -1,27 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import '../../../utils/const.dart';
 
 class LanguageChangeOptionWidget extends StatelessWidget {
-
   const LanguageChangeOptionWidget({super.key});
   @override
   Widget build(BuildContext context) {
+    final List locale =[
+    {'name':'ENGLISH','locale': Locale('en','US')},
+    {'name':'Spanish','locale': Locale('es','ES')},
+    {'name':'हिंदी','locale': Locale('hi','IN')},
+    {'name':'Arabic','locale': Locale('ar','IN')},
+    {'name':'Manderin','locale': Locale('zh','IN')},
+    {'name':'German','locale': Locale('de','IN')},
+    {'name':'French','locale': Locale('fr','IN')},
+    {'name':'Italian','locale': Locale('it','IN')},
+    {'name':'Urdu','locale': Locale('ur','IN')},
+    {'name':'Bengali','locale': Locale('bn','IN')},
+  ];
+
+
+
     List<String> languages = [
+      // 'English',
+      // 'Deutsch',
+      // 'Spanish',
+      // 'Language 4 (native)',
+      // 'Башҡортса',
+      // 'Українська',
+      // 'Yorùbá',
+      // '中文',
+      // 'Кыргызча',
+      // 'Português'
       'English',
-      'Deutsch',
       'Spanish',
-      'Language 4 (native)',
-      'Башҡортса',
-      'Українська',
-      'Yorùbá',
-      '中文',
-      'Кыргызча',
-      'Português'
+      'Hindi',
+      'Arbaic',
+      'Manderin',
+      'German',
+      'French',
+      'Italian',
+      'Urdu',
+      'Bengali',
     ];
+
+    updateLanguage(Locale locale){
+    Get.updateLocale(locale);
+    Get.back();
+  }
     return Center(
       child: InkWell(
         onTap: () {
@@ -103,7 +133,7 @@ class LanguageChangeOptionWidget extends StatelessWidget {
                     ),
                     Expanded(
                       child: ListView.builder(
-                          itemCount: languages.length,
+                          itemCount: locale.length,
                           itemBuilder: (context, index) {
                             return Container(
                               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -113,11 +143,13 @@ class LanguageChangeOptionWidget extends StatelessWidget {
                                 ),
                               ),
                               child: GestureDetector(
-                                onTap: (() => 
-                                  print('language selected')),
+                                onTap:(){
+                                  print(locale[index]['name']);
+                                  updateLanguage(locale[index]['locale']);
+                                },
                                 child: Center(
                                   child: Text(
-                                    languages[index],
+                                    locale[index]['name'],
                                     textScaleFactor: 1.0,
                                     style: GoogleFonts.montserrat(
                                       textStyle:

@@ -57,6 +57,15 @@ class CommonService {
     await prefs.remove('token');
   }
 
+  setTimerDetails(String formattedTime,
+  bool dottedTime,
+  int countdownseconds,) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('formattedTime',formattedTime);
+        prefs.setInt('countdownseconds',countdownseconds);
+        prefs.setBool('dottedTime',dottedTime);
+  }
+
   Future<void> openSnackBar(String message, context,
       {int durationInSeconds = 2}) async {
     ScaffoldMessenger.of(context).showSnackBar(

@@ -5,11 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:sgt/main.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import 'package:sgt/presentation/connect_screen/model/live_location_modal.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
+import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/utils/database_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -397,8 +403,10 @@ class FirebaseHelper {
     String? converseId = getConversationID(chatUsers.id);
     if (chatUsers.position == "property_owner") {
       converseId = "${user.uid}_${chatUsers.id}";
+      sendChatRelatedNotificationToPropertyOwner(chatUsers.id,);
     } else {
       converseId = getConversationID(chatUsers.id);
+      sendChatRelatedNotificationToPropertyOwner(chatUsers.id,);
     }
 
     // final ref = firestore
@@ -408,6 +416,44 @@ class FirebaseHelper {
         .doc(time)
         .set(message.toJson())
         .then((value) => sendPushNotification(chatUsers, msg, msgType));
+  }
+
+
+  static void sendChatRelatedNotificationToPropertyOwner(propertyOwnerId) async{
+    print("propertyOwner Id-------->${propertyOwnerId}");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, String> myHeader = <String, String>{
+      "Authorization": "Bearer ${prefs.getString('token')}",
+    };
+    Map<String, dynamic> myJsonBody = {
+        'property_owner_id': propertyOwnerId.toString(),
+        'category': "general",
+        'message': 'You have a new message!',
+      };
+    String apiUrl = baseUrl + apiRoutes['propertyOwnerNotification']!;
+    final response = await http.post(Uri.parse(apiUrl), headers: myHeader, body: myJsonBody);
+    if (response.statusCode == 201) {
+        print('Notification sent');
+    } else {
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context as BuildContext).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Message Not Sent');
+      }
+    }
   }
 
 //update read status of message

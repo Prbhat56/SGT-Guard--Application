@@ -1,12 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/guard_tools_screen/widgets/leave_pending_popup.dart';
 import 'package:sgt/presentation/guard_tools_screen/widgets/leave_rejection_popup.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +51,6 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
 
     if (response.statusCode == 200) {
       final LeaveListModel responseModel = leaveModelFromJson(response.body);
-      print("-------------ApiUrl------> ${apiUrl}");
       //leaveDatum = responseModel.response!.data ?? [];
       leaveDatum.addAll(responseModel.response!.data!);
 
@@ -60,8 +64,27 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
       setState(() {});
       return true;
     } else {
-      EasyLoading.dismiss();
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+        return false;
+      } else {
+        EasyLoading.dismiss();
       return false;
+      }
+      
     }
   }
 

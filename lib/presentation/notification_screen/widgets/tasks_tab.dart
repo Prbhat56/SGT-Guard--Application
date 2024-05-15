@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/notification_screen/modal/duty_notification_modal.dart';
 import 'package:sgt/presentation/notification_screen/widgets/notification_model.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -15,14 +20,16 @@ class TasksTab extends StatefulWidget {
   State<TasksTab> createState() => _TasksTabState();
 }
 
+var taskNotificationDataFetched;
+List<DutyDatum> taskNotificationList= [];
 class _TasksTabState extends State<TasksTab> {
   @override
   void initState() {
     super.initState();
-    dutyNotificationsList();
+   taskNotificationDataFetched=dutyNotificationsList();
   }
 
-  Future<DutyNotification> dutyNotificationsList() async {
+  Future dutyNotificationsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -37,34 +44,45 @@ class _TasksTabState extends State<TasksTab> {
     if (response.statusCode == 200) {
       final DutyNotification responseModel =
           dutyNotificationFromJson(response.body);
+      taskNotificationList = responseModel.response!.data ?? [];
       return responseModel;
     } else {
-      return DutyNotification();
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return DutyNotification();
+      }
+      
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: dutyNotificationsList(),
+        future: taskNotificationDataFetched,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
             return ListView.builder(
                 physics: BouncingScrollPhysics(),
-                itemCount: snapshot.data!.response!.data!.length,
+                itemCount: taskNotificationList.length,
                 itemBuilder: (context, index) {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTile(
-                        title: Text(snapshot.data!.response!.data![index].message.toString()),
+                        title: Text(taskNotificationList[index].message.toString()),
                         subtitle: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Row(
@@ -77,7 +95,7 @@ class _TasksTabState extends State<TasksTab> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(snapshot.data!.response!.data![index].notificationTime.toString()+' '+'(${snapshot.data!.response!.data![index].notificationDate.toString()})'),
+                              Text(taskNotificationList[index].notificationTime.toString()+' '+'(${taskNotificationList[index].notificationDate.toString()})'),
                             ],
                           ),
                         ),
@@ -85,7 +103,7 @@ class _TasksTabState extends State<TasksTab> {
                           radius: 30,
                           backgroundColor: grey,
                           backgroundImage: NetworkImage(
-                            snapshot.data!.response!.data![index].userAvtar.toString()
+                            taskNotificationList[index].userAvtar.toString()
                           ),
                         ),
                       ),
@@ -95,7 +113,6 @@ class _TasksTabState extends State<TasksTab> {
                     ],
                   );
                 });
-          }
         });
   }
 }

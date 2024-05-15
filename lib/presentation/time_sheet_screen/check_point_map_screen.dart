@@ -1,9 +1,16 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
@@ -18,14 +25,19 @@ class CheckPointMapScreen extends StatefulWidget {
 
 String imgBaseUrl = '';
 List<Checkpoint> checkpoint = [];
-
+var checkpointListDataFetched;
 class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
-
   Completer<GoogleMapController> _controller = Completer();
 
   List<Marker> markers = <Marker>[];
 
-  Future<CheckPointPropertyShiftWise> getCheckpointsList() async {
+   @override
+  void initState() {
+    super.initState();
+  checkpointListDataFetched = getCheckpointsList();
+  }
+
+  Future getCheckpointsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? property_id = prefs.getString('propertyId');
     String? shift_id = prefs.getString('shiftId');
@@ -61,10 +73,27 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
 
       return responseModel;
     } else {
-      return CheckPointPropertyShiftWise(
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        return CheckPointPropertyShiftWise(
           checkpoints: [],
           status: response.statusCode,
           propertyImageBaseUrl: '');
+      }
     }
   }
 
@@ -75,7 +104,7 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
         width: MediaQuery.of(context).size.width,
         child: Scaffold(
             body: FutureBuilder(
-                future: getCheckpointsList(),
+                future: checkpointListDataFetched,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return SizedBox(
@@ -89,6 +118,12 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
                       children: [
                         GoogleMap(
                           padding: EdgeInsets.only(bottom: 150, left: 15),
+                          gestureRecognizers:
+                              <Factory<OneSequenceGestureRecognizer>>[
+                            new Factory<OneSequenceGestureRecognizer>(
+                              () => new EagerGestureRecognizer(),
+                            ),
+                          ].toSet(),
                           mapType: MapType.normal,
                           zoomControlsEnabled: true,
                           initialCameraPosition: CameraPosition(
@@ -123,80 +158,91 @@ class _CheckPointMapScreenState extends State<CheckPointMapScreen> {
                                     color: white,
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(
-                                          color: grey,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                  child: 
+                                  GestureDetector(
+                                    onTap: () {
+                                      CameraPosition(target: LatLng(
+                                double.parse(checkpoint[index].latitude.toString()),
+                                double.parse(checkpoint[index].longitude.toString()),
+                              ),zoom: 14);
+                                    },
+                                    child: 
+                                    Row(
+                                      children: [
+                                        Container(
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: BoxDecoration(
+                                            color: grey,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          height: 90,
+                                          width: 90,
+                                          child: checkpoint[index]
+                                                      .checkPointAvatar!
+                                                      .length !=
+                                                  0
+                                              ? Image.network(
+                                                  fit: BoxFit.fill,
+                                                  '${imgBaseUrl}/${checkpoint[index].checkPointAvatar!.first.checkpointAvatars.toString()}',
+                                                )
+                                              : Image.asset(
+                                                  'assets/sgt_logo.jpg'),
                                         ),
-                                        height: 90,
-                                        width: 90,
-                                        child: checkpoint[index]
-                                                    .checkPointAvatar!
-                                                    .length !=
-                                                0
-                                            ? Image.network(
-                                                fit: BoxFit.fill,
-                                                '${imgBaseUrl}/${checkpoint[index].checkPointAvatar!.first.checkpointAvatars.toString()}',
-                                              )
-                                            : Image.asset(
-                                                'assets/sgt_logo.jpg'),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0, top: 10),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            SizedBox(
-                                              width: 130,
-                                              child: Text(
-                                                checkpoint[index]
-                                                    .checkpointName
-                                                    .toString(),
-                                                maxLines: 3,
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 15.0, top: 10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            // Text(
-                                            //   'Check-in by ${myData.shifts!.first.clockIn.toString()}',
-                                            //   style: TextStyle(
-                                            //       fontSize: 15,
-                                            //       color: Colors.grey),
-                                            // ),
-                                            // SizedBox(
-                                            //   height: 5,
-                                            // ),
-                                            SizedBox(
-                                              width: 120,
-                                              child: Text(
-                                                checkpoint[index]
-                                                    .propertyName
-                                                    .toString(),
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.grey,
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                              SizedBox(
+                                                width: 130,
+                                                child: Text(
+                                                  checkpoint[index]
+                                                      .checkpointName
+                                                      .toString(),
+                                                  maxLines: 3,
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      overflow:
+                                                          TextOverflow.ellipsis),
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              // Text(
+                                              //   'Check-in by ${myData.shifts!.first.clockIn.toString()}',
+                                              //   style: TextStyle(
+                                              //       fontSize: 15,
+                                              //       color: Colors.grey),
+                                              // ),
+                                              // SizedBox(
+                                              //   height: 5,
+                                              // ),
+                                              SizedBox(
+                                                width: 120,
+                                                child: Text(
+                                                  checkpoint[index]
+                                                      .propertyName
+                                                      .toString(),
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.grey,
+                                                      overflow:
+                                                          TextOverflow.ellipsis),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

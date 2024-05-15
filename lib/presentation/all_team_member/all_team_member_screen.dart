@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import 'package:sgt/presentation/connect_screen/widgets/chatting_screen.dart';
 import 'package:sgt/presentation/connect_screen/widgets/profile_image.dart';
 import 'package:sgt/presentation/share_location_screen/share_location_screen.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
+import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/custom_theme.dart';
@@ -25,7 +29,7 @@ class AllTeamMemberScreen extends StatefulWidget {
 
 class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
   List<ChatUsers> userList = [];
-  Future<GuardHome> getAllGuardListAPI() async {
+  Future getAllGuardListAPI() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> myHeader = <String, String>{
       "Authorization": "Bearer ${prefs.getString('token')}",
@@ -40,7 +44,24 @@ class _AllTeamMemberScreenState extends State<AllTeamMemberScreen> {
     if (response.statusCode == 201) {
       return GuardHome.fromJson(data);
     } else {
-      return GuardHome.fromJson(data);
+      if (response.statusCode == 401) {
+        print("--------------------------------Unauthorized");
+        var apiService = ApiCallMethodsService();
+        apiService.updateUserDetails('');
+        var commonService = CommonService();
+        FirebaseHelper.signOut();
+        FirebaseHelper.auth = FirebaseAuth.instance;
+        commonService.logDataClear();
+        commonService.clearLocalStorage();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('welcome', '1');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+          (route) => false,
+        );
+      } else {
+        throw Exception('Failed to load guard');
+      }
     }
   }
 

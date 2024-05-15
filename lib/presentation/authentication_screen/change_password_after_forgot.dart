@@ -9,6 +9,7 @@ import 'package:sgt/presentation/authentication_screen/cubit/isValidPassword/is_
 import 'package:sgt/presentation/authentication_screen/cubit/ispasswordmatched/ispasswordmarched_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/obscure/obscure_cubit.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
+import 'package:sgt/presentation/authentication_screen/password_change_after_forget_success.dart';
 import 'package:sgt/presentation/authentication_screen/password_change_success_screen.dart';
 import 'package:sgt/presentation/authentication_screen/widget/error_widgets.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -380,7 +381,7 @@ class _ChangePasswordAfterForgotScreenState
       EasyLoading.dismiss();
 
       FirebaseHelper.changeMyPassword(newPassword).then((value) {
-        screenNavigator(context, PasswordChangeSuccessScreen());
+        screenNavigator(context, PasswordChangeSuccessAfterForgetScreen());
       });
     }).onError((error, stackTrace) {
       EasyLoading.dismiss();
