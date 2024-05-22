@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/isValidPassword/is_valid_password_cubit.dart';
@@ -15,7 +16,9 @@ import 'package:sgt/presentation/authentication_screen/widget/error_widgets.dart
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_underline_textfield_widget.dart';
 import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const.dart';
 
 class ChangePasswordAfterForgotScreen extends StatefulWidget {
@@ -52,7 +55,7 @@ class _ChangePasswordAfterForgotScreenState
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Reset Password'),
+        appBar: CustomAppBarWidget(appbarTitle: 'Reset Password'.tr),
         body: Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -145,7 +148,7 @@ class _ChangePasswordAfterForgotScreenState
             //                       width: 3,
             //                     ),
             //                     Text(
-            //                       'Passwords is too short!',
+            //                       'password_short_password'.tr,
             //                       style: TextStyle(
             //                           color: Colors.red, fontSize: 13),
             //                     ),
@@ -364,7 +367,7 @@ class _ChangePasswordAfterForgotScreenState
 
   void passwordChanged(email, newPassword, reEnterPassword, context) async {
     EasyLoading.show();
-
+    SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> myJsonBody = {
       'email': email,
       'password': newPassword,
@@ -376,11 +379,15 @@ class _ChangePasswordAfterForgotScreenState
     // map['email']= email;
     // map['password']=newPassword;
     // map['password_confirmation']=reEnterPassword;
+    var commonService = CommonService();
     var apiService = ApiCallMethodsService();
     apiService.post(apiRoutes['resetPassword']!, myJsonBody).then((value) {
       EasyLoading.dismiss();
 
       FirebaseHelper.changeMyPassword(newPassword).then((value) {
+        commonService.logDataClear();
+          commonService.clearLocalStorage();
+          pref.setString('welcome', '1');
         screenNavigator(context, PasswordChangeSuccessAfterForgetScreen());
       });
     }).onError((error, stackTrace) {

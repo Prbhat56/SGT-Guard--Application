@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 // import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -22,7 +23,7 @@ class _UpcomingShiftDetailsScreenState extends State<UpcomingShiftDetailsScreen>
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Shift details'),
+        appBar: CustomAppBarWidget(appbarTitle: 'shift_details'.tr),
         backgroundColor: white,
         body: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -30,7 +31,7 @@ class _UpcomingShiftDetailsScreenState extends State<UpcomingShiftDetailsScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Shift Timing',
+                'shift_timing'.tr,
                 style: CustomTheme.blueTextStyle(17, FontWeight.w400),
               ),
               SizedBox(
@@ -102,7 +103,7 @@ class _UpcomingShiftDetailsScreenState extends State<UpcomingShiftDetailsScreen>
                 height: 20,
               ),
               Text(
-                'Property',
+                'property'.tr,
                 style: CustomTheme.blueTextStyle(17, FontWeight.w400),
               ),
               Text(
@@ -124,7 +125,7 @@ class _UpcomingShiftDetailsScreenState extends State<UpcomingShiftDetailsScreen>
                 height: 20,
               ),
               Text(
-                'Job Details',
+                'job_details'.tr,
                 style: CustomTheme.blueTextStyle(17, FontWeight.w400),
               ),
               Padding(

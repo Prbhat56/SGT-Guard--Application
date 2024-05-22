@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -158,7 +159,7 @@ class _StaticMaintenanceReportScreenState
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Maintenance Report'),
+        appBar: CustomAppBarWidget(appbarTitle: 'maintanance_report'.tr),
         backgroundColor: white,
         body: SingleChildScrollView(
             child: Padding(
@@ -174,7 +175,7 @@ class _StaticMaintenanceReportScreenState
                 children: [
                   RichText(
                       text: TextSpan(
-                          text: 'Property Name',
+                          text: 'property_name'.tr,
                           style: CustomTheme.textField_Headertext_Style,
                           children: [
                         TextSpan(
@@ -241,7 +242,7 @@ class _StaticMaintenanceReportScreenState
               ),
               CustomTextField(
                 controller: _notesController,
-                textfieldTitle: 'Notes',
+                textfieldTitle: 'notes'.tr,
                 hintText: 'Enter Note Here',
                 isFilled: false,
                 maxLines: 5,
@@ -273,7 +274,7 @@ class _StaticMaintenanceReportScreenState
                   : Container(),
                RichText(
                       text: TextSpan(
-                          text: 'Upload Record Sample',
+                          text: 'sample_upload_image_text'.tr,
                           style: CustomTheme.blueTextStyle(17, FontWeight.w500),
                           children: [
                         TextSpan(
@@ -283,7 +284,7 @@ class _StaticMaintenanceReportScreenState
                             ))
                       ])),
               // Text(
-              //   'Upload Record Sample',
+              //   'sample_upload_image_text'.tr,
               //   style: TextStyle(
               //       fontSize: 17,
               //       color: primaryColor,
@@ -312,7 +313,7 @@ class _StaticMaintenanceReportScreenState
                         });
                   },
                   child: DottedChooseFileWidget(
-                    title: 'Choose a file',
+                    title: 'choose_file_text'.tr,
                     height: 15,
                   )),
               imageFileList!.isNotEmpty
@@ -323,7 +324,7 @@ class _StaticMaintenanceReportScreenState
               Container(
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: CustomButtonWidget(
-                      buttonTitle: 'Send',
+                      buttonTitle: 'send'.tr,
                       onBtnPress: () {
                         if (_propertyNameController.text.isEmpty) {
                           CommonService().openSnackBar(

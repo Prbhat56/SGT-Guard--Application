@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -95,7 +96,7 @@ class _InActivePropertyDetailsScreenState
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-          appBar: CustomAppBarWidget(appbarTitle: 'Inactive Property'),
+          appBar: CustomAppBarWidget(appbarTitle: 'inactive_property'.tr),
           body: FutureBuilder(
             future: jobDetailDataFetched,
             builder: (context, snapshot) {
@@ -154,7 +155,7 @@ class _InActivePropertyDetailsScreenState
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        'Last Shift: ',
+                                        'last_shift'.tr,
                                         style: TextStyle(
                                             fontSize: 12, color: Colors.red),
                                       ),
@@ -179,7 +180,7 @@ class _InActivePropertyDetailsScreenState
                       height: 20,
                     ),
                     Text(
-                      'Job Details',
+                      'job_details'.tr,
                       style: CustomTheme.textField_Headertext_Style,
                     ),
                     const SizedBox(
@@ -188,7 +189,7 @@ class _InActivePropertyDetailsScreenState
                     Row(
                       children: [
                         Text(
-                          'Guard Name: ',
+                          'guard_name'.tr+': ',
                           style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w300,
@@ -210,7 +211,7 @@ class _InActivePropertyDetailsScreenState
                     Row(
                       children: [
                         Text(
-                          'Position: ',
+                          'position'.tr+': ',
                           style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w300,
@@ -231,7 +232,7 @@ class _InActivePropertyDetailsScreenState
                       height: 20,
                     ),
                     Text(
-                      'Location',
+                      'location'.tr,
                       style: CustomTheme.textField_Headertext_Style,
                     ),
                     const SizedBox(

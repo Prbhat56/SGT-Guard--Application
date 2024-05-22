@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../utils/const.dart';
 
 class CheckPointCountWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class CheckPointCountWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Completed Checkpoints:',
+              'completed_checkpoints'.tr+':',
               style: TextStyle(
                   color: Colors.blue,
                   fontSize: 15,
@@ -38,7 +39,7 @@ class CheckPointCountWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Remaining Checkpoints:',
+              'remaining_checkpoints'.tr+':',
               style: TextStyle(
                   color: Colors.blue,
                   fontSize: 15,

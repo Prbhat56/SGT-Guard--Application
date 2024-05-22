@@ -334,6 +334,8 @@ class JobDetails {
   String? guardPosition;
   String? avatar;
   String? shiftTime;
+  int? completedCheckpoint;
+  int? remainingCheckpoint;
 
   JobDetails({
     this.firstName,
@@ -341,6 +343,8 @@ class JobDetails {
     this.guardPosition,
     this.avatar,
     this.shiftTime,
+    this.completedCheckpoint,
+    this.remainingCheckpoint,
   });
 
   factory JobDetails.fromJson(Map<String, dynamic> json) => JobDetails(
@@ -349,6 +353,8 @@ class JobDetails {
         guardPosition: json["guard_position"],
         avatar: json["avatar"],
         shiftTime: json["shift_time"],
+        completedCheckpoint: json["completed_checkpoint"],
+        remainingCheckpoint: json["remaining_checkpoint"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -357,6 +363,8 @@ class JobDetails {
         "guard_position": guardPosition,
         "avatar": avatar,
         "shift_time": shiftTime,
+        "remaining_checkpoint": remainingCheckpoint,
+        "completed_checkpoint": completedCheckpoint,
       };
 }
 

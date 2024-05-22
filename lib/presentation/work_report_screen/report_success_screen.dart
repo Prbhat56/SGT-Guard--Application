@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/home.dart';
 import '../../utils/const.dart';
@@ -50,7 +51,7 @@ class _ReportSuccessScreenState extends State<ReportSuccessScreen> {
                 ),
                 Center(
                   child: Text(
-                    widget.isSubmitReportScreen ? "Confirmed" : "Done",
+                    widget.isSubmitReportScreen ? "confirmed".tr : "done".tr,
                     textAlign: TextAlign.center,
                     textScaleFactor: 1.0,
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -77,8 +78,8 @@ class _ReportSuccessScreenState extends State<ReportSuccessScreen> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 120.w, vertical: 15),
                           color: primaryColor,
-                          child: const Text(
-                            'Next',
+                          child: Text(
+                            'next'.tr,
                             textScaleFactor: 1.0,
                             style: TextStyle(fontSize: 20),
                           ),

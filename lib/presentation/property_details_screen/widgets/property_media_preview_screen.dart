@@ -63,13 +63,17 @@ class _PropertyMediaPreviewScreenState
               itemCount: widget.avatars!.length,
               itemBuilder: (context, index, realIndex) {
                 activeIndex = index;
+                print('activeIndex=========> ${activeIndex}');
+                print('avatarsLength =========> ${widget.avatars!.length}');
                 return Stack(
                   children: [
                     index == 3
                         ? Center(child: PropertyVideoPreviewWidget())
                         : Center(
                             child: Image.network(
-                              widget.imageBaseUrl.toString() +''+ widget.avatars![index].propertyAvatar
+                              widget.imageBaseUrl.toString() +
+                                  '' +
+                                  widget.avatars![index].propertyAvatar
                                       .toString(),
                               height: MediaQuery.of(context).size.height,
                               width: MediaQuery.of(context).size.width,
@@ -90,6 +94,7 @@ class _PropertyMediaPreviewScreenState
                 );
               },
               options: CarouselOptions(
+                enableInfiniteScroll: false,
                 initialPage: 0,
                 viewportFraction: 1,
                 disableCenter: true,
@@ -101,9 +106,9 @@ class _PropertyMediaPreviewScreenState
               left: 0,
               child: IconButton(
                 onPressed: () {
-                  activeIndex! != 0 ?
-                  controller.previousPage() :
-                  print(' IndexMore ');
+                  activeIndex! != 0
+                      ? controller.previousPage()
+                      : print(' IndexMore ');
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
@@ -116,10 +121,14 @@ class _PropertyMediaPreviewScreenState
               top: 350,
               right: 0,
               child: IconButton(
-                onPressed: () {
-                    (activeIndex!) != widget.avatars!.length ?
-                  controller.nextPage(): print(' IndexMore ');;
-                },
+                onPressed: activeIndex! < widget.avatars!.length
+                    ? () {
+                        controller.nextPage();
+                      }
+                    : () {
+                        print(' IndexMore ');
+                        ;
+                      },
                 icon: Icon(
                   Icons.arrow_forward_ios,
                   color: white,

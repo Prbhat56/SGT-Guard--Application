@@ -1,13 +1,13 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
 import '../../utils/const.dart';
 import '../widgets/main_appbar_widget.dart';
+import 'model/chat_messages_modal.dart';
 import 'widgets/chattile_widget.dart';
 
 class ConnectScreen extends StatefulWidget {
@@ -19,6 +19,7 @@ class ConnectScreen extends StatefulWidget {
 
 class _ConnectScreenState extends State<ConnectScreen> {
   List<ChatUsers> userList = [];
+  List<ChatMessages> messages = [];
 
   @override
   void initState() {
@@ -51,36 +52,42 @@ class _ConnectScreenState extends State<ConnectScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // SizedBox(
-          //   height: 20.0,
-          // ),
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //       left: 16.w, top: 16.h, bottom: 6.h, right: 16.w),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Text(
-          //         'Chats',
-          //         style: TextStyle(
-          //             color: primaryColor,
-          //             fontSize: 17.sp,
-          //             fontWeight: FontWeight.w500),
-          //       ),
-          //       Text(
-          //         'Mark All As Read',
-          //         style: TextStyle(
-          //             color: primaryColor,
-          //             fontSize: 13.sp,
-          //             fontWeight: FontWeight.w400),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // Divider(
-          //   thickness: 3,
-          //   color: seconderyColor,
-          // ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: 16.w, top: 16.h, bottom: 6.h, right: 16.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Chats',
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w500),
+                ),
+                InkWell(
+                  onTap: () {
+                    EasyLoading.show();
+                    for (var index = 0; index < userList.length; index++) {
+                      FirebaseHelper.showAllMessages(userList[index]);
+                    }
+                    
+                  },
+                  child: Text(
+                    'Mark All As Read',
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            thickness: 3,
+            color: seconderyColor,
+          ),
           Expanded(
             child: StreamBuilder(
               stream: FirebaseHelper.getAllUsers(),

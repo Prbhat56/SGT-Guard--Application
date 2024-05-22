@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/allWorkReport/static_emergency_report.dart';
@@ -31,7 +32,7 @@ class _EmergencyDateTimeWidgetState extends State<EmergencyDateTimeWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Date',
+                    'date'.tr,
                     style: TextStyle(
                       fontSize: 17,
                       color: CustomTheme.black,

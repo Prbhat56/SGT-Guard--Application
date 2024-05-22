@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/clock_in_screen.dart';
 import '../../utils/const.dart';
 
@@ -15,7 +16,7 @@ class ShiftDetailsScreen extends StatelessWidget {
           elevation: 0,
           backgroundColor: white,
           title: Text(
-            'Shift details',
+            'shift_details'.tr,
             style: TextStyle(color: black),
             textScaleFactor: 1.0,
           ),
@@ -32,7 +33,7 @@ class ShiftDetailsScreen extends StatelessWidget {
             TextButton(
               onPressed: () {},
               child: Text(
-                'Cancel',
+                'cancel'.tr,
                 style: TextStyle(color: Colors.grey, fontSize: 17),
               ),
             ),
@@ -119,8 +120,8 @@ class ShiftDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  'Property',
+                Text(
+                  'property'.tr,
                   style: TextStyle(fontSize: 13, color: Colors.grey),
                 ),
                 const SizedBox(
@@ -130,7 +131,7 @@ class ShiftDetailsScreen extends StatelessWidget {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Rivi Properties',
                           style: TextStyle(
@@ -141,7 +142,7 @@ class ShiftDetailsScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          'Guard Post Duties',
+                          'guard_post_duties'.tr,
                           style: TextStyle(
                             fontSize: 15,
                           ),
@@ -162,8 +163,8 @@ class ShiftDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  'Job Details',
+                Text(
+                  'job_details'.tr,
                   style: TextStyle(fontSize: 13, color: Colors.grey),
                 ),
                 const SizedBox(
@@ -186,7 +187,7 @@ class ShiftDetailsScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 140, vertical: 20),
                     child: Text(
-                      'Clock In',
+                      'clock_in'.tr,
                       style: TextStyle(color: white, fontSize: 17),
                     ),
                     onPressed: () {

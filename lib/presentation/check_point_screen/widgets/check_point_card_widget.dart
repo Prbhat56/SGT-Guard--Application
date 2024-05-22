@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -151,7 +152,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Remaining Shift Time: ',
+                      Text('remaining_shift_time'.tr+': ',
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -213,7 +214,7 @@ class _CheckPointCardsWidgetState extends State<CheckPointCardsWidget> {
                         width: 5,
                       ),
                       Text(
-                        "${widget.checkPointLength!.length.toString()} Checkpoints",
+                        '${widget.checkPointLength!.length.toString()}'+ 'checkpoint'.tr,
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,

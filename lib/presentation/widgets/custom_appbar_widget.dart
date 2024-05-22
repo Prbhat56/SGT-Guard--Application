@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/theme/font_style.dart';
@@ -27,11 +28,15 @@ class CustomAppBarWidget extends StatelessWidget
           Navigator.of(context).pop();
         },
       ),
-      // centerTitle: true,
-      title: Text(
-        appbarTitle,
-        textScaleFactor: 1.0,
-        style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+      centerTitle: false,
+      titleSpacing: 0,
+      title: Align(
+        alignment: Alignment(-0.92.w, 0),
+        child: Text(
+          appbarTitle,
+          textScaleFactor: 1.0,
+          style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+        ),
       ),
       actions: widgets,
     );

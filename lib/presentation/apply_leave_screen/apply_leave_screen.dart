@@ -320,7 +320,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                   ),
                   Center(
                     child: CustomButtonWidget(
-                        buttonTitle: 'Continue',
+                        buttonTitle: 'continue'.tr,
                         onBtnPress: () {
                           if (_fromText.text.isEmpty) {
                             CommonService().openSnackBar(

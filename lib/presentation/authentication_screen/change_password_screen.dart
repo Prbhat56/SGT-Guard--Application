@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/helper/validator.dart';
@@ -18,6 +20,7 @@ import 'package:sgt/presentation/authentication_screen/verify_otp.dart';
 import 'package:sgt/presentation/authentication_screen/widget/error_widgets.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/service/api_call_service.dart';
+import 'package:sgt/service/common_service.dart';
 import 'package:sgt/service/constant/constant.dart';
 import 'package:sgt/service/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +62,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Change Password'),
+        appBar: CustomAppBarWidget(appbarTitle: 'change_password'.tr),
         body: Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -69,8 +72,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               height: 30.h,
             ),
             CustomUnderlineTextFieldWidget(
-              textfieldTitle: 'Old Password',
-              hintText: 'Enter Password',
+              textfieldTitle: 'old_password'.tr,
+              hintText: 'enter_password'.tr,
               controller: _oldpasswordController,
               obscureText:
                   context.watch<ObscureCubit>().state.oldpasswordObscure,
@@ -93,8 +96,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               onChanged: (value) {},
             ),
             CustomUnderlineTextFieldWidget(
-              textfieldTitle: 'New Password',
-              hintText: 'Enter Password',
+              textfieldTitle: 'new_password'.tr,
+              hintText: 'enter_password'.tr,
               controller: _newpasswordController,
               obscureText:
                   context.watch<ObscureCubit>().state.newpasswordObscure,
@@ -128,8 +131,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
             CustomUnderlineTextFieldWidget(
               bottomPadding: 7,
-              textfieldTitle: 'Re-Enter New Password',
-              hintText: 'Enter Password',
+              textfieldTitle: 're_enter_new_password'.tr,
+              hintText: 'enter_password'.tr,
               controller: _reenteredpasswordController,
               obscureText: context.watch<ObscureCubit>().state.isObscure,
               suffixIcon: IconButton(
@@ -181,8 +184,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 listen: false)
                             .state
                             .isValid
-                        ?
-                        passwordChange(_oldpasswordController.text.toString(),_newpasswordController.text.toString(),_reenteredpasswordController.text.toString())
+                        ? passwordChange(
+                            _oldpasswordController.text.toString(),
+                            _newpasswordController.text.toString(),
+                            _reenteredpasswordController.text.toString())
                         //  Navigator.push(
                         //     context,
                         //     MaterialPageRoute(
@@ -225,11 +230,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     var apiService = ApiCallMethodsService();
     apiService.post(apiRoutes['updatePassword']!, myJsonBody).then((value) {
       EasyLoading.dismiss();
+      var commonService = CommonService();
       var response = jsonDecode(value);
       if (response['status'] == 400) {
         print("error => ${response['error']}");
       } else {
         FirebaseHelper.changePassword(newPassword).then((value) {
+          FirebaseHelper.auth = FirebaseAuth.instance;
+          commonService.logDataClear();
+          commonService.clearLocalStorage();
+          pref.setString('welcome', '1');
           screenNavigator(context, PasswordChangeSuccessScreen());
         });
       }

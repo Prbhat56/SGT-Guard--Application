@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/all_team_member/all_team_member_screen.dart';
@@ -106,7 +107,7 @@ class _CircularProfileState extends State<CircularProfile> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(right: 10.0),
-                          child: Text('See all',
+                          child: Text('see_all'.tr,
                               style: CustomTheme.seeAllBtnStyle),
                         ),
                       )
@@ -226,12 +227,12 @@ class _CircularProfileState extends State<CircularProfile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Team (0)',
+                      Text('team'.tr +'(0)',
                           style: CustomTheme.textField_Headertext_Style),
                       Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child:
-                            Text('See all', style: CustomTheme.seeAllBtnStyle),
+                            Text('see_all'.tr, style: CustomTheme.seeAllBtnStyle),
                       )
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../theme/custom_theme.dart';
 
@@ -54,7 +55,7 @@ class DeleteDialog extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Cancel',
+                      'cancel'.tr,
                       // ignore: deprecated_member_use
                       textScaleFactor: 1.0,
                       style: TextStyle(

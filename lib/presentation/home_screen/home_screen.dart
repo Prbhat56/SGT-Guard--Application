@@ -23,24 +23,23 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-var activeToursDataFetched;
-var upcomingToursDataFetched;
+// var activeToursDataFetched;
+// var upcomingToursDataFetched;
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-  @override void initState() {
-    // TODO: implement initState
-  activeToursDataFetched = getJobsList();
-  upcomingToursDataFetched = getUpcomingJobsList();
-    super.initState();
-  }
+  // @override void initState() {
+  //   // TODO: implement initState
+  // // activeToursDataFetched = getJobsList();
+  // // upcomingToursDataFetched = getUpcomingJobsList();
+  //   super.initState();
+  // }
 
-  @override
-  void dispose() {
-    activeToursDataFetched;
-    upcomingToursDataFetched;
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // activeToursDataFetched;
+  //   // upcomingToursDataFetched;
+  //   super.dispose();
+  // }
 
   int? totalTeams;
   String? propertyImgBaseUrl;
@@ -107,7 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: () async {
           await getJobsList();
           getUpcomingJobsList();
-          setState(() {});
+          // activeToursDataFetched;
+          // upcomingToursDataFetched;
+          // setState(() {});
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -131,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10.0),
-                      child: Text('See all', style: CustomTheme.seeAllBtnStyle),
+                      child: Text('see_all'.tr, style: CustomTheme.seeAllBtnStyle),
                     ),
                   )
                 ],
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),*/
               //LocationDetailsCard(),
               FutureBuilder<DutyListModel>(
-                  future: activeToursDataFetched,
+                  future: getJobsList(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
@@ -164,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Active Tours (${snapshot.data!.activeData!.length})',
+                                'active_tours'.tr+ '(${snapshot.data!.activeData!.length})',
                                 style: CustomTheme.textField_Headertext_Style,
                               ),
                               //btn to see all the active jobs
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(right: 10.0),
-                                        child: Text('See all',
+                                        child: Text('see_all'.tr,
                                             style: CustomTheme.seeAllBtnStyle),
                                       ),
                                     )
@@ -264,26 +265,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 10),
+                                            horizontal: 0, vertical: 10),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              height: 204,
-                                              decoration:
-                                                  CustomTheme.locationCardStyle(
-                                                      snapshot.data!
-                                                          .propertyImageBaseUrl
-                                                          .toString(),
-                                                      snapshot
-                                                          .data!
-                                                          .activeData![index]
-                                                          .propertyAvatars!
-                                                          .first
-                                                          .propertyAvatar
-                                                          .toString()),
-                                            ),
+                                                height: 204,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color: white,
+                                                ),
+                                                child: Center(
+                                                    child: Image.network(
+                                                        snapshot.data!
+                                                                .propertyImageBaseUrl
+                                                                .toString() +
+                                                            snapshot
+                                                                .data!
+                                                                .activeData![
+                                                                    index]
+                                                                .propertyAvatars!
+                                                                .first
+                                                                .propertyAvatar
+                                                                .toString(),
+                                                        frameBuilder: (context,
+                                                            child,
+                                                            frame,
+                                                            wasSynchronouslyLoaded) {
+                                                  return child;
+                                                }, loadingBuilder: (context,
+                                                            child,
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  } else {
+                                                    return Center(
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    );
+                                                  }
+                                                }))
+                                                // CustomTheme.locationCardStyle(
+                                                //     snapshot.data!
+                                                //         .propertyImageBaseUrl
+                                                //         .toString(),
+                                                //     snapshot
+                                                //         .data!
+                                                //         .activeData![index]
+                                                //         .propertyAvatars!
+                                                //         .first
+                                                //         .propertyAvatar
+                                                //         .toString()),
+                                                ),
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -371,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   }),
                           FutureBuilder<TimeSheetModel>(
-                              future: upcomingToursDataFetched,
+                              future: getUpcomingJobsList(),
                               builder: (context, snapshot) {
                                 // if (!snapshot.hasData) {
                                 //   return Center(
@@ -380,301 +415,324 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //           width: 60,
                                 //           child: CircularProgressIndicator()));
                                 // } else {
-                                  if (upcomingData.isEmpty) {
-                                    return SizedBox(
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              height: 16.h,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Upcoming Tours (${upcomingData.length})',
-                                                  style: CustomTheme
-                                                      .textField_Headertext_Style,
+                                if (upcomingData.isEmpty) {
+                                  return SizedBox(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 16.h,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'upcoming_tours'.tr+ '(${upcomingData.length})',
+                                                style: CustomTheme
+                                                    .textField_Headertext_Style,
+                                              ),
+                                              //btn to see all the active jobs
+                                              InkWell(
+                                                onTap: () {
+                                                  // screenNavigator(context, JobsScreen());
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return UpcomingThimeSheet();
+                                                  }));
+                                                  // screenNavigator(context, TimeSheetScreen());
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 10.0),
+                                                  child: upcomingData.length ==
+                                                          0
+                                                      ? Container()
+                                                      : Text('see_all'.tr,
+                                                          style: CustomTheme
+                                                              .seeAllBtnStyle),
                                                 ),
-                                                //btn to see all the active jobs
-                                                InkWell(
-                                                  onTap: () {
-                                                    // screenNavigator(context, JobsScreen());
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
-                                                      return UpcomingThimeSheet();
-                                                    }));
-                                                    // screenNavigator(context, TimeSheetScreen());
-                                                  },
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10.0),
-                                                    child: upcomingData
-                                                                .length ==
-                                                            0
-                                                        ? Container()
-                                                        : Text('See all',
-                                                            style: CustomTheme
-                                                                .seeAllBtnStyle),
-                                                  ),
-                                                )
-                                              ],
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            width: 120,
+                                            child: Image.asset(
+                                              'assets/no_active_jobs.png',
+                                              fit: BoxFit.contain,
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              width: 120,
-                                              child: Image.asset(
-                                                'assets/no_active_jobs.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 12,
-                                            ),
-                                            Text(
-                                              'No Inactive jobs',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 17,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.6)),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                          Text(
+                                            'No Inactive jobs',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 17,
+                                                color: Colors.grey
+                                                    .withOpacity(0.6)),
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  } else {
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Upcoming Tours (${upcomingData.length})',
-                                              style: CustomTheme
-                                                  .textField_Headertext_Style,
+                                    ),
+                                  );
+                                } else {
+                                  return Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'upcoming_tours'.tr+ '(${upcomingData.length})',
+                                            style: CustomTheme
+                                                .textField_Headertext_Style,
+                                          ),
+                                          //btn to see all the active jobs
+                                          InkWell(
+                                            onTap: () {
+                                              // screenNavigator(context, JobsScreen());
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return UpcomingThimeSheet();
+                                              }));
+                                              // screenNavigator(context, TimeSheetScreen());
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10.0),
+                                              child: upcomingData.length == 0
+                                                  ? Container()
+                                                  : Text('see_all'.tr,
+                                                      style: CustomTheme
+                                                          .seeAllBtnStyle),
                                             ),
-                                            //btn to see all the active jobs
-                                            InkWell(
-                                              onTap: () {
-                                                // screenNavigator(context, JobsScreen());
-                                                Navigator.push(context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
-                                                  return UpcomingThimeSheet();
-                                                }));
-                                                // screenNavigator(context, TimeSheetScreen());
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: upcomingData.length == 0
-                                                    ? Container()
-                                                    : Text('See all',
-                                                        style: CustomTheme
-                                                            .seeAllBtnStyle),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        ListView.builder(
-                                            itemCount: upcomingData.length,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemBuilder: (context, index) {
-                                              return Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  upcomingData
-                                                          .isNotEmpty
-                                                      ? Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  upcomingData[
-                                                                          index]
-                                                                      .shifts!
-                                                                      .first
-                                                                      .formattedDate
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          17,
-                                                                      color: Colors
-                                                                          .grey
-                                                                          .withOpacity(
-                                                                              0.9),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : Container(),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      screenNavigator(
-                                                          context,
-                                                          PropertyDetailsScreen(
-                                                            propertyId:
-                                                                upcomingData[
-                                                                        index]
-                                                                    .id,
-                                                            imageBaseUrl: snapshot
-                                                                .data!
-                                                                .propertyImageBaseUrl,
-                                                            propertyImageBaseUrl:
-                                                                snapshot.data!
-                                                                    .propertyImageBaseUrl,
-                                                            // activeData: snapshot.data?.activeData![index],
-                                                          ));
-                                                    },
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 10),
-                                                      child: Column(
+                                          )
+                                        ],
+                                      ),
+                                      ListView.builder(
+                                          itemCount: upcomingData.length,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                upcomingData.isNotEmpty
+                                                    ? Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Container(
-                                                            height: 204,
-                                                            decoration: CustomTheme.locationCardStyle(
-                                                                snapshot.data!
-                                                                    .propertyImageBaseUrl
-                                                                    .toString(),
-                                                                upcomingData[
-                                                                        index]
-                                                                    .propertyAvatars!
-                                                                    .first
-                                                                    .propertyAvatar
-                                                                    .toString()),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 10,
-                                                          ),
                                                           Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .spaceBetween,
+                                                                    .start,
                                                             children: [
-                                                              Flexible(
-                                                                flex: 1,
-                                                                child: Text(
-                                                                  upcomingData[
-                                                                          index]
-                                                                      .propertyName
-                                                                      .toString(),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  // locationData[index].title,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          17),
-                                                                ),
-                                                              ),
                                                               Text(
                                                                 upcomingData[
                                                                         index]
-                                                                    .latestShiftTime
+                                                                    .shifts!
+                                                                    .first
+                                                                    .formattedDate
                                                                     .toString(),
-                                                                // locationData[index].duty,
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         17,
-                                                                    color:
-                                                                        primaryColor),
-                                                              )
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.9),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                              ),
                                                             ],
                                                           ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .location_on,
-                                                                color:
-                                                                    primaryColor,
-                                                                size: 15,
-                                                              ),
-                                                              Text(
+                                                        ],
+                                                      )
+                                                    : Container(),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    screenNavigator(
+                                                        context,
+                                                        PropertyDetailsScreen(
+                                                          propertyId:
+                                                              upcomingData[
+                                                                      index]
+                                                                  .id,
+                                                          imageBaseUrl: snapshot
+                                                              .data!
+                                                              .propertyImageBaseUrl,
+                                                          propertyImageBaseUrl:
+                                                              snapshot.data!
+                                                                  .propertyImageBaseUrl,
+                                                          // activeData: snapshot.data?.activeData![index],
+                                                        ));
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 10),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                            height: 204,
+                                                            child: Center(
+                                                                child: Image.network(
+                                                                    snapshot.data!
+                                                                            .propertyImageBaseUrl
+                                                                            .toString() +
+                                                                        upcomingData[index]
+                                                                            .propertyAvatars!
+                                                                            .first
+                                                                            .propertyAvatar
+                                                                            .toString(),
+                                                                    frameBuilder:
+                                                                        (context,
+                                                                            child,
+                                                                            frame,
+                                                                            wasSynchronouslyLoaded) {
+                                                              return child;
+                                                            }, loadingBuilder:
+                                                                        (context,
+                                                                            child,
+                                                                            loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null) {
+                                                                return child;
+                                                              } else {
+                                                                return Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(),
+                                                                );
+                                                              }
+                                                            }))
+                                                            // decoration: CustomTheme
+                                                            //     .locationCardStyle(
+                                                            //         snapshot.data!
+                                                            //             .propertyImageBaseUrl
+                                                            //             .toString(),
+                                                            //         upcomingData[
+                                                            //                 index]
+                                                            //             .propertyAvatars!
+                                                            //             .first
+                                                            //             .propertyAvatar
+                                                            //             .toString()),
+                                                            ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Flexible(
+                                                              flex: 1,
+                                                              child: Text(
                                                                 upcomingData[
                                                                         index]
                                                                     .propertyName
                                                                     .toString(),
-                                                                // locationData[index].subtitle,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                // locationData[index].title,
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                        13,
-                                                                    color: Colors
-                                                                        .grey),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 15.0),
-                                                            child: Text(
-                                                              // locationData[index].address,
+                                                                        17),
+                                                              ),
+                                                            ),
+                                                            Text(
                                                               upcomingData[
                                                                       index]
-                                                                  .location
-                                                                  // snapshot.data!.jobs!.data![index].location
+                                                                  .latestShiftTime
                                                                   .toString(),
+                                                              // locationData[index].duty,
+                                                              style: TextStyle(
+                                                                  fontSize: 17,
+                                                                  color:
+                                                                      primaryColor),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.location_on,
+                                                              color:
+                                                                  primaryColor,
+                                                              size: 15,
+                                                            ),
+                                                            Text(
+                                                              upcomingData[
+                                                                      index]
+                                                                  .propertyName
+                                                                  .toString(),
+                                                              // locationData[index].subtitle,
                                                               style: TextStyle(
                                                                   fontSize: 13,
-                                                                  color: black),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
+                                                                  color: Colors
+                                                                      .grey),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 15.0),
+                                                          child: Text(
+                                                            // locationData[index].address,
+                                                            upcomingData[index]
+                                                                .location
+                                                                // snapshot.data!.jobs!.data![index].location
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: black),
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                ],
-                                              );
-                                            })
-                                      ],
-                                    );
-                                  }
+                                                ),
+                                              ],
+                                            );
+                                          })
+                                    ],
+                                  );
+                                }
                                 // }
                               })
                         ],

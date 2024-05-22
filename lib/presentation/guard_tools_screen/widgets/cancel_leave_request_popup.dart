@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -30,7 +31,7 @@ class CancelLeaveRequest extends StatelessWidget {
       EasyLoading.show();
       Map<String, dynamic> myJsonBody = {"leave_id": leaveId};
       print(myJsonBody.toString());
-      Response response =
+      final response =
           await post(Uri.parse(apiUrl), body: myJsonBody, headers: myHeader);
       print(response.body.toString());
       var data = jsonDecode(response.body.toString());
@@ -85,7 +86,7 @@ class CancelLeaveRequest extends StatelessWidget {
                 alignment: Alignment.center,
                 width: 218.w,
                 child: Text(
-                  'Are you sure you want to cancel leave request ?',
+                  'leave_request_cancelation'.tr,
                   style: CustomTheme.blackTextStyle(14.sp),
                   // AppFontStyle.mediumTextStyle(AppColors.black, 14.sp)
                 ),
@@ -109,7 +110,7 @@ class CancelLeaveRequest extends StatelessWidget {
                               BorderRadius.all(Radius.elliptical(5.r, 5.r))),
                       padding:
                           EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-                      child: Text("Yes",
+                      child: Text("yes".tr,
                           style:
                               TextStyle(color: Colors.white, fontSize: 13.sp)),
                     ),
@@ -125,7 +126,7 @@ class CancelLeaveRequest extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
                       child: Text(
-                        "No",
+                        "no".tr,
                         style: CustomTheme.blackTextStyle(13.sp),
                         // TextStyle(color: Colors.black),
                       ),

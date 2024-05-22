@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -27,8 +28,8 @@ import 'package:http/http.dart' as http;
 // import 'package:geolocator/geolocator.dart';
 
 class ClockOutScreen extends StatefulWidget {
-  String? clockOutQrData;
-  ClockOutScreen({super.key, this.clockOutQrData});
+  String? shiftId;
+  ClockOutScreen({super.key, this.shiftId});
 
   @override
   State<ClockOutScreen> createState() => _ClockOutScreenState();
@@ -42,13 +43,13 @@ final imageUrl =
 class _ClockOutScreenState extends State<ClockOutScreen> {
   @override
   void initState() {
-    print("${widget.clockOutQrData}");
+    // print("${widget.clockOutQrData}");
     super.initState();
-    final ShiftDetailsModal shiftDetails =
-        shiftDetailsModalFromJson(widget.clockOutQrData.toString());
-    String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
-    getClockOutData(
-        shiftDetails.shiftDetails!.clockOut != null ? shiftId : '');
+    // final ShiftDetailsModal shiftDetails =
+    //     shiftDetailsModalFromJson(widget.clockOutQrData.toString());
+    // String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
+    // getClockOutData(
+    //     shiftDetails.shiftDetails!.clockOut != null ? shiftId : '');
   }
 
   Future getClockOutData(shift_id) async {
@@ -100,12 +101,12 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TimerOnCubit>().state.istimerOn
-        ? context.read<TimerOnCubit>().turnOffTimer()
-        : null;
-    final ShiftDetailsModal shiftDetails =
-        shiftDetailsModalFromJson(widget.clockOutQrData.toString());
-    String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
+    // context.read<TimerOnCubit>().state.istimerOn
+    //     ? context.read<TimerOnCubit>().turnOffTimer()
+    //     : null;
+    // final ShiftDetailsModal shiftDetails =
+    //     shiftDetailsModalFromJson(widget.clockOutQrData.toString());
+    // String? shiftId = shiftDetails.shiftDetails!.shiftId.toString();
     return
         // PopScope(
         //   canPop:false,
@@ -115,8 +116,7 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
       child: Scaffold(
           // appBar: CustomAppBarWidget(appbarTitle: 'Clocked Out'),
           body: FutureBuilder(
-              future: getClockOutData(
-                  shiftDetails.shiftDetails!.clockOut != null ? shiftId : ''),
+              future: getClockOutData(widget.shiftId),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -125,30 +125,30 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                           width: 60,
                           child: CircularProgressIndicator()));
                 }
-                // else {
-                //   if (snapshot.data!.status == 400) {
-                //     return Center(
-                //         child: Container(
-                //       height: 200,
-                //       width: 200,
-                //       child: Column(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //       Text(
-                //         snapshot.data!.message!.toString(),
-                //         textAlign: TextAlign.center,
-                //         style: TextStyle(fontSize: 15, color: primaryColor),
-                //       ),
-                //       SizedBox(height: 20), // Add spacing if needed
-                //       CustomButtonWidget(
-                //         buttonTitle: 'Home',
-                //         onBtnPress: () {
-                //           screenNavigator(context, Home());
-                //         },
-                //       ),
-                //       ]
-                //     )));
-                //   }
+                else {
+                  if (snapshot.data!.status == 400) {
+                    return Center(
+                        child: Container(
+                      height: 200,
+                      width: 200,
+                      child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Text(
+                        snapshot.data!.message!.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15, color: primaryColor),
+                      ),
+                      SizedBox(height: 20), // Add spacing if needed
+                      CustomButtonWidget(
+                        buttonTitle: 'Home'.tr,
+                        onBtnPress: () {
+                          screenNavigator(context, Home());
+                        },
+                      ),
+                      ]
+                    )));
+                  }
 
                 else {
                   return Center(
@@ -215,7 +215,7 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                                       ),
                                       const SizedBox(height: 28),
                                       Text(
-                                        'Property',
+                                        'property'.tr,
                                         style: CustomTheme.blueTextStyle(
                                             15, FontWeight.w400),
                                       ),
@@ -226,8 +226,8 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                                           style:
                                               CustomTheme.blackTextStyle(15)),
                                       const SizedBox(height: 6),
-                                      const Text(
-                                        'Guard Post Duties',
+                                      Text(
+                                        'guard_post_duties'.tr,
                                         style: TextStyle(
                                             fontSize: 15, color: Colors.grey),
                                       ),
@@ -265,14 +265,14 @@ class _ClockOutScreenState extends State<ClockOutScreen> {
                             height: 105,
                           ),
                           CustomButtonWidget(
-                              buttonTitle: 'Home',
+                              buttonTitle: 'Home'.tr,
                               onBtnPress: () {
                                 screenReplaceNavigator(context, Home());
                               }),
                         ]),
                   );
                 }
-                // }
+                }
               })),
     );
 

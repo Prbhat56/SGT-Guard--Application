@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/time_sheet_screen/upcoming_screen.dart';
 import 'package:sgt/theme/colors.dart';
 import 'package:sgt/theme/font_style.dart';
@@ -135,7 +136,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Active Property Map View',
+                            'active_property_map_view'.tr,
                             style:
                                 // AppFontStyle.mediumTextStyle(
                                 //     AppColors.primaryColor, 17.sp),
@@ -172,7 +173,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'General Report',
+                            'general_report'.tr,
                             style:
                                 // AppFontStyle.mediumTextStyle(
                                 //     AppColors.primaryColor, 17.sp),
@@ -209,7 +210,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Maintenance Report',
+                            'maintanance_report'.tr,
                             style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
@@ -245,7 +246,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Parking Report',
+                            'parking_report'.tr,
                             style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
@@ -281,7 +282,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Emergency Report',
+                            'emergency_report'.tr,
                             style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
@@ -317,7 +318,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Upcoming Shifts',
+                            'upcoming_shift'.tr,
                             style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
@@ -353,7 +354,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Missed Shifts',
+                            'missed_shifts'.tr,
                             style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,
@@ -389,7 +390,7 @@ class GuardToolScreen extends StatelessWidget {
                             width: 15.w,
                           ),
                           Text(
-                            'Leave Status',
+                            'leave_status'.tr,
                             style: TextStyle(
                               fontSize: 17.sp,
                               color: primaryColor,

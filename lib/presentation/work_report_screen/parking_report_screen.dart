@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,8 +49,8 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
   TextEditingController _colorController = TextEditingController();
   TextEditingController _lincenseController = TextEditingController();
   TextEditingController _stateMyController = TextEditingController();
-  List<String> _dropdownItems = <String>['Yes', 'No'];
-  String? towedValue = 'Yes';
+  List<String> _dropdownItems = <String>['yes'.tr, 'no'.tr];
+  String? towedValue = 'yes'.tr;
   String? propertyName;
   String? propertyId;
 
@@ -107,7 +109,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
     request.fields['license_number'] = _lincenseController.text.toString();
     request.fields['state'] = _stateMyController.text.toString();
 
-    towedValue == 'Yes'
+    towedValue == 'yes'.tr
         ? request.fields['towed_status'] = '1'.toString()
         : request.fields['towed_status'] = '0'.toString();
 
@@ -267,7 +269,8 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Parking Report'),
+        appBar: 
+        CustomAppBarWidget(appbarTitle: 'parking_report'.tr),
         backgroundColor: white,
         body: SingleChildScrollView(
             child: Column(
@@ -285,7 +288,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     children: [
                       RichText(
                           text: TextSpan(
-                              text: 'Property Name',
+                              text: 'property_name'.tr,
                               style: TextStyle(
                                 fontSize: 17,
                                 color: primaryColor,
@@ -299,7 +302,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                                 ))
                           ])),
                       // Text(
-                      //   'Property Name \*',
+                      //   'property_name'.tr,
                       //   style: CustomTheme.textField_Headertext_Style,
                       //   textScaleFactor: 1.0,
                       // ),
@@ -380,25 +383,25 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                   ),
                   CustomParkingTextField(
                     controller: _titleController,
-                    textfieldTitle: 'Title',
+                    textfieldTitle: 'title'.tr,
                     hintText: 'Enter Title',
                     isFilled: false,
                   ),
                   CustomParkingTextField(
                     controller: _vehicleTypeController,
-                    textfieldTitle: 'Manufacturer',
-                    hintText: 'Type here manufacturer',
+                    textfieldTitle: 'manufacturer'.tr,
+                    hintText: 'manufacturer_hint'.tr,
                     isFilled: false,
                   ),
                   CustomParkingTextField(
                     controller: _modelController,
-                    textfieldTitle: 'Model',
+                    textfieldTitle: 'model'.tr,
                     hintText: 'Enter Model',
                     isFilled: false,
                   ),
                   CustomParkingTextField(
                     controller: _colorController,
-                    textfieldTitle: 'Color',
+                    textfieldTitle: 'color'.tr,
                     hintText: 'Enter Color',
                     isFilled: false,
                   ),
@@ -415,7 +418,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                     isFilled: false,
                   ),
                   Text(
-                    'Towed',
+                    'towed'.tr,
                     style: CustomTheme.textField_Headertext_Style,
                     textScaleFactor: 1.0,
                   ),
@@ -465,7 +468,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                       : Container(),
                   RichText(
                       text: TextSpan(
-                          text: 'Upload Record Sample',
+                          text: 'sample_upload_image_text'.tr,
                           style: CustomTheme.blueTextStyle(17, FontWeight.w500),
                           children: [
                         TextSpan(
@@ -474,7 +477,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                               color: Colors.red,
                             ))
                       ])),
-                  // Text('Upload Record Sample',
+                  // Text('sample_upload_image_text'.tr,
                   //     style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
                   const SizedBox(
                     height: 20,
@@ -498,7 +501,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
                           });
                     },
                     child: DottedChooseFileWidget(
-                      title: 'Choose a file',
+                      title: 'choose_file_text'.tr,
                       height: 15,
                     ),
                   ),
@@ -514,7 +517,7 @@ class _ParkingReportScreenState extends State<ParkingReportScreen> {
             padding: EdgeInsets.symmetric(horizontal: 32),
             margin: EdgeInsets.symmetric(vertical: 30),
             child: CustomButtonWidget(
-                buttonTitle: 'Send',
+                buttonTitle: 'send'.tr,
                 onBtnPress: () {
                   if (_propertyNameController.text.isEmpty) {
                     CommonService()

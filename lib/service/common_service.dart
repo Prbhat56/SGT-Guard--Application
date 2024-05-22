@@ -122,9 +122,11 @@ class MyDateUtil {
         time.month == now.month &&
         time.year == time.year) {
       return '$formattedTime';  // return 'Today at $formattedTime';
-    } else if ((now.difference(time).inHours / 24).round() == 1) {
+    // } else if ((now.difference(time).inHours / 24).round() == 1) {     // For 12 Hour Format
+    } else if ((now.difference(time).inHours).round() == 1) {
       return 'Yesterday at $formattedTime';
-    } else if ((now.difference(time).inHours / 24).round() == 0) {
+    // } else if ((now.difference(time).inHours / 24).round() == 0) {     // For 12 Hour Format
+    } else if ((now.difference(time).inHours).round() == 0) {
       return 'Yesterday at $formattedTime';
     } else {
       return '${time.day} $month, $formattedTime';

@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DottedChooseFileWidget extends StatefulWidget {
   final String? title;
@@ -24,7 +25,7 @@ class _DottedChooseFileWidgetState extends State<DottedChooseFileWidget> {
             EdgeInsets.symmetric(vertical: widget.height ?? 20, horizontal: 5),
         child: Center(
             child: Text(
-          widget.title ?? 'Choose a File',
+          widget.title ?? 'choose_file_text'.tr,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.blue,

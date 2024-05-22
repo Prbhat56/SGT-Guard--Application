@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -18,12 +19,14 @@ class _CheckPointCompleteSuccessState extends State<CheckPointCompleteSuccess> {
     Timer(Duration(seconds: 2), () {
       // screenNavigator(
       // context, CheckPointScreen());
-      // screenReplaceNavigator(context, CheckPointScreen());
+      screenReplaceNavigator(context, CheckPointScreen());
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => CheckPointScreen()));
+
       // Navigator.of(context).pushAndRemoveUntil(
       //   MaterialPageRoute(builder: (context) => CheckPointScreen()),
       //   (route) => false,
       // );
-      Navigator.of(context)..pop()..pop()..pop();
+      // Navigator.of(context)..pop()..pop()..pop();
     });
 
     super.initState();
@@ -45,7 +48,7 @@ class _CheckPointCompleteSuccessState extends State<CheckPointCompleteSuccess> {
           SizedBox(
             height: 15,
           ),
-          Text('Done',
+          Text('done'.tr,
               textAlign: TextAlign.center,
               style: CustomTheme.blackTextStyle(25)),
           SizedBox(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
@@ -78,7 +79,7 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Missed Shifts'),
+        appBar: CustomAppBarWidget(appbarTitle: 'missed_shifts'.tr),
         body: FutureBuilder(
             future: getShiftList(),
             builder: ((context, snapshot) {
@@ -188,7 +189,7 @@ class _MissedShiftScreenState extends State<MissedShiftScreen> {
                                               BorderRadius.circular(20.r)),
                                       child: Center(
                                         child: Text(
-                                          'Missed',
+                                          'missed'.tr,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12.sp),

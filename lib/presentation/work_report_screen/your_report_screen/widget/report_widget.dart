@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../theme/custom_theme.dart';
 import '../../../widgets/custom_circular_image_widget.dart';
 
@@ -34,7 +35,7 @@ class ReportWidget extends StatelessWidget {
                                 CustomTheme.blueTextStyle(15, FontWeight.w400),
                           ),
                           Text(
-                            'Report type',
+                            'report_type'.tr,
                             style: CustomTheme.blackTextStyle(12),
                           ),
                         ],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/service/globals.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
@@ -72,7 +73,7 @@ class GuardCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name :',
+                  'name'.tr+' :',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 8,

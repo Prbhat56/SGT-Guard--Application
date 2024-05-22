@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 
 import '../cubit/isValidPassword/is_valid_password_cubit.dart';
@@ -19,8 +20,11 @@ class CustomErrorWidget {
             color: Colors.red,
             size: 17,
           ),
+          SizedBox(
+            width: 3,
+          ),
           Text(
-            ' Email ID is Incorrect',
+            'email_validation'.tr,
             style: TextStyle(color: Colors.red, fontSize: 13),
           ),
         ],
@@ -40,8 +44,11 @@ class CustomErrorWidget {
             color: Colors.red,
             size: 12,
           ),
+          SizedBox(
+            width: 3,
+          ),
           Text(
-            ' Enter Valid password',
+            'enter_valid_password'.tr,
             style: TextStyle(color: Colors.red, fontSize: 13),
           ),
         ],
@@ -73,7 +80,7 @@ class CustomErrorWidget {
                           width: 3,
                         ),
                         Text(
-                          'Passwords is too short!',
+                          'password_short_password'.tr,
                           style: TextStyle(color: Colors.red, fontSize: 13),
                         ),
                       ],
@@ -97,7 +104,7 @@ class CustomErrorWidget {
                           width: 3,
                         ),
                         Text(
-                          'Password not matched',
+                          'password_not_matched'.tr,
                           style: TextStyle(color: Colors.red, fontSize: 13),
                         ),
                       ],

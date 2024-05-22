@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/apply_leave_screen/model/leave_missing_shift_model.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
@@ -173,7 +174,7 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                     children: [
                       RichText(
                           text: TextSpan(
-                              text: 'Subject',
+                              text: 'subject'.tr,
                               style: CustomTheme.blueTextStyle(
                                   17, FontWeight.w500),
                               children: [
@@ -201,7 +202,7 @@ class _ApplyLeaveScreen2State extends State<ApplyLeaveScreen2> {
                           controller: _subjectText,
                           focusNode: subject_FocusNode,
                           decoration: InputDecoration(
-                            hintText: 'Subject',
+                            hintText: 'subject'.tr,
                             hintStyle: TextStyle(color: Colors.black38),
                             contentPadding:
                                 EdgeInsets.only(left: 10, top: 8, right: 5),

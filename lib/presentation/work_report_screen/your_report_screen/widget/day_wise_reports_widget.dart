@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/widget/report_widget.dart';
 import '../../../../theme/custom_theme.dart';
 
@@ -26,7 +27,7 @@ class DayWiseReportWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Report type',
+                    'report_type'.tr,
                     style: CustomTheme.blueTextStyle(12, FontWeight.w400),
                   ),
                   Icon(Icons.keyboard_arrow_up)

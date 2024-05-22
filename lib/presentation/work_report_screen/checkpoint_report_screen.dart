@@ -38,7 +38,7 @@ import 'widget/tasks_list_widget.dart';
 import 'package:http/http.dart' as http;
 
 class CheckpointReportScreen extends StatefulWidget {
-  String? checkPointqrData;
+  String? checkPointName;
   String? propId;
   String? shiftId;
   String? checkPointId;
@@ -47,7 +47,7 @@ class CheckpointReportScreen extends StatefulWidget {
 
   CheckpointReportScreen({
     super.key,
-    this.checkPointqrData,
+    this.checkPointName,
     this.propId,
     this.shiftId,
     this.checkPointId,
@@ -82,11 +82,8 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
 
   @override
   void initState() {
-    final CheckpointQrDetails checkPointQr =
-        checkpointQrDetailsFromJson(widget.checkPointqrData!);
-    String? checkpointId =
-        checkPointQr.checkpointDetails!.checkpointId.toString();
-    checkpointDetailsDataFetched = getCheckpointsTaskList(checkpointId);
+    getCheckpointsTaskList(widget.checkPointId);
+    // checkpointDetailsDataFetched = getCheckpointsTaskList(widget.checkPointId);
     super.initState();
   }
 
@@ -105,7 +102,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
         latestCheckpointId.toString(),
         routeId.toString(),
         property_id.toString());
-    screenNavigator(context, CheckPointCompleteSuccess());
+    screenReplaceNavigator(context, CheckPointCompleteSuccess());
   }
 
   void pickGalleryImage() async {
@@ -255,72 +252,19 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final CheckpointQrDetails checkPointQr =
-        checkpointQrDetailsFromJson(widget.checkPointqrData!);
-    String? checkpointId =
-        checkPointQr.checkpointDetails!.checkpointId.toString();
-    String checkPointName =
-        checkPointQr.checkpointDetails!.checkpointName.toString();
-    var jsonResponse = json.decode(widget.checkPointqrData!.toString());
     var cubit = context.watch<ReportTypeCubit>().state;
     print(cubit.isparkingReport);
-    return widget.checkPointId != checkpointId.toString() ||
-            jsonResponse.containsKey("checkpoint_details") == false
-        ? Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "You have scanned wrong checkpoint",
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                InkWell(
-                  onTap: () {
-                    screenReplaceNavigator(
-                            context,
-                            CheckPointScanningScreen(
-                                propId: widget.propId,
-                                shiftId: widget.shiftId,
-                                checkpointlistIndex: widget.checkpointListIndex,
-                                checkpointId: widget.checkPointId,
-                                checkpointHistoryId:
-                                    widget.checkpointHistoryId));
-                    // Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Re-scan',
-                    style:
-                        AppFontStyle.boldTextStyle(AppColors.primaryColor, 17),
-                  ),
-                ),
-                // CustomButtonWidget(
-                //   buttonTitle: 'back To Checkpoints',
-                //   onBtnPress: () {
-                //     screenNavigator(context, CheckPointScreen());
-                //   },
-                // ),
-              ],
-            ),
-          )
-        : MediaQuery(
+    return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
               appBar: CustomAppBarWidget(
                 appbarTitle:
-                    "CP-${widget.checkpointListIndex! + 1} ${'' + checkPointName}",
+                    "CP-${widget.checkpointListIndex! + 1} ${'' + widget.checkPointName.toString()}",
               ),
               backgroundColor: white,
               body: SingleChildScrollView(
                   child: FutureBuilder(
-                      future: checkpointDetailsDataFetched,
+                      future: getCheckpointsTaskList(widget.checkPointId),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
@@ -351,7 +295,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Tasks',
+                                    'tasks'.tr,
                                     style: TextStyle(
                                         fontSize: 17, color: primaryColor),
                                   ),
@@ -491,7 +435,7 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                                           });
                                     },
                                     child: DottedChooseFileWidget(
-                                      title: 'Choose a file',
+                                      title: 'choose_file_text'.tr,
                                       height: 50,
                                     ),
                                   ),
@@ -502,9 +446,9 @@ class _CheckpointReportScreenState extends State<CheckpointReportScreen> {
                               ),
                             ),
                             CustomButtonWidget(
-                                buttonTitle: 'Send',
+                                buttonTitle: 'send'.tr,
                                 onBtnPress: () {
-                                  uploadImage(checkpointId,
+                                  uploadImage(widget.checkPointId,
                                       checkpointTask.map((e) => e.id));
                                 }),
                             const SizedBox(

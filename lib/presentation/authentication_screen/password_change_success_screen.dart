@@ -23,7 +23,11 @@ class _PasswordChangeSuccessScreenState
     Timer(Duration(seconds: 2), () {
       // Navigator.pop(context);
       // screenReplaceNavigator(context, SignInScreen());
-      Navigator.of(context)..pop()..pop()..pop(); // ScreenUntill also can be used here 
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+        (route) => false,
+      );
+      // Navigator.of(context)..pop()..pop()..pop(); // ScreenUntill also can be used here 
     });
   }
 
@@ -56,7 +60,7 @@ class _PasswordChangeSuccessScreenState
                 Spacer(),
                 // const Center(
                 //   child: Text(
-                //     'You can now log-in to your SGT account',
+                //     'account_accessible'.tr,
                 //     textScaleFactor: 1.0,
                 //     style: TextStyle(fontSize: 13),
                 //   ),
@@ -65,7 +69,7 @@ class _PasswordChangeSuccessScreenState
                 //   height: 8,
                 // ),
                 // CustomButtonWidget(
-                //   buttonTitle: 'Back To Log In',
+                //   buttonTitle: 'back_to_login'.tr,
                 //   onBtnPress: () {
                 //     screenReplaceNavigator(context, SignInScreen());
                 //   },

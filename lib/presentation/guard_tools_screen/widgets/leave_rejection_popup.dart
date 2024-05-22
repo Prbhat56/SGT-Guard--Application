@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -30,7 +31,7 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title: statusOfLeave=='Rejected'? 'Rejected By: ' : 'Approved By: ',
+                title: statusOfLeave=='Rejected'? 'rejected_by'.tr+': ' : 'approved_by'.tr +': ',
                 titleValue: name,
                 fontsize: 15,
               ),
@@ -41,7 +42,7 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title:statusOfLeave=='Rejected'?  'Rejected On: ':'Approved On: ',
+                title:statusOfLeave=='Rejected'?  'rejected_on'.tr+': ':'approved_on'.tr+': ',
                 titleValue: date,
                 fontsize: 15,
               ),
@@ -52,7 +53,7 @@ class LeaveRejectInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextStyleWidget1(
-                title:statusOfLeave=='Rejected'? 'Rejected At: ':'Approved At: ',
+                title:statusOfLeave=='Rejected'? 'rejected_at'.tr+': ':'approved_at'.tr+': ',
                 titleValue: time,
                 fontsize: 15,
               ),
@@ -66,7 +67,7 @@ class LeaveRejectInfo extends StatelessWidget {
             height: 6,
           ),
           Text(
-            statusOfLeave=='Rejected'? 'Reason Of Rejection' : 'Leave Subject',
+            statusOfLeave=='Rejected'? 'rejection_reason'.tr : 'leave_subject'.tr,
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
             textScaleFactor: 1.0,
           ),
@@ -84,7 +85,7 @@ class LeaveRejectInfo extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 10),
             child: CustomButtonWidget(
-                buttonTitle: 'Go Back',
+                buttonTitle: 'go_back'.tr,
                 onBtnPress: () {
                   Navigator.pop(context);
                 }),

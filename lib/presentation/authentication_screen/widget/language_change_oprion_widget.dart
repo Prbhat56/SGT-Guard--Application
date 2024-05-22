@@ -144,7 +144,7 @@ class LanguageChangeOptionWidget extends StatelessWidget {
                               ),
                               child: GestureDetector(
                                 onTap:(){
-                                  print(locale[index]['name']);
+                                  print("Language ========> ${locale[index]['name']}");
                                   updateLanguage(locale[index]['locale']);
                                 },
                                 child: Center(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../utils/const.dart';
 
 class CheckInErrorScreen extends StatelessWidget {
@@ -108,8 +109,8 @@ class CheckInErrorScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Property',
+                      Text(
+                        'property'.tr,
                         style: TextStyle(fontSize: 13, color: Colors.grey),
                       ),
                       const Text(
@@ -122,8 +123,8 @@ class CheckInErrorScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        'Guard Post Duties',
+                      Text(
+                        'guard_post_duties'.tr,
                         style: TextStyle(
                             fontSize: 13, fontWeight: FontWeight.bold),
                       ),
@@ -137,7 +138,7 @@ class CheckInErrorScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 140, vertical: 20),
                       child: Text(
-                        'Back',
+                        'back'.tr,
                         style: TextStyle(color: black, fontSize: 17),
                       ),
                       onPressed: () {}),
@@ -149,7 +150,7 @@ class CheckInErrorScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 123, vertical: 20),
                       child: Text(
-                        'Clock Out',
+                        'clock_out_button'.tr,
                         style: TextStyle(color: white, fontSize: 17),
                       ),
                       onPressed: () {}),

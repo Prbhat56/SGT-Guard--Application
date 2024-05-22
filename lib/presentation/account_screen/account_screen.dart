@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -114,7 +115,7 @@ class _AccountScreenState extends MyState<AccountScreen> {
           ),
           leadingWidth: 30,
           title: Text(
-            'Account',
+            'account'.tr,
             style: TextStyle(
                 color: CustomTheme.primaryColor, fontWeight: FontWeight.w700),
           ),
@@ -225,7 +226,7 @@ class _AccountScreenState extends MyState<AccountScreen> {
                             ),
                             CustomUnderlineTextFieldWidget(
                               bottomPadding: 7,
-                              textfieldTitle: 'Email',
+                              textfieldTitle: 'email'.tr,
                               hintText: userDetails.emailAddress.toString(),
                               readonly: true,
                             ),

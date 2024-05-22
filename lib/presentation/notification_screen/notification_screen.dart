@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/notification_screen/widgets/general_tab.dart';
 import 'package:sgt/presentation/notification_screen/widgets/tasks_tab.dart';
 import 'package:sgt/service/constant/constant.dart';
@@ -55,7 +56,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MainAppBarWidget(
-          appBarTitle: 'Notifications',
+          appBarTitle: 'notification'.tr,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +75,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                   ),
                   Tab(
                     child: Text(
-                      'Tasks',
+                      'tasks'.tr,
                       style: TextStyle(fontSize: 20),
                     ),
                   ),

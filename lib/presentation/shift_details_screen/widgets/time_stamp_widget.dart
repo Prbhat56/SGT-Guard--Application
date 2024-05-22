@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
@@ -45,7 +46,7 @@ class _TimeStampWidgetState extends State<TimeStampWidget> {
           children: [
             Text(hours, style: CustomTheme.blueTextStyle(13, FontWeight.w400)),
             Text(
-              "Hours",
+              "hours".tr,
               style: CustomTheme.blueTextStyle(13, FontWeight.bold),
             )
           ],
@@ -56,7 +57,7 @@ class _TimeStampWidgetState extends State<TimeStampWidget> {
             Text(minutes,
                 style: CustomTheme.blueTextStyle(13, FontWeight.w400)),
             Text(
-              "Minutes",
+              "minutes".tr,
               style: CustomTheme.blueTextStyle(13, FontWeight.bold),
             )
           ],
@@ -69,7 +70,7 @@ class _TimeStampWidgetState extends State<TimeStampWidget> {
               style: TextStyle(fontSize: 13, color: primaryColor),
             ),
             Text(
-              "Seconds",
+              "seconds".tr,
               style: CustomTheme.blueTextStyle(13, FontWeight.bold),
             )
           ],

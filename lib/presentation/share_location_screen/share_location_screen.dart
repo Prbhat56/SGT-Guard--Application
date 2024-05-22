@@ -31,11 +31,11 @@ class _ShareLocationScreenState extends State<ShareLocationScreen> {
   }
 
   Future<Position> _determinePosition(context) async {
-    showDialog(
-        context: context,
-        builder: ((context) {
-          return Center(child: CircularProgressIndicator());
-        }));
+    // showDialog(
+    //     context: context,
+    //     builder: ((context) {
+    //       return Center(child: CircularProgressIndicator());
+    //     }));
 
     LocationPermission permission;
     permission = await Geolocator.checkPermission();

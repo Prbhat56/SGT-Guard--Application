@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/utils/const.dart';
 
@@ -21,12 +22,12 @@ class CheckpointsAlertDialog extends StatelessWidget {
                   color: Colors.red,
                   size: 16,
                 ),
-                Text(' To view checkpoint details you',
+                Text('checkpoint_shift_validation'.tr,
                     style: TextStyle(color: Colors.red))
               ],
             ),
           ),
-          Text('have to start the shift!', style: TextStyle(color: Colors.red)),
+          // Text('have to start the shift!', style: TextStyle(color: Colors.red)),
           SizedBox(
             height: 10,
           ),
@@ -39,7 +40,7 @@ class CheckpointsAlertDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 10),
             child: CustomButtonWidget(
-                buttonTitle: 'Go Back',
+                buttonTitle: 'go_back'.tr,
                 onBtnPress: () {
                   Navigator.pop(context);
                 }),

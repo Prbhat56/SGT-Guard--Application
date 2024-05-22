@@ -5,8 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+
 import 'package:sgt/main.dart';
 import 'package:sgt/presentation/account_screen/model/guard_details_model.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -370,6 +374,36 @@ class FirebaseHelper {
         .snapshots();
   }
 
+  static Future<List<ChatMessages>> showAllMessages(ChatUsers chatUsers) async {
+    String? converseId = getConversationID(chatUsers.id);
+    if (chatUsers.position == "property_owner") {
+      converseId = "${user.uid}_${chatUsers.id}";
+    } else {
+      converseId = getConversationID(chatUsers.id);
+    }
+
+    QuerySnapshot snapshot = await firestore
+        .collection('chats/${converseId}/messages/')
+        .orderBy('sent', descending: false)
+        .get();
+
+    var myData = snapshot.docs
+        .map((e) => ChatMessages.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
+
+    for (var i = 0; i < myData.length; i++) {
+      await firestore
+          .collection('chats/${converseId}/messages/')
+          .doc(myData[i].sent)
+          .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+    }
+    Future.delayed(const Duration(seconds: 3)).then((val) {
+      EasyLoading.dismiss();
+    });
+
+    return myData;
+  }
+
   //GET UNREAD MESSAGES METHOD
   static Stream<QuerySnapshot<Map<String, dynamic>>> getUnreadMessages(
       ChatUsers chatUsers) {
@@ -409,8 +443,6 @@ class FirebaseHelper {
       sendChatRelatedNotificationToPropertyOwner(chatUsers.id,);
     }
 
-    // final ref = firestore
-    //     .collection('chats/${getConversationID(chatUser.id)}/messages/');
     final ref = firestore.collection('chats/${converseId}/messages/');
     await ref
         .doc(time)
@@ -478,10 +510,20 @@ class FirebaseHelper {
     Map<String, dynamic> json =
         jsonDecode(pref.getString('user_profile').toString());
     var userDetails = GuardDetails.fromJson(json);
+    print(chatUser.id);
     await firestore
         .collection(
             'property_owner_${userDetails.userDetails!.propertyOwnerId.toString()}')
         .doc(chatUser.id)
+        .update({
+      'recentMessageTimestamp':
+          DateTime.now().millisecondsSinceEpoch.toString(),
+    });
+    print(user.uid);
+    await firestore
+        .collection(
+            'property_owner_${userDetails.userDetails!.propertyOwnerId.toString()}')
+        .doc(user.uid)
         .update({
       'recentMessageTimestamp':
           DateTime.now().millisecondsSinceEpoch.toString(),

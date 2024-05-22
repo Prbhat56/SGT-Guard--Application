@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/clocked_in_out_screen/modal/clock_in_modal.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
 import 'package:sgt/theme/custom_theme.dart';
@@ -17,7 +18,7 @@ import 'package:sgt/theme/custom_theme.dart';
 //       title: 'Day:',
 //       titleValue: ' Monday, October 24'), // missing in api response
 //   TimeDetailsModel(
-//       title: 'Shift Time:',
+//       title: 'shift_time'.tr+': ',
 //       titleValue: '10:00 AM - 04:00 PM') //missing in apiResponse
 // ];
 
@@ -45,7 +46,7 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Day:',
+                      'day'.tr+':',
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
@@ -59,7 +60,7 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Shift Time:',
+                      'shift_time'.tr+': ',
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
@@ -94,7 +95,7 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Day: ',
+                      'day'.tr+':',
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(
@@ -108,7 +109,7 @@ class _TimeDetailsWidgetState extends State<TimeDetailsWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Shift Time: ',
+                      'shift_time'.tr+': ',
                       style: CustomTheme.blackTextStyle(13),
                     ),
                     Text(

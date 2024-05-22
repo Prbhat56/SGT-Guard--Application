@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -251,7 +252,8 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Maintenance Report'),
+        appBar: 
+        CustomAppBarWidget(appbarTitle: 'maintanance_report'.tr),
         backgroundColor: white,
         body: SingleChildScrollView(
             child: Padding(
@@ -266,13 +268,13 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Text(
-                  //   'Property Name \*',
+                  //   'property_name'.tr,
                   //   style: CustomTheme.textField_Headertext_Style,
                   //   textScaleFactor: 1.0,
                   // ),
                   RichText(
                       text: TextSpan(
-                          text: 'Property Name',
+                          text: 'property_name'.tr,
                           style: CustomTheme.textField_Headertext_Style,
                           children: [
                         TextSpan(
@@ -364,7 +366,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
               ),
               CustomTextField(
                 controller: _notesController,
-                textfieldTitle: 'Notes',
+                textfieldTitle: 'notes'.tr,
                 hintText: 'Enter Note Here',
                 isFilled: false,
                 maxLines: 5,
@@ -396,7 +398,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                   : Container(),
               RichText(
                   text: TextSpan(
-                      text: 'Upload Record Sample',
+                      text: 'sample_upload_image_text'.tr,
                       style: CustomTheme.blueTextStyle(17, FontWeight.w500),
                       children: [
                     TextSpan(
@@ -406,7 +408,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                         ))
                   ])),
               // Text(
-              //   'Upload Record Sample',
+              //   'sample_upload_image_text'.tr,
               //   style: TextStyle(
               //       fontSize: 17,
               //       color: primaryColor,
@@ -435,7 +437,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
                         });
                   },
                   child: DottedChooseFileWidget(
-                    title: 'Choose a file',
+                    title: 'choose_file_text'.tr,
                     height: 15,
                   )),
               imageFileList!.isNotEmpty
@@ -450,7 +452,7 @@ class _MaintenanceReportScreenState extends State<MaintenanceReportScreen> {
           padding: EdgeInsets.symmetric(horizontal: 32),
             margin: EdgeInsets.symmetric(vertical: 30),
             child: CustomButtonWidget(
-                buttonTitle: 'Send',
+                buttonTitle: 'send'.tr,
                 onBtnPress: () {
                   if (_propertyNameController.text.isEmpty) {
                     CommonService()

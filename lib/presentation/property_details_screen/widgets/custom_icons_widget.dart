@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/check_points_list.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
@@ -22,16 +23,16 @@ class CustomIconsDataModel {
 //data list of customicon
 List<CustomIconsDataModel> customIconsData = customIconsData = [
   CustomIconsDataModel(
-      iconUrl: 'assets/qr1.svg', title: 'Scan QR', widget: ScanningScreen()),
+      iconUrl: 'assets/qr1.svg', title: 'scan_qr'.tr, widget: ScanningScreen()),
   CustomIconsDataModel(
       iconUrl: 'assets/map.svg',
-      title: 'Checkpoints',
+      title: 'checkpoint'.tr,
       widget: CheckPointListsScreen(
         // checkPoint: [],
         imageBaseUrl: '',
       )),
   CustomIconsDataModel(
-      iconUrl: 'assets/plus.svg', title: 'Report', widget: WorkReportScreen()),
+      iconUrl: 'assets/plus.svg', title: 'report'.tr, widget: WorkReportScreen()),
 ];
 
 //custom-icon widget

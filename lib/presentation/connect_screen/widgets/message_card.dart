@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gal/gal.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_messages_modal.dart';
 import 'package:sgt/presentation/connect_screen/model/chat_users_model.dart';
@@ -501,7 +502,7 @@ class _MessageCardState extends State<MessageCard> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              'Cancel',
+                              'cancel'.tr,
                               // ignore: deprecated_member_use
                               textScaleFactor: 1.0,
                               style: TextStyle(
@@ -632,7 +633,7 @@ class _MessageCardState extends State<MessageCard> {
                                 }
                               },
                               child: Text(
-                                'Cancel',
+                                'cancel'.tr,
                                 // ignore: deprecated_member_use
                                 textScaleFactor: 1.0,
                                 style: TextStyle(

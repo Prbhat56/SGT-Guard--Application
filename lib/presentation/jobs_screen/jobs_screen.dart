@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
@@ -116,13 +117,13 @@ class _JobsScreenState extends State<JobsScreen> with TickerProviderStateMixin {
                   tabs: [
                     Tab(
                       child: Text(
-                        'Active',
+                        'active'.tr,
                         style: TextStyle(fontSize: 17),
                       ),
                     ),
                     Tab(
                       child: Text(
-                        'Inactive',
+                        'Inactive'.tr,
                         style: TextStyle(fontSize: 17),
                       ),
                     ),
@@ -168,13 +169,13 @@ class _JobsScreenState extends State<JobsScreen> with TickerProviderStateMixin {
                     tabs: [
                       Tab(
                         icon: Text(
-                          'Active',
+                          'active'.tr,
                           style: TextStyle(fontSize: 17),
                         ),
                       ),
                       Tab(
                         icon: Text(
-                          'Inactive',
+                          'Inactive'.tr,
                           style: TextStyle(fontSize: 17),
                         ),
                       ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -85,7 +86,7 @@ class _ActiveMapScreenState extends State<ActiveMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWidget(appbarTitle: 'Active Properties'),
+      appBar: CustomAppBarWidget(appbarTitle: 'active_properties'.tr),
       body: FutureBuilder(
         future: getJobsList(),
         builder: (context, snapshot) {

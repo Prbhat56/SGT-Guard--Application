@@ -35,7 +35,7 @@ class NetworkController extends GetxController {
         messageText: Padding(
           padding: EdgeInsets.only(left:8.0),
           child: Text(
-            "No Internet Connection.",
+            "no_internet".tr,
             style: AppFontStyle.mediumTextStyle(AppColors.textColor, 15.sp),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_textfield_widget.dart';
@@ -54,7 +55,6 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
     } else {
        results = languages.where((element) => element.toLowerCase().contains(searchText.toLowerCase())).toList();
     }
-
     setState(() {
       _searchedItems = results;
     });
@@ -65,7 +65,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Languages'),
+        appBar: CustomAppBarWidget(appbarTitle: 'language'.tr),
         backgroundColor: white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -147,7 +147,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                             style:
                                 TextStyle(color: CustomTheme.black, fontSize: 13),
                           ),
-                          // trailing: index == 0 ? Text('default') : Text(''),
+                          trailing: index == 0 ? Text('default') : Text(''),
                         ),
                       ),
                     );

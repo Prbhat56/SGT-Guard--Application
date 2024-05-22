@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import '../../utils/const.dart';
 import '../cubit/navigation/navigation_cubit.dart';
 import 'bottom_navigation_bar_model.dart';
@@ -41,7 +42,7 @@ class _BottomNavigationBarItemListState
           onTap: _onItemTapped,
           items: bottmNavigationItemData.map((e) {
             return BottomNavigationBarItem(
-              activeIcon: e.label == 'Connect'
+              activeIcon: e.label == 'connect'.tr
                   ? FaIcon(
                       e.icon,
                       size: 28,

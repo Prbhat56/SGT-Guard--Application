@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -63,8 +64,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
   String? propertyName;
   String? propertyId;
 
-  List<String> _dropdownItems = <String>['Yes', 'No'];
-  String? towedValue = 'Yes';
+  List<String> _dropdownItems = <String>['yes'.tr, 'no'.tr];
+  String? towedValue = 'yes'.tr;
 
   // List<TextEditingController> _peopleNameController = [TextEditingController()];
   // List<TextEditingController> _peoplePhoneController = [
@@ -136,13 +137,13 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
         Column(
           children: [
             CustomReportTextField(
-              textfieldTitle: 'Name',
-              hintText: 'Name',
+              textfieldTitle: 'name'.tr,
+              hintText: 'name'.tr,
               controller: nameController,
             ),
             CustomReportTextField(
-              textfieldTitle: 'Phone Number',
-              hintText: 'Phone Number',
+              textfieldTitle: 'phone_number'.tr,
+              hintText: 'phone_number'.tr,
               keyboardType: TextInputType.number,
               controller: mobileController,
             ),
@@ -166,13 +167,13 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
         Column(
           children: [
             CustomReportTextField(
-              textfieldTitle: 'Name',
-              hintText: 'Name',
+              textfieldTitle: 'name'.tr,
+              hintText: 'name'.tr,
               controller: nameController,
             ),
             CustomReportTextField(
-              textfieldTitle: 'Phone Number',
-              hintText: 'Phone Number',
+              textfieldTitle: 'phone_number'.tr,
+              hintText: 'phone_number'.tr,
               keyboardType: TextInputType.number,
               controller: mobileController,
             ),
@@ -251,7 +252,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     request.fields['officer_name'] = _officerController.text.toString();
     request.fields['officer_designation'] = _officeController.text.toString();
 
-    towedValue == 'Yes'
+    towedValue == 'yes'.tr
         ? request.fields['towed_status'] = '1'.toString()
         : request.fields['towed_status'] = '0'.toString();
 
@@ -413,7 +414,8 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Emergency Report'),
+        appBar: 
+        CustomAppBarWidget(appbarTitle: 'emergency_report'.tr),
         backgroundColor: white,
         body: SingleChildScrollView(
           child: Padding(
@@ -429,7 +431,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   children: [
                     RichText(
                         text: TextSpan(
-                            text: 'Property Name',
+                            text: 'property_name'.tr,
                             style: CustomTheme.textField_Headertext_Style,
                             children: [
                           TextSpan(
@@ -439,7 +441,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                               ))
                         ])),
                     // Text(
-                    //   'Property Name \*',
+                    //   'property_name'.tr,
                     //   style: CustomTheme.textField_Headertext_Style,
                     //   textScaleFactor: 1.0,
                     // ),
@@ -526,7 +528,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 RichText(
                     text: TextSpan(
-                        text: 'Emergency Date & Time',
+                        text: 'emergency_date_time'.tr,
                         style: CustomTheme.textField_Headertext_Style,
                         children: [
                       TextSpan(
@@ -549,7 +551,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
 
                 CustomTextField(
                   controller: _detailsController,
-                  textfieldTitle: 'Emergency Details',
+                  textfieldTitle: 'emergency_details'.tr,
                   hintText: 'Something here',
                   isFilled: false,
                   maxLines: 5,
@@ -558,7 +560,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                   height: 10.h,
                 ),
                 Text(
-                  'People Involved',
+                  'people_involved'.tr,
                   style: TextStyle(
                     fontSize: 17.sp,
                     color: CustomTheme.black,
@@ -597,7 +599,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                             color: CustomTheme.primaryColor,
                             borderRadius: BorderRadius.circular(15.r)),
                         child: Text(
-                          'Add peoples +',
+                          'add_people'.tr+'s'+'+',
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -649,7 +651,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                             color: CustomTheme.primaryColor,
                             borderRadius: BorderRadius.circular(15)),
                         child: Text(
-                          'Add peoples +',
+                          'add_people'.tr+'s'+'+',
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -663,25 +665,25 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 CustomTextField(
                   controller: _actionController,
-                  textfieldTitle: 'Action Taken',
+                  textfieldTitle: 'action_taken'.tr,
                   hintText: 'Something here',
                   isFilled: false,
                   maxLines: 5,
                 ),
                 CustomReportTextField(
                   controller: _policeReportController,
-                  textfieldTitle: 'Police Report#',
+                  textfieldTitle: 'police_report'.tr+'#',
                   hintText: 'Police report number',
                 ),
                 CustomReportTextField(
                   controller: _officerController,
-                  textfieldTitle: 'Officer Name#',
-                  hintText: 'Officer Name',
+                  textfieldTitle: 'officer_name'.tr+'#',
+                  hintText: 'officer_name'.tr,
                 ),
 
                 CustomReportTextField(
                   controller: _officeController,
-                  textfieldTitle: 'Officer#',
+                  textfieldTitle: 'officer'.tr+'#',
                   hintText: 'Officer Designation',
                 ),
 
@@ -739,7 +741,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                 ),
                 RichText(
                     text: TextSpan(
-                        text: 'Upload Record Sample',
+                        text: 'sample_upload_image_text'.tr,
                         style:
                             CustomTheme.blueTextStyle(17.sp, FontWeight.w500),
                         children: [
@@ -750,7 +752,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           ))
                     ])),
                 // Text(
-                //   'Upload Record Sample',
+                //   'sample_upload_image_text'.tr,
                 //   style: CustomTheme.blueTextStyle(17, FontWeight.w500),
                 //   textScaleFactor: 1.0,
                 // ),
@@ -776,7 +778,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
                           });
                     },
                     child: DottedChooseFileWidget(
-                      title: 'Choose a file',
+                      title: 'choose_file_text'.tr,
                       height: 15.h,
                     )),
               ],
@@ -787,7 +789,7 @@ class _EmergencyReportScreenState extends State<EmergencyReportScreen> {
             padding: EdgeInsets.symmetric(horizontal: 32.w),
             margin: EdgeInsets.symmetric(vertical: 30.h),
             child: CustomButtonWidget(
-                buttonTitle: 'Send',
+                buttonTitle: 'send'.tr,
                 onBtnPress: () {
                   if (_propertyNameController.text.isEmpty) {
                     CommonService()

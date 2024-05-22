@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -54,9 +55,9 @@ class _PasswordChangeSuccessAfterForgetScreenState
                   ),
                 ),
                 Spacer(),
-                const Center(
+                Center(
                   child: Text(
-                    'You can now log-in to your SGT account',
+                    'account_accessible'.tr,
                     textScaleFactor: 1.0,
                     style: TextStyle(fontSize: 13),
                   ),
@@ -65,7 +66,7 @@ class _PasswordChangeSuccessAfterForgetScreenState
                   height: 8,
                 ),
                 CustomButtonWidget(
-                  buttonTitle: 'Back To Log In',
+                  buttonTitle: 'back_to_login'.tr,
                   onBtnPress: () {
                     screenReplaceNavigator(context, SignInScreen());
                   },
