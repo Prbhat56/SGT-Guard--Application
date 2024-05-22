@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
 import 'package:sgt/presentation/widgets/custom_text_widget.dart';
@@ -251,7 +252,7 @@ class _FilterReportWidgetState extends State<FilterReportWidget> {
                   ),
                 ),
                 title: Text(
-                  'General Report',
+                  'general_report'.tr,
                   style: TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500, color: black),
                 ),
@@ -282,7 +283,7 @@ class _FilterReportWidgetState extends State<FilterReportWidget> {
                   ),
                 ),
                 title: Text(
-                  'Maintenance Report',
+                  'maintanance_report'.tr,
                   style: TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500, color: black),
                 ),
@@ -313,7 +314,7 @@ class _FilterReportWidgetState extends State<FilterReportWidget> {
                   ),
                 ),
                 title: Text(
-                  'Parking Report',
+                  'parking_report'.tr,
                   style: TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500, color: black),
                 ),
@@ -344,7 +345,7 @@ class _FilterReportWidgetState extends State<FilterReportWidget> {
                   ),
                 ),
                 title: Text(
-                  'Emergency Report',
+                  'emergency_report'.tr,
                   style: TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500, color: black),
                 ),

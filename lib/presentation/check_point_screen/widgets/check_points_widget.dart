@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
@@ -200,7 +201,7 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
     );
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    countdownSeconds == 0 ? prefs.setString('isTimer', '0') : '';
+    countdownSeconds == 0 ? prefs.remove('isTimer') : '';
     //native app life cycle
     SystemChannels.lifecycle.setMessageHandler((msg) {
       // On AppLifecycleState: paused
@@ -262,7 +263,7 @@ class _CheckPointWidgetState extends State<CheckPointWidget> {
               ),
               Center(
                 child: CustomButtonWidget(
-                    buttonTitle: 'Clock Out',
+                    buttonTitle: 'clock_out_button'.tr,
                     onBtnPress: () {
                       locationSubscription?.cancel();
                       LocationManager().stop();

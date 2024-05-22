@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/work_report_screen/your_report_screen/model/report_list_model.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import 'package:sgt/utils/const.dart';
@@ -55,7 +56,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Property Name',
+                  Text('property_name'.tr,
                       style: CustomTheme.blueTextStyle(17.sp, FontWeight.w700)),
                   SizedBox(
                     height: 10,
@@ -208,7 +209,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Notes',
+                  Text('notes'.tr,
                       style: CustomTheme.blueTextStyle(17.sp, FontWeight.w700)),
                   SizedBox(
                     height: 10.h,

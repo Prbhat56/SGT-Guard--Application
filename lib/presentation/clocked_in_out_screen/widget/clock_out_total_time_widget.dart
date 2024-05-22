@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/theme/custom_theme.dart';
 import '../../../utils/const.dart';
 
@@ -16,7 +17,7 @@ class _TotalTimeWidgetState extends State<TotalTimeWidget> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('Total Time:',
+        Text('total_time'.tr+':',
             style: CustomTheme.blueTextStyle(15, FontWeight.w500)),
         SizedBox(
           width: 15,

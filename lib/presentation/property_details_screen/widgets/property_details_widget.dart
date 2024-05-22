@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/jobs_screen/model/dutyList_model.dart';
 import 'package:sgt/presentation/property_details_screen/model/propertyDetail_model.dart';
 
@@ -72,7 +73,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                           Row(
                             children: [
                               Text(
-                                'Last Shift: ',
+                                'last_shift'.tr,
                                 style: TextStyle(
                                   color: Colors.red,
                                   fontSize: 11.sp,
@@ -111,12 +112,12 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                 child: Center(
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                     PropertyDataWidget(
-                        title: 'Guards',
+                        title: 'guard'.tr,
                         number: widget.detailsData!.assignStaff.toString()),
                     PropertyDataWidget(
-                        title: 'Checkpoints', number: widget.detailsData!.checkpointCount.toString()),
+                        title: 'checkpoint'.tr, number: widget.detailsData!.checkpointCount.toString()),
                     PropertyDataWidget(
-                        title: 'Sqft',
+                        title: 'sqft'.tr,
                         number: widget.detailsData!.area.toString())
                   ]),
                 ),

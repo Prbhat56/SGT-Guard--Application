@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/helper/navigator_function.dart';
@@ -197,8 +198,8 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                                 SizedBox(
                                   width: 180.w,
                                   child: Text(
-                                    // 'Shift Time: ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockIn.toString()} - ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockOut.toString()}',
-                                  'Shift Time:  ${detailsData.jobDetails!.shiftTime.toString()}',
+                                    // 'shift_time'.tr+': ',${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockIn.toString()} - ${detailsData.shifts!.isEmpty ? '' : detailsData.shifts!.first.clockOut.toString()}',
+                                  'shift_time'.tr+': '+'${detailsData.jobDetails!.shiftTime.toString()}',
                                     maxLines: 1,
                                     style: TextStyle(
                                         fontSize: 13.sp,
@@ -219,7 +220,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextFieldHeaderWidget(title: 'Completed Checkpoints:'),
+                        TextFieldHeaderWidget(title: 'completed_checkpoints'.tr+':'),
                         TextFieldHeaderWidget(title: detailsData.jobDetails!.completedCheckpoint.toString())
                       ],
                     ),
@@ -230,7 +231,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextFieldHeaderWidget(title: 'Missed Checkpoints:'),
+                        TextFieldHeaderWidget(title: 'missed_checkpoints'.tr+':'),
                         TextFieldHeaderWidget(title: detailsData.jobDetails!.remainingCheckpoint.toString())
                       ],
                     ),
@@ -241,7 +242,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextFieldHeaderWidget(title: 'Clock In Time:'),
+                        TextFieldHeaderWidget(title: 'clock_in_time'.tr+':'),
                         TextFieldHeaderWidget(
                             title: detailsData.shifts!.isEmpty
                                 ? ''
@@ -255,7 +256,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextFieldHeaderWidget(title: 'Clock Out Time:'),
+                        TextFieldHeaderWidget(title: 'clock_out_time'.tr+':'),
                         TextFieldHeaderWidget(
                             title: detailsData.shifts!.isEmpty
                                 ? ''
@@ -283,7 +284,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                             borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(color: primaryColor)),
                         child: Text(
-                          "View Reports",
+                          "view_report".tr,
                           style: TextStyle(
                               color: primaryColor,
                               fontSize: 10.sp,
@@ -312,7 +313,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextFieldHeaderWidget(title: 'Job Details'),
+                            TextFieldHeaderWidget(title: 'job_details'.tr),
                             SizedBox(height: 10.h),
                             JobDetailsWidget(jobDetails: detailsData.jobDetails)
                           ],
@@ -335,7 +336,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextFieldHeaderWidget(title: 'Description'),
+                        TextFieldHeaderWidget(title: 'description'.tr),
                         SizedBox(height: 10),
                         // Text(
                         //   detailsData.propertyDescription.toString(),
@@ -411,7 +412,7 @@ class _TimeSheetDetailsWidgetState extends State<TimeSheetDetailsWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextFieldHeaderWidget(title: 'Location'),
+                        TextFieldHeaderWidget(title: 'location'.tr),
                         SizedBox(height: 10.h),
                         Text(
                           detailsData.location.toString(),

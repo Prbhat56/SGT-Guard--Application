@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:sgt/presentation/guard_tools_screen/widgets/cancel_leave_request_popup.dart';
 import 'package:sgt/presentation/widgets/custom_button_widget.dart';
@@ -39,7 +40,7 @@ class LeavePendingInfo extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Pending',
+                    'pending'.tr,
                     style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 16,
@@ -59,7 +60,7 @@ class LeavePendingInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    statusOfLeave == 'Pending' ? 'Leave Subject' : '',
+                    statusOfLeave == 'pending'.tr ? 'leave_subject'.tr : '',
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                     textScaleFactor: 1.0,
                   ),
@@ -85,7 +86,7 @@ class LeavePendingInfo extends StatelessWidget {
                             EdgeInsets.symmetric(vertical: 9, horizontal: 14),
                         color: CustomTheme.primaryColor,
                         child: Text(
-                          'Go back',
+                          'go_back'.tr,
                           textScaleFactor: 1.0,
                           style: TextStyle(fontSize: 17),
                         ),
@@ -108,7 +109,7 @@ class LeavePendingInfo extends StatelessWidget {
                               });
                         },
                         child: Text(
-                          'Cancel',
+                          'cancel'.tr,
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 13,

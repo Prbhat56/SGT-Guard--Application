@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
@@ -97,7 +98,7 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Leave Status'),
+        appBar: CustomAppBarWidget(appbarTitle: 'leave_status'.tr),
         body: SmartRefresher(
           controller: refreshController,
           enablePullUp: true,
@@ -139,7 +140,7 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                               backgroundImage:
                                   AssetImage(leave.status == 'Rejected'
                                       ? 'assets/rejected_leave.png'
-                                      : leave.status == 'Pending'
+                                      : leave.status == 'pending'.tr
                                           ? 'assets/pending_leave.png'
                                           : leave.status == 'Approved'
                                               ? 'assets/approved_leave.png'
@@ -283,7 +284,7 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                                           color: leave.status.toString() ==
                                                   "Approved"
                                               ? primaryColor
-                                              : leave.status.toString() == "Pending"
+                                              : leave.status.toString() == "pending".tr
                                                   ? Colors.grey
                                                   : leave.status.toString() ==
                                                           "Rejected"
@@ -298,8 +299,8 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
                                       child: Text(
                                         leave.status.toString() == "Approved"
                                             ? "Approved"
-                                            : leave.status.toString() == "Pending"
-                                                ? "Pending"
+                                            : leave.status.toString() == "pending".tr
+                                                ? "pending".tr
                                                 : "Rejected",
                                         style: TextStyle(
                                             color: white,

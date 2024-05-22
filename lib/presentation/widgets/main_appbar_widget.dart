@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import '../../utils/const.dart';
 import '../guard_tools_screen/guard_tools_screen.dart';
@@ -38,7 +39,7 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           style: TextStyle(color: black, fontWeight: FontWeight.w400),
         ),
         actions: [
-          appBarTitle == 'Account'
+          appBarTitle == 'account'.tr
               ? IconButton(
                   onPressed: () {
                     screenNavigator(context, SettingsScreen());

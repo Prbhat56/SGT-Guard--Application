@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/work_report_screen/emergency_report_screen/emergency_report_screen.dart';
@@ -60,7 +61,7 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                       Icon(Icons.my_location, color: CustomTheme.primaryColor),
                       SizedBox(width: 5),
                       Text(
-                        'Location',
+                        'location'.tr,
                         style: TextStyle(
                             fontSize: 15.sp,
                             color: CustomTheme.black,
@@ -85,7 +86,7 @@ class _EmergencyLocationWidgetState extends State<EmergencyLocationWidget> {
                               ));
                         },
                         child: Text(
-                          'Edit Location',
+                          'edit_location'.tr,
                           style: TextStyle(
                               fontSize: 12.sp,
                               color: CustomTheme.primaryColor,

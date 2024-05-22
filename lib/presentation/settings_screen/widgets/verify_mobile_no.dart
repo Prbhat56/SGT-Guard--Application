@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import '../../../utils/const.dart';
 
@@ -174,7 +175,7 @@ class _VerifyMobileNoScreenState extends State<VerifyMobileNoScreen> {
                   //     const EdgeInsets.symmetric(horizontal: 130, vertical: 15),
                   color: primaryColor,
                   child: Text(
-                    'Done',
+                    'done'.tr,
                     style: TextStyle(fontSize: 20.sp),
                   ),
                   onPressed: () {

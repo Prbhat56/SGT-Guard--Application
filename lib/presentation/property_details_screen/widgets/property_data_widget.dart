@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class PropertydataModel {
   final String title;
@@ -11,9 +12,9 @@ class PropertydataModel {
 }
 
 List<PropertydataModel> propertyData = [
-  PropertydataModel(title: 'Guards', number: '15'),
+  PropertydataModel(title: 'guard'.tr, number: '15'),
   PropertydataModel(title: 'Points', number: '10'),
-  PropertydataModel(title: 'Sqft', number: '7000')
+  PropertydataModel(title: 'sqft'.tr, number: '7000')
 ];
 
 class PropertyDataWidget extends StatelessWidget {

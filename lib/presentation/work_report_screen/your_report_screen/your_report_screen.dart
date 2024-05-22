@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
@@ -458,7 +459,7 @@ class _YourReportScreenState extends State<YourReportScreen> {
               SizedBox(
                 height: 20,
               ),
-              Text('All Reports',
+              Text('all_reports'.tr,
                   style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
               SizedBox(
                 height: 15,

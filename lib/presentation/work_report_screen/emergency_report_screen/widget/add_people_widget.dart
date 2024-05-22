@@ -54,8 +54,8 @@ class _AddPeopleWidgetState extends State<AddPeopleWidget> {
                       controller: widget.peopleName[index],
                     ),
                     CustomUnderlineTextFieldWidget(
-                      textfieldTitle: 'Phone Number',
-                      hintText: 'Phone Number',
+                      textfieldTitle: 'phone_number'.tr,
+                      hintText: 'phone_number'.tr,
                       keyboardType: TextInputType.number,
                       controller: widget.peoplePhone[index],
                     ),
@@ -72,7 +72,7 @@ class _AddPeopleWidgetState extends State<AddPeopleWidget> {
                 color: CustomTheme.primaryColor,
                 borderRadius: BorderRadius.circular(15)),
             child: Text(
-              'Add peoples +',
+              'add_people'.tr+'s'+'+',
               style: TextStyle(
                 color: Colors.white,
               ),

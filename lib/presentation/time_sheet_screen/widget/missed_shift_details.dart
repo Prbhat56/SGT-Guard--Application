@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/missed_shift_model.dart';
@@ -23,7 +24,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWidget(appbarTitle: 'Missed Shifts'),
+      appBar: CustomAppBarWidget(appbarTitle: 'missed_shifts'.tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -72,7 +73,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Last Shift: ',
+                                  'last_shift'.tr,
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.red),
                                 ),
@@ -100,7 +101,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFieldHeaderWidget(title: 'Missed Shift'),
+                    TextFieldHeaderWidget(title: 'missed_shift'.tr),
                     const SizedBox(height: 10),
                     Container(
                       // width: 122,
@@ -157,7 +158,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
               SizedBox(
                 height: 10,
               ),
-              TextFieldHeaderWidget(title: 'Job Details'),
+              TextFieldHeaderWidget(title: 'job_details'.tr),
               const SizedBox(height: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +166,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Guard Name: ',
+                      Text('guard_name'.tr+': ',
                           style: CustomTheme.blackTextStyle(15)),
                       Text(
                         '${widget.details!.jobDetails == null ? '' : widget.details!.jobDetails!.firstName.toString()} ${widget.details!.jobDetails == null ? '' : widget.details!.jobDetails!.lastName.toString()}',
@@ -179,7 +180,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Position: ', style: CustomTheme.blackTextStyle(15)),
+                      Text('position'.tr+': ', style: CustomTheme.blackTextStyle(15)),
                       Text(
                         ' ${widget.details!.jobDetails == null ? '' : widget.details!.jobDetails!.guardPosition.toString()}',
                         style: CustomTheme.blueTextStyle(15, FontWeight.w400),
@@ -192,7 +193,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Shift Time: ',
+                      Text('shift_time'.tr+': ',
                           style: CustomTheme.blackTextStyle(15)),
                       Text(
                         '${widget.details!.jobDetails == null ? "" : widget.details!.jobDetails!.shiftTime.toString()}',
@@ -210,7 +211,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
               ),
 
               const SizedBox(height: 10),
-              TextFieldHeaderWidget(title: 'Description'),
+              TextFieldHeaderWidget(title: 'description'.tr),
               const SizedBox(height: 10),
               Text(
                 widget.details!.propertyDescription.toString(),
@@ -226,7 +227,7 @@ class _MissedShiftDetailsScreenState extends State<MissedShiftDetailsScreen> {
                 thickness: 5,
               ),
               const SizedBox(height: 10),
-              TextFieldHeaderWidget(title: 'Location'),
+              TextFieldHeaderWidget(title: 'location'.tr),
               const SizedBox(height: 10),
               Text(
                 widget.details!.location.toString(),

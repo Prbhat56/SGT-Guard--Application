@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../theme/custom_theme.dart';
 
 class DropDownWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class DropDownWidget extends StatelessWidget {
             child: DropdownButtonHideUnderline(
               child: DropdownButton(
                 icon: const Icon(Icons.keyboard_arrow_down),
-                items: ['Yes', 'No'].map((String val) {
+                items: ['yes'.tr, 'no'.tr].map((String val) {
                   return DropdownMenuItem<String>(
                     value: val,
                     child: Text(val),

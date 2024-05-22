@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/account_screen/account_screen.dart';
@@ -58,16 +59,14 @@ Data? detailsData = Data();
 var jobDetailDataFetched;
 String? imageBaseUrlData;
 String? propertyImageBaseUrlData;
-class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
 
- @override
+class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
+  @override
   void initState() {
     super.initState();
-   jobDetailDataFetched = getJobDetailList(widget.propertyId);
+    jobDetailDataFetched = getJobDetailList(widget.propertyId);
   }
 
-
-  
   Future getJobDetailList(property_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -104,10 +103,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
         );
       } else {
         return PropertyDetailsModel(
-        status: response.statusCode,
-      );
+          status: response.statusCode,
+        );
       }
-      
     }
   }
 
@@ -136,8 +134,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         PropertyDetailsWidget(
                             imageBaseUrl: propertyImageBaseUrlData,
                             detailsData: detailsData,
-                            checkPoint:
-                                detailsData!.checkpointCount.toString()
+                            checkPoint: detailsData!.checkpointCount.toString()
                             // widget.activeData!.checkPoints!.length.toString(),
                             ),
                         SizedBox(
@@ -161,8 +158,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       screenNavigator(
                                           context,
                                           ScanningScreen(
-                                              propertyId:
-                                                  detailsData!.id));
+                                              propertyId: detailsData!.id));
                                     },
                                     child: Container(
                                       height: 32.h,
@@ -185,7 +181,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                     height: 5.h,
                                   ),
                                   Text(
-                                    'Scan QR',
+                                    'scan_qr'.tr,
                                     style: TextStyle(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w500,
@@ -225,7 +221,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                     height: 5.h,
                                   ),
                                   Text(
-                                    'Checkpoints',
+                                    'checkpoint'.tr,
                                     style: TextStyle(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w500,
@@ -240,9 +236,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       screenNavigator(
                                           context,
                                           WorkReportScreen(
-                                            propertyId: detailsData!.id
-                                                .toString(),
-                                            propertyName: detailsData!.propertyName,
+                                            propertyId:
+                                                detailsData!.id.toString(),
+                                            propertyName:
+                                                detailsData!.propertyName,
                                           ));
                                     },
                                     child: Container(
@@ -266,7 +263,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                     height: 5.h,
                                   ),
                                   Text(
-                                    'Report',
+                                    'report'.tr,
                                     style: TextStyle(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w500,
@@ -300,7 +297,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextFieldHeaderWidget(title: 'Upcoming Shifts'),
+                              TextFieldHeaderWidget(title: 'upcoming_shift'.tr),
                               const SizedBox(height: 10),
                               // ShiftCards(shifts: widget.activeData!.shifts), //shift cards widget
                               detailsData!.shifts!.length != 0
@@ -318,7 +315,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  TextFieldHeaderWidget(title: 'Job Details'),
+                                  TextFieldHeaderWidget(title: 'job_details'.tr),
                                   const SizedBox(height: 10),
                                   Column(
                                     crossAxisAlignment:
@@ -327,7 +324,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text('Guard Name: ',
+                                          Text('guard_name'.tr+': ',
                                               style: CustomTheme.blackTextStyle(
                                                   15.sp)),
                                           Text(
@@ -343,7 +340,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text('Position: ',
+                                          Text('position'.tr+': ',
                                               style: CustomTheme.blackTextStyle(
                                                   15.sp)),
                                           Text(
@@ -359,7 +356,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text('Shift Time: ',
+                                          Text('shift_time'.tr+': ',
                                               style: CustomTheme.blackTextStyle(
                                                   15.sp)),
                                           Text(
@@ -377,7 +374,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "Emergency Contact",
+                                            "emergency_contact".tr,
                                             style: TextStyle(
                                                 fontSize: 17.sp,
                                                 fontWeight: FontWeight.w500,
@@ -395,8 +392,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                   },
                                                   child: Text(
                                                     disable == true
-                                                        ? 'Show more'
-                                                        : 'Show less',
+                                                        ? 'show_more'.tr
+                                                        : 'show_less'.tr,
                                                     style:
                                                         // detailsData!
                                                         //             .emergencyContact!
@@ -429,7 +426,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                   height: 12.h,
                                                 ),
                                                 Text(
-                                                  'Contact 1',
+                                                  'contact'.tr+' 1',
                                                   style:
                                                       CustomTheme.blueTextStyle(
                                                           15.sp,
@@ -452,7 +449,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                             color: CustomTheme
                                                                 .seconderyLightColor)),
                                                     label: Text(
-                                                      'Name',
+                                                      'name'.tr,
                                                       style: TextStyle(
                                                           fontSize: 12.sp,
                                                           color: Colors
@@ -489,96 +486,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                // Padding(
-                                                //   padding: EdgeInsets.only(
-                                                //       left: 19.w),
-                                                //   child: Text(
-                                                //     'Name',
-                                                //     style: TextStyle(
-                                                //         fontSize: 12.sp,
-                                                //         color: Colors
-                                                //             .grey.shade700,
-                                                //         fontWeight:
-                                                //             FontWeight.w400),
-                                                //   ),
-                                                // ),
-                                                // Container(
-                                                //   width: MediaQuery.of(context)
-                                                //           .size
-                                                //           .width *
-                                                //       .9,
-                                                //   padding: EdgeInsets.symmetric(
-                                                //       horizontal: 19.w,
-                                                //       vertical: 14.h),
-                                                //   decoration: BoxDecoration(
-                                                //       color: CustomTheme.white,
-                                                //       border: Border.all(
-                                                //           width: 1.w,
-                                                //           color:
-                                                //               CustomTheme.grey),
-                                                //       borderRadius:
-                                                //           BorderRadius.all(
-                                                //               Radius.elliptical(
-                                                //                   5.r, 5.r))),
-                                                //   child: Text(
-                                                //     detailsData!
-                                                //         .emergencyContact!
-                                                //         .first
-                                                //         .contactName
-                                                //         .toString(),
-                                                //     style: TextStyle(
-                                                //         fontSize: 15.sp,
-                                                //         color: Colors
-                                                //             .grey.shade700,
-                                                //         fontWeight:
-                                                //             FontWeight.w400),
-                                                //   ),
-                                                // ),
-                                                // Padding(
-                                                //   padding: EdgeInsets.only(
-                                                //       left: 19.w),
-                                                //   child: Text(
-                                                //     'Mobile Number',
-                                                //     style: TextStyle(
-                                                //         fontSize: 12.sp,
-                                                //         color: Colors
-                                                //             .grey.shade700,
-                                                //         fontWeight:
-                                                //             FontWeight.w400),
-                                                //   ),
-                                                // ),
-                                                // Container(
-                                                //   width: MediaQuery.of(context)
-                                                //           .size
-                                                //           .width *
-                                                //       .9,
-                                                //   padding: EdgeInsets.symmetric(
-                                                //       horizontal: 19.w,
-                                                //       vertical: 14.h),
-                                                //   decoration: BoxDecoration(
-                                                //       color: CustomTheme.white,
-                                                //       border: Border.all(
-                                                //           width: 1.w,
-                                                //           color:
-                                                //               CustomTheme.grey),
-                                                //       borderRadius:
-                                                //           BorderRadius.all(
-                                                //               Radius.elliptical(
-                                                //                   5.r, 5.r))),
-                                                //   child: Text(
-                                                //     detailsData!
-                                                //         .emergencyContact!
-                                                //         .first
-                                                //         .contactNumber
-                                                //         .toString(),
-                                                //     style: TextStyle(
-                                                //         fontSize: 15.sp,
-                                                //         color: Colors
-                                                //             .grey.shade700,
-                                                //         fontWeight:
-                                                //             FontWeight.w400),
-                                                //   ),
-                                                // ),
                                               ],
                                             )
                                           : EmergencyContact()
@@ -607,7 +514,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                     propvatars: detailsData!.propertyAvatars,
                                   ), //widget to show property details
                                   const SizedBox(height: 25),
-                                  TextFieldHeaderWidget(title: 'Location'),
+                                  TextFieldHeaderWidget(title: 'location'.tr),
                                   const SizedBox(height: 10),
                                   Text(
                                     detailsData!.location.toString(),
@@ -627,12 +534,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   const SizedBox(height: 30),
                                   Center(
                                       child: CustomButtonWidget(
-                                          buttonTitle: 'Start Shift',
+                                          buttonTitle: 'start_shift'.tr,
                                           onBtnPress: () {
                                             screenNavigator(
                                                 context,
                                                 ScanningScreen(
-                                                    propertyId: detailsData!.id));
+                                                    propertyId:
+                                                        detailsData!.id));
                                           })),
                                   const SizedBox(height: 30),
                                 ],
@@ -650,7 +558,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
 
   SizedBox EmergencyContact() {
     return SizedBox(
-      height: 180.h * detailsData!.emergencyContact!.length,
+      height: 160.h * detailsData!.emergencyContact!.length,
       child: ListView.builder(
           physics: ClampingScrollPhysics(),
           shrinkWrap: true,
@@ -664,23 +572,23 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     height: 12.h,
                   ),
                   Text(
-                    'Contact ${index + 1}',
+                    'contact'.tr+' ${index + 1}',
                     style: CustomTheme.blueTextStyle(15.sp, FontWeight.w500),
                   ),
                   SizedBox(
                     height: 12.h,
                   ),
                   TextFormField(
-                    initialValue: detailsData!.emergencyContact![index].contactName
-                          .toString(),
+                    initialValue: detailsData!
+                        .emergencyContact![index].contactName
+                        .toString(),
                     readOnly: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.w,
-                              color: CustomTheme.grey)),
+                          borderSide:
+                              BorderSide(width: 1.w, color: CustomTheme.grey)),
                       label: Text(
-                        'Name',
+                        'name'.tr,
                         style: TextStyle(
                             fontSize: 12.sp,
                             color: Colors.grey.shade700,
@@ -692,14 +600,14 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     height: 10.h,
                   ),
                   TextFormField(
-                    initialValue: detailsData!.emergencyContact![index].contactNumber
-                          .toString(),
+                    initialValue: detailsData!
+                        .emergencyContact![index].contactNumber
+                        .toString(),
                     readOnly: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.w,
-                              color: CustomTheme.grey)),
+                          borderSide:
+                              BorderSide(width: 1.w, color: CustomTheme.grey)),
                       label: Text(
                         'Mobile Number',
                         style: TextStyle(
@@ -709,64 +617,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       ),
                     ),
                   ),
-
-
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 19.w),
-                  //   child: Text(
-                  //     'Name',
-                  //     style: TextStyle(
-                  //         fontSize: 12.sp,
-                  //         color: Colors.grey.shade700,
-                  //         fontWeight: FontWeight.w400),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width * .9,
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: 19.w, vertical: 14.h),
-                  //   decoration: BoxDecoration(
-                  //       color: CustomTheme.white,
-                  //       border: Border.all(width: 1, color: CustomTheme.grey),
-                  //       borderRadius:
-                  //           BorderRadius.all(Radius.elliptical(5.r, 5.r))),
-                  //   child: Text(
-                  //     detailsData!.emergencyContact![index].contactName
-                  //         .toString(),
-                  //     style: TextStyle(
-                  //         fontSize: 15.sp,
-                  //         color: Colors.grey.shade700,
-                  //         fontWeight: FontWeight.w400),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 19.h),
-                  //   child: Text(
-                  //     'Mobile Number',
-                  //     style: TextStyle(
-                  //         fontSize: 12.sp,
-                  //         color: Colors.grey.shade700,
-                  //         fontWeight: FontWeight.w400),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width * .9,
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: 19.w, vertical: 14.h),
-                  //   decoration: BoxDecoration(
-                  //       color: CustomTheme.white,
-                  //       border: Border.all(width: 1, color: CustomTheme.grey),
-                  //       borderRadius:
-                  //           BorderRadius.all(Radius.elliptical(5.r, 5.r))),
-                  //   child: Text(
-                  //     detailsData!.emergencyContact![index].contactNumber
-                  //         .toString(),
-                  //     style: TextStyle(
-                  //         fontSize: 15.sp,
-                  //         color: Colors.grey.shade700,
-                  //         fontWeight: FontWeight.w400),
-                  //   ),
-                  // ),
                 ]);
           }),
     );

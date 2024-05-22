@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/time_sheet_screen/model/timeSheet_model.dart';
@@ -98,7 +99,7 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBarWidget(
-        appBarTitle: 'TimeSheet',
+        appBarTitle: 'timesheet'.tr,
       ),
       body: FutureBuilder(
         future: timeSheetDataFetched,
@@ -122,13 +123,13 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
                     tabs: [
                       Tab(
                         child: Text(
-                          'Upcoming',
+                          'upcoming'.tr,
                           style: TextStyle(fontSize: 17),
                         ),
                       ),
                       Tab(
                         child: Text(
-                          'Completed',
+                          'completed'.tr,
                           style: TextStyle(fontSize: 17),
                         ),
                       ),
@@ -174,13 +175,13 @@ class _TimeSheetScreenState extends State<TimeSheetScreen>
                         tabs: [
                           Tab(
                             icon: Text(
-                              'Upcoming',
+                              'upcoming'.tr,
                               style: TextStyle(fontSize: 17),
                             ),
                           ),
                           Tab(
                             icon: Text(
-                              'Completed',
+                              'completed'.tr,
                               style: TextStyle(fontSize: 17),
                             ),
                           ),

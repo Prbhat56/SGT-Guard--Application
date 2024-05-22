@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/timeline_details_widget.dart';
@@ -66,8 +67,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
     shiftDetails = shiftDetailsModalFromJson(result?.code);
     shiftId = shiftDetails!.shiftDetails!.shiftId.toString();
     print('Shift ID: $shiftId');
-    clockInStatus =
-        (shiftDetails!.shiftDetails!.clockOut == null) ? true : false;
+    clockInStatus = (shiftDetails!.shiftDetails!.clockOut == null) ? true : false;
   }
 
   @override
@@ -77,9 +77,6 @@ class _ScanningScreenState extends State<ScanningScreen> {
                 !jsonResponse!.containsKey("checkpoint_details")
             ? clockInStatus == true
                 ? ClockInScreen(propId: widget.propertyId, shiftId: shiftId)
-                // Center(child: Container(
-                //   child: Text('You have scanned Exact QR'),
-                // ),)
                 : Container(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -93,6 +90,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                         ),
                         Text(
                           "You have scanned wrong QR,Please Scan Clock-In QR",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.red,
@@ -108,7 +106,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                                 ScanningScreen(propertyId: widget.propertyId));
                           },
                           child: Text(
-                            'Re-scan',
+                            're_scan'.tr,
                             style: AppFontStyle.boldTextStyle(
                                 AppColors.primaryColor, 17),
                           ),
@@ -144,7 +142,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                             ScanningScreen(propertyId: widget.propertyId));
                       },
                       child: Text(
-                        'Re-scan',
+                        're_scan'.tr,
                         style: AppFontStyle.boldTextStyle(
                             AppColors.primaryColor, 17),
                       ),
@@ -155,7 +153,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
-              appBar: CustomAppBarWidget(appbarTitle: 'QR Scan'),
+              appBar: CustomAppBarWidget(appbarTitle: 'qr_scan'.tr),
               backgroundColor: white,
               body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 80),
@@ -163,8 +161,8 @@ class _ScanningScreenState extends State<ScanningScreen> {
                   SizedBox(
                     height: 69,
                   ),
-                  const Text(
-                    'Clock in',
+                  Text(
+                    'clock_in'.tr,
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(
@@ -173,7 +171,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Scan QR code\n to clock in!',
+                      'clock_in_description'.tr+'!',
                       textScaleFactor: 1.0,
                       textAlign: TextAlign.center,
                       style: TextStyle(

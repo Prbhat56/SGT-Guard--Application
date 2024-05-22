@@ -10,7 +10,6 @@ import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/presentation/check_point_screen/utils/countdown_timer.dart';
-import 'package:sgt/presentation/cubit/timer/timer_dependency_state.dart';
 import 'package:sgt/presentation/cubit/timer_on/timer_on_cubit.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
@@ -22,35 +21,31 @@ import 'dart:async';
 import '../../utils/const.dart';
 import 'package:http/http.dart' as http;
 
-
 class TimerWidget extends StatefulWidget {
   @override
   _TimerWidgetState createState() => _TimerWidgetState();
 }
-final TimerController timerController = Get.put(TimerController());
+
 Property property = Property();
 List<Checkpoint> checkpoint = [];
 
-class _TimerWidgetState extends State<TimerWidget> {
+class _TimerWidgetState extends State<TimerWidget>{
   Duration duration = Duration();
   Timer? timer;
+  bool? dataFetched = false;
   @override
   void initState() {
     super.initState();
     // startTimer();
     getCheckpointsList();
-    String timeString = property.shift!.clockOutFull!.toString();
-    DateTime dateTime = DateTime.parse(timeString);
-    DateTime currentTime = DateTime.now();
-    int differenceInSeconds = dateTime.difference(currentTime).inSeconds;
-    initTimerOperation(differenceInSeconds.toInt());
   }
 
-   @override
-  void dispose() {
-    timer!.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   timer!.cancel();
+  //   getCheckpointsList();
+  //   super.dispose();
+  // }
 
   Future getCheckpointsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -70,8 +65,15 @@ class _TimerWidgetState extends State<TimerWidget> {
     if (response.statusCode == 201) {
       final CheckPointPropertyShiftWise responseModel =
           checkPointPropertyShiftWiseFromJson(response.body);
-      property = responseModel.property ?? property ;
+      property = responseModel.property ?? property;
       checkpoint = responseModel.checkpoints ?? [];
+      String timeString = property.shift!.clockOutFull!.toString();
+      DateTime dateTime = DateTime.parse(timeString);
+      DateTime currentTime = DateTime.now();
+      int differenceInSeconds = dateTime.difference(currentTime).inSeconds;
+      var timerStatus =prefs.getString('isTimer');
+      timerStatus=='1' ? initTimerOperation(differenceInSeconds.toInt()):'';
+      dataFetched = true;
       // var checks = json.decode(checkpoint.toString());
       // print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ===> ${checks}");
       return responseModel;
@@ -91,27 +93,25 @@ class _TimerWidgetState extends State<TimerWidget> {
           (route) => false,
         );
       } else {
-         return CheckPointPropertyShiftWise(
-        // checkpoint: [],
-        status: response.statusCode,
-        message: response.body,
-      );
+        return CheckPointPropertyShiftWise(
+          // checkpoint: [],
+          status: response.statusCode,
+          message: response.body,
+        );
       }
     }
   }
 
-  late int countdownSeconds; //total timer limit in seconds
-  late CountdownTimer countdownTimer;
+  int? countdownSeconds; //total timer limit in seconds
+  CountdownTimer? countdownTimer;
   bool isTimerRunning = false;
-  
-  
 
-  void initTimerOperation( int countdownseconds) async{
+  void initTimerOperation(int countdownseconds) async {
     //timer callbacks
     countdownSeconds = countdownseconds;
     print("countdownseconds ==============> ${countdownSeconds}");
     countdownTimer = CountdownTimer(
-      seconds: countdownSeconds,
+      seconds: countdownSeconds!,
       onTick: (seconds) {
         isTimerRunning = true;
         setState(() {
@@ -120,6 +120,7 @@ class _TimerWidgetState extends State<TimerWidget> {
       },
       onFinished: () {
         stopTimer();
+        removeTimer();
         // Handle countdown finished
       },
     );
@@ -129,14 +130,14 @@ class _TimerWidgetState extends State<TimerWidget> {
       // On AppLifecycleState: paused
       if (msg == AppLifecycleState.paused.toString()) {
         if (isTimerRunning) {
-          countdownTimer.pause(countdownSeconds); //setting end time on pause
+          countdownTimer!.pause(countdownSeconds!); //setting end time on pause
         }
       }
 
       // On AppLifecycleState: resumed
       if (msg == AppLifecycleState.resumed.toString()) {
         if (isTimerRunning) {
-          countdownTimer.resume();
+          countdownTimer!.resume();
         }
       }
       return Future(() => null);
@@ -144,12 +145,12 @@ class _TimerWidgetState extends State<TimerWidget> {
 
     //starting timer
     isTimerRunning = true;
-    countdownTimer.start();
+    countdownTimer!.start();
   }
 
-   void stopTimer() async{
+  void stopTimer() async {
     isTimerRunning = false;
-    countdownTimer.stop();
+    countdownTimer!.stop();
   }
 
   void addTime() {
@@ -164,113 +165,111 @@ class _TimerWidgetState extends State<TimerWidget> {
     timer = Timer.periodic(Duration(seconds: 1), (_) => addTime());
   }
 
-  void removeTimer() async{
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('timerStatus','0');
+  void removeTimer() async {
+    context.read<TimerOnCubit>().turnOffTimer();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('isTimer');
   }
 
   @override
   Widget build(BuildContext context) {
-  int hours = countdownSeconds ~/ 3600;
-  int remainingSeconds = countdownSeconds % 3600;
-  int minutes = remainingSeconds ~/ 60;
-  int secondsOutput = remainingSeconds % 60;
-  String hoursStr = hours.toString().padLeft(2, '0');
-  String minutesStr = minutes.toString().padLeft(2, '0');
-  String secondsStr = secondsOutput.toString().padLeft(2, '0');
-  // print("countdownSeconds this----------------> ${countdownSeconds}");
-  print("countdownSeconds----------------> ${countdownSeconds.isNegative}");
-  if(countdownSeconds <= 0 || countdownSeconds.isNegative){
-    stopTimer();
-    removeTimer();
-    context.read<TimerOnCubit>().turnOffTimer();
-  }
+    // getCheckpointsList();
+    int hours = countdownSeconds! ~/ 3600;
+    int remainingSeconds = countdownSeconds! % 3600;
+    int minutes = remainingSeconds ~/ 60;
+    int secondsOutput = remainingSeconds % 60;
+    String hoursStr = hours.toString().padLeft(2, '0');
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    String secondsStr = secondsOutput.toString().padLeft(2, '0');
+    // print("countdownSeconds this----------------> ${countdownSeconds}");
+    print("countdownSeconds----------------> ${countdownSeconds!.isNegative}");
+    if (countdownSeconds! <= 0 || countdownSeconds!.isNegative) {
+      stopTimer();
+      removeTimer();
+    }
 
     // String twoDigits(int n) => n.toString().padLeft(2, '0');
     // final hours = twoDigits(duration.inHours);
     // final minutes = twoDigits(duration.inMinutes.remainder(60));
     // final seconds = twoDigits(duration.inSeconds.remainder(60));
     return Container(
-        padding: EdgeInsets.only(left: 10.w,top: 5.h,bottom: 5.h),
-        width: Get.width-32.w,
-        decoration: BoxDecoration(
-            color: seconderyColor, borderRadius: BorderRadius.circular(8.r)),
-        child: InkWell(
-          onTap: remainingSeconds == 0 ? () {} : () {
-            screenNavigator(context,CheckPointScreen());
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Your Shift Time',
-                style:
-                TextStyle(
-                    fontSize: 10.sp,
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold),
+            padding: EdgeInsets.only(left: 10.w, top: 5.h, bottom: 5.h),
+            width: Get.width - 32.w,
+            decoration: BoxDecoration(
+                color: seconderyColor,
+                borderRadius: BorderRadius.circular(8.r)),
+            child: InkWell(
+              onTap: remainingSeconds == 0
+                  ? () {}
+                  : () {
+                      screenNavigator(context, CheckPointScreen());
+                    },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'shift_time_text'.tr,
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 30.w),
+                    height: 30.h,
+                    width: 2.w,
+                    color: white,
+                    child: Text(''),
+                  ),
+                  Text(
+                    ' $hoursStr Hrs',
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text(
+                    ':',
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text(
+                    '$minutesStr Min',
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text(
+                    ':',
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text(
+                    '$secondsStr Sec',
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 30.w),
-                height: 30.h,
-                width: 2.w,
-                color: white,
-                child: Text(''),
-              ),
-              Text(
-                ' $hoursStr Hrs',
-                style:
-                TextStyle(
-                    fontSize: 10.sp,
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Text(
-                ':',
-                style:
-                TextStyle(
-                    fontSize: 10.sp,
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Text(
-                '$minutesStr Min',
-                style:
-                TextStyle(
-                    fontSize: 10.sp,
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Text(
-                ':',
-                style: 
-                TextStyle(
-                    fontSize: 10.sp,
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Text(
-                '$secondsStr Sec',
-                style:
-                TextStyle(
-                    fontSize: 10.sp,
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ));
+            ));
   }
 }

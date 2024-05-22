@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/theme/custom_theme.dart';
 
 class ReportSubmitSuccess extends StatefulWidget {
@@ -40,7 +41,7 @@ class _ReportSubmitSuccessState extends State<ReportSubmitSuccess> {
               SizedBox(
                 height: 15.h,
               ),
-              Text('Done',
+              Text('done'.tr,
                   textAlign: TextAlign.center,
                   style: CustomTheme.blackTextStyle(25.sp)),
               SizedBox(

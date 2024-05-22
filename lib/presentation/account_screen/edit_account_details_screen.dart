@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:intl/intl.dart';
 import 'package:sgt/presentation/account_screen/widgets/add_card_back_images.dart';
@@ -186,32 +187,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: primaryColor,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        // centerTitle: true,
-        title: Align(
-          alignment: Alignment(-1.1.w, 0.w),
-          child: Text(
-            "Edit Account Details",
-            textScaleFactor: 1.0,
-            style: TextStyle(
-                color: primaryColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 15.sp),
-          ),
-        ),
-      ),
-
-      // CustomAppBarWidget(appbarTitle: 'Edit Account Details'),
+      appBar: CustomAppBarWidget(appbarTitle: 'Edit Account Details'),
       backgroundColor: white,
       body: Form(
         key: _formKey,
@@ -280,8 +256,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         CustomUnderlineTextFieldWidget(
                           bottomPadding: 7,
                           keyboardType: TextInputType.emailAddress,
-                          textfieldTitle: 'Email',
-                          hintText: 'Enter Email',
+                          textfieldTitle: 'email'.tr,
+                          hintText: 'enter_email'.tr,
                           controller: emailController,
                           readonly: true,
                         ),
@@ -330,10 +306,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                       contact_number_FocusNode, dob_FocusNode);
                                 },
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10),
+                                  LengthLimitingTextInputFormatter(13),
                                 ],
                                 decoration: InputDecoration(
-                                  hintText: 'Phone Number',
+                                  hintText: 'phone_number'.tr,
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: seconderyColor)),

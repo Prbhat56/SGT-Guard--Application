@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../utils/const.dart';
 
 class CustomBottomModelSheet extends StatelessWidget {
@@ -13,13 +14,13 @@ class CustomBottomModelSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Select Media From?',
+          Text(
+            'select_media'.tr,
             textScaleFactor: 1.0,
             style: TextStyle(fontSize: 16),
           ),
-          const Text(
-            'Use camera or select file from device gallery',
+          Text(
+            'select_media_description'.tr,
             textScaleFactor: 1.0,
             style: TextStyle(
                 fontSize: 12, color: Color.fromARGB(255, 109, 109, 109)),
@@ -49,8 +50,8 @@ class CustomBottomModelSheet extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    const Text(
-                      'Camera',
+                    Text(
+                      'camera'.tr,
                       textScaleFactor: 1.0,
                     )
                   ],
@@ -84,8 +85,8 @@ class CustomBottomModelSheet extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    const Text(
-                      'Gallery',
+                    Text(
+                      'gallery'.tr,
                       textScaleFactor: 1.0,
                     )
                   ],

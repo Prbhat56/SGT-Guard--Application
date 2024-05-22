@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sgt/presentation/check_point_screen/widgets/check_point_card_widget.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
@@ -40,7 +41,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   @override
   Widget build(BuildContext context) {
           return Scaffold(
-              appBar: CustomAppBarWidget(appbarTitle: 'Privacy Policy'),
+              appBar: CustomAppBarWidget(appbarTitle: 'privacy_policy'.tr),
               backgroundColor: white,
               body: Padding(
                 padding: const EdgeInsets.all(30.0),

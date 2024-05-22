@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ShouldPopAlertDialog extends StatelessWidget {
   const ShouldPopAlertDialog({super.key});
@@ -28,7 +29,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.green, borderRadius: BorderRadius.circular(4.r)),
             child:Text(
-              "No",
+              'no'.tr,
               textScaleFactor: 1.0,
               style: TextStyle(
                 color: Colors.white,
@@ -56,7 +57,7 @@ class ShouldPopAlertDialog extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(4.r)),
             child: Text(
-              "Yes",
+              'yes'.tr,
               textScaleFactor: 1.0,
               style: TextStyle(
                 color: Colors.white,

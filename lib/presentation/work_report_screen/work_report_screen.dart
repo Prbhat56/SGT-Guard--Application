@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/widgets/custom_appbar_widget.dart';
 import 'package:sgt/presentation/work_report_screen/cubit/report_type/report_type_cubit.dart';
 import 'package:sgt/presentation/work_report_screen/general_report_screen.dart';
@@ -26,7 +27,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWidget(appbarTitle: 'Shift Report'),
+      appBar: CustomAppBarWidget(appbarTitle: 'shift_report'.tr),
       backgroundColor: white,
       body: SingleChildScrollView(
         child: Padding(
@@ -38,7 +39,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                 height: 40.h,
               ),
               Text(
-                'Select report type below',
+                'select_report_type_text'.tr,
                 style: CustomTheme.blueTextStyle(17, FontWeight.bold),
                 textScaleFactor: 1.0,
               ),
@@ -61,7 +62,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                       border: Border.all(color: Colors.grey)),
                   child: Center(
                     child: Text(
-                      'General Report',
+                      'general_report'.tr,
                       style: TextStyle(
                         color: primaryColor,
                         fontSize: 15,
@@ -90,7 +91,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                       border: Border.all(color: Colors.grey)),
                   child: Center(
                     child: Text(
-                      'Maintenance Report',
+                      'maintanance_report'.tr,
                       style: TextStyle(
                         color: primaryColor,
                         fontSize: 15,
@@ -120,7 +121,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                       border: Border.all(color: Colors.grey)),
                   child: Center(
                     child: Text(
-                      'Parking Report',
+                      'parking_report'.tr,
                       style: TextStyle(
                         color: primaryColor,
                         fontSize: 15,
@@ -150,7 +151,7 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                       border: Border.all(color: Colors.grey)),
                   child: Center(
                     child: Text(
-                      'Emergency Report',
+                      'emergency_report'.tr,
                       style: TextStyle(
                         color: primaryColor,
                         fontSize: 15,
@@ -180,8 +181,8 @@ class _WorkReportScreenState extends State<WorkReportScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 150, vertical: 15),
                     color: primaryColor,
-                    child: const Text(
-                      'Next',
+                    child: Text(
+                      'next'.tr,
                       style: TextStyle(fontSize: 20),
                       textScaleFactor: 1.0,
                     ),

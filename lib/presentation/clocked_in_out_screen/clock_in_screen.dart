@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
@@ -59,7 +60,8 @@ Future getCheckpointsTaskList(propertyId,shiftId,context) async {
   if (response.statusCode == 200) {
     await prefs.setString('propertyId', data["property"]["id"].toString());
     final ClockInModal responseModel = clockInModalFromJson(response.body);
-    prefs.setString('isTimer', '1');
+    // prefs.setString('isTimer', '1');
+    // context.read<TimerOnCubit>().turnOnTimer();
     return responseModel;
   } else {
     if (response.statusCode == 401) {
@@ -91,7 +93,7 @@ Future getCheckpointsTaskList(propertyId,shiftId,context) async {
 
 backToHome(context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString('isTimer', '0');
+  prefs.remove('isTimer');
   prefs.remove('shiftId');
   prefs.remove('propertyId');
   screenNavigator(context, Home());
@@ -112,13 +114,14 @@ class _ClockInScreenState extends State<ClockInScreen> {
   @override
   Widget build(BuildContext context) {
     //logic to start the timer if it's not start
-    context.read<TimerOnCubit>().state.istimerOn
-        ? null
-        : context.read<TimerOnCubit>().turnOnTimer();
+    // context.read<TimerOnCubit>().state.istimerOn
+    //     ? context.read<TimerOnCubit>().turnOffTimer()
+        print(context.read<TimerOnCubit>().state.istimerOn);
+        context.read<TimerOnCubit>().turnOnTimer();
     return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
-                appBar: CustomAppBarWidget(appbarTitle: 'Clocked In'),
+                appBar: CustomAppBarWidget(appbarTitle: 'clocked_in'.tr),
                 body: FutureBuilder(
                     future: getCheckpointsTaskList(widget.propId,widget.shiftId, context),
                     builder: (context, snapshot) {
@@ -150,7 +153,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                             height:
                                                 20), // Add spacing if needed
                                         CustomButtonWidget(
-                                          buttonTitle: 'Home',
+                                          buttonTitle: 'Home'.tr,
                                           onBtnPress: () {
                                             context
                                                 .read<TimerOnCubit>()
@@ -236,7 +239,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                           ),
                                           const SizedBox(height: 28),
                                           Text(
-                                            'Property',
+                                            'property'.tr,
                                             style: CustomTheme.blueTextStyle(
                                                 15, FontWeight.w400),
                                           ),
@@ -249,8 +252,8 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                               style: CustomTheme.blackTextStyle(
                                                   15)),
                                           const SizedBox(height: 6),
-                                          const Text(
-                                            'Guard Post Duties',
+                                          Text(
+                                            'guard_post_duties'.tr,
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.grey),
@@ -277,12 +280,13 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                           const SizedBox(height: 20),
                                           TimeStampWidget(),
                                           const SizedBox(height: 30),
+                                          
                                           CupertinoButton(
                                               color: blueColor,
                                               borderRadius:
                                                   BorderRadius.circular(13),
                                               child: Text(
-                                                'Checkpoints',
+                                                'checkpoint'.tr,
                                                 style: TextStyle(
                                                     color: white, fontSize: 17),
                                               ),
@@ -303,7 +307,7 @@ class _ClockInScreenState extends State<ClockInScreen> {
                                 height: 57,
                               ),
                               // CustomButtonWidget(
-                              //     buttonTitle: 'Clock Out',
+                              //     buttonTitle: 'clock_out'.tr,
                               //     onBtnPress: () {
                               //       screenNavigator(context, ClockOutErrorScreen());
                               //     }),

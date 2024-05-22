@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/main.dart';
 import 'package:sgt/presentation/onboarding_screen/widgets/build_pages.dart';
@@ -106,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     },
                     child: Center(
                       child: Text(
-                        'Next',
+                        'next'.tr,
                         style: TextStyle(fontSize: 20, color: Colors.grey),
                       ),
                     ),

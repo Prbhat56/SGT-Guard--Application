@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/cubit/email_checker/email_checker_cubit.dart';
@@ -48,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'Forgot Password'),
+        appBar: CustomAppBarWidget(appbarTitle: 'forget_password'.tr),
         body: Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -58,7 +59,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 40,
             ),
             Text(
-              'Enter your registered email and will send you instructions on how to reset it',
+              'forgot_password_details'.tr,
               textScaleFactor: 1.0,
               style: TextStyle(fontSize: 18),
             ),
@@ -67,7 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             /*CustomUnderlineTextFieldWidget(
                 bottomPadding: 7,
-                textfieldTitle: 'Email',
+                textfieldTitle: 'email'.tr,
                 hintText: "Enter Email",
                 controller: emailController,
                 onChanged: (value) {
@@ -96,7 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           width: 5,
                         ),
                         Text(
-                          'Email ID is Incorrect',
+                          'email_validation'.tr,
                           style: TextStyle(color: Colors.red, fontSize: 13),
                         ),
                       ],
@@ -104,8 +105,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),*/
             CustomUnderlineTextFieldWidget(
               bottomPadding: 7,
-              textfieldTitle: 'Email',
-              hintText: 'Enter Email',
+              textfieldTitle: 'email'.tr,
+              hintText: 'enter_email'.tr,
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
@@ -118,7 +119,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 : CustomErrorWidget.emailError(),
             Spacer(),
             CustomButtonWidget(
-                buttonTitle: 'Send',
+                buttonTitle: 'send'.tr,
                 btnColor: isValid ? primaryColor : seconderyColor,
                 onBtnPress: () async {
                   // var map = new Map<String, dynamic>();
@@ -161,7 +162,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Map<String, dynamic> myJsonBody = {
                       'email': emailController.text.toString()
                     };
-                    Response response =
+                    final response =
                         await post(Uri.parse(apiUrl), body: myJsonBody);
                     var data = jsonDecode(response.body.toString());
                     print(data);

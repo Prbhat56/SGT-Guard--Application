@@ -3,6 +3,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -266,7 +267,7 @@ class _EditLocationScreenState extends State<EditLocationScreen> {
                           borderRadius: BorderRadius.circular(30)),
                       child: Center(
                         child: Text(
-                          "Use Pinned Location",
+                          "use_pinned_location".tr,
                           style: TextStyle(color: white, fontSize: 17),
                         ),
                       ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sgt/presentation/account_screen/edit_account_details_screen.dart';
+import 'package:sgt/presentation/settings_screen/widgets/sign_out_confirmation_dialog.dart';
 import 'package:sgt/presentation/settings_screen/widgets/sign_out_dialog.dart';
 import 'package:sgt/presentation/work_report_screen/work_report_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../helper/navigator_function.dart';
 import '../../../theme/custom_theme.dart';
 import '../../../utils/const.dart';
@@ -41,31 +44,31 @@ List<SettingsOptionModel> settingsOptionlist = [
       imageWidget: Image.asset('assets/leave.png'),
       widget: ApplyLeaveScreen()),
   SettingsOptionModel(
-      optionTitle: 'Reports',
+      optionTitle: 'report'.tr,
       imageWidget: Image.asset('assets/leave.png'),
       widget: YourReportScreen()),
   SettingsOptionModel(
-      optionTitle: 'Change Password',
+      optionTitle: 'change_password'.tr,
       imageWidget: SvgPicture.asset('assets/lock.svg'),
       widget: ChangePasswordScreen()),
   SettingsOptionModel(
-      optionTitle: 'Terms and Conditions',
+      optionTitle: 'terms_and_conditions'.tr,
       imageWidget: Image.asset('assets/leave.png'),
       widget: TermsandConditionScreen()),
   SettingsOptionModel(
-      optionTitle: 'Privacy Policy',
+      optionTitle: 'privacy_policy'.tr,
       imageWidget: SvgPicture.asset('assets/hand.svg'),
       widget: PrivacyPolicyScreen()),
   SettingsOptionModel(
-      optionTitle: 'Languages',
+      optionTitle: 'language'.tr,
       imageWidget: SvgPicture.asset('assets/globe.svg'),
       widget: LanguagesScreen()),
   SettingsOptionModel(
-    optionTitle: 'Help & Support ',
+    optionTitle: 'help_and_support'.tr,
     imageWidget: SvgPicture.asset('assets/hand.svg'),
   ),
   SettingsOptionModel(
-    optionTitle: 'Sign Out',
+    optionTitle: 'sign_out'.tr,
     imageWidget: SvgPicture.asset('assets/logout.svg'),
   )
 ];
@@ -85,13 +88,18 @@ class SettingsOptions extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
+                  // onTap: () async{
                   onTap: () {
+                    // SharedPreferences prefs = await SharedPreferences.getInstance();
                     print(index);
                     index == 8
                         ? showDialog(
                             context: context,
                             builder: (context) {
-                              return SignOutDialog();
+                              return 
+                              // prefs.getString('isTimer') == '1' ? 
+                              // SignOutConfirmationDialog(); : 
+                              SignOutDialog();
                             })
                         : screenNavigator(
                             context, settingsOptionlist[index].widget!);

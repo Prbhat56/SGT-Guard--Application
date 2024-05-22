@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
@@ -157,7 +158,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Scaffold(
-        appBar: CustomAppBarWidget(appbarTitle: 'General Report'),
+        appBar: CustomAppBarWidget(appbarTitle: 'general_report'.tr),
         backgroundColor: white,
         body: SingleChildScrollView(
             child: Padding(
@@ -173,7 +174,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                 children: [
                   RichText(
                       text: TextSpan(
-                          text: 'Property Name',
+                          text: 'property_name'.tr,
                           style: CustomTheme.textField_Headertext_Style,
                           children: [
                         TextSpan(
@@ -183,7 +184,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                             ))
                       ])),
                   // Text(
-                  //   'Property Name \*',
+                  //   'property_name'.tr,
                   //   style: CustomTheme.textField_Headertext_Style,
                   //   textScaleFactor: 1.0,
                   // ),
@@ -239,7 +240,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
               ),
               CustomTextField(
                 controller: _notesController,
-                textfieldTitle: 'Notes ',
+                textfieldTitle: 'notes'.tr,
                 hintText: 'Enter Note Here',
                 isFilled: false,
                 maxLines: 5,
@@ -271,7 +272,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                   : Container(),
                RichText(
                       text: TextSpan(
-                          text: 'Upload Record Sample',
+                          text: 'sample_upload_image_text'.tr,
                           style: CustomTheme.blueTextStyle(17, FontWeight.w500),
                           children: [
                         TextSpan(
@@ -280,7 +281,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                               color: Colors.red,
                             ))
                       ])),
-              // Text('Upload Record Sample',
+              // Text('sample_upload_image_text'.tr,
               //     style: CustomTheme.blueTextStyle(17, FontWeight.w500)),
               const SizedBox(
                 height: 20,
@@ -304,7 +305,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
                         });
                   },
                   child: DottedChooseFileWidget(
-                    title: 'Choose a file',
+                    title: 'choose_file_text'.tr,
                     height: 15,
                   )),
               imageFileList!.isNotEmpty
@@ -315,7 +316,7 @@ class _StaticGeneralReportScreenState extends State<StaticGeneralReportScreen> {
               Container(
                   margin: EdgeInsets.symmetric(vertical: 30),
                   child: CustomButtonWidget(
-                      buttonTitle: 'Send',
+                      buttonTitle: 'send'.tr,
                       onBtnPress: () {
                         if (_propertyNameController.text.isEmpty) {
                           CommonService().openSnackBar(

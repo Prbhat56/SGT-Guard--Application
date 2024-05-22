@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sgt/helper/navigator_function.dart';
+import 'package:sgt/presentation/guard_tools_screen/widgets/leave_status_screen.dart';
 import 'package:sgt/presentation/settings_screen/settings_screen.dart';
 import 'package:sgt/theme/custom_theme.dart';
 
@@ -21,7 +22,7 @@ class _ApplyLeaveSuccessState extends State<ApplyLeaveSuccess> {
       // Navigator.pushAndRemoveUntil(
       //   context,
       //   MaterialPageRoute(builder: (context) => SettingsScreen()),(route) => false,).then((value) => setState(() {}));
-      // screenReplaceNavigator(context, SettingsScreen());
+      // screenReplaceNavigator(context, LeaveStatusScreen());
         Navigator.of(context)..pop()..pop()..pop()..pop();
     });
     super.initState();

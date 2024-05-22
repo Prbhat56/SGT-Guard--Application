@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
 import 'package:sgt/utils/const.dart';
@@ -22,7 +23,7 @@ class _CheckPointTimeLineWidgetState extends State<CheckPointTimeLineWidget> {
       child: Column(
         children: [
           Text(
-            'Start',
+            'start'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.black,

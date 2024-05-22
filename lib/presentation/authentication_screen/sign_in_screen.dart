@@ -211,11 +211,11 @@ class _SignInScreenState extends State<SignInScreen> {
                               // commonService.openSnackBar(
                               //     'Please enter registered email', context);
                               EasyLoading.showInfo(
-                                  'Please enter registered email');
+                                  'enter_registered_email'.tr);
                             } else if (_passwordController.text.isEmpty) {
                               // commonService.openSnackBar(
                               //     'Please enter password', context);
-                              EasyLoading.showInfo('Please enter password');
+                              EasyLoading.showInfo('please_enter_password'.tr);
                             } else {
                               handle_SignIn(_emailController.text.toString(),
                                   _passwordController.text.toString());
@@ -226,17 +226,17 @@ class _SignInScreenState extends State<SignInScreen> {
                               .watch<IssigninvalidCubit>()
                               .state
                               .issigninValid,
-                          buttonTitle: 'Sign In',
+                          buttonTitle: 'sign_in_text'.tr,
                           onBtnPress: () {
                             if (_emailController.text.isEmpty) {
                               // commonService.openSnackBar(
                               //     'Please enter registered email', context);
                               EasyLoading.showInfo(
-                                  'Please enter registered email');
+                                  'enter_registered_email'.tr);
                             } else if (_passwordController.text.isEmpty) {
                               // commonService.openSnackBar(
                               //     'Please enter password', context);
-                              EasyLoading.showInfo('Please enter password');
+                              EasyLoading.showInfo('please_enter_password'.tr);
                             }
                           }),
                   SizedBox(
@@ -320,7 +320,7 @@ class _SignInScreenState extends State<SignInScreen> {
           });
 
           if (permission == LocationPermission.deniedForever) {
-            return Future.error('Location Not Available');
+            return Future.error('location_not_available'.tr);
           }
         } else {
           if (permission == LocationPermission.always ||

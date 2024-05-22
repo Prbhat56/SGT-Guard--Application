@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sgt/helper/navigator_function.dart';
@@ -12,6 +13,7 @@ import 'package:sgt/presentation/authentication_screen/firebase_auth.dart';
 import 'package:sgt/presentation/authentication_screen/sign_in_screen.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
 import 'package:sgt/presentation/check_point_screen/model/checkpointpropertyWise_model.dart';
+import 'package:sgt/presentation/property_details_screen/check_points_list.dart';
 import 'package:sgt/presentation/work_report_screen/checkpoint_report_screen.dart';
 import 'package:sgt/service/api_call_service.dart';
 import 'package:sgt/service/common_service.dart';
@@ -39,11 +41,13 @@ List<Checkpoint> checkpointList = [];
 String? propId;
 String? shiftId;
 var checkpointAllListFetched;
+String? checkpointImageBaseUrl;
 
 class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
   @override
   void initState() {
     super.initState();
+    getCheckpointsList();
     checkpointAllListFetched = getCheckpointsList();
   }
 
@@ -66,6 +70,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
       if (response.statusCode == 201) {
         final CheckPointPropertyShiftWise responseModel =
             checkPointPropertyShiftWiseFromJson(response.body);
+        checkpointImageBaseUrl = responseModel.imageBaseUrl;
         checkpointList = responseModel.checkpoints ?? [];
         final squares = checkpointList.map((e) => e.status);
         var jsonData = {
@@ -76,7 +81,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
         // print(
         //     "----------------####### >>>>>> ${jsonData["checkpointStatus"]!.every((item) => item == "Visited")}");
         // print(
-        //     "----------------@@@@@@@@@@ >>>>>> ${jsonData["checkpointStatus"]!.indexWhere((element) => element == "Upcoming" || element == "Missed")}");
+        //     "----------------@@@@@@@@@@ >>>>>> ${jsonData["checkpointStatus"]!.indexWhere((element) => element == "Upcoming" || element == "missed".tr)}");
         bool everyCheckpointIsSame =
             jsonData["checkpointStatus"]!.every((item) => item == "Visited");
         everyCheckpointIsSame == true
@@ -118,10 +123,10 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 14.0),
-      child: FutureBuilder<CheckPointPropertyShiftWise>(
+      child: FutureBuilder(
           future: checkpointAllListFetched,
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+            if (checkpointList.isEmpty) {
               return Center(
                   child: Container(
                       height: 60,
@@ -193,7 +198,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                                 backgroundImage:
                                                     // AssetImage('assets/sgt_logo.jpg'),
                                                     NetworkImage(
-                                                  snapshot.data!.imageBaseUrl! +
+                                                  checkpointImageBaseUrl! +
                                                       '' +
                                                       checkpointList[index]
                                                           .checkPointAvatar!
@@ -226,7 +231,7 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                                         "Visited" ||
                                                     checkpointList[index]
                                                             .status ==
-                                                        "Missed"
+                                                        "missed".tr
                                                 ? Text(
                                                     checkpointList[index]
                                                         .status
@@ -254,6 +259,19 @@ class _TimeLineDetailsWidgetState extends State<TimeLineDetailsWidget> {
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      // Navigator.pushNamed(context, '/QrScreen',
+                                      //     arguments: {
+                                      //       propId: propId,
+                                      //       shiftId: shiftId,
+                                      //       checkpointlistIndex: index,
+                                      //       checkpointId: checkpointList[index]
+                                      //           .id
+                                      //           .toString(),
+                                      //       checkpointHistoryId:
+                                      //           checkpointList[index]
+                                      //               .checkpointHistoryId
+                                      //               .toString()
+                                      //     });
                                       screenNavigator(
                                           context,
                                           CheckPointScanningScreen(

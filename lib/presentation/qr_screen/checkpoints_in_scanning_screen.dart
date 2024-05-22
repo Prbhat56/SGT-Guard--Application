@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sgt/helper/navigator_function.dart';
 import 'package:sgt/presentation/check_point_screen/check_point_screen.dart';
@@ -37,10 +38,12 @@ class CheckPointScanningScreen extends StatefulWidget {
 
 class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
   Map<String, dynamic>? jsonResponse;
-  CheckpointQrDetails? checkPointDetails;
+  CheckpointQrDetails? checkPointQr;
+  String? qrCheckpointId;
   final qrKey = GlobalKey(debugLabel: "Qr");
   QRViewController? controller;
   Barcode? result;
+  String? checkPointName;
 
   @override
   void initState() {
@@ -63,31 +66,75 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
   }
 
   retriveAndChecksCheckpointId(result) async {
-    log("${result!.code.toString()}");
     jsonResponse = json.decode(result!.code.toString());
-    log("jsonResponse =>  ${jsonResponse}");
+    print("jsonResponse =>  ${jsonResponse}");
+    print(
+        "jsonResponse------------>${jsonResponse!.containsKey("shift_details")}  ${jsonResponse!.containsKey("checkpoints_details")}");
+    checkPointQr = checkpointQrDetailsFromJson(result?.code);
+    qrCheckpointId = checkPointQr!.checkpointDetails!.checkpointId.toString();
+    checkPointName = checkPointQr!.checkpointDetails!.checkpointName.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return result != null
-        ? jsonResponse!.containsKey("checkpoint_details") == true
-            ? 
-            CheckpointReportScreen(
-                checkPointqrData: result?.code,
-                propId: widget.propId,
-                shiftId: widget.shiftId,
-                checkPointId: widget.checkpointId,
-                checkpointHistoryId: widget.checkpointHistoryId,
-                checkpointListIndex: widget.checkpointlistIndex,
-              )
+        ? jsonResponse!.containsKey("checkpoint_details") &&
+                !jsonResponse!.containsKey("shift_details")
+            ? qrCheckpointId == widget.checkpointId
+                ? CheckpointReportScreen(
+                    propId: widget.propId,
+                    shiftId: widget.shiftId,
+                    checkPointId: widget.checkpointId,
+                    checkpointHistoryId: widget.checkpointHistoryId,
+                    checkpointListIndex: widget.checkpointlistIndex,
+                    checkPointName: checkPointName,
+                  )
+                : Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "You have scanned wrong checkpoint",
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            screenReplaceNavigator(
+                                context,
+                                CheckPointScanningScreen(
+                                    propId: widget.propId,
+                                    shiftId: widget.shiftId,
+                                    checkpointlistIndex:
+                                        widget.checkpointlistIndex,
+                                    checkpointId: widget.checkpointId,
+                                    checkpointHistoryId:
+                                        widget.checkpointHistoryId));
+                            // Navigator.pop(context);
+                          },
+                          child: Text(
+                            're_scan'.tr,
+                            style: AppFontStyle.boldTextStyle(
+                                AppColors.primaryColor, 17),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
             : Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "You have scanned wrong checkpoint",
+                      "You have scanned wrong QR,Please check QR Response",
                       style: TextStyle(
                         fontSize: 17,
                         color: Colors.red,
@@ -111,7 +158,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
                         // Navigator.pop(context);
                       },
                       child: Text(
-                        'Re-scan',
+                        're_scan'.tr,
                         style: AppFontStyle.boldTextStyle(
                             AppColors.primaryColor, 17),
                       ),
@@ -122,7 +169,7 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
         : MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Scaffold(
-              appBar: CustomAppBarWidget(appbarTitle: 'QR Scan'),
+              appBar: CustomAppBarWidget(appbarTitle: 'qr_scan'.tr),
               backgroundColor: white,
               body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 80),
@@ -130,8 +177,8 @@ class _CheckPointScanningScreenState extends State<CheckPointScanningScreen> {
                   SizedBox(
                     height: 69,
                   ),
-                  const Text(
-                    'Check in',
+                  Text(
+                    'check_in'.tr,
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
